@@ -1,0 +1,6 @@
+@import './assets/sass/variables.scss';
+@import './assets/sass/mixin.scss';
+@import './assets/sass/iconFont.scss';
+@import './assets/sass/layout.scss';
+@import './assets/sass/ant.scss';
+@import './assets/sass/component.scss';
