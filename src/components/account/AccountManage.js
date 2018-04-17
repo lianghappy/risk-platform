@@ -56,11 +56,11 @@ const columns = [
         dataIndex: 'state',
         key: 'state',
         width: 100,
-        render: (text) => (
+        render: () => (
             <span>
-                <a href="javascript:;">修改</a>
-                <a href="javascript:;" className={styles.pwd}>重置密码</a>
-                <a href="javascript:;" className="ant-dropdown-link">删除</a>
+                <a >修改</a>
+                <a className={styles.pwd}>重置密码</a>
+                <a className="ant-dropdown-link">删除</a>
             </span>
         ),
     },
