@@ -1,9 +1,5 @@
-import React, {
-    Component,
-} from 'react';
-import {
-    connect,
-} from 'dva';
+import React, { Component } from 'react';
+import { connect } from 'dva';
 import {
     Button,
     DatePicker,
@@ -12,16 +8,9 @@ import {
 } from 'antd';
 import moment from 'moment';
 import CSSModules from 'react-css-modules';
-import {
-    ENV,
-} from 'utils/constants';
 import * as request from 'utils/request';
 import API from 'utils/api';
-import Main from 'components/layout/Main';
 import styles from './IndexPage.css';
-
-console.log(ENV);
-request.signature();
 
 class IndexPage extends Component {
     static propTypes = {};
@@ -35,17 +24,6 @@ class IndexPage extends Component {
     componentDidMount() {
         request.get(API.address, null, {
             standard: false,
-        })
-            .then((result) => {
-                console.log(result);
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-
-        request.post(API.login, {
-            passWord: 'E10ADC3949BA59ABBE56E057F20F883E',
-            userName: 'admin',
         })
             .then((result) => {
                 console.log(result);
@@ -84,49 +62,43 @@ class IndexPage extends Component {
     };
 
     render() {
-        const {
-            visible,
-            confirmLoading,
-            ModalText,
-        } = this.state;
+        const { visible, confirmLoading, ModalText } = this.state;
         return (
-            <Main>
-                <section>
-                    <div styleName="normal test" style={{ fontStyle: 'oblique' }}>
-                        <h1 styleName="title">Yay! Welcome to dva!</h1>
-                        <a
-                            target="_blank"
-                            href="http://zcainfo.miitbeian.gov.cn/state/outPortal/loginPortal.action"
-                            rel="noopener noreferrer"
-                        >
-        许可证
-                        </a>
-                        <i className="jimi-icon" styleName="iconRegister" />
-                        <div styleName="welcome" />
-                        <ul styleName="list">
-                            <li>To get started, edit <code>src/index.js</code> and save to reload.</li>
-                            <li><a href="https://github.com/dvajs/dva-docs/blob/master/v1/en-us/getting-started.md">Getting Started</a></li>
-                        </ul>
-                        <Button type="primary" onClick={this.handleClick}>Primary</Button>
-                        <p>{this.state.ModalText}</p>
-                        <DatePicker placeholder="请选择时间" />
-                        <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} format="HH:mm" minuteStep={5} />
-                    </div>
+            <section>
+                <div styleName="normal test" style={{ fontStyle: 'oblique' }}>
+                    <h1 styleName="title">Yay! Welcome to dva!</h1>
+                    <a
+                        target="_blank"
+                        href="http://zcainfo.miitbeian.gov.cn/state/outPortal/loginPortal.action"
+                        rel="noopener noreferrer"
+                    >
+                        许可证
+                    </a>
+                    <i className="jimi-icon" styleName="iconRegister" />
+                    <div styleName="welcome" />
+                    <ul styleName="list">
+                        <li>To get started, edit <code>src/index.js</code> and save to reload.</li>
+                        <li><a href="https://github.com/dvajs/dva-docs/blob/master/v1/en-us/getting-started.md">Getting Started</a></li>
+                    </ul>
+                    <Button type="primary" onClick={this.handleClick}>Primary</Button>
+                    <p>{this.state.ModalText}</p>
+                    <DatePicker placeholder="请选择时间" />
+                    <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} format="HH:mm" minuteStep={5} />
+                </div>
 
-                    <div>
-                        <Button type="primary" onClick={this.showModal}>Open</Button>
-                        <Modal
-                            title="Title"
-                            visible={visible}
-                            onOk={this.handleOk}
-                            confirmLoading={confirmLoading}
-                            onCancel={this.handleCancel}
-                        >
-                            <p>{ModalText}</p>
-                        </Modal>
-                    </div>
-                </section>
-            </Main>
+                <div>
+                    <Button type="primary" onClick={this.showModal}>Open</Button>
+                    <Modal
+                        title="Title"
+                        visible={visible}
+                        onOk={this.handleOk}
+                        confirmLoading={confirmLoading}
+                        onCancel={this.handleCancel}
+                    >
+                        <p>{ModalText}</p>
+                    </Modal>
+                </div>
+            </section>
         );
     }
 }
@@ -135,6 +107,4 @@ class IndexPage extends Component {
 
 // }
 
-export default connect()(CSSModules(IndexPage, styles, {
-    allowMultiple: true,
-}));
+export default connect()(CSSModules(IndexPage, styles, { allowMultiple: true }));

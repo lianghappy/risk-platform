@@ -9,6 +9,10 @@ const api = {
     login: `${API}/api/merchant/proxy/user/login/v1`,
     // 默认地址
     getAddress: 'https://migu.jimistore.com/api/model/explains/yihuigou',
+    // 修改密码
+    userResetPwd: `${API}/api/rbac/service/user/resetPwd/v1`,
+    // 用户列表
+    userList: `${API}/api/merchant/proxy/user/listUser/v1`,
 };
 
 export default api;

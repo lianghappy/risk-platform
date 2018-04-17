@@ -4,66 +4,58 @@ import {
     Menu,
     Icon,
 } from 'antd';
+import { connect } from 'dva';
+import PropTypes from 'prop-types';
 import UpdatePwd from 'components/UpdatePwd';
+import { getUserName } from 'models/session';
 
-class Header extends React.Component {
-    static defaultProps = {
-        userName: 'admin',
-    };
+function Header({ userName, logout }) {
+    const menu = (
+        <Menu>
+            <Menu.Item key="password">
+                <UpdatePwd visible={false}>修改密码</UpdatePwd>
+            </Menu.Item>
+            <Menu.Item key="logout">
+                <span role="button" tabIndex="-1" onClick={logout}>
+                    退出登录
+                </span>
+            </Menu.Item>
+        </Menu>
+    );
 
-    state = {
-        visible: false, // 更新密码对话框显示标识
-    };
-
-    handleOk = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    menuClick = ({ key }) => {
-        if (Object.is(key, 'password')) {
-        // 修改密码
-            this.setState({
-                visible: true,
-            });
-        } else {
-        // 退出登录
-
-        }
-    };
-
-    render() {
-        const menu = (
-            <Menu onClick={this.menuClick}>
-                <Menu.Item key="password">修改密码</Menu.Item>
-                <Menu.Item key="logout">退出登录</Menu.Item>
-            </Menu>
-        );
-        const { userName } = this.props;
-
-        return (
-            <section style={{ float: 'right' }}>
-                <Dropdown overlay={menu}>
-                    <a className="ant-dropdown-link" href="#">
-                        {userName}
-                        <Icon type="down" />
-                    </a>
-                </Dropdown>
-                <UpdatePwd
-                    visible={this.state.visible}
-                    handleOk={this.handleOk}
-                    handleCancel={this.handleCancel}
-                />
-            </section>
-        );
-    }
+    return (
+        <section style={{ float: 'right' }}>
+            <Dropdown overlay={menu} trigger={['click']}>
+                <a className="ant-dropdown-link" href="#">
+                    {userName}
+                    <Icon type="down" />
+                </a>
+            </Dropdown>
+        </section>
+    );
 }
 
-export default Header;
+Header.propTypes = {
+    userName: PropTypes.string.isRequired,
+    logout: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+    userName: getUserName(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    logout: () => {
+        dispatch({
+            type: 'session/logout',
+        });
+    },
+    resetPwd: (data) => {
+        dispatch({
+            type: 'user/resetPwd',
+            payload: data,
+        });
+    },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

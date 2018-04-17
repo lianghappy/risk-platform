@@ -10,3 +10,5 @@ export const PASSWORD = password;
 export const PAGE_SIZE = 10;
 // 错误提示
 export const ERR_MSG = '系统错误，请稍后重试';
+// 全局提示延时时间(秒)
+export const DURATION = 3;

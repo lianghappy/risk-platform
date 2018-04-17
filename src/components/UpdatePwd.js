@@ -6,38 +6,56 @@ import {
     Button,
     Input,
 } from 'antd';
-
-const FormItem = Form.Item;
+import { connect } from 'dva';
+import MD5 from 'utils/MD5';
+import { getUserInfo } from 'models/session';
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-class UpdatePwd extends React.Component {
+class UpdatePwd extends React.PureComponent {
     static propTypes = {
         visible: PropTypes.bool.isRequired,
-        handleOk: PropTypes.func.isRequired,
-        handleCancel: PropTypes.func.isRequired,
+        children: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.element,
+        ]).isRequired,
     };
 
     state = {
-        loading: false,
+        visible: this.props.visible || false,
     };
-
-    componentDidMount() {
-        this.props.form.validateFields();
-    }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let isRight = true;
+        const { form, userInfo, resetPwd, logout } = this.props;
 
-        this.props.form.validateFields((err) => {
-            if (err) isRight = false;
+        form.validateFields((err, { oldPwd, newPwd }) => {
+            if (!err) {
+                new Promise((resolve) => {
+                    resetPwd({
+                        data: {
+                            id: userInfo.id,
+                            oldPwd: MD5(oldPwd),
+                            newPwd: MD5(newPwd),
+                        },
+                        resolve,
+                    });
+                }).then(() => {
+                    this.handleCancel();
+                    sessionStorage.clear();
+                    Modal.success({
+                        title: '系统提示',
+                        content: '密码修改成功，请重新登录！',
+                        onOk: () => {
+                            logout();
+                        },
+                    });
+                });
+            }
         });
-
-        if (isRight) this.props.handleOk();
-    }
+    };
 
     handleConfirmPassword = (rule, value, callback) => {
         const { getFieldValue } = this.props.form;
@@ -49,16 +67,26 @@ class UpdatePwd extends React.Component {
         }
     };
 
+    handleShow = () => {
+        this.props.form.validateFields();
+        this.setState({
+            visible: true,
+        });
+    };
+
+    handleCancel = () => {
+        this.props.form.resetFields();
+        this.setState({
+            visible: false,
+        });
+    };
+
     render() {
         const formItemLayout = {
             labelCol: { span: 6 },
             wrapperCol: { span: 14 },
         };
-        const {
-            visible,
-            handleCancel,
-            form,
-        } = this.props;
+        const { form, children } = this.props;
         const {
             getFieldDecorator,
             getFieldsError,
@@ -66,83 +94,109 @@ class UpdatePwd extends React.Component {
             isFieldTouched,
         } = form;
 
-        const oldError = isFieldTouched('old') && getFieldError('old');
-        const newError = isFieldTouched('new') && getFieldError('new');
+        const oldError = isFieldTouched('oldPwd') && getFieldError('oldPwd');
+        const newError = isFieldTouched('newPwd') && getFieldError('newPwd');
         const confirmError = isFieldTouched('confirm') && getFieldError('confirm');
 
         return (
-            <Modal
-                title="更新密码"
-                visible={visible}
-                onCancel={handleCancel}
-                onOk={this.handleSubmit}
-                destroyOnClose
-                footer={[
-                    <Button key="back" onClick={handleCancel}>取消</Button>,
-                    <Button
-                        key="submit"
-                        type="primary"
-                        loading={this.state.loading}
-                        disabled={hasErrors(getFieldsError())}
-                        onClick={this.handleSubmit}
-                    >
-                        确定
-                    </Button>,
-                ]}
-            >
-                <Form layout="horizontal">
-                    <FormItem
-                        {...formItemLayout}
-                        label="原密码"
-                        validateStatus={oldError ? 'error' : ''}
-                        help={oldError || ''}
-                    >
-                        {
-                            getFieldDecorator('old', {
-                                rules: [{ required: true, message: '请输入原密码' }],
-                            })(<Input type="password" />)
-                        }
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="新密码"
-                        validateStatus={newError ? 'error' : ''}
-                        help={newError || ''}
-                    >
-                        {
-                            getFieldDecorator('new', {
-                                rules: [
-                                    { required: true, message: '请输入新密码' },
-                                    { min: 6, message: '密码最小长度为6位' },
-                                ],
-                            })(<Input type="password" />)
-                        }
-                    </FormItem>
-                    <FormItem
-                        {...formItemLayout}
-                        label="确认密码"
-                        validateStatus={confirmError ? 'error' : ''}
-                        help={confirmError || ''}
-                    >
-                        {
-                            getFieldDecorator('confirm', {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: '请输入确认密码',
-                                    },
-                                    {
-                                        validator: this.handleConfirmPassword,
-                                        message: '两次输入密码不一致',
-                                    },
-                                ],
-                            })(<Input type="password" />)
-                        }
-                    </FormItem>
-                </Form>
-            </Modal>
+            <section>
+                <span role="button" tabIndex="0" onClick={this.handleShow}>
+                    {children}
+                </span>
+                <Modal
+                    title="更新密码"
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    onOk={this.handleSubmit}
+                    footer={[
+                        <Button key="back" onClick={this.handleCancel}>取消</Button>,
+                        <Button
+                            key="submit"
+                            type="primary"
+                            loading={this.props.loading}
+                            disabled={hasErrors(getFieldsError())}
+                            onClick={this.handleSubmit}
+                        >
+                            确定
+                        </Button>,
+                    ]}
+                >
+                    <Form layout="horizontal">
+                        <Form.Item
+                            {...formItemLayout}
+                            label="原密码"
+                            validateStatus={oldError ? 'error' : ''}
+                            help={oldError || ''}
+                        >
+                            {
+                                getFieldDecorator('oldPwd', {
+                                    rules: [{ required: true, message: '请输入原密码' }],
+                                })(<Input type="password" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="新密码"
+                            validateStatus={newError ? 'error' : ''}
+                            help={newError || ''}
+                        >
+                            {
+                                getFieldDecorator('newPwd', {
+                                    rules: [
+                                        { required: true, message: '请输入新密码' },
+                                        { min: 6, message: '密码最小长度为6位' },
+                                    ],
+                                })(<Input type="password" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="确认密码"
+                            validateStatus={confirmError ? 'error' : ''}
+                            help={confirmError || ''}
+                        >
+                            {
+                                getFieldDecorator('confirm', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请输入确认密码',
+                                        },
+                                        {
+                                            validator: this.handleConfirmPassword,
+                                            message: '两次输入密码不一致',
+                                        },
+                                    ],
+                                })(<Input type="password" />)
+                            }
+                        </Form.Item>
+                    </Form>
+                </Modal>
+            </section>
         );
     }
 }
 
-export default Form.create()(UpdatePwd);
+const mapStateToProps = (state) => ({
+    userInfo: getUserInfo(state),
+    loading: state.loading.models.session,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    resetPwd: (data) => {
+        dispatch({
+            type: 'user/resetPwd',
+            payload: data,
+        });
+    },
+    logout: () => {
+        dispatch({
+            type: 'session/logout',
+        });
+    },
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+)(Form.create()(UpdatePwd));

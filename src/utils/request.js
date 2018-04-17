@@ -14,7 +14,7 @@ const appId = {
 const headers = {
     appId, // app唯一标识
     deviceId: 'null', // 设备唯一标识
-    userId: '', // 用户id
+    userId: 'null', // 用户id
     OSVersion: parseFloat(navigator.appVersion), // 设备系统版本
     timestamp: '', // 时间戳
     signature: '', // 签名
@@ -29,6 +29,12 @@ function setUserId(userId) {
 // 设置设备Id
 function setDeviceId(deviceId) {
     Object.assign(headers, { deviceId });
+}
+
+// 设置token
+function setToken(token) {
+    if (token) Object.assign(headers, { token });
+    else delete headers.token;
 }
 
 // 签名
@@ -138,21 +144,19 @@ function request(url, config) {
         .then(checkStatus)
         .then(parseJSON)
         .then((data) => {
-        // http请求返回值状态校验
             if (config.standard) {
             // 约定的数据格式
-                if (Object.is(data.code, '200')) return data.data;
+                if (config.withCode) return data; // 返回所有数据【code+data/code+message】
 
+                if (Object.is(data.code, '200')) return data.data;
                 const error = new Error(data.message || ERR_MSG);
                 error.code = data.code;
                 throw error;
+            } else {
+                return data;
             }
-            return data;
         })
         .catch((error) => {
-        // 错误处理
-            // do something common
-
             throw error;
         });
 }
@@ -162,7 +166,8 @@ function get(url, data, config) {
     return request(url, {
         data,
         method: 'GET',
-        standard: true, // 是否按约定的数据格式返回
+        standard: true, // 是否按约定的数据格式返回【code+data/code+message】
+        withCode: false, // 是否返回code【response.status==200且standard:true有效】
         ...config,
     });
 }
@@ -172,9 +177,17 @@ function post(url, data, config) {
     return request(url, {
         data,
         method: 'POST',
-        standard: true, // 是否按约定的数据格式返回
+        standard: true,
+        withCode: false,
         ...config,
     });
 }
 
-export { setUserId, setDeviceId, signature, get, post };
+export {
+    setUserId,
+    setDeviceId,
+    setToken,
+    signature,
+    get,
+    post,
+};
