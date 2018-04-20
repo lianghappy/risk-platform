@@ -39,6 +39,7 @@ export default {
         API: constants.API,
         API_COMMON: constants.API_COMMON,
         API_USER: constants.API_USER,
+        API_RBAC: constants.API_RBAC,
     },
     alias: {
         assets: path.join(__dirname, 'src/assets'),

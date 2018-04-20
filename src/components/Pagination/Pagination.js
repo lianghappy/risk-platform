@@ -23,13 +23,13 @@ const defaultPageSizeOptions = ['10', '20', '30', '40']; // 默认指定每页�
 
 class Pagination extends React.PureComponent {
     static propTypes = {
-        current: PropTypes.number,
-        dataSize: PropTypes.number,
-        onChange: PropTypes.func,
-        pageSize: PropTypes.number,
-        pageSizeOptions: PropTypes.arrayOf(PropTypes.string),
-        showQuickJumper: PropTypes.bool,
-        showSizeChanger: PropTypes.bool,
+        current: PropTypes.number.isRequired,
+        dataSize: PropTypes.number.isRequired,
+        onChange: PropTypes.func.isRequired,
+        pageSize: PropTypes.number.isRequired,
+        pageSizeOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
+        showQuickJumper: PropTypes.bool.isRequired,
+        showSizeChanger: PropTypes.bool.isRequired,
     };
 
     state = {

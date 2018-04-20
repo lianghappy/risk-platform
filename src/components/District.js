@@ -61,7 +61,7 @@ class District extends React.PureComponent {
     };
 
     // 城市数据集获取
-    getDistrict() {
+    getDistrict = () => {
         return new Promise((resolve, reject) => {
             if (districts) {
                 resolve(districts);
@@ -95,7 +95,7 @@ class District extends React.PureComponent {
     }
 
     // 根据名称查询城市编码
-    getCodeByName(name, source = []) {
+    getCodeByName = (name, source = []) => {
         const city = {
             code: null,
             next: [],

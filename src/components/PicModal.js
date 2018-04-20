@@ -26,7 +26,11 @@ class PicModal extends Component {
     render() {
         return (
             <span>
-                <span onClick={e => this.showModal(e)}>
+                <span
+                    onClick={e => this.showModal(e)}
+                    role="button"
+                    tabIndex="0"
+                >
                     {this.props.children}
                 </span>
                 <Modal

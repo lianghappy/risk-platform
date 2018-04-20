@@ -2,11 +2,12 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import CSSModules from 'react-css-modules';
 import DecisionIndex from './Account';
+import RoleIndex from './Role';
 import style from './index.scss';
 
 class SystemManage extends React.PureComponent {
     state = {
-        current: 'account',
+        current: '.$account',
     }
     handleClick = (e) => {
         console.log('click ', e);
@@ -15,6 +16,7 @@ class SystemManage extends React.PureComponent {
         });
     }
     render() {
+        console.log(this.state.current);
         return (
             <Layout className={style.container}>
                 <Menu
@@ -32,7 +34,12 @@ class SystemManage extends React.PureComponent {
                         权限管理
                     </Menu.Item>
                 </Menu>
-                <DecisionIndex />
+                {
+                    this.state.current === '.$account' ?
+                        <DecisionIndex />
+                        :
+                        <RoleIndex />
+                }
             </Layout>
         );
     }

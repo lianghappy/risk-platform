@@ -21,7 +21,6 @@ class AddAccount extends React.PureComponent {
             PropTypes.string,
             PropTypes.element,
         ]).isRequired,
-        loading: PropTypes.bool.isRequired,
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
         pageNum: PropTypes.number.isRequired,
@@ -33,7 +32,7 @@ class AddAccount extends React.PureComponent {
     };
     onPageChange = (pageNum, pageSize) => {
         this.props.dispatch({
-            type: 'account/getRoleNameListSuc',
+            type: 'account/getRoleNameList',
             payload: {
                 pageNum,
                 pageSize,
@@ -46,7 +45,7 @@ class AddAccount extends React.PureComponent {
            dispatch,
        } = this.props;
        dispatch({
-           type: 'account/getRoleNameListSuc',
+           type: 'account/getRoleNameList',
            payload: {
                pageNum: 1,
                pageSize,
@@ -115,7 +114,6 @@ class AddAccount extends React.PureComponent {
                         <Button
                             key="submit"
                             type="primary"
-                            loading={this.props.loading}
                             disabled={hasErrors(getFieldsError())}
                             onClick={this.handleSubmit}
                         >
@@ -209,6 +207,13 @@ const mapStateToProps = (state) => ({
     list: state.account.list,
     pageNum: state.account.pageNum,
     pageSize: state.account.pageSize,
-    loading: state.loading.models.account,
 });
-export default connect(mapStateToProps)(Form.create()(AddAccount));
+const mapDispatchToProps = (dispatch) => ({
+    getRoleNameList: (data) => {
+        dispatch({
+            type: 'account/getRoleNameList',
+            payload: data,
+        });
+    },
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(AddAccount));

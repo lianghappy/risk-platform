@@ -36,12 +36,15 @@
     "import/no-unresolved": 0,
     "import/extensions": 0,
     "import/no-extraneous-dependencies": [0],
-    "jsx-a11y/anchor-is-valid": 0,
+    "jsx-a11y/anchor-is-valid": [0],
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-indent": 0,
+    "jsx-a11y/no-noninteractive-element-to-interactive-role": 0,
+    "no-plusplus": 0,
     "react/forbid-prop-types": [0],
     "react/display-name": [0],
     "react/jsx-indent-props": 0,
+    "react/prefer-stateless-function": 0,
     "react/self-closing-comp": [
       "error", {
         "component": false,

@@ -35,8 +35,6 @@ export default function (attributes, data = []) {
         }
     }
 
-    pickChild(treeData);
-
     // 子节点解析
     function pickChild(node) {
         if (restData.length !== 0) {
@@ -57,6 +55,7 @@ export default function (attributes, data = []) {
             }
         }
     }
+    pickChild(treeData);
 
     return treeData;
 }

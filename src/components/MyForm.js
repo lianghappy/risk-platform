@@ -20,7 +20,7 @@ class NewForm extends Component {
         });
     }
 
-    checksort(rule, value, callback, el) {
+    checksort = (rule, value, callback, el) => {
         const min = el.min || 0;
         if (!value && value !== 0) {
             callback(`请输入${el.name}!`);

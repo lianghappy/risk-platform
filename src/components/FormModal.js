@@ -16,8 +16,6 @@ class FormModal extends Component {
         super(props);
         this.state = {
             visible: props.visible || false,
-            money: 0,
-            num: 0,
         };
     }
 
@@ -38,7 +36,7 @@ class FormModal extends Component {
         });
     }
 
-    checksort(rule, value, callback, el) {
+    checksort = (rule, value, callback, el) => {
         const min = el.min || 0;
         if (!value && value !== 0) {
             callback(`请输入${el.name}!`);
@@ -72,7 +70,7 @@ class FormModal extends Component {
                     {this.props.renderTop}
                     <Form layout={layout}>
                         {
-                            list.length && list.map((el, index) => {
+                            list.length && list.map((el) => {
                                 if (el.type === 'input') {
                                     return (
                                         <FormItem key={el.id} {...formItemLayout} label={el.name}>
@@ -159,7 +157,8 @@ class FormModal extends Component {
             <span>
                 <span
                     onClick={e => this.showModal(e)}
-                    role="children"
+                    role="button"
+                    tabIndex="0"
                 >
                     {this.props.children}
                 </span>
@@ -169,7 +168,7 @@ class FormModal extends Component {
                     title={this.props.title}
                     placeholder={this.props.placeholder}
                     list={this.props.list}
-                    ref={(form) => this.form = form}
+                    ref={(form) => this.form === form}
                     visible={this.state.visible}
                     onCancel={() => this.setState({ visible: false })}
                     onCreate={() => this.handleCreate()}

@@ -36,6 +36,7 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/system/Index'),
         models: () => [
             import('models/system/Account'),
+            import('models/system/Role'),
         ],
     });
     const User = dynamic({
@@ -58,6 +59,13 @@ function RouterConfig({ history, app }) {
         app,
         component: () => import('routes/application/Application'),
     });
+    const AddRole = dynamic({
+        app,
+        component: () => import('routes/system/AddRole'),
+        models: () => [
+            import('models/system/roleMenuTree'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -72,6 +80,7 @@ function RouterConfig({ history, app }) {
                     />
                     <PrivateRoute path="/index" exact component={Index} />
                     <Route path="/systemManage" exact component={SystemManage} />
+                    <Route path="/addRole" exact component={AddRole} />
                     <Route path="/user" exact component={User} />
                     <Route path="/decision" exact component={Decision} />
                     <Route path="/application" exact component={Application} />

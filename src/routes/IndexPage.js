@@ -21,8 +21,4 @@ class IndexPage extends React.PureComponent {
     }
 }
 
-// function mapStateToProps() {
-
-// }
-
 export default CSSModules(IndexPage, styles, { allowMultiple: true });

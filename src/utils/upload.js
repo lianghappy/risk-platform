@@ -18,7 +18,7 @@ function uploadResult(params, formData, host, fname) {
         let timeoutAction = null;
         const timerPromise = new Promise((resolve, reject) => {
             timeoutAction = () => {
-                reject('timeout');
+                reject(new Error('timeout'));
             };
         });
         setTimeout(() => {

@@ -27,6 +27,10 @@ const api = {
     roleNameList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
     // 账号列表
     getAccountList: `${API}/api/risk/manager/user/select/v1`,
+    // 角色列表
+    getRoleList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
+    // 权限树
+    getMenuTreeList: `${API_RBAC}/api/rbac/service/rolePlus/menuTreeList/v2`,
 };
 
 export default api;
