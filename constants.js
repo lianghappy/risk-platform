@@ -5,16 +5,24 @@ exports.VERSION = '1.0';
 
 // 秘钥
 exports.PASSWORD = {
-    prod: '2150b489f07f43b78fc6fb5b13b2480b',
-    sandbox: '2150b489f07f43b78fc6fb5b13b2480b',
-    test: '318b04a58d9c4b54af076a3874c5483a',
-    dev: '318b04a58d9c4b54af076a3874c5483a',
+    prod: 'XwxQ7i4T65BVaPqeX2Bc0XxSMHYGWuP6',
+    sandbox: 'ZDqKURwRpSj070WjujeSaZfJsnh0ETk7',
+    test: 'sY0KVp5jLtYDtpFquh29Nuc0lAJOQOsF',
+    dev: 'YpVlYlPHOzDWSBKoEoDPoQirHvBc4rnr',
+}[exports.JIMI_ENV];
+
+// rbac接口
+exports.API_RBAC = {
+    dev: 'http://rbac-api.dev.jimistore.com',
+    test: 'http://rbac-api.test.jimistore.com',
+    prod: 'http://rbac-api.jimistore.com',
+    sandbox: 'https://user-api.jimistore.com',
 }[exports.JIMI_ENV];
 
 // 平台接口
 exports.API = {
-    dev: 'http://msp-api.dev.jimistore.com',
-    test: 'http://msp-api.test.jimistore.com',
+    dev: 'http://platform-risk.dev.jimistore.com',
+    test: 'http://platform-risk.test.jimistore.com',
     sandbox: 'https://testmsp-api.jimistore.com',
     prod: 'https://msp-api.jimistore.com',
 }[exports.JIMI_ENV];
@@ -27,7 +35,7 @@ exports.API_COMMON = {
     prod: 'https://common.jimistore.com',
 }[exports.JIMI_ENV];
 
-//用户
+// 用户
 exports.API_USER = {
     dev: 'http://user.dev.jimistore.com',
     test: 'http://user.test.jimistore.com',

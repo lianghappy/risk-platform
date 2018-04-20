@@ -13,7 +13,7 @@ const Main = ({ children, location }) => (
         <Layout style={{ width: '100vw', height: '100vh' }}>
             <Sider location={location} />
             <Layout>
-                <Layout.Header>
+                <Layout.Header style={{ height: '80px', lineHeight: '80px' }}>
                     <Header />
                 </Layout.Header>
                 <Layout.Content id="ui-content" style={{ overflow: 'auto' }}>

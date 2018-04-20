@@ -1,102 +1,20 @@
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import {
-    Button,
-    DatePicker,
-    Modal,
-    TimePicker,
-} from 'antd';
-import moment from 'moment';
+import React from 'react';
 import CSSModules from 'react-css-modules';
-import * as request from 'utils/request';
-import API from 'utils/api';
 import styles from './IndexPage.css';
+import welcome from '../assets/images/欢迎页面.svg';
+import smile from '../assets/images/笑脸.svg';
 
-class IndexPage extends Component {
-    static propTypes = {};
-
-    state = {
-        ModalText: 'Content of the modal',
-        visible: false,
-        confirmLoading: false,
-    };
-
-    componentDidMount() {
-        request.get(API.address, null, {
-            standard: false,
-        })
-            .then((result) => {
-                console.log(result);
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
-    }
-
-    handleClick = () => {
-        console.log(this.state.ModalText);
-    };
-
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    };
-    handleOk = () => {
-        this.setState({
-            ModalText: 'The modal will be closed after two seconds',
-            confirmLoading: true,
-        });
-        setTimeout(() => {
-            this.setState({
-                visible: false,
-                confirmLoading: false,
-            });
-        }, 2000);
-    };
-    handleCancel = () => {
-        console.log('Clicked cancel button');
-        this.setState({
-            visible: false,
-        });
-    };
-
+class IndexPage extends React.PureComponent {
     render() {
-        const { visible, confirmLoading, ModalText } = this.state;
         return (
-            <section>
-                <div styleName="normal test" style={{ fontStyle: 'oblique' }}>
-                    <h1 styleName="title">Yay! Welcome to dva!</h1>
-                    <a
-                        target="_blank"
-                        href="http://zcainfo.miitbeian.gov.cn/state/outPortal/loginPortal.action"
-                        rel="noopener noreferrer"
-                    >
-                        许可证
-                    </a>
-                    <i className="jimi-icon" styleName="iconRegister" />
-                    <div styleName="welcome" />
-                    <ul styleName="list">
-                        <li>To get started, edit <code>src/index.js</code> and save to reload.</li>
-                        <li><a href="https://github.com/dvajs/dva-docs/blob/master/v1/en-us/getting-started.md">Getting Started</a></li>
-                    </ul>
-                    <Button type="primary" onClick={this.handleClick}>Primary</Button>
-                    <p>{this.state.ModalText}</p>
-                    <DatePicker placeholder="请选择时间" />
-                    <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} format="HH:mm" minuteStep={5} />
-                </div>
-
+            <section styleName="welcome">
+                <img src={welcome} alt="welcome" styleName="bigImg" />
                 <div>
-                    <Button type="primary" onClick={this.showModal}>Open</Button>
-                    <Modal
-                        title="Title"
-                        visible={visible}
-                        onOk={this.handleOk}
-                        confirmLoading={confirmLoading}
-                        onCancel={this.handleCancel}
-                    >
-                        <p>{ModalText}</p>
-                    </Modal>
+                    <img src={smile} alt="smile" styleName="smallImg" />
+                    <p styleName="texts">
+                        <span styleName="top">Welcome back</span>
+                        <span styleName="bottom">欢迎使用机蜜PLD风控系统</span>
+                    </p>
                 </div>
             </section>
         );
@@ -107,4 +25,4 @@ class IndexPage extends Component {
 
 // }
 
-export default connect()(CSSModules(IndexPage, styles, { allowMultiple: true }));
+export default CSSModules(IndexPage, styles, { allowMultiple: true });

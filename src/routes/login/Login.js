@@ -1,10 +1,12 @@
 import React from 'react';
-import { Layout, Form, Icon, Input, Button, Card } from 'antd';
+import { Layout, Form, Icon, Input, Button } from 'antd';
 import { connect } from 'dva';
 import { Redirect } from 'dva/router';
 import CSSModules from 'react-css-modules';
 import MD5 from 'utils/MD5';
 import styles from './index.scss';
+import imgs from '../../assets/images/背景图.svg';
+import logoImg from '../../assets/images/logo.svg';
 
 class Login extends React.PureComponent {
   handleSubmit = e => {
@@ -13,7 +15,7 @@ class Login extends React.PureComponent {
 
       form.validateFields((err, { userName, passWord }) => {
           if (!err) {
-              login({ userName, passWord: MD5(passWord) });
+              login({ account: userName, password: MD5(passWord), sysId: 'risk' });
           }
       });
   };
@@ -28,38 +30,47 @@ class Login extends React.PureComponent {
       return (
           <Layout styleName="layout">
               <Layout.Content styleName="content">
-                  <Card title="登录" styleName="card">
-                      <Form layout="horizontal" onSubmit={this.handleSubmit}>
-                          <Form.Item>
-                              {getFieldDecorator('userName', {
-                                  rules: [{ required: true, message: '请输入用户名' }],
-                              })(<Input
-                                  prefix={<Icon type="user" />}
-                                  placeholder="请输入用户名"
-                                  autoFocus
-                              />)}
-                          </Form.Item>
-                          <Form.Item>
-                              {getFieldDecorator('passWord', {
-                                  rules: [{ required: true, message: '请输入密码' }],
-                              })(<Input
-                                  prefix={<Icon type="lock" />}
-                                  type="password"
-                                  placeholder="请输入用户名"
-                              />)}
-                          </Form.Item>
-                          <Form.Item>
-                              <Button
-                                  type="primary"
-                                  htmlType="submit"
-                                  styleName="login"
-                                  loading={this.props.loading}
-                              >
-                  登陆
-                              </Button>
-                          </Form.Item>
-                      </Form>
-                  </Card>
+                  <div styleName="card">
+                      <img src={imgs} alt="背景" styleName="imgs" />
+                      <div styleName="logins">
+                          <img src={logoImg} alt="logo" styleName="logoImg" />
+                          <div styleName="inputLogin">
+                              <span styleName="texts">PLD风控系统</span>
+                              <Form layout="horizontal" onSubmit={this.handleSubmit}>
+                                  <Form.Item>
+                                      {getFieldDecorator('userName', {
+                                          rules: [{ required: true, message: '请输入用户名' }],
+                                      })(<Input
+                                          prefix={<Icon type="user" />}
+                                          placeholder="请输入用户名"
+                                          autoFocus
+                                          className={styles.antinput}
+                                      />)}
+                                  </Form.Item>
+                                  <Form.Item>
+                                      {getFieldDecorator('passWord', {
+                                          rules: [{ required: true, message: '请输入密码' }],
+                                      })(<Input
+                                          prefix={<Icon type="lock" />}
+                                          type="password"
+                                          placeholder="请输入用户名"
+                                          className={styles.antinput}
+                                      />)}
+                                  </Form.Item>
+                                  <Form.Item>
+                                      <Button
+                                          type="primary"
+                                          htmlType="submit"
+                                          styleName="login"
+                                          loading={this.props.loading}
+                                      >
+                                       立即登录
+                                      </Button>
+                                  </Form.Item>
+                              </Form>
+                          </div>
+                      </div>
+                  </div>
                   <p>
                       {this.props.user}
                   </p>

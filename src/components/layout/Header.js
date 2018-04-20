@@ -24,9 +24,9 @@ function Header({ userName, logout }) {
     );
 
     return (
-        <section style={{ float: 'right' }}>
+        <section style={{ float: 'right', height: '80px' }}>
             <Dropdown overlay={menu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="#">
+                <a className="ant-dropdown-link" href="">
                     {userName}
                     <Icon type="down" />
                 </a>

@@ -4,10 +4,10 @@ import MD5 from 'utils/MD5';
 
 // appid
 const appId = {
-    prod: 'merchant-proxy-prod',
-    sandbox: 'merchant-proxy-sandbox',
-    test: 'merchant-proxy-test',
-    dev: 'merchant-proxy-test',
+    prod: 'risk-manager',
+    sandbox: 'risk-manager',
+    test: 'risk-manager',
+    dev: 'risk-manager',
 }[ENV];
 
 // 公共请求头

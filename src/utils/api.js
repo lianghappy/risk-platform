@@ -6,13 +6,27 @@ const api = {
     // oss上传
     oss: `${API_COMMON}/api/fileUpload/accessKey/merchant`,
     // 登录
-    login: `${API}/api/merchant/proxy/user/login/v1`,
+    login: `${API}/api/risk/manager/user/login/v1`,
     // 默认地址
     getAddress: 'https://migu.jimistore.com/api/model/explains/yihuigou',
     // 修改密码
-    userResetPwd: `${API}/api/rbac/service/user/resetPwd/v1`,
+    userResetPwd: `${API}/api/risk/manager/user/updatePass/v1`,
     // 用户列表
     userList: `${API}/api/merchant/proxy/user/listUser/v1`,
+    // 添加用户
+    addUser: `${API}/api/risk/manager/user/add/v1`,
+    // 修改用户
+    editUser: `${API}/api/risk/manager/user/update/v1`,
+    // 查询用户
+    selectUser: `${API}/api/risk/manager/user/select/v1`,
+    // 获取公司列表
+    getCompanyList: `${API}/api/risk/manager/application/company/list/v1`,
+    // 添加公司
+    addCompany: `${API}/api/risk/manager/application/company/create/v1`,
+    // 角色名称的列表
+    roleNameList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
+    // 账号列表
+    getAccountList: `${API}/api/risk/manager/user/select/v1`,
 };
 
 export default api;

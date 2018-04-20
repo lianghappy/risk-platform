@@ -13,11 +13,33 @@
 }
 
 .welcome {
-  height: 328px;
-  background: url(../assets/yay.jpg) no-repeat center 0;
-  background-size: 388px 328px;
+   height: 100%;
+   text-align: center;
+   margin-top: 8%;
 }
-
+.bigImg{
+    height: 500px;
+    width: auto;
+    margin-bottom: 17px;
+}
+.smallImg{
+    display: inline-block;
+    margin-right: 30px;
+    vertical-align: baseline;
+}
+.texts{
+    display: inline-block;
+}
+.top{
+    font-size: 44px;
+    color: #001428;
+    display: block;
+}
+.bottom{
+    font-size: 26px;
+    color: rgba(0,0,0,0.65);
+    display: block;
+}
 .list {
   font-size: 1.2em;
   margin-top: 1.8em;

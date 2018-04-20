@@ -8,11 +8,13 @@ import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import styles from './Sider.scss';
+import logo from '../../assets/images/机蜜logo.svg';
 
 const Sider = ({ location }) => (
     <Layout.Sider breakpoint="lg" >
         <div className={styles.logo}>
-            <Icon type="html5" />
+            <img src={logo} alt="logo" className={styles.logoImgs} />
+            <span className={styles.names}>PLD风控系统</span>
         </div>
         <Menu
             theme="dark"
@@ -25,8 +27,8 @@ const Sider = ({ location }) => (
                     <span>系统管理</span>
                 </Link>
             </Menu.Item>
-            <Menu.Item key="/indexPage">
-                <Link to="/indexPage">
+            <Menu.Item key="/application">
+                <Link to="/application">
                     <Icon type="video-camera" />
                     <span>应用管理</span>
                 </Link>

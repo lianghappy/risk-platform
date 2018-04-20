@@ -5,10 +5,48 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background: url('../../assets/images/loginbg.svg') no-repeat center center;
+    background-size: cover;
 }
 .card {
-    width: 360px;
+    width: 768px;
+    height: 432px;
+    display: flex;
+    border-radius: 20px;
+    background-color: #fff;
+}
+.imgs{
+   height: 100%;
+   border-top-left-radius:20px;
 }
 .login {
+    width: 230px;
+    height: 40px;
+    border-radius: 20px;
+}
+.logins{
+    border: none;
+}
+.logoImg{
+    height: 38px;
+    width: auto;
+    margin-top: 26px;
+    margin-left: 20px;
+}
+.texts{
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+.inputLogin{
     width: 100%;
+    text-align: center;
+    margin-top: 55px;
+    margin-left: 25px;
+    width: 260px;
+}
+.antinput .ant-input{
+    border: none!important;
+    border-bottom: 1px solid #d9d9d9!important;
 }
