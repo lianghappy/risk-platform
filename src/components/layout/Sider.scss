@@ -10,6 +10,14 @@
 .icon-user:before {
     content: '\e626';
 }
+.icon-xitongguanli:before{
+    content: "\e641";
+    color: #FFFFFF;
+}
+.icon-jueceyinqing:before{ content: "\e63e"; color: #FFFFFF;}
+
+.icon-yingyongguanli:before{ content: "\e63f"; color: #FFFFFF;}
+
 .logoImgs{
     width: 60px;
     height: 60px;
@@ -18,4 +26,16 @@
     font-size: 20px;
     color: #FFFFFF;
     letter-spacing: 0.01px;
+}
+.tops{
+    margin-top: 38px!important;
+    height: 68px!important;
+    line-height: 68px!important;
+    font-size: 18px!important;
+
+}
+.heights{
+    height: 68px!important;
+    line-height: 68px!important;
+    font-size: 18px!important;
 }

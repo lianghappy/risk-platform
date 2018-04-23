@@ -2,7 +2,6 @@ import React from 'react';
 import {
     Layout,
     Menu,
-    Icon,
 } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
@@ -21,21 +20,21 @@ const Sider = ({ location }) => (
             mode="inline"
             selectedKeys={[location.pathname]}
         >
-            <Menu.Item key="/systemManage">
+            <Menu.Item key="/systemManage" className={styles.tops}>
                 <Link to="/systemManage">
-                    <i className={cs('jimi-icon', 'anticon', styles['icon-user'])} />
+                    <i className={cs('icon-xitongguanli', 'anticon', styles['icon-xitongguanli'])} />
                     <span>系统管理</span>
                 </Link>
             </Menu.Item>
-            <Menu.Item key="/application">
+            <Menu.Item key="/application" className={styles.heights}>
                 <Link to="/application">
-                    <Icon type="video-camera" />
+                    <i className={cs('icon-yingyongguanli', 'anticon', styles['icon-yingyongguanli'])} />
                     <span>应用管理</span>
                 </Link>
             </Menu.Item>
-            <Menu.Item key="/decision">
+            <Menu.Item key="/decision" className={styles.heights}>
                 <Link to="/decision">
-                    <Icon type="video-camera" />
+                    <i className={cs('icon-jueceyinqing', 'anticon', styles['icon-jueceyinqing'])} />
                     <span>决策引擎</span>
                 </Link>
             </Menu.Item>
