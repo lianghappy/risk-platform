@@ -20,8 +20,8 @@ const Sider = ({ location }) => (
             mode="inline"
             selectedKeys={[location.pathname]}
         >
-            <Menu.Item key="/systemManage" className={styles.tops}>
-                <Link to="/systemManage">
+            <Menu.Item key="/account" className={styles.tops}>
+                <Link to="/account">
                     <i className={cs('icon-xitongguanli', 'anticon', styles['icon-xitongguanli'])} />
                     <span>系统管理</span>
                 </Link>
@@ -32,8 +32,8 @@ const Sider = ({ location }) => (
                     <span>应用管理</span>
                 </Link>
             </Menu.Item>
-            <Menu.Item key="/decision" className={styles.heights}>
-                <Link to="/decision">
+            <Menu.Item key="/categoryStru" className={styles.heights}>
+                <Link to="/categoryStru">
                     <i className={cs('icon-jueceyinqing', 'anticon', styles['icon-jueceyinqing'])} />
                     <span>决策引擎</span>
                 </Link>

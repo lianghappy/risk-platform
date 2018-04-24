@@ -31,6 +31,14 @@ const api = {
     getRoleList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
     // 权限树
     getMenuTreeList: `${API_RBAC}/api/rbac/service/rolePlus/menuTreeList/v2`,
+    // 获取规则类别的接口
+    getCategory: `${API}/api/risk/manager/policy/category/list/v1`,
+    // 新增类别操作保存数据接口
+    addCategory: `${API}/api/risk/manager/policy/category/create/v1`,
+    // 获取父类别列表
+    getParentCategory: `${API}/api/risk/manager/policy/category/parent/list/v1`,
+    // 获取规则库列表
+    getRules: `${API}/api/risk/manager/policy/ruleBank/list/v1`,
 };
 
 export default api;

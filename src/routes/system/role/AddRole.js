@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Tree, Button } from 'antd';
-import style from './addrole.scss';
+import style from './index.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -46,6 +46,7 @@ const treeData = [{
 }];
 class AddRole extends React.PureComponent {
     static propTypes ={
+        dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
         sysId: PropTypes.string.isRequired,
     };

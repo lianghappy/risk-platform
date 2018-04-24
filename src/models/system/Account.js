@@ -9,24 +9,29 @@ export default {
         pageNum: 1,
         pageSize: PAGE_SIZE,
         sysId: SYSID,
+        roleNameList: [],
     },
     effects: {
-        * getRoleNameList({ payload }, { call, put }) {
-            const response = yield call(post, API.roleNameList, payload);
+        // 查询角色名称列表
+        * getRoleNameList(action, { call, put }) {
+            const response = yield call(post, API.roleNameList, {
+                pageSize: 9999,
+                pageNum: 1,
+                sysId: SYSID,
+            });
             yield put({
-                type: 'getRoleNameListSuc',
+                type: 'querySuc',
                 payload: {
-                    list: response,
-                    pageNum: payload.pageNum,
-                    pageSize: '100',
+                    roleNameList: response,
                 },
             });
         },
-        * getAccountList({ payload }, { call, put }) {
+        // 查询账号管理
+        * queryAccountList({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.getAccountList, payload, data);
             yield put({
-                type: 'getAccountListSuc',
+                type: 'querySuc',
                 payload: {
                     list: response,
                     pageNum: payload.pageNum,
@@ -37,19 +42,24 @@ export default {
         },
     },
     reducers: {
-        getRoleNameListSuc(state, { payload }) {
-            return { ...state, ...payload };
-        },
-        getAccountListSuc(state, { payload }) {
+        querySuc(state, { payload }) {
             return { ...state, ...payload };
         },
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/systemManage') {
+                if (pathname === '/account') {
                     dispatch({
-                        type: 'getAccountList',
+                        type: 'queryAccountList',
+                        payload: {
+                            pageNum: 1,
+                            pageSize: PAGE_SIZE,
+                            sysId: SYSID,
+                        },
+                    });
+                    dispatch({
+                        type: 'getRoleNameList',
                         payload: {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,

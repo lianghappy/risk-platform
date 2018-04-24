@@ -30,28 +30,6 @@ class AddAccount extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
     };
-    onPageChange = (pageNum, pageSize) => {
-        this.props.dispatch({
-            type: 'account/getRoleNameList',
-            payload: {
-                pageNum,
-                pageSize,
-            },
-        });
-    };
-   onQuery = () => {
-       const {
-           pageSize,
-           dispatch,
-       } = this.props;
-       dispatch({
-           type: 'account/getRoleNameList',
-           payload: {
-               pageNum: 1,
-               pageSize,
-           },
-       });
-   };
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {

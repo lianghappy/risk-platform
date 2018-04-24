@@ -4,8 +4,9 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table } from 'antd';
 import CSSModules from 'react-css-modules';
 import createHistory from 'history/createBrowserHistory';
-import style from './account.scss';
-import Pagination from '../../components/Pagination/Pagination';
+import SystemManage from '../Index';
+import style from './index.scss';
+import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -49,7 +50,7 @@ class RoleIndex extends React.PureComponent {
    addrole = (e) => {
        e.preventDefault();
        console.log(createHistory());
-       createHistory().push('/systemManage/addRole');
+       createHistory().push('/addRole');
    }
    render() {
        const {
@@ -69,7 +70,8 @@ class RoleIndex extends React.PureComponent {
            { title: '操作', dataIndex: 'operator', key: 'operator' },
        ];
        return (
-           <Layout className={style.container}>
+           <Layout className={style.containers}>
+               <SystemManage current=".$role" />
                <Form layout="inline" className={style.inputs}>
                    <FormItem label="角色名称">
                        <Input />
