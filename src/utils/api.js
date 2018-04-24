@@ -23,6 +23,38 @@ const api = {
     getCompanyList: `${API}/api/risk/manager/application/company/list/v1`,
     // 添加公司
     addCompany: `${API}/api/risk/manager/application/company/create/v1`,
+    // 公司的id查找公司详情
+    companyItem: `${API}/api/risk/manager/application/company/get/v1`,
+    // 删除公司
+    companyDel: `${API}/api/risk/manager/application/company/delete/v1`,
+    // 更新公司
+    companyUpdate: `${API}/api/risk/manager/application/company/update/v1`,
+
+    // 获取应用列表
+    getAppList: `${API}/api/risk/manager/application/app/list/v1`,
+    // 添加应用
+    addApp: `${API}/api/risk/manager/application/app/create/v1`,
+    // 应用的id查找公司详情
+    appItem: `${API}/api/risk/manager/application/company/get/v1`,
+    // 删除应用
+    appDel: `${API}/api/risk/manager/application/app/delete/v1`,
+    // 更新应用
+    appUpdate: `${API}/api/risk/manager/application/app/update/v1`,
+    // 应用详情
+    getAppDetail: `${API}/api/risk/manager/application/app/get/v1`,
+    // 已选产品
+    listSign: `${API}/api/risk/manager/application/appProduct/listSign/v1`,
+    // 未选产品
+    listNoSign: `${API}/api/risk/manager/application/appProduct/listNoSign/v1`,
+    // 单个创建
+    createPro: `${API}/api/risk/manager/application/appProduct/create/v1`,
+    // 单个删除
+    delPro: `${API}/api/risk/manager/application/appProduct/delete/v1`,
+    // 多个添加
+    listCreatePro: `${API}/api/risk/manager/application/appProduct/listCreate/v1`,
+    // 多个删除
+    listDeletePro: `${API}/api/risk/manager/application/appProduct/listDelete/v1`,
+
     // 角色名称的列表
     roleNameList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
     // 账号列表

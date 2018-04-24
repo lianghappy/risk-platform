@@ -63,12 +63,25 @@ function RouterConfig({ history, app }) {
     // 公司管理
     const Application = dynamic({
         app,
-        component: () => import('routes/application/Index'),
+        component: () => import('routes/application/company/Company'),
+        models: () => [
+            import('models/application/Company'),
+        ],
     });
     // 应用管理
     const appManage = dynamic({
         app,
-        component: () => import('routes/application/Application'),
+        component: () => import('routes/application/app/App'),
+        models: () => [
+            import('models/application/App'),
+        ],
+    });
+    const LookApp = dynamic({
+        app,
+        component: () => import('routes/application/app/LookApp'),
+        models: () => [
+            import('models/application/LookApp'),
+        ],
     });
     // 添加角色/编辑角色
     const AddRole = dynamic({
@@ -111,8 +124,9 @@ function RouterConfig({ history, app }) {
                     <Route path="/role" exact component={Role} />
                     <Route path="/addRole" exact component={AddRole} />
                     <Route path="/user" exact component={User} />
-                    {/* <Route path="/decision" exact component={Decision} /> */}
-                    <Route path="/application" exact component={Application} />
+                    <Route path="/app" exact component={appManage} />
+                    <Route path="/app/lookApp" exact component={LookApp} />
+                    <Route path="/company" exact component={Application} />
                     <Route path="/applicationManage" exact component={appManage} />
                     <Route path="/categoryStru" exact component={construct} />
                     <Route path="/rule" exact component={Rules} />

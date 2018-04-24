@@ -107,7 +107,7 @@ class Structure extends React.PureComponent {
             { title: '类别名称', dataIndex: 'name', key: 'name' },
             { title: '类别级别', dataIndex: 'level', key: 'level' },
             { title: '父级别名称', dataIndex: 'pname', key: 'pname' },
-            { title: '类别描述', dataIndex: 'describ', key: 'describ' },
+            { title: '类别描述', dataIndex: 'describ', key: 'describ', width: '300' },
             { title: '操作',
                 dataIndex: 'operator',
                 key: 'operator',

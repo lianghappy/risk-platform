@@ -8,7 +8,7 @@
 
 
 import fetch from 'dva/fetch';
-// import { message } from 'antd';
+import { message } from 'antd';
 import { post } from '../utils/request';
 import { getUUID } from './common';
 
@@ -50,8 +50,10 @@ export default function upload(params) {
     // 回收商品：recycleProduct
     // 每日签到，图文配置：leaseProduct
     // 其他上传图片：manual
-    const url = 'http://api.test.jimistore.com:4999/api/fileUpload/accessKey/params.type';
-    post(url, null, null).then((res) => {
+    const url = `http://api.test.jimistore.com:4999/api/fileUpload/accessKey/${params.type}`;
+    post(url, null, {
+        standard: false,
+    }).then((res) => {
         const fname = getUUID();
         const formData = new window.FormData();
         formData.append('name', fname);
@@ -64,7 +66,14 @@ export default function upload(params) {
         formData.append('file', file); // file必须放在表单域后面
 
         return uploadResult(params, formData, res.host, fname);
-    });
+    }).then((data) => {
+        if (data === 'error') {
+            return message.error('上传文件失败');
+        } else if (data === 'timeout') {
+            return message.error('上传文件超时！');
+        }
+        return params.success(params.key, data);
+    }).catch(error => params.success(params.key, error));
     // getOssKey(params.type).then((res) => {
     //     const fname = common.getUUID();
     //     const formData = new window.FormData();

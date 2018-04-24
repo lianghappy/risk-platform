@@ -8,18 +8,18 @@ import {
     Select,
 } from 'antd';
 import { connect } from 'dva';
-
+import style from './company.scss';
+import PicInput from '../../../components/PicInput';
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 const Option = Select.Option;
-const { TextArea } = Input;
-class AddStruc extends React.PureComponent {
+class AddApp extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
         onOk: PropTypes.func.isRequired,
-        record: PropTypes.array.isRequired,
+        record: PropTypes.object.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.element,
@@ -29,8 +29,26 @@ class AddStruc extends React.PureComponent {
     };
     state = {
         visible: this.props.visible || false,
-        title: this.props.type === 'add' ? '新增类别' : '更新类别',
-        parent: this.props.parent,
+    };
+    onQueryCompany = (value) => {
+        this.props.form.resetFields('id');
+        this.props.dispatch({
+            type: 'company/queryCompanyDetail',
+            payload: {
+                id: value,
+            },
+        });
+    }
+    onChange = (value, selectedOptions) => {
+        console.log(selectedOptions);
+    }
+    handleShow = () => {
+        if (this.props.type === 'edit') {
+            this.onQueryCompany(this.props.record.id);
+        }
+        this.setState({
+            visible: true,
+        });
     };
     handleSubmit = (e) => {
         e.preventDefault();
@@ -54,14 +72,15 @@ class AddStruc extends React.PureComponent {
             }
         });
     };
-
-    handleShow = () => {
-        // this.props.form.validateFields();
-        this.setState({
-            visible: true,
-        });
-    };
-
+    imgChange(value) {
+        const modalData = this.state.modalData;
+        if (modalData.activityGoodsImg) {
+            modalData.activityGoodsImg[0].img = value.imgUrl;
+        } else {
+            modalData.activityGoodsImg = [{ img: value.imgUrl }];
+        }
+        this.setState({ modalData });
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -74,29 +93,30 @@ class AddStruc extends React.PureComponent {
             wrapperCol: { span: 14 },
         };
         const {
-            form,
             children,
+            form,
             record,
         } = this.props;
         const {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        const options = this.state.parent ? this.state.parent.forEach((item) => {
-            return (
-                <Option value={item.id}>{item.name}</Option>
-            );
-        }) : null;
+        const value = [];
+        const arr = ['租赁', '电商', '信息安全', '银行', '保险', '证券／期货', '基金', '信托', '其他'];
+        for (let i = 0; i < arr.length; i++) {
+            value.push(<Option key={i}>{arr[i]}</Option>);
+        }
         return (
-            <section>
+            <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
                     {children}
                 </span>
                 <Modal
-                    title={this.state.title}
+                    title="公司基本信息"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
+                    width={800}
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>取消</Button>,
                         <Button
@@ -112,41 +132,39 @@ class AddStruc extends React.PureComponent {
                     <Form layout="horizontal">
                         <Form.Item
                             {...formItemLayout}
-                            label="类别名称"
+                            label="公司名称"
+                        >
+                            {
+                                getFieldDecorator('industry', {
+                                    initialValue: record.industry,
+                                })(<Select placeholder="请选择公司名称">{value}</Select>)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="应用名称"
                         >
                             {
                                 getFieldDecorator('name', {
                                     initialValue: record.name,
                                     rules: [
-                                        { required: true, message: '请输入类别名称' },
+                                        { required: true, message: '请输入应用名称' },
+                                        { max: '30', message: '* 应用名称不超过30个字' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入类别名称" />)
+                                })(<Input type="acount" placeholder="请输入应用名称" />)
                             }
                         </Form.Item>
                         <Form.Item
+                            label="公司logo"
                             {...formItemLayout}
-                            label="父类别"
                         >
-                            {
-                                getFieldDecorator('pid')(<Select style={{ width: 150 }} placeholder="请选择">{options}</Select>)
-                            }
-                        </Form.Item>
-                        <Form.Item
-                            {...formItemLayout}
-                            label="类别描述"
-                        >
-                            {
-                                getFieldDecorator('describ', {
-                                    initialValue: record.describ,
-                                    rules: [{ required: true, message: '请输入描述内容' },
-                                        { max: 100, message: '描述内容最多100个字' }],
-                                })(<TextArea height={100} placeholder="请输入描述内容" />)
-                            }
+                            <span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span>
+                            <PicInput type="manual" value={record && { imgUrl: record.img }} onChange={this.imgChange} />
                         </Form.Item>
                     </Form>
                 </Modal>
-            </section>
+            </span>
         );
     }
 }
-export default connect()(Form.create()(AddStruc));
+export default connect()(Form.create()(AddApp));

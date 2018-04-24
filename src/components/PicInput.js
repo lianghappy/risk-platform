@@ -49,7 +49,7 @@ export default class PicInput extends React.Component {
         }
         const p = {
             file,
-            type: this.props.type || 'index',
+            type: 'manual',
             key,
             success: (t, imgUrl) => this.handleImgChange(imgUrl),
         };
