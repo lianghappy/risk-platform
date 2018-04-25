@@ -2,16 +2,16 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, message, Tooltip } from 'antd';
+import { Layout, Input, Form, Button, Table, message } from 'antd';
 import { DURATION } from 'utils/constants';
+import createHistory from 'history/createBrowserHistory';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
-import AddStruc from './AddStru';
+import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
 
-class Structure extends React.PureComponent {
+class Policy extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
@@ -19,7 +19,10 @@ class Structure extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
-        parentlist: PropTypes.array.isRequired,
+    };
+    state = {
+        clone: {},
+        disabled: true,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -54,10 +57,10 @@ class Structure extends React.PureComponent {
             pageSize,
         });
     };
-    query(payload) {
-        this.props.dispatch({
-            type: 'structure/getStructureList',
-            payload,
+    onSelectChange = (selectedRows) => {
+        this.setState({
+            clone: selectedRows,
+            disabled: false,
         });
     }
     modalOk = (data, callback) => {
@@ -67,14 +70,25 @@ class Structure extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
-        let content = '类别新增';
-        if (data.id !== undefined) {
-            content = '类别更新成功';
+        const content = data.id !== undefined ? '更新成功' : '新增成功';
+        let url = '';
+        switch (data.type) {
+        case 'add':
+            url = 'policy/add';
+            break;
+        case 'edit':
+            url = 'policy/updata';
+            break;
+        case 'clone':
+            url = 'policy/clone';
+            break;
+        default:
+            break;
         }
 
         new Promise((resolve) => {
             dispatch({
-                type: 'structure/add',
+                type: url,
                 payload: {
                     data,
                     resolve,
@@ -91,8 +105,22 @@ class Structure extends React.PureComponent {
                 });
             });
         });
+    };
+    query(payload) {
+        this.props.dispatch({
+            type: 'policy/getPolicyList',
+            payload,
+        });
+    }
+    stage = (e, value) => {
+        e.preventDefault();
+        createHistory().push(`policy/${value.id}`);
     }
     render() {
+        const rowSelection = {
+            type: 'radio',
+            onSelect: this.onSelectChange,
+        };
         const { getFieldDecorator } = this.props.form;
         const {
             pageSize,
@@ -101,69 +129,66 @@ class Structure extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '类别名称', dataIndex: 'name', key: 'name' },
-            { title: '类别级别', dataIndex: 'level', key: 'level' },
-            { title: '父级别名称', dataIndex: 'pname', key: 'pname' },
-            { title: '类别描述',
-                dataIndex: 'describ',
-                key: 'describ',
-                width: '300',
+            { title: '策略标识', dataIndex: 'id', key: 'id' },
+            { title: '策略名称', dataIndex: 'name', key: 'name' },
+            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
+            { title: '策略描述', dataIndex: 'describ', key: 'describ' },
+            { title: '状态',
+                dataIndex: 'isEnable',
+                key: 'isEnable',
                 render: (...rest) => (
-                    <Tooltip title={rest[1].describ}>
-                        <span className={style.describ}>
-                            {rest[1].describ}
-                        </span>
-                    </Tooltip>
+                    <span>{rest[1].isEnable === 'true' ? '已上架' : '已下架'}</span>
                 ) },
             { title: '操作',
-                dataIndex: 'operator',
-                key: 'operator',
+                dataIndex: 'valueType',
+                key: 'valueType',
                 render: (...rest) => (
-                    <AddStruc
-                        type="edit"
-                        record={rest[1]}
-                        onOk={this.modalOk}
-                        parent={this.props.parentlist}
-                    >
-                        <Button icon="edit" style={{ marginRight: 5 }} />
-                    </AddStruc>
-                ) },
+                    <div className={style.edits}>
+                        <AddPolicy
+                            type="edit"
+                            record={rest[1]}
+                            onOk={this.modalOk}
+                        >
+                            <span>编辑</span>
+                        </AddPolicy>
+                        <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>阶段管理</span>
+                    </div>) },
         ];
         return (
             <Layout className={style.container}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                    <FormItem label="类别名称" >
+                    <FormItem label="策略名称" >
                         {
-                            getFieldDecorator('name')(<Input placeholder="请输入类别名称" />)
+                            getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
                         }
-                    </FormItem>
-                    <FormItem label="类别级别" >
-                        {getFieldDecorator('level')(<Select style={{ width: 150 }} placeholder="请选择类别级别"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
                     </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                     </FormItem>
                 </Form>
-                <AddStruc
-                    visible={false}
-                    type="add"
-                    record={{}}
-                    onOk={this.modalOk}
-                    parent={this.props.getParentCategory}
-                >
-                    <Button
-                        type="primary"
-                        onClick={this.showModal}
-                        className={style.addBtn}
-                    >新增
-                    </Button>
-                </AddStruc>
+                <div className={style.btns}>
+                    <AddPolicy
+                        type="add"
+                        record={{}}
+                        onOk={this.modalOk}
+                    >
+                        <Button type="primary">新增策略</Button>
+                    </AddPolicy>
+                    <AddPolicy
+                        type="clone"
+                        record={this.state.clone}
+                        onOk={this.modalOk}
+                    >
+                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                    </AddPolicy>
+                </div>
                 <Table
                     columns={columns}
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    rowSelection={rowSelection}
                 />
                 <Pagination
                     current={pageNum}
@@ -178,11 +203,10 @@ class Structure extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.structure.list,
-    sysId: state.structure.sysId,
-    loading: state.loading.models.structure,
-    pageNum: state.structure.pageNum,
-    pageSize: state.structure.pageSize,
-    parentlist: state.structure.parentlist,
+    list: state.policy.list,
+    sysId: state.policy.sysId,
+    loading: state.loading.models.policy,
+    pageNum: state.policy.pageNum,
+    pageSize: state.policy.pageSize,
 });
-export default connect(mapStateToProps)(Form.create()(CSSModules(Structure)));
+export default connect(mapStateToProps)(Form.create()(CSSModules(Policy)));

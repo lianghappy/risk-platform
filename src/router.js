@@ -51,15 +51,20 @@ function RouterConfig({ history, app }) {
         app,
         component: () => import('routes/user/User'),
     });
+    // 权限管理
+    const Permission = dynamic({
+        app,
+        component: () => import('routes/system/permission/Permission'),
+        models: () => [
+            import('models/system/Permission'),
+        ],
+    });
     // 欢迎页面
     const Index = dynamic({
         app,
         component: () => import('routes/IndexPage'),
     });
-    // const Decision = dynamic({
-    //     app,
-    //     component: () => import('routes/system/account/Account'),
-    // });
+
     // 公司管理
     const Application = dynamic({
         app,
@@ -107,6 +112,21 @@ function RouterConfig({ history, app }) {
             import('models/policy/rule/Rule'),
         ],
     });
+    // 策略管理
+    const Policy = dynamic({
+        app,
+        component: () => import('routes/policy/policies/Policy'),
+        models: () => [
+            import('models/policy/policies/Policy'),
+        ],
+    });
+    const Strategy = dynamic({
+        app,
+        component: () => import('routes/policy/policies/Strategy'),
+        models: () => [
+            import('models/policy/policies/Strategy'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -130,6 +150,9 @@ function RouterConfig({ history, app }) {
                     <Route path="/applicationManage" exact component={appManage} />
                     <Route path="/categoryStru" exact component={construct} />
                     <Route path="/rule" exact component={Rules} />
+                    <Route path="/policy" exact component={Policy} />
+                    <Route path="/policy/:id" exact component={Strategy} />
+                    <Route path="/permission" exact component={Permission} />
                 </Main>
             </Switch>
         </Router>

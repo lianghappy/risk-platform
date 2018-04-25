@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, Popconfirm } from 'antd';
 import CSSModules from 'react-css-modules';
 import style from './account.scss';
-import SystemManage from '../Index';
 import AddAccount from './AddAccount';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -89,7 +88,6 @@ class DecisionIndex extends React.PureComponent {
        ];
        return (
            <Layout className={style.container}>
-               <SystemManage current="account" />
                <Form layout="inline" className={style.inputs}>
                    <FormItem label="用户账号">
                        {

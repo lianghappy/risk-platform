@@ -5,31 +5,28 @@ import {
     Modal,
     Button,
     Input,
-    Select,
+    Switch,
 } from 'antd';
 import { connect } from 'dva';
 
-
+const { TextArea } = Input;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
-const Option = Select.Option;
-const { TextArea } = Input;
-class AddStruc extends React.PureComponent {
+class AddPolicy extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
         onOk: PropTypes.func.isRequired,
-        record: PropTypes.array.isRequired,
+        record: PropTypes.object.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        parent: PropTypes.array.isRequired,
     };
     state = {
         visible: this.props.visible || false,
-        title: this.props.type === 'add' ? '新增类别' : '更新类别',
+        title: this.props.type === 'add' ? '新增策略' : '更新策略',
     };
     handleSubmit = (e) => {
         e.preventDefault();
@@ -39,13 +36,16 @@ class AddStruc extends React.PureComponent {
             type,
             onOk,
         } = this.props;
-
+        const that = this;
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (type === 'edit') {
+                    if (type === 'edit' || type === 'clone') {
+                        Object.assign(values, { isEnable: record.isEnable });
                         Object.assign(values, { id: record.id });
+                        console.log(record);
                     }
+                    values.type = that.props.type;
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -81,14 +81,8 @@ class AddStruc extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        const childrens = [];
-        if (this.props.parent) {
-            this.props.parent.forEach((item) => {
-                childrens.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
-            });
-        }
         return (
-            <section>
+            <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
                     {children}
                 </span>
@@ -112,43 +106,44 @@ class AddStruc extends React.PureComponent {
                     <Form layout="horizontal">
                         <Form.Item
                             {...formItemLayout}
-                            label="类别名称"
+                            label="策略名称"
                         >
                             {
                                 getFieldDecorator('name', {
                                     initialValue: record.name,
                                     rules: [
-                                        { required: true, message: '请输入类别名称' },
+                                        { required: true, message: '请输入策略名称' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入类别名称" />)
+                                })(<Input type="acount" placeholder="请输入策略名称" />)
                             }
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
-                            label="父类别"
-                        >
-                            {
-                                getFieldDecorator('pid', {
-                                    initialValue: record.pname,
-                                })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}</Select>)
-                            }
-                        </Form.Item>
-                        <Form.Item
-                            {...formItemLayout}
-                            label="类别描述"
+                            label="策略描述"
                         >
                             {
                                 getFieldDecorator('describ', {
                                     initialValue: record.describ,
-                                    rules: [{ required: true, message: '请输入描述内容' },
+                                    rules: [{ required: true, message: '请描述该策略的内容及业务上的使用场景' },
                                         { max: 100, message: '描述内容最多100个字' }],
-                                })(<TextArea height={100} placeholder="请输入描述内容" />)
+                                })(<TextArea height={100} placeholder="请描述该策略的内容及业务上的使用场景" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="状态"
+                        >
+                            {
+                                getFieldDecorator('isEnable', {
+                                    initialValue: record.isEnable,
+                                    valuePropName: 'checked',
+                                })(<Switch checkedChildren="上架" unCheckedChildren="下架" />)
                             }
                         </Form.Item>
                     </Form>
                 </Modal>
-            </section>
+            </span>
         );
     }
 }
-export default connect()(Form.create()(AddStruc));
+export default connect()(Form.create()(AddPolicy));

@@ -6,12 +6,18 @@ import {
     Button,
     Input,
     Select,
+    message,
 } from 'antd';
 import { connect } from 'dva';
+import { DURATION } from 'utils/constants';
+import { get } from 'utils/request';
+import API from 'utils/api';
+import treeConvert from 'utils/treeConvert';
 import style from './company.scss';
 import District from '../../../components/District';
 import PicInput from '../../../components/PicInput';
 
+let districts = null;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
@@ -31,7 +37,16 @@ class AddCompany extends React.PureComponent {
     };
     state = {
         visible: this.props.visible || false,
+        modalData: null,
+        citys: {
+            provice: null,
+            city: null,
+            regoin: null,
+        },
     };
+    componentDidMount() {
+        this.getDistrict();
+    }
     onQueryCompany = (value) => {
         this.props.form.resetFields('id');
         this.props.dispatch({
@@ -41,9 +56,79 @@ class AddCompany extends React.PureComponent {
             },
         });
     }
-    onChange = (value, selectedOptions) => {
-        console.log(selectedOptions);
+    onChange = (value) => {
+        const citys = this.state.citys;
+        const cities = this.getCodeByName(value, districts);
+        citys.provice = cities.provice;
+        citys.city = cities.city;
+        citys.regoin = cities.regoin;
+        this.setState({ citys });
     }
+    // 城市数据集获取
+    getDistrict = () => {
+        return new Promise((resolve, reject) => {
+            if (districts) {
+                resolve(districts);
+            } else {
+                get(API.address, null, {
+                    standard: false,
+                }).then((result) => {
+                    districts = [
+                        ...result,
+                        {
+                            id: '710001',
+                            v: '台湾',
+                            p: '710000',
+                        },
+                    ];
+                    districts = treeConvert({
+                        id: 'id',
+                        name: 'v',
+                        pId: 'p',
+                        rootId: '100000',
+                        tId: 'value',
+                        tName: 'label',
+                    }, districts);
+                    resolve(districts);
+                }).catch((error) => {
+                    message.error(error.message, DURATION);
+                    reject();
+                });
+            }
+        });
+    }
+
+    // 根据名称查询城市编码
+    getCodeByName = (name, source = []) => {
+        const city = {
+            provice: null,
+            city: null,
+            regoin: null,
+        };
+        source.some(item => {
+            if (item.value === name[0]) {
+                city.provice = item.label;
+                item.children.forEach((it) => {
+                    if (it.value === name[1]) {
+                        city.city = it.label;
+                        if (it.children) {
+                            it.children.forEach((items) => {
+                                if (items.value === name[2]) {
+                                    city.regoin = items.label;
+                                    return true;
+                                }
+                                return false;
+                            });
+                        }
+                    }
+                    return false;
+                });
+            }
+            return false;
+        });
+        return city;
+    }
+
     handleShow = () => {
         if (this.props.type === 'edit') {
             this.onQueryCompany(this.props.record.id);
@@ -60,17 +145,25 @@ class AddCompany extends React.PureComponent {
             type,
             onOk,
         } = this.props;
-
+        const that = this;
         form.validateFields((err, values) => {
             if (!err) {
-                new Promise(resolve => {
-                    if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
-                    }
-                    onOk(values, resolve);
-                }).then(() => {
-                    this.handleCancel();
-                });
+                if (that.state.modalData) {
+                    new Promise(resolve => {
+                        if (type === 'edit') {
+                            Object.assign(values, { id: record.id });
+                        }
+                        values.img = that.state.modalData;
+                        values.provice = that.state.citys.provice;
+                        values.city = that.state.citys.city;
+                        values.regoin = that.state.citys.regoin;
+                        onOk(values, resolve);
+                    }).then(() => {
+                        this.handleCancel();
+                    });
+                } else {
+                    message.error('请上传公司logo');
+                }
             }
         });
     };
@@ -106,7 +199,7 @@ class AddCompany extends React.PureComponent {
         const value = [];
         const arr = ['租赁', '电商', '信息安全', '银行', '保险', '证券／期货', '基金', '信托', '其他'];
         for (let i = 0; i < arr.length; i++) {
-            value.push(<Option key={i}>{arr[i]}</Option>);
+            value.push(<Option key={arr[i]} value={arr[i]}>{arr[i]}</Option>);
         }
         return (
             <span>
@@ -188,11 +281,16 @@ class AddCompany extends React.PureComponent {
                             label="公司所在地"
                             {...formItemLayout}
                         >
-                            <District
+                            {getFieldDecorator('address', {
+                                initialValue: record.contactEmail,
+                                rules: [
+                                    { required: true, message: '请选择公司所在地' },
+                                ] })(<District
                                 placeholder="请选择公司所在地"
                                 defaultValue={[record.provice, record.city, record.regoin]}
                                 onChange={this.onChange}
-                            />
+                                defaultType="label"
+                                />)}
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
@@ -201,7 +299,9 @@ class AddCompany extends React.PureComponent {
                             {
                                 getFieldDecorator('industry', {
                                     initialValue: record.industry,
-                                })(<Select placeholder="请选择公司所属行业">{value}</Select>)
+                                    rules: [
+                                        { required: true, message: '请选择公司所属行业' },
+                                    ] })(<Select placeholder="请选择公司所属行业">{value}</Select>)
                             }
                         </Form.Item>
                         <Form.Item

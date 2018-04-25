@@ -9,7 +9,7 @@ import Pagination from '../../../components/Pagination/Pagination';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
-class Rules extends React.PureComponent {
+class Permission extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
@@ -53,7 +53,7 @@ class Rules extends React.PureComponent {
     };
     query(payload) {
         this.props.dispatch({
-            type: 'rule/getRuleList',
+            type: 'permission/getPermissionList',
             payload,
         });
     }
@@ -66,33 +66,22 @@ class Rules extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '规则编号', dataIndex: 'id', key: 'id' },
-            { title: '规则名称', dataIndex: 'name', key: 'name' },
-            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel' },
-            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
+            { title: '权限ID', dataIndex: 'id', key: 'id' },
+            { title: '权限名称', dataIndex: 'name', key: 'name' },
+            { title: '权限类型', dataIndex: 'type', key: 'type' },
+            { title: '是否显示', dataIndex: 'isShow', key: 'isShow' },
+            { title: '排序', dataIndex: 'sort', key: 'sort' },
         ];
         return (
             <Layout className={style.container}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                    <FormItem label="规则编号" >
+                    <FormItem label="权限名称" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('name')(<Input placeholder="请输入权限名称" />)
                         }
                     </FormItem>
-                    <FormItem label="规则来源" >
-                        {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
-                    </FormItem>
-                    <FormItem label="风险代码" >
-                        {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
-                        }
-                    </FormItem>
-                    <FormItem label="规则名称" >
-                        {
-                            getFieldDecorator('name')(<Input placeholder="请输入规则名称" />)
-                        }
+                    <FormItem label="权限类型" >
+                        {getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择权限类型"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
                     </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
@@ -118,10 +107,10 @@ class Rules extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.rule.list,
-    sysId: state.rule.sysId,
-    loading: state.loading.models.rule,
-    pageNum: state.rule.pageNum,
-    pageSize: state.rule.pageSize,
+    list: state.permission.list,
+    sysId: state.permission.sysId,
+    loading: state.loading.models.permission,
+    pageNum: state.permission.pageNum,
+    pageSize: state.permission.pageSize,
 });
-export default connect(mapStateToProps)(Form.create()(CSSModules(Rules)));
+export default connect(mapStateToProps)(Form.create()(CSSModules(Permission)));

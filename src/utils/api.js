@@ -19,6 +19,10 @@ const api = {
     editUser: `${API}/api/risk/manager/user/update/v1`,
     // 查询用户
     selectUser: `${API}/api/risk/manager/user/select/v1`,
+
+    // 权限列表
+    getPermission: `${API_RBAC}/api/rbac/service/menuPlus/list/v2`,
+
     // 获取公司列表
     getCompanyList: `${API}/api/risk/manager/application/company/list/v1`,
     // 添加公司
@@ -71,6 +75,19 @@ const api = {
     getParentCategory: `${API}/api/risk/manager/policy/category/parent/list/v1`,
     // 获取规则库列表
     getRules: `${API}/api/risk/manager/policy/ruleBank/list/v1`,
+
+    // 策略
+    getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,
+    addPolicy: `${API}/api/risk/manager/policy/strategy/create/v1`,
+    updatePolicy: `${API}/api/risk/manager/policy/strategy/update/v1`,
+    //  克隆策略
+    clonePolicy: `${API}/api/risk/manager/policy/strategy/clone/v1`,
+
+    // 阶段列表
+    getStrategyList: `${API}/api/risk/manager/policy/stage/list/v1`,
+    addStrategy: `${API}/api/risk/manager/policy/stage/create/v1`,
+    updateStrategy: `${API}/api/risk/manager/policy/stage/update/v1`,
+    delStrategy: `${API}/api/risk/manager/policy/stage/delete/v1`,
 };
 
 export default api;

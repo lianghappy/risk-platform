@@ -4,7 +4,6 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table } from 'antd';
 import CSSModules from 'react-css-modules';
 import createHistory from 'history/createBrowserHistory';
-import SystemManage from '../Index';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -71,7 +70,6 @@ class RoleIndex extends React.PureComponent {
        ];
        return (
            <Layout className={style.containers}>
-               <SystemManage current=".$role" />
                <Form layout="inline" className={style.inputs}>
                    <FormItem label="角色名称">
                        <Input />
