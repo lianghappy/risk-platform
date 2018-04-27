@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import createHistory from 'history/createBrowserHistory';
 import style from './company.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddApp from './AddApp';
@@ -17,6 +18,7 @@ class AppIndex extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
+        appItem: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -77,6 +79,9 @@ class AppIndex extends React.PureComponent {
             pageSize,
         });
     };
+    look = (id) => {
+        createHistory().push(`/${id}`);
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -84,8 +89,8 @@ class AppIndex extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
-        const content = data.id !== undefined ? '更新成功' : '新增成功';
-        const url = data.id !== undefined ? 'app/updata' : 'company/add';
+        const content = '新增成功';
+        const url = 'app/add';
 
         new Promise((resolve) => {
             dispatch({
@@ -130,7 +135,7 @@ class AppIndex extends React.PureComponent {
                 dataIndex: 'operator',
                 render: (...rest) => (
                     <div>
-                        <Button type="default" style={{ marginRight: 5 }}>查看</Button>
+                        <span role="button" tabIndex="-1" style={{ marginRight: 5 }} onClick={() => this.look(rest[1].id)}>查看</span>
                         <Popconfirm
                             placement="topRight"
                             title="您确定要删除该公司吗？"
@@ -141,15 +146,6 @@ class AppIndex extends React.PureComponent {
                     </div>),
             },
         ];
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
         return (
             <Layout className={style.container}>
                 <Form
@@ -179,9 +175,11 @@ class AppIndex extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <AddApp
-                    type="edit"
+                    type="add"
                     record={{}}
                     onOk={this.modalOk}
+                    appItem={this.props.appItem}
+                    modalData={{}}
                 >
                     <Button
                         type="primary"
@@ -191,7 +189,6 @@ class AppIndex extends React.PureComponent {
                     </Button>
                 </AddApp>
                 <Table
-                    rowSelection={rowSelection}
                     columns={columns}
                     dataSource={dataSource}
                     pagination={false}
@@ -213,5 +210,6 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.app,
     pageNum: state.app.pageNum,
     pageSize: state.app.pageSize,
+    appItem: state.app.appItem,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(AppIndex)));

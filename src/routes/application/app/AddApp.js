@@ -25,27 +25,21 @@ class AddApp extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        parent: PropTypes.array.isRequired,
+        appItem: PropTypes.array.isRequired,
+        modalData: PropTypes.object.isRequired,
     };
     state = {
         visible: this.props.visible || false,
+        appItem: this.props.appItem || [],
+        modalData: this.props.modalData || {},
     };
-    onQueryCompany = (value) => {
-        this.props.form.resetFields('id');
-        this.props.dispatch({
-            type: 'company/queryCompanyDetail',
-            payload: {
-                id: value,
-            },
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            appItem: nextProps.appItem,
+            modalData: nextProps.modalData,
         });
     }
-    onChange = (value, selectedOptions) => {
-        console.log(selectedOptions);
-    }
     handleShow = () => {
-        if (this.props.type === 'edit') {
-            this.onQueryCompany(this.props.record.id);
-        }
         this.setState({
             visible: true,
         });
@@ -55,16 +49,24 @@ class AddApp extends React.PureComponent {
         const {
             form,
             record,
-            type,
             onOk,
         } = this.props;
 
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
+                    if (values.partnerName) {
+                        this.state.appItem.some((item) => {
+                            if (item.name === values.partnerName) {
+                                Object.assign(values, { partnerId: item.id });
+                                return true;
+                            }
+                            return false;
+                        });
+                    } else {
+                        Object.assign(values, { partnerId: record.partnerId });
                     }
+                    Object.assign(values, { img: this.state.modalData.imgUrl });
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -73,13 +75,9 @@ class AddApp extends React.PureComponent {
         });
     };
     imgChange(value) {
-        const modalData = this.state.modalData;
-        if (modalData.activityGoodsImg) {
-            modalData.activityGoodsImg[0].img = value.imgUrl;
-        } else {
-            modalData.activityGoodsImg = [{ img: value.imgUrl }];
-        }
-        this.setState({ modalData });
+        this.setState({
+            modalData: value,
+        });
     }
     handleCancel = () => {
         this.props.form.resetFields();
@@ -101,10 +99,11 @@ class AddApp extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        const value = [];
-        const arr = ['租赁', '电商', '信息安全', '银行', '保险', '证券／期货', '基金', '信托', '其他'];
-        for (let i = 0; i < arr.length; i++) {
-            value.push(<Option key={i}>{arr[i]}</Option>);
+        const options = [];
+        if (this.state.appItem.length > 0) {
+            this.state.appItem.forEach((item) => {
+                options.push(<Option value={item.name} key={item.name}>{item.name}</Option>);
+            });
         }
         return (
             <span>
@@ -135,9 +134,12 @@ class AddApp extends React.PureComponent {
                             label="公司名称"
                         >
                             {
-                                getFieldDecorator('industry', {
-                                    initialValue: record.industry,
-                                })(<Select placeholder="请选择公司名称">{value}</Select>)
+                                getFieldDecorator('partnerName', {
+                                    rules: [
+                                        { required: true, message: '请输入公司名称' },
+                                    ],
+                                    initialValue: record.partnerName,
+                                })(<Select placeholder="请选择公司名称" onSelect={this.onSelect}>{options}</Select>)
                             }
                         </Form.Item>
                         <Form.Item
@@ -158,8 +160,13 @@ class AddApp extends React.PureComponent {
                             label="公司logo"
                             {...formItemLayout}
                         >
-                            <span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span>
-                            <PicInput type="manual" value={record && { imgUrl: record.img }} onChange={this.imgChange} />
+                            {
+                                getFieldDecorator('img', {
+                                    initialValue: record.img,
+                                    rules: [
+                                        { required: true, message: '请上传应用图片' },
+                                    ],
+                                })(<div><span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span><PicInput type="manual" value={this.state.modalData} onChange={(value) => this.imgChange(value)} /></div>) }
                         </Form.Item>
                     </Form>
                 </Modal>

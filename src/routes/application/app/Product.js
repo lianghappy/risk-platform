@@ -4,22 +4,30 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
-import style from './company.scss';
+import style from './LookApp.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
 class Product extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
-        list: PropTypes.array.isRequired,
-        sysId: PropTypes.string.isRequired,
+        dataSource: PropTypes.array.isRequired,
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
         type: PropTypes.string.isRequired,
     };
     state = {
-        type: this.props.type ? this.props.type : 'del',
+        type: this.props.type ? this.props.type : '.$del',
+        dataSource: this.props.dataSource || {},
+        appId: this.props.appId,
     };
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            type: nextProps.type,
+            dataSource: nextProps.dataSource,
+            appId: nextProps.appId,
+        });
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
             pageNum,
@@ -79,55 +87,60 @@ class Product extends React.PureComponent {
             pageSize,
         });
     };
-    modalOk = (data, callback) => {
+    query(payload) {
+        let url = '';
+        if (this.state.type === '.$del') {
+            url = 'lookApp/queryListSign';
+        } else {
+            url = 'lookApp/queryListNoSign';
+        }
+        this.props.dispatch({
+            type: url,
+            payload,
+        });
+    }
+    add = (rest) => {
         const {
-            dispatch,
             pageSize,
             pageNum,
-            form,
+            dispatch,
         } = this.props;
-        const content = data.id !== undefined ? '更新成功' : '新增成功';
-        const url = data.id !== undefined ? 'app/updata' : 'company/add';
-
+        const appId = this.state.appId;
         new Promise((resolve) => {
             dispatch({
-                type: url,
+                type: 'lookApp/create',
                 payload: {
-                    data,
+                    data: {
+                        appId,
+                        productName: rest.name,
+                        productDesc: rest.description,
+                        productId: rest.id,
+                    },
                     resolve,
                 },
             });
         }).then(() => {
-            callback();
-            message.success(content, DURATION);
-            form.validateFields((errors, values) => {
-                this.query({
-                    ...values,
-                    pageNum,
-                    pageSize,
-                });
+            message.success('添加成功');
+            this.query({
+                pageNum,
+                pageSize,
+                appId,
+                productId: rest.id,
             });
-        });
-    };
-    query(payload) {
-        this.props.dispatch({
-            type: 'app/getAppList',
-            payload,
         });
     }
     render() {
         const {
             pageSize,
             pageNum,
-            list: dataSource,
             loading,
         } = this.props;
-        const columns = [
-            { title: '产品名称', dataIndex: 'name', key: 'name' },
-            { title: '产品介绍', dataIndex: 'contactName', key: 'contactName' },
-            { title: '签约开始时间', dataIndex: 'secret', key: 'secret' },
-            { title: '失效时间', dataIndex: 'partnerName', key: 'partnerName' },
-            { title: '状态', dataIndex: 'partnerName', key: 'partnerName' },
+        const dels = [
+            { title: '产品名称', dataIndex: 'productName', key: 'productName' },
+            { title: '产品介绍', dataIndex: 'productDesc', key: 'productDesc' },
+            { title: '签约开始时间', dataIndex: 'signStartDate', key: 'signStartDate' },
+            { title: '失效时间', dataIndex: 'signExpiredDate', key: 'signExpiredDate' },
+            { title: '状态', dataIndex: 'signStatus', key: 'signStatus' },
             { title: '操作',
                 dataIndex: 'operator',
                 render: (...rest) => (
@@ -142,12 +155,12 @@ class Product extends React.PureComponent {
                     </div>),
             },
         ];
-        const column = [
+        const adds = [
             { title: '产品名称', dataIndex: 'name', key: 'name' },
-            { title: '产品介绍', dataIndex: 'name', key: 'name' },
+            { title: '产品介绍', dataIndex: 'description', key: 'description' },
             { title: '操作',
                 dataIndex: 'operator',
-                render: () => (<Button type="default">添加</Button>),
+                render: (...rest) => (<span className={style.add} role="button" tabIndex="-1" onClick={() => this.add(rest[1])}>添加</span>),
             },
         ];
         const rowSelection = {
@@ -160,30 +173,23 @@ class Product extends React.PureComponent {
             }),
         };
         return (
-            <Layout className={style.container}>
-                <Button type="primary" onClick={this.all}>{this.state.type === 'del' ? '批量删除' : '批量增加'}</Button>
+            <Layout className={style.containers}>
+                <Button className={style.btns} type="primary" onClick={this.all}>{this.state.type === '.$del' ? '批量删除' : '批量增加'}</Button>
                 <Table
                     rowSelection={rowSelection}
-                    columns={this.state.type ? columns : column}
-                    dataSource={dataSource}
+                    columns={this.state.type === '.$del' ? dels : adds}
+                    dataSource={this.state.dataSource}
                     pagination={false}
                     loading={loading}
                 />
                 <Pagination
                     current={pageNum}
                     pageSize={pageSize}
-                    dataSize={dataSource.length}
+                    dataSize={this.state.dataSource.length}
                     onChange={this.onPageChange}
                     showQuickJumper
                 />
             </Layout>);
     }
 }
-// const mapStateToProps = (state) => ({
-//     list: state.app.list,
-//     sysId: state.app.sysId,
-//     loading: state.loading.models.app,
-//     pageNum: state.app.pageNum,
-//     pageSize: state.app.pageSize,
-// });
 export default connect()(Form.create()(CSSModules(Product)));

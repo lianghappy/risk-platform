@@ -28,11 +28,12 @@ export default {
         },
         // 品牌查询
         * queryAppDetail({ payload }, { call, put }) {
-            const response = yield call(post, API.appItem, payload);
+            const response = yield call(post, API.getCompanyList, payload);
             yield put({
-                type: 'querySuc',
+                type: 'queryAppDetailSuc',
                 payload: {
                     appItem: response,
+                    sysId: SYSID,
                 },
             });
         },
@@ -59,6 +60,9 @@ export default {
         getAppListSuc(state, { payload }) {
             return { ...state, ...payload };
         },
+        queryAppDetailSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
     },
     subscriptions: {
         setup({ dispatch, history }) {
@@ -70,6 +74,14 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                        },
+                    });
+                    dispatch({
+                        type: 'queryAppDetail',
+                        payload: {
+                            sysId: SYSID,
+                            pageNum: 1,
+                            pageSize: '999',
                         },
                     });
                 }

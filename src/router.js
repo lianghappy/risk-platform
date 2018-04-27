@@ -81,6 +81,7 @@ function RouterConfig({ history, app }) {
             import('models/application/App'),
         ],
     });
+    // 查看应用
     const LookApp = dynamic({
         app,
         component: () => import('routes/application/app/LookApp'),
@@ -145,7 +146,7 @@ function RouterConfig({ history, app }) {
                     <Route path="/addRole" exact component={AddRole} />
                     <Route path="/user" exact component={User} />
                     <Route path="/app" exact component={appManage} />
-                    <Route path="/app/lookApp" exact component={LookApp} />
+                    <Route path="/:id" exact component={LookApp} />
                     <Route path="/company" exact component={Application} />
                     <Route path="/applicationManage" exact component={appManage} />
                     <Route path="/categoryStru" exact component={construct} />

@@ -11,6 +11,7 @@ export default {
         pageSize: PAGE_SIZE,
         listSign: [],
         listNoSign: [],
+        appItem: [],
     },
     effects: {
         // 根据id查询App
@@ -21,6 +22,17 @@ export default {
                 type: 'getAppDetailListSuc',
                 payload: {
                     list: response,
+                    sysId: SYSID,
+                },
+            });
+        },
+        // 品牌查询
+        * queryAppDetail({ payload }, { call, put }) {
+            const response = yield call(post, API.getCompanyList, payload);
+            yield put({
+                type: 'queryAppDetailSuc',
+                payload: {
+                    appItem: response,
                     sysId: SYSID,
                 },
             });
@@ -42,7 +54,7 @@ export default {
         * queryListNoSign({ payload }, { call, put }) {
             const response = yield call(post, API.listNoSign, payload);
             yield put({
-                type: 'querySuc',
+                type: 'queryListNoSignSuc',
                 payload: {
                     listNoSign: response,
                     sysId: SYSID,
@@ -83,23 +95,49 @@ export default {
         queryListSignSuc(state, { payload }) {
             return { ...state, ...payload };
         },
+        queryListNoSignSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
+        queryAppDetailSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/lookApp') {
+                const ids = pathname.substring(pathname.indexOf('/') + 1);
+                if (pathname === `/${ids}`) {
                     dispatch({
                         type: 'getAppDetailList',
                         payload: {
                             sysId: SYSID,
+                            id: ids,
                         },
                     });
                     dispatch({
                         type: 'queryListSign',
                         payload: {
                             sysId: SYSID,
+                            appId: ids,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                        },
+                    });
+                    dispatch({
+                        type: 'queryListNoSign',
+                        payload: {
+                            sysId: SYSID,
+                            appId: ids,
+                            pageNum: 1,
+                            pageSize: PAGE_SIZE,
+                        },
+                    });
+                    dispatch({
+                        type: 'queryAppDetail',
+                        payload: {
+                            sysId: SYSID,
+                            pageNum: 1,
+                            pageSize: '999',
                         },
                     });
                 }
