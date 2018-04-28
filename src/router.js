@@ -105,6 +105,14 @@ function RouterConfig({ history, app }) {
             import('models/policy/category/Structure'),
         ],
     });
+    // 关联规则
+    const LinkRuler = dynamic({
+        app,
+        component: () => import('routes/policy/category/LinkRuler'),
+        models: () => [
+            import('models/policy/category/LinkRuler'),
+        ],
+    });
     // 规则库管理
     const Rules = dynamic({
         app,
@@ -121,6 +129,7 @@ function RouterConfig({ history, app }) {
             import('models/policy/policies/Policy'),
         ],
     });
+    // 阶段
     const Strategy = dynamic({
         app,
         component: () => import('routes/policy/policies/Strategy'),
@@ -146,10 +155,11 @@ function RouterConfig({ history, app }) {
                     <Route path="/addRole" exact component={AddRole} />
                     <Route path="/user" exact component={User} />
                     <Route path="/app" exact component={appManage} />
-                    <Route path="/:id" exact component={LookApp} />
+                    <Route path="/app/:id" exact component={LookApp} />
                     <Route path="/company" exact component={Application} />
                     <Route path="/applicationManage" exact component={appManage} />
                     <Route path="/categoryStru" exact component={construct} />
+                    <Route path="/linkRuler" exact component={LinkRuler} />
                     <Route path="/rule" exact component={Rules} />
                     <Route path="/policy" exact component={Policy} />
                     <Route path="/policy/:id" exact component={Strategy} />

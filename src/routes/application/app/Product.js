@@ -20,6 +20,7 @@ class Product extends React.PureComponent {
         type: this.props.type ? this.props.type : '.$del',
         dataSource: this.props.dataSource || {},
         appId: this.props.appId,
+        selectedRows: [],
     };
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -35,34 +36,16 @@ class Product extends React.PureComponent {
             sysId,
         });
     };
-    onQuery = (e) => {
-        e.preventDefault();
-        const {
-            pageSize,
-            loading,
-            form,
-            sysId,
-        } = this.props;
-        if (loading) return;
-        form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize,
-                sysId,
-            });
-        });
-    }
     onDelete(id) {
         const {
             pageSize,
             pageNum,
-            form,
             dispatch,
         } = this.props;
+        const appId = this.state.appId;
         new Promise((resolve) => {
             dispatch({
-                type: 'app/del',
+                type: 'lookApp/del',
                 payload: {
                     data: { id },
                     resolve,
@@ -70,12 +53,10 @@ class Product extends React.PureComponent {
             });
         }).then(() => {
             message.success('删除成功', DURATION);
-            form.validateFields((errors, values) => {
-                this.query({
-                    ...values,
-                    pageNum,
-                    pageSize,
-                });
+            this.query({
+                pageNum,
+                pageSize,
+                appId,
             });
         });
     }
@@ -87,6 +68,10 @@ class Product extends React.PureComponent {
             pageSize,
         });
     };
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRows });
+        console.log(selectedRows);
+    }
     query(payload) {
         let url = '';
         if (this.state.type === '.$del') {
@@ -125,9 +110,58 @@ class Product extends React.PureComponent {
                 pageNum,
                 pageSize,
                 appId,
-                productId: rest.id,
             });
         });
+    }
+    all = () => {
+        const listAppProduct = [];
+        const appId = this.state.appId;
+        let url = '';
+        let text = '';
+        const {
+            pageSize,
+            pageNum,
+            dispatch,
+        } = this.props;
+        console.log(this.state.selectedRows);
+        if (this.state.selectedRows.length > 0) {
+            if (this.state.type === '.$add') {
+                this.state.selectedRows.forEach((item) => {
+                    listAppProduct.push({
+                        productId: item.id,
+                        productName: item.name,
+                        productDesc: item.id,
+                        appId,
+                    });
+                });
+                url = 'lookApp/listCreate';
+                text = '添加成功';
+            } else {
+                this.state.selectedRows.forEach((item) => {
+                    listAppProduct.push({
+                        id: item.id,
+                    });
+                });
+                url = 'lookApp/listDel';
+                text = '删除成功';
+            }
+            new Promise((resolve) => {
+                dispatch({
+                    type: url,
+                    payload: {
+                        data: { listAppProduct },
+                        resolve,
+                    },
+                });
+            }).then(() => {
+                message.success(text);
+                this.query({
+                    pageNum,
+                    pageSize,
+                    appId,
+                });
+            });
+        }
     }
     render() {
         const {
@@ -163,14 +197,10 @@ class Product extends React.PureComponent {
                 render: (...rest) => (<span className={style.add} role="button" tabIndex="-1" onClick={() => this.add(rest[1])}>添加</span>),
             },
         ];
+        const { selectedRows } = this.state.selectedRows;
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
+            selectedRows,
+            onChange: this.onSelectChange,
         };
         return (
             <Layout className={style.containers}>

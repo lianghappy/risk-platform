@@ -12,7 +12,7 @@ import logo from '../../assets/images/机蜜logo.svg';
 
 const SubMenu = Menu.SubMenu;
 const Sider = ({ location }) => (
-    <Layout.Sider breakpoint="lg" >
+    <Layout.Sider breakpoint="lg" width="240" >
         <div className={styles.logo}>
             <img src={logo} alt="logo" className={styles.logoImgs} />
             <span className={styles.names}>PLD风控系统</span>

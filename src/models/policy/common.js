@@ -3,28 +3,14 @@ import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 
 export default {
-    namespace: 'rule',
+    namespace: 'common',
     state: {
-        list: [],
+        typeList: [],
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
     },
     effects: {
-        // 获取规则类别列表
-        * getRuleList({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getRules, payload, data);
-            yield put({
-                type: 'getRuleListSuc',
-                payload: {
-                    list: response,
-                    sysId: SYSID,
-                    pageNum: payload.pageNum,
-                    pageSize: PAGE_SIZE,
-                },
-            });
-        },
         // 获取来源的数据
         * getChannel({ payload }, { call, put }) {
             const { data } = payload;
@@ -34,14 +20,13 @@ export default {
                 payload: {
                     typeList: response,
                     sysId: SYSID,
+                    pageNum: payload.pageNum,
+                    pageSize: PAGE_SIZE,
                 },
             });
         },
     },
     reducers: {
-        getRuleListSuc(state, { payload }) {
-            return { ...state, ...payload };
-        },
         getChannelSuc(state, { payload }) {
             return { ...state, ...payload };
         },
@@ -49,18 +34,13 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/rule') {
+                if (pathname === '/linkRuler') {
                     dispatch({
-                        type: 'getRuleList',
+                        type: 'getChannel',
                         payload: {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
-                        },
-                    });
-                    dispatch({
-                        type: 'getChannel',
-                        payload: {
                             type: 'rule',
                         },
                     });

@@ -67,6 +67,7 @@ const api = {
     getRoleList: `${API_RBAC}/api/rbac/service/rolePlus/list/v2`,
     // 权限树
     getMenuTreeList: `${API_RBAC}/api/rbac/service/rolePlus/menuTreeList/v2`,
+
     // 获取规则类别的接口
     getCategory: `${API}/api/risk/manager/policy/category/list/v1`,
     // 新增类别操作保存数据接口
@@ -75,6 +76,16 @@ const api = {
     getParentCategory: `${API}/api/risk/manager/policy/category/parent/list/v1`,
     // 获取规则库列表
     getRules: `${API}/api/risk/manager/policy/ruleBank/list/v1`,
+    // 类别关联规则list
+    getLinkRuler: `${API}/api/risk/manager/policy/categoryAndRule/list/v1`,
+    // 获取来源的接口
+    getChannel: `${API}/api/risk/manager/policy/channelBank/list/v1`,
+    // 单个删除规则-类别数据
+    delCategoryRule: `${API}/api/risk/manager/policy/categoryAndRule/delete/v1`,
+    // 批量删除规则-类别数据
+    delListCategoryRule: `${API}/api/risk/manager/policy/categoryAndRule/deletes/v1`,
+    // 获取全部规则类别的list
+    getCategoryList: `${API}/api/risk/manager/policy/category/list/all/v1`,
 
     // 策略
     getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,

@@ -3,20 +3,22 @@ import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 
 export default {
-    namespace: 'rule',
+    namespace: 'linkRuler',
     state: {
         list: [],
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        typeList: [],
+        categoryList: [],
     },
     effects: {
-        // 获取规则类别列表
-        * getRuleList({ payload }, { call, put }) {
+        // 获取类别关联规则信息
+        * getLinkRulerList({ payload }, { call, put }) {
             const { data } = payload;
-            const response = yield call(post, API.getRules, payload, data);
+            const response = yield call(post, API.getLinkRuler, payload, data);
             yield put({
-                type: 'getRuleListSuc',
+                type: 'getLinkRulerListSuc',
                 payload: {
                     list: response,
                     sysId: SYSID,
@@ -37,21 +39,48 @@ export default {
                 },
             });
         },
+        // 获取规则类目的列表
+        * getCategoryList({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getCategoryList, payload, data);
+            yield put({
+                type: 'getCategoryListSuc',
+                payload: {
+                    categoryList: response,
+                    sysId: SYSID,
+                },
+            });
+        },
+        // 单个删除类别规则
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delCategoryRule, data);
+            yield call(resolve);
+        },
+        // 单个删除类别规则
+        * delList({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delListCategoryRule, data);
+            yield call(resolve);
+        },
     },
     reducers: {
-        getRuleListSuc(state, { payload }) {
+        getLinkRulerListSuc(state, { payload }) {
             return { ...state, ...payload };
         },
         getChannelSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
+        getCategoryListSuc(state, { payload }) {
             return { ...state, ...payload };
         },
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/rule') {
+                if (pathname === '/linkRuler') {
                     dispatch({
-                        type: 'getRuleList',
+                        type: 'getLinkRulerList',
                         payload: {
                             sysId: SYSID,
                             pageNum: 1,
@@ -62,6 +91,12 @@ export default {
                         type: 'getChannel',
                         payload: {
                             type: 'rule',
+                        },
+                    });
+                    dispatch({
+                        type: 'getCategoryList',
+                        payload: {
+                            sysId: SYSID,
                         },
                     });
                 }
