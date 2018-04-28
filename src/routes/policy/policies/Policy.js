@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
 import createHistory from 'history/createBrowserHistory';
 import style from './index.scss';
@@ -61,6 +61,32 @@ class Policy extends React.PureComponent {
         this.setState({
             clone: selectedRows,
             disabled: false,
+        });
+    }
+    onEdit = (id, isEnable) => {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'policy/updataEnable',
+                payload: {
+                    data: { id, isEnable: (Number(isEnable) + 1) },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('操作成功', DURATION);
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
         });
     }
     modalOk = (data, callback) => {
@@ -137,13 +163,32 @@ class Policy extends React.PureComponent {
                 dataIndex: 'isEnable',
                 key: 'isEnable',
                 render: (...rest) => (
-                    <span>{rest[1].isEnable === 'true' ? '已上架' : '已下架'}</span>
+                    <span>
+                        {
+                            Number(rest[1].isEnable) === 1 ?
+                                '已上架'
+                                :
+                                '已下架'
+                        }
+                    </span>
                 ) },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
                 render: (...rest) => (
                     <div className={style.edits}>
+                        {
+                            rest[1].isEnable < 2 ?
+                                <Popconfirm
+                                    placement="topRight"
+                                    title={rest[1].isEnable === 1 && rest[1].isEnable < 2 ? '是否下架？' : '是否上架？'}
+                                    onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
+                                >
+                                    <span className={style.isEnable}>{rest[1].isEnable === 1 && rest[1].isEnable < 2 ? '下架' : '上架'}</span>
+                                </Popconfirm>
+                                :
+                                null
+                        }
                         <AddPolicy
                             type="edit"
                             record={rest[1]}

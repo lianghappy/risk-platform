@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
 import { DURATION } from 'utils/constants';
+import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -103,7 +104,15 @@ class LinkRuler extends React.PureComponent {
         });
     }
     render() {
-        console.log(this.props.categoryList);
+        const lists = this.props.categoryList;
+        console.log(treeConvert({
+            id: 'id',
+            name: 'v',
+            pId: 'p',
+            rootId: '100000',
+            tId: 'value',
+            tName: 'label',
+        }, lists));
         const { getFieldDecorator } = this.props.form;
         const {
             pageSize,

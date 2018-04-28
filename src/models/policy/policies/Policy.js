@@ -43,6 +43,12 @@ export default {
             yield call(post, API.clonePolicy, data);
             yield call(resolve);
         },
+        // 更新上架状态
+        * updataEnable({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.updataEnable, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         getPolicyListSuc(state, { payload }) {
