@@ -13,7 +13,7 @@ const appId = {
 // 公共请求头
 const headers = {
     appId, // app唯一标识
-    deviceId: 'null', // 设备唯一标识
+    deviceId: 'risk', // 设备唯一标识
     userId: 'null', // 用户id
     OSVersion: parseFloat(navigator.appVersion), // 设备系统版本
     timestamp: '', // 时间戳

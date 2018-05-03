@@ -5,14 +5,16 @@ import {
     Modal,
     Button,
     Input,
+    // Select,
 } from 'antd';
 import { connect } from 'dva';
 
 const { TextArea } = Input;
+// const Option = Select.Option;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
-class AddPolicy extends React.PureComponent {
+class AddModal extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
         onOk: PropTypes.func.isRequired,
@@ -22,28 +24,29 @@ class AddPolicy extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
     };
     state = {
         visible: this.props.visible || false,
-        title: this.props.type === 'add' ? '新增策略' : '更新策略',
+        title: this.props.title === 'add' ? '新增' : '更新',
+        // type: this.props.type,
     };
     handleSubmit = (e) => {
         e.preventDefault();
         const {
             form,
             record,
-            type,
+            title,
             onOk,
         } = this.props;
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (type === 'edit' || type === 'clone') {
-                        Object.assign(values, { isEnable: record.isEnable });
-                        Object.assign(values, { id: record.id });
+                    if (title === 'edit') {
+                        Object.assign(values, { strategyId: record.strategyId });
                     }
-                    values.type = that.props.type;
+                    values.title = that.props.title;
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -51,7 +54,6 @@ class AddPolicy extends React.PureComponent {
             }
         });
     };
-
     handleShow = () => {
         // this.props.form.validateFields();
         this.setState({
@@ -104,20 +106,46 @@ class AddPolicy extends React.PureComponent {
                     <Form layout="horizontal">
                         <Form.Item
                             {...formItemLayout}
-                            label="策略名称"
+                            label="用户手机号"
                         >
                             {
-                                getFieldDecorator('name', {
-                                    initialValue: record.name,
+                                getFieldDecorator('phone', {
+                                    initialValue: record.phone,
                                     rules: [
-                                        { required: true, message: '请输入策略名称' },
+                                        { required: true, message: '请输入用户手机号' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入策略名称" />)
+                                })(<Input type="phone" placeholder="请输入用户手机号" />)
                             }
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
-                            label="策略描述"
+                            label="用户姓名"
+                        >
+                            {
+                                getFieldDecorator('idCardName', {
+                                    initialValue: record.name,
+                                    rules: [
+                                        { required: true, message: '请输入用户姓名' },
+                                    ],
+                                })(<Input type="idCardName" placeholder="请输入用户姓名" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="用户身份证"
+                        >
+                            {
+                                getFieldDecorator('idCard', {
+                                    initialValue: record.idCard,
+                                    rules: [
+                                        { required: true, message: '请输入用户身份证' },
+                                    ],
+                                })(<Input type="idCard" placeholder="请输入用户身份证" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="用户描述"
                         >
                             {
                                 getFieldDecorator('describ', {
@@ -133,4 +161,4 @@ class AddPolicy extends React.PureComponent {
         );
     }
 }
-export default connect()(Form.create()(AddPolicy));
+export default connect()(Form.create()(AddModal));

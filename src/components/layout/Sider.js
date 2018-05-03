@@ -68,6 +68,45 @@ const Sider = ({ location }) => (
                     </Link>
                 </Menu.Item>
             </SubMenu>
+            <SubMenu key="sandboxie" title={<span><Icon type="mail" /><span>策略沙箱</span></span>}>
+                <Menu.Item key="/sandboxie">
+                    <Link to="/sandboxie">
+                        <span>策略沙箱</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="/samples">
+                    <Link to="/samples">
+                        <span>实验样本</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="/records">
+                    <Link to="/records">
+                        <span>实验记录</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="/sandSamples">
+                    <Link to="/sandSamples">
+                        <span>沙箱样本</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
+            <SubMenu key="blackAndWhite" title={<span><Icon type="mail" /><span>黑白名单</span></span>}>
+                <Menu.Item key="/black">
+                    <Link to="/black">
+                        <span>黑名单</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="/white">
+                    <Link to="/white">
+                        <span>白名单</span>
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key="/gray">
+                    <Link to="/gray">
+                        <span>灰名单</span>
+                    </Link>
+                </Menu.Item>
+            </SubMenu>
         </Menu>
     </Layout.Sider>
 );

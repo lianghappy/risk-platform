@@ -100,6 +100,15 @@ const api = {
     addStrategy: `${API}/api/risk/manager/policy/stage/create/v1`,
     updateStrategy: `${API}/api/risk/manager/policy/stage/update/v1`,
     delStrategy: `${API}/api/risk/manager/policy/stage/delete/v1`,
+
+    // 黑白名单
+    getBlack: `${API}/api/risk/manager/blackAndWhite/list/v1`,
+    // 增加
+    addBlack: `${API}/api/risk/manager/blackAndWhite/create/v1`,
+    // 删除
+    delBlack: `${API}/api/risk/manager/blackAndWhite/delete/v1`,
+    // 更新
+    updateBlack: `${API}/api/risk/manager/blackAndWhite/update/v1`,
 };
 
 export default api;

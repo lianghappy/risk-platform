@@ -14,3 +14,14 @@ export const ERR_MSG = '系统错误，请稍后重试';
 export const DURATION = 3;
 // 系统参数sysId
 export const SYSID = 'risk';
+// 上下架
+export const OPRA = [{
+    key: '0',
+    value: '未上架',
+}, {
+    key: '1',
+    value: '已上架',
+}, {
+    key: '2',
+    value: '已下架',
+}];

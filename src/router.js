@@ -137,6 +137,14 @@ function RouterConfig({ history, app }) {
             import('models/policy/policies/Strategy'),
         ],
     });
+    // 黑名单
+    const Black = dynamic({
+        app,
+        component: () => import('routes/blackAndWhite/Black.js'),
+        models: () => [
+            import('models/blackAndWhite/Black.js'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -151,10 +159,11 @@ function RouterConfig({ history, app }) {
                     />
                     <PrivateRoute path="/index" exact component={Index} />
                     <Route path="/account" exact component={Account} />
-                    <Route path="/role" exact component={Role} />
-                    <Route path="/addRole" exact component={AddRole} />
+                    <Route path="/role" component={Role}>
+                        <Route path="/addRole" component={AddRole} />
+                    </Route>
                     <Route path="/user" exact component={User} />
-                    <Route path="/app" exact component={appManage} />
+                    <Route path="/app" component={appManage} />
                     <Route path="/app/:id" exact component={LookApp} />
                     <Route path="/company" exact component={Application} />
                     <Route path="/applicationManage" exact component={appManage} />
@@ -162,8 +171,9 @@ function RouterConfig({ history, app }) {
                     <Route path="/linkRuler" exact component={LinkRuler} />
                     <Route path="/rule" exact component={Rules} />
                     <Route path="/policy" exact component={Policy} />
-                    <Route path="/policy/:id" exact component={Strategy} />
+                    <Route path="/policy/:id" component={Strategy} />
                     <Route path="/permission" exact component={Permission} />
+                    <Route path="/black" exact component={Black} />
                 </Main>
             </Switch>
         </Router>

@@ -7,11 +7,11 @@ import { DURATION } from 'utils/constants';
 import createHistory from 'history/createBrowserHistory';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
-import AddPolicy from './AddPolicy';
+// import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
 
-class Policy extends React.PureComponent {
+class Sandboxie extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
@@ -62,6 +62,7 @@ class Policy extends React.PureComponent {
             clone: selectedRows,
             disabled: false,
         });
+        console.log(this.state.clone);
     }
     onEdit = (id, isEnable) => {
         const {
@@ -158,7 +159,8 @@ class Policy extends React.PureComponent {
             { title: '策略标识', dataIndex: 'id', key: 'id' },
             { title: '策略名称', dataIndex: 'name', key: 'name' },
             { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '策略描述', dataIndex: 'describ', key: 'describ' },
+            { title: '上架人', dataIndex: 'describ', key: 'describ' },
+            { title: '上架时间', dataIndex: 'describ', key: 'describ' },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
@@ -198,13 +200,6 @@ class Policy extends React.PureComponent {
                                 :
                                 null
                         }
-                        <AddPolicy
-                            type="edit"
-                            record={rest[1]}
-                            onOk={this.modalOk}
-                        >
-                            <span>编辑</span>
-                        </AddPolicy>
                         <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>阶段管理</span>
                     </div>) },
         ];
@@ -222,20 +217,8 @@ class Policy extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
-                    <AddPolicy
-                        type="add"
-                        record={{}}
-                        onOk={this.modalOk}
-                    >
-                        <Button type="primary">新增策略</Button>
-                    </AddPolicy>
-                    <AddPolicy
-                        type="clone"
-                        record={this.state.clone}
-                        onOk={this.modalOk}
-                    >
-                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
-                    </AddPolicy>
+                    <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                    <Button type="primary">开始实验</Button>
                 </div>
                 <Table
                     columns={columns}
@@ -257,10 +240,10 @@ class Policy extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.policy.list,
-    sysId: state.policy.sysId,
-    loading: state.loading.models.policy,
-    pageNum: state.policy.pageNum,
-    pageSize: state.policy.pageSize,
+    list: state.sandboxie.list,
+    sysId: state.sandboxie.sysId,
+    loading: state.loading.models.sandboxie,
+    pageNum: state.sandboxie.pageNum,
+    pageSize: state.sandboxie.pageSize,
 });
-export default connect(mapStateToProps)(Form.create()(CSSModules(Policy)));
+export default connect(mapStateToProps)(Form.create()(CSSModules(Sandboxie)));
