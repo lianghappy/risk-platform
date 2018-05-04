@@ -51,6 +51,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/account') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['系统管理', '账号管理'],
+                    });
+                    dispatch({
                         type: 'queryAccountList',
                         payload: {
                             pageNum: 1,

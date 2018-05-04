@@ -4,3 +4,4 @@
 @import './assets/sass/layout.scss';
 @import './assets/sass/ant.scss';
 @import './assets/sass/component.scss';
+@import "./assets/sass/global.scss";

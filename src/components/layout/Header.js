@@ -3,13 +3,14 @@ import {
     Dropdown,
     Menu,
     Icon,
+    Breadcrumb,
 } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import UpdatePwd from 'components/UpdatePwd';
 import { getUserName } from 'models/session';
 
-function Header({ userName, logout }) {
+function Header({ userName, logout, breadcrumbItems }) {
     const menu = (
         <Menu>
             <Menu.Item key="password">
@@ -24,13 +25,24 @@ function Header({ userName, logout }) {
     );
 
     return (
-        <section style={{ float: 'right', height: '80px' }}>
-            <Dropdown overlay={menu} trigger={['click']}>
-                <a className="ant-dropdown-link" href="">
-                    {userName}
-                    <Icon type="down" />
-                </a>
-            </Dropdown>
+        <section>
+            <div className="jm-clearfix" style={{ float: 'right' }}>
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <a className="ant-dropdown-link" href="">
+                        {userName}
+                        <Icon type="down" />
+                    </a>
+                </Dropdown>
+            </div>
+            <Breadcrumb separator=">">
+                {
+                    breadcrumbItems.map((name, index) => (
+                        <Breadcrumb.Item key={index + name}>
+                            {name}
+                        </Breadcrumb.Item>
+                    ))
+                }
+            </Breadcrumb>
         </section>
     );
 }
@@ -38,10 +50,12 @@ function Header({ userName, logout }) {
 Header.propTypes = {
     userName: PropTypes.string.isRequired,
     logout: PropTypes.func.isRequired,
+    breadcrumbItems: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = state => ({
     userName: getUserName(state),
+    breadcrumbItems: state.common.breadcrumbItems,
 });
 
 const mapDispatchToProps = (dispatch) => ({

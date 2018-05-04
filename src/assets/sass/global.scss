@@ -1,0 +1,29 @@
+html, body, :global(#root) {
+    height: 100vh;
+}
+table {
+    width: 100%;
+}
+:global(.jm-lf) {
+    float: left;
+}
+:global(.jm-rt) {
+    float: right;
+}
+:global(.jm-clearfix) { zoom: 1; }  /* For IE 6/7 (trigger hasLayout) */
+:global(.jm-clearfix:before) {
+    display: table;
+    content: "";
+}
+:global(.jm-clearfix:after) {
+    content: "";
+    display: table;
+    clear: both;
+}
+:global(.jm-flex) {
+    display: flex;
+    flex-direction: column;
+}
+:global(.jm-flex-auto) {
+    flex: auto;
+}

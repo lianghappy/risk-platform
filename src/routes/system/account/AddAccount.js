@@ -22,7 +22,6 @@ class AddAccount extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         dispatch: PropTypes.func.isRequired,
-        list: PropTypes.array.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
     };
@@ -75,8 +74,6 @@ class AddAccount extends React.PureComponent {
             getFieldsError,
         } = forms;
 
-        const { list: dataSource } = this.props;
-        console.log(dataSource);
         return (
             <section>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -108,6 +105,7 @@ class AddAccount extends React.PureComponent {
                                 getFieldDecorator('acount', {
                                     rules: [
                                         { required: true, message: '请输入用户账号' },
+                                        { max: 20, message: '*用户账号最好为姓名全拼，不能输入汉字，最多20个字符' },
                                     ],
                                 })(<Input type="acount" placeholder="请输入用户账号" />)
                             }
@@ -132,6 +130,16 @@ class AddAccount extends React.PureComponent {
                                 getFieldDecorator('phone', {
                                     rules: [{ required: true, message: '请输入用户手机号' }],
                                 })(<Input placeholder="请输入用户手机号" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="公司名称"
+                        >
+                            {
+                                getFieldDecorator('phone', {
+                                    rules: [{ required: true, message: '请输入公司名称' }],
+                                })(<Input placeholder="请输入公司名称" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -181,17 +189,4 @@ class AddAccount extends React.PureComponent {
         );
     }
 }
-const mapStateToProps = (state) => ({
-    list: state.account.list,
-    pageNum: state.account.pageNum,
-    pageSize: state.account.pageSize,
-});
-const mapDispatchToProps = (dispatch) => ({
-    getRoleNameList: (data) => {
-        dispatch({
-            type: 'account/getRoleNameList',
-            payload: data,
-        });
-    },
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(AddAccount));
+export default connect()(Form.create()(AddAccount));

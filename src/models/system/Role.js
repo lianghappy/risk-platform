@@ -35,6 +35,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/systemManage') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['系统管理', '角色管理'],
+                    });
+                    dispatch({
                         type: 'getRoleList',
                         payload: {
                             pageNum: 1,

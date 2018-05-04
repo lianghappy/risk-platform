@@ -1,0 +1,16 @@
+:global(.ant-layout-header) {
+    padding: 0 20px !important;
+    // height: 100px !important;
+    // background: #0082FD !important;
+}
+:global(.ant-breadcrumb) {
+    float: left;
+    margin-top: 43px!important;
+    color: rgba(255,255,255,.85) !important;
+}
+:global(.ant-breadcrumb > span:last-child) {
+    color: rgb(255,255,255) !important;
+}
+:global(.ant-breadcrumb-separator) {
+    color: rgba(255,255,255,.85) !important;
+}

@@ -10,17 +10,21 @@
     align-items: center;
     justify-content: center;
 }
-.icon-user:before {
-    content: '\e626';
+.system:before {
+    content: '\e641';
 }
-.icon-xitongguanli:before{
-    content: "\e641";
-    color: #FFFFFF;
+.application:before {
+    content: '\e63f';
 }
-.icon-jueceyinqing:before{ content: "\e63e"; color: #FFFFFF;}
-
-.icon-yingyongguanli:before{ content: "\e63f"; color: #FFFFFF;}
-
+.policy:before {
+    content: '\e63e';
+}
+.sandboxie:before {
+    content: '\e643';
+}
+.blackAndWhite:before {
+    content: '\e644';
+}
 .logoImgs{
     width: 50px;
     height: 50px;

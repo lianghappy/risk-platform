@@ -26,3 +26,19 @@ export const textPick = (_key, source, attributes = {}) => {
     });
     return t;
 };
+
+// 导航选中
+export const menuKeyPick = (pathname) => {
+    const path = pathname.split('/');
+    const router = path[1];
+    const key = [];
+    switch (router) {
+    case 'detail':
+        if (path[2] === '0') key.push('auctioning');
+        else key.push('auctioned');
+        break;
+    default:
+        key.push(router);
+    }
+    return key;
+};

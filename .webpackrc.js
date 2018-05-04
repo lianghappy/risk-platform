@@ -12,6 +12,7 @@ export default {
     env: {
         development: {
             extraBabelPlugins: ['dva-hmr'],
+            publicPath: '/',
         },
         production: {
             outputPath: path.join(__dirname, `dist/${constants.VERSION}`),

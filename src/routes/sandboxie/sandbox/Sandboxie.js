@@ -2,10 +2,10 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
 import { DURATION } from 'utils/constants';
 import createHistory from 'history/createBrowserHistory';
-import style from './index.scss';
+import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 // import AddPolicy from './AddPolicy';
 
@@ -73,7 +73,7 @@ class Sandboxie extends React.PureComponent {
         } = this.props;
         new Promise((resolve) => {
             dispatch({
-                type: 'policy/updataEnable',
+                type: 'sandboxie/updataEnable',
                 payload: {
                     data: { id, isEnable: (Number(isEnable) + 1) },
                     resolve,
@@ -101,13 +101,13 @@ class Sandboxie extends React.PureComponent {
         let url = '';
         switch (data.type) {
         case 'add':
-            url = 'policy/add';
+            url = 'sandboxie/add';
             break;
         case 'edit':
-            url = 'policy/updata';
+            url = 'sandboxie/updata';
             break;
         case 'clone':
-            url = 'policy/clone';
+            url = 'sandboxie/clone';
             break;
         default:
             break;
@@ -133,15 +133,22 @@ class Sandboxie extends React.PureComponent {
             });
         });
     };
+    exciese = () => {
+        if (this.state.disabled) {
+            message.info('请选择策略');
+        } else {
+            createHistory().push('/experiment');
+        }
+    }
     query(payload) {
         this.props.dispatch({
-            type: 'policy/getPolicyList',
+            type: 'sandboxie/getPolicyList',
             payload,
         });
     }
     stage = (e, value) => {
         e.preventDefault();
-        createHistory().push(`policy/${value.id}`);
+        createHistory().push(`sandboxie/${value.id}`);
     }
     render() {
         const rowSelection = {
@@ -155,12 +162,25 @@ class Sandboxie extends React.PureComponent {
             list: dataSource,
             loading,
         } = this.props;
+        const menu = (
+            <Menu>
+                <Menu.Item>
+                    <span>阶段管理</span>
+                </Menu.Item>
+                <Menu.Item>
+                    <span>编辑</span>
+                </Menu.Item>
+                <Menu.Item>
+                    <span>删除</span>
+                </Menu.Item>
+            </Menu>
+        );
         const columns = [
             { title: '策略标识', dataIndex: 'id', key: 'id' },
             { title: '策略名称', dataIndex: 'name', key: 'name' },
             { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '上架人', dataIndex: 'describ', key: 'describ' },
-            { title: '上架时间', dataIndex: 'describ', key: 'describ' },
+            { title: '上架人', dataIndex: 'workName', key: 'workName' },
+            { title: '上架时间', dataIndex: 'workTime', key: 'workTime' },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
@@ -192,7 +212,7 @@ class Sandboxie extends React.PureComponent {
                             rest[1].isEnable < 2 ?
                                 <Popconfirm
                                     placement="topRight"
-                                    title={rest[1].isEnable === 1 && rest[1].isEnable < 2 ? '是否下架？' : '是否上架？'}
+                                    title={Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '是否下架？' : '是否上架？'}
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
                                     <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
@@ -200,12 +220,32 @@ class Sandboxie extends React.PureComponent {
                                 :
                                 null
                         }
-                        <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>阶段管理</span>
+                        <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>实验历史记录</span>
+                        {
+                            rest[1].isEnable > 0 ?
+                                <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
+                                :
+                                <Dropdown overlay={menu}>
+                                    <a className="ant-dropdown-link" href="#">
+                                        更多<Icon type="down" />
+                                    </a>
+                                </Dropdown>
+                        }
                     </div>) },
         ];
         return (
             <Layout className={style.container}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
+                    <FormItem label="策略标识" >
+                        {
+                            getFieldDecorator('id')(<Input placeholder="请输入策略名称" />)
+                        }
+                    </FormItem>
+                    <FormItem label="商家状态" >
+                        {
+                            getFieldDecorator('status')(<Input placeholder="请输入策略名称" />)
+                        }
+                    </FormItem>
                     <FormItem label="策略名称" >
                         {
                             getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
@@ -217,8 +257,8 @@ class Sandboxie extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
+                    <Button type="primary" onClick={() => this.exciese()}>开始实验</Button>
                     <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
-                    <Button type="primary">开始实验</Button>
                 </div>
                 <Table
                     columns={columns}

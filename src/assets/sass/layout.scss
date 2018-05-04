@@ -1,11 +1,36 @@
-html, body, :global(#root) {
-    height: 100vh;
+:global(.jm-sider),
+:global(.jm-sider .ant-menu-root),
+:global(.jm-sider .ant-menu-sub) {
+    background: #333 !important;
 }
-
-table {
-    width: 100%;
+:global(.jm-sider .ant-menu-sub) {
+    box-shadow: none !important;
 }
-
-:global {
-
+:global(.jm-sider .ant-menu-submenu-arrow) {
+    display: none !important;
+}
+:global(.jm-sider .ant-menu-submenu-open) {
+    color: #999 !important;
+}
+:global(.jm-sider > .ant-layout-sider-children) {
+    display: flex;
+    flex-direction: column;
+}
+:global(.jm-menu) {
+    flex: 1;
+    overflow: auto;
+}
+:global(.jm-body) {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 20px 16px 16px;
+    overflow: auto;
+}
+:global(.jm-main) {
+    border-radius: 2px;
+    background: #fff;
+}
+#root{
+    height: 100%;
 }

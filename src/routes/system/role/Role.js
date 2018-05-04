@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table } from 'antd';
 import CSSModules from 'react-css-modules';
-import createHistory from 'history/createBrowserHistory';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -48,8 +47,7 @@ class RoleIndex extends React.PureComponent {
    }
    addrole = (e) => {
        e.preventDefault();
-       console.log(createHistory());
-       createHistory().push('/addRole');
+       this.props.history.push('/role/addRole');
    }
    render() {
        const {

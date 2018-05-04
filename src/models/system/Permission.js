@@ -36,6 +36,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/permission') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['系统管理', '权限管理'],
+                    });
+                    dispatch({
                         type: 'getPermissionList',
                         payload: {
                             sysId: SYSID,

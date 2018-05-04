@@ -31,6 +31,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/addRole') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['系统管理', '角色管理', '新增角色'],
+                    });
+                    dispatch({
                         type: 'getTreeList',
                         payload: {
                             sysId: 'merchant',

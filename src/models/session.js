@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { setToken, post } from 'utils/request';
+import { setToken, post, setUserId, setDeviceId } from 'utils/request';
 import API from 'utils/api';
 
 export const getUserInfo = (state) => state.session.user;
@@ -24,8 +24,12 @@ export const initSession = () => {
         userInfo = JSON.parse(userInfo);
         session = { ...userInfo, isLogin: true };
         setToken(userInfo.token);
+        // setUserId(userInfo.user.id);
+        // setDeviceId(userInfo.user.type);
     } else {
         setToken(null);
+        // setUserId(null);
+        // setDeviceId(null);
     }
     return {
         session,
@@ -47,6 +51,8 @@ export default {
             const response = yield call(post, API.login, payload);
             yield sessionStorage.setItem('userInfo', JSON.stringify(response));
             yield setToken(response.token);
+            yield setUserId(response.user.id);
+            yield setDeviceId(response.user.type);
             yield put({
                 type: 'loginSuc',
                 payload: response,
@@ -71,8 +77,14 @@ export default {
                 if (pathname === '/login') {
                     sessionStorage.clear();
                     setToken(null);
+                    setUserId(null);
+                    setDeviceId(null);
                     dispatch({
                         type: 'logoutSuc',
+                    });
+                    dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: [],
                     });
                 }
             });
