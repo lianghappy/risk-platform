@@ -5,12 +5,12 @@ import {
     Modal,
     Button,
     Input,
-    // Select,
+    Select,
 } from 'antd';
 import { connect } from 'dva';
 
 const { TextArea } = Input;
-// const Option = Select.Option;
+const Option = Select.Option;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
@@ -24,27 +24,35 @@ class AddModal extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
+        category: PropTypes.array.isRequired,
     };
     state = {
         visible: this.props.visible || false,
         title: this.props.title === 'add' ? '新增' : '更新',
+        category: this.props.category,
         // type: this.props.type,
     };
+    componentWillReceiveProps(nextProps) {
+        if (nextProps) {
+            this.setState({
+                category: nextProps.category,
+            });
+        }
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
             form,
             record,
-            title,
             onOk,
+            type,
         } = this.props;
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (title === 'edit') {
-                        Object.assign(values, { strategyId: record.strategyId });
+                    if (type === 'edit') {
+                        Object.assign(values, { id: record.id });
                     }
                     values.title = that.props.title;
                     onOk(values, resolve);
@@ -81,6 +89,10 @@ class AddModal extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
+        const options = [];
+        this.state.category.forEach((item) => {
+            options.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
+        });
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -114,7 +126,7 @@ class AddModal extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入用户手机号' },
                                     ],
-                                })(<Input type="phone" placeholder="请输入用户手机号" />)
+                                })(<Input placeholder="请输入用户手机号" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -127,7 +139,7 @@ class AddModal extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
                                     ],
-                                })(<Input type="idCardName" placeholder="请输入用户姓名" />)
+                                })(<Input placeholder="请输入用户姓名" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -140,7 +152,33 @@ class AddModal extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入用户身份证' },
                                     ],
-                                })(<Input type="idCard" placeholder="请输入用户身份证" />)
+                                })(<Input placeholder="请输入用户身份证" />)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="名单分类"
+                        >
+                            {
+                                getFieldDecorator('categoryId', {
+                                    initialValue: record.categoryId,
+                                    rules: [
+                                        { required: true, message: '请输入名单分类' },
+                                    ],
+                                })(<Select>{options}</Select>)
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="名单来源"
+                        >
+                            {
+                                getFieldDecorator('channelId', {
+                                    initialValue: record.channelId,
+                                    rules: [
+                                        { required: true, message: '请输入名单来源' },
+                                    ],
+                                })(<Select>{options}</Select>)
                             }
                         </Form.Item>
                         <Form.Item
@@ -148,7 +186,7 @@ class AddModal extends React.PureComponent {
                             label="用户描述"
                         >
                             {
-                                getFieldDecorator('describ', {
+                                getFieldDecorator('description', {
                                     initialValue: record.describ,
                                     rules: [{ required: true, message: '请描述该策略的内容及业务上的使用场景' },
                                         { max: 100, message: '描述内容最多100个字' }],

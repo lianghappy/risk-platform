@@ -3,10 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button } from 'antd';
-// import { DURATION } from 'utils/constants';
-// import createHistory from 'history/createBrowserHistory';
 import style from '../index.scss';
-// import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
 

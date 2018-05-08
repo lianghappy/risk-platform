@@ -109,6 +109,8 @@ const api = {
     delBlack: `${API}/api/risk/manager/blackAndWhite/delete/v1`,
     // 更新
     updateBlack: `${API}/api/risk/manager/blackAndWhite/update/v1`,
+    // 来源
+    getBlackType: `${API}/api/risk/manager/policy/channelBank/list/v1`,
 };
 
 export default api;

@@ -80,6 +80,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/linkRuler') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['决策引擎', '类别管理'],
+                    });
+                    dispatch({
                         type: 'getLinkRulerList',
                         payload: {
                             sysId: SYSID,

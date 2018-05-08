@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu } from 'antd';
 import { DURATION } from 'utils/constants';
 import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
@@ -25,6 +25,7 @@ class LinkRuler extends React.PureComponent {
     state = {
         selectedRows: [],
         disabled: true,
+        current: '.$linkRuler',
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -86,7 +87,6 @@ class LinkRuler extends React.PureComponent {
         });
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log(selectedRows);
         if (selectedRows.length > 0) {
             this.setState({
                 disabled: false,
@@ -107,7 +107,7 @@ class LinkRuler extends React.PureComponent {
         const lists = this.props.categoryList;
         console.log(treeConvert({
             id: 'id',
-            name: 'v',
+            name: 'name',
             pId: 'p',
             rootId: '100000',
             tId: 'value',
@@ -154,6 +154,18 @@ class LinkRuler extends React.PureComponent {
         };
         return (
             <Layout className={style.container}>
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                >
+                    <Menu.Item key="structure">
+                        <a href="/categoryStru">类别构建</a>
+                    </Menu.Item>
+                    <Menu.Item key="linkRuler">
+                        关联规则
+                    </Menu.Item>
+                </Menu>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="规则编号" >
                         {

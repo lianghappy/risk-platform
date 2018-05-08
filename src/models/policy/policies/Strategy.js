@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import base64 from 'utils/base64';
 
 export default {
     namespace: 'strategy',
@@ -52,8 +53,13 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const ids = pathname.substring(pathname.indexOf('/') + 1);
-                if (pathname === `/policy/${ids}`) {
+                const path = pathname.split('/');
+                if (path[1] === 'strategy') {
+                    const ids = base64.decode(path[2]);
+                    dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['决策引擎', '策略管理', '阶段管理'],
+                    });
                     dispatch({
                         type: 'getStrategyList',
                         payload: {

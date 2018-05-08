@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import base64 from 'utils/base64';
 
 export default {
     namespace: 'lookApp',
@@ -105,8 +106,13 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const ids = pathname.substring(pathname.indexOf('/') + 1);
-                if (pathname === `/${ids}`) {
+                const path = pathname.split('/');
+                if (path[1] === 'apps') {
+                    const ids = base64.decode(path[2]);
+                    dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['应用管理', '查看应用'],
+                    });
                     dispatch({
                         type: 'getAppDetailList',
                         payload: {

@@ -51,6 +51,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/rule') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['决策引擎', '规则库管理'],
+                    });
+                    dispatch({
                         type: 'getRuleList',
                         payload: {
                             sysId: SYSID,

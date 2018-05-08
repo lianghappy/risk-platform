@@ -56,6 +56,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/categoryStru') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['决策引擎', '类别管理'],
+                    });
+                    dispatch({
                         type: 'getStructureList',
                         payload: {
                             sysId: SYSID,

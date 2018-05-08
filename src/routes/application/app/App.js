@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
-import createHistory from 'history/createBrowserHistory';
+import base64 from 'utils/base64';
 import style from './company.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddApp from './AddApp';
@@ -80,7 +80,7 @@ class AppIndex extends React.PureComponent {
         });
     };
     look = (id) => {
-        createHistory().push(`/${id}`);
+        this.props.history.push(`/apps/${base64.encode(id)}`);
     }
     modalOk = (data, callback) => {
         const {
@@ -135,13 +135,13 @@ class AppIndex extends React.PureComponent {
                 dataIndex: 'operator',
                 render: (...rest) => (
                     <div>
-                        <span role="button" tabIndex="-1" style={{ marginRight: 5 }} onClick={() => this.look(rest[1].id)}>查看</span>
+                        <span role="button" tabIndex="-1" style={{ marginRight: 5, color: 'rgba(59,153,252,1)' }} onClick={() => this.look(rest[1].id)}>查看</span>
                         <Popconfirm
                             placement="topRight"
                             title="您确定要删除该公司吗？"
                             onConfirm={() => this.onDelete(rest[1].id)}
                         >
-                            <Button icon="delete" />
+                            <span style={{ color: 'rgba(59,153,252,1)' }}>删除</span>
                         </Popconfirm>
                     </div>),
             },

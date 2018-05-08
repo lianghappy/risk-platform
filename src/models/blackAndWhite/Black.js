@@ -9,6 +9,7 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        category: [],
     },
     effects: {
         // 获取规则类别列表
@@ -22,6 +23,17 @@ export default {
                     sysId: SYSID,
                     pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        // 获取来源
+        * getType({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getBlackType, payload, data);
+            yield put({
+                type: 'getTypeSuc',
+                payload: {
+                    category: response,
                 },
             });
         },
@@ -48,11 +60,18 @@ export default {
         getBlackListSuc(state, { payload }) {
             return { ...state, ...payload };
         },
+        getTypeSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (pathname === '/black') {
+                    dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['黑白名单', '黑名单'],
+                    });
                     dispatch({
                         type: 'getBlackList',
                         payload: {
@@ -60,6 +79,12 @@ export default {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                             type: 0,
+                        },
+                    });
+                    dispatch({
+                        type: 'getType',
+                        payload: {
+                            type: 'rule',
                         },
                     });
                 }

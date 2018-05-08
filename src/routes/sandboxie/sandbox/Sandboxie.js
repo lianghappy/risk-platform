@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
 import { DURATION } from 'utils/constants';
-import createHistory from 'history/createBrowserHistory';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 // import AddPolicy from './AddPolicy';
@@ -137,7 +136,7 @@ class Sandboxie extends React.PureComponent {
         if (this.state.disabled) {
             message.info('请选择策略');
         } else {
-            createHistory().push('/experiment');
+            this.props.history.push('/experiment');
         }
     }
     query(payload) {
@@ -148,7 +147,7 @@ class Sandboxie extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        createHistory().push(`sandboxie/${value.id}`);
+        this.props.history.push(`sandboxie/${value.id}`);
     }
     render() {
         const rowSelection = {

@@ -153,6 +153,13 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/Sandboxie.js'),
         ],
     });
+    const Experiment = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/Experiment.js'),
+        models: () => [
+            import('models/sandboxie/Experiment.js'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -171,17 +178,18 @@ function RouterConfig({ history, app }) {
                     <Route path="/role/addRole" exact component={AddRole} />
                     <Route path="/user" exact component={User} />
                     <Route path="/app" exact component={appManage} />
-                    <Route path="/app/:id" exact component={LookApp} />
+                    <Route path="/apps/:id" exact component={LookApp} />
                     <Route path="/company" exact component={Application} />
                     <Route path="/applicationManage" exact component={appManage} />
                     <Route path="/categoryStru" exact component={construct} />
                     <Route path="/linkRuler" exact component={LinkRuler} />
                     <Route path="/rule" exact component={Rules} />
                     <Route path="/policy" exact component={Policy} />
-                    <Route path="/policy/:id" component={Strategy} />
+                    <Route path="/strategy/:id" component={Strategy} />
                     <Route path="/permission" exact component={Permission} />
                     <Route path="/black" exact component={Black} />
                     <Route path="/sandboxie" exact component={sandboxie} />
+                    <Route path="/sandboxie/:id" exact component={Experiment} />
                 </Main>
             </Switch>
         </Router>

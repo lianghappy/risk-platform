@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, message, Tooltip } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, message, Tooltip, Menu } from 'antd';
 import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -21,6 +21,9 @@ class Structure extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
         parentlist: PropTypes.array.isRequired,
     };
+    state = {
+        current: '.$structure',
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
             pageNum,
@@ -131,6 +134,18 @@ class Structure extends React.PureComponent {
         ];
         return (
             <Layout className={style.container}>
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                >
+                    <Menu.Item key="structure">
+                        类别构建
+                    </Menu.Item>
+                    <Menu.Item key="linkRuler">
+                        <a href="/linkRuler">关联规则</a>
+                    </Menu.Item>
+                </Menu>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="类别名称" >
                         {

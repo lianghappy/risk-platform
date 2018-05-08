@@ -33,9 +33,9 @@ export const menuKeyPick = (pathname) => {
     const router = path[1];
     const key = [];
     switch (router) {
-    case 'detail':
-        if (path[2] === '0') key.push('auctioning');
-        else key.push('auctioned');
+    case 'apps':
+        if (path[2] === '0') key.push('app');
+        else key.push('app');
         break;
     default:
         key.push(router);

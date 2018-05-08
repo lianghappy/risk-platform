@@ -60,6 +60,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/policy') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['决策引擎', '策略管理'],
+                    });
+                    dispatch({
                         type: 'getPolicyList',
                         payload: {
                             sysId: SYSID,

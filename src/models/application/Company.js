@@ -65,6 +65,10 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/application') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: ['应用管理', '公司管理'],
+                    });
+                    dispatch({
                         type: 'getCompanyList',
                         payload: {
                             sysId: SYSID,

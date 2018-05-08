@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
-import createHistory from 'history/createBrowserHistory';
+import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddPolicy from './AddPolicy';
@@ -140,7 +140,7 @@ class Policy extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        createHistory().push(`policy/${value.id}`);
+        this.props.history.push(`strategy/${base64.encode(value.id)}`);
     }
     render() {
         const rowSelection = {
