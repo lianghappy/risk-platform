@@ -1,15 +1,42 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
-// import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table } from 'antd';
-import style from './index.scss';
+import { connect } from 'dva';
+import { Layout, Form, Button, Table, DatePicker } from 'antd';
+import moment from 'moment';
+import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
-const Option = Select.Option;
+const { RangePicker } = DatePicker;
+function range(start, end) {
+    const result = [];
+    for (let i = start; i < end; i++) {
+        result.push(i);
+    }
+    return result;
+}
 
-class Record extends React.PureComponent {
+function disabledDate(current) {
+    // Can not select days before today and today
+    return current && current < moment().endOf('day');
+}
+
+function disabledRangeTime(_, type) {
+    if (type === 'start') {
+        return {
+            disabledHours: () => range(0, 60).splice(4, 20),
+            disabledMinutes: () => range(30, 60),
+            disabledSeconds: () => [55, 56],
+        };
+    }
+    return {
+        disabledHours: () => range(0, 60).splice(20, 4),
+        disabledMinutes: () => range(0, 31),
+        disabledSeconds: () => [55, 56],
+    };
+}
+class HistoryRecord extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
@@ -66,41 +93,43 @@ class Record extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '实验记录ID', dataIndex: 'id', key: 'id' },
-            { title: '策略标识', dataIndex: 'name', key: 'name' },
+            { title: '实验记录id', dataIndex: 'id', key: 'id' },
+            { title: '实验标识', dataIndex: 'name', key: 'name' },
             { title: '策略名称', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '样本ID', dataIndex: 'code', key: 'code' },
+            { title: '样本id', dataIndex: 'code', key: 'code' },
             { title: '实验开始时间', dataIndex: 'channel', key: 'channel' },
             { title: '实验结束时间', dataIndex: 'valueType', key: 'valueType' },
             { title: '实验用户姓名', dataIndex: 'valueType', key: 'valueType' },
             { title: '实验状态', dataIndex: 'valueType', key: 'valueType' },
             { title: '操作', dataIndex: 'valueType', key: 'valueType' },
         ];
-        const options = [];
-        if (this.props.typeList) {
-            this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
-            });
-        }
         return (
             <Layout className={style.container}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                    <FormItem label="规则编号" >
+                    <FormItem label="实验开始时间" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('startTime')(<RangePicker
+                                disabledDate={disabledDate}
+                                disabledTime={disabledRangeTime}
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                }}
+                                format="YYYY-MM-DD HH:mm:ss"
+                            />)
                         }
                     </FormItem>
-                    <FormItem label="规则来源" >
-                        {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)}
-                    </FormItem>
-                    <FormItem label="风险代码" >
+                    <FormItem label="实验结束时间" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
-                        }
-                    </FormItem>
-                    <FormItem label="规则名称" >
-                        {
-                            getFieldDecorator('name')(<Input placeholder="请输入规则名称" />)
+                            getFieldDecorator('endTime')(<RangePicker
+                                disabledDate={disabledDate}
+                                disabledTime={disabledRangeTime}
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                }}
+                                format="YYYY-MM-DD HH:mm:ss"
+                            />)
                         }
                     </FormItem>
                     <FormItem>
@@ -125,13 +154,13 @@ class Record extends React.PureComponent {
         );
     }
 }
-//
-// const mapStateToProps = (state) => ({
-//     list: state.samples.list,
-//     sysId: state.samples.sysId,
-//     loading: state.loading.models.samples,
-//     pageNum: state.samples.pageNum,
-//     pageSize: state.samples.pageSize,
-// });
-// export default connect(mapStateToProps)(Form.create()(CSSModules(Samples)));
-export default Form.create()(CSSModules(Record));
+
+const mapStateToProps = (state) => ({
+    list: state.history.list,
+    sysId: state.history.sysId,
+    loading: state.loading.models.history,
+    pageNum: state.history.pageNum,
+    pageSize: state.history.pageSize,
+    typeList: state.history.typeList,
+});
+export default connect(mapStateToProps)(Form.create()(CSSModules(HistoryRecord)));

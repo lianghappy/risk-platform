@@ -113,7 +113,7 @@ class AddRole extends React.PureComponent {
       return (
           <Layout className={style.container}>
               <Form layout="vertical">
-                  <FormItem label="角色名称" {...formItemLayout}>
+                  <FormItem label="角色类型" {...formItemLayout}>
                       <Select defaultValue="请选择角色类型">
                           <Option value="公司内">公司内</Option>
                           <Option value="公司外">公司外</Option>

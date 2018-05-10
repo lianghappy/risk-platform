@@ -40,6 +40,24 @@ export default {
                 },
             });
         },
+        // 增加策略
+        * add({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.addAccount, data);
+            yield call(resolve);
+        },
+        // 更新策略
+        * update({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.updateAccount, data);
+            yield call(resolve);
+        },
+        // 删除
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delAccount, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         querySuc(state, { payload }) {

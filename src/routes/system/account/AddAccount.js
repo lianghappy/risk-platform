@@ -73,7 +73,6 @@ class AddAccount extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = forms;
-
         return (
             <section>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -137,7 +136,7 @@ class AddAccount extends React.PureComponent {
                             label="公司名称"
                         >
                             {
-                                getFieldDecorator('phone', {
+                                getFieldDecorator('company', {
                                     rules: [{ required: true, message: '请输入公司名称' }],
                                 })(<Input placeholder="请输入公司名称" />)
                             }
@@ -147,7 +146,7 @@ class AddAccount extends React.PureComponent {
                             label="密码"
                         >
                             {
-                                getFieldDecorator('newPwd', {
+                                getFieldDecorator('password', {
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -178,10 +177,16 @@ class AddAccount extends React.PureComponent {
                             {...formItemLayout}
                             label="角色名称"
                         >
-                            <Select defaultValue="请输入角色名称">
-                                <Option value="全部">全部</Option>
-                                <Option value="123" >123</Option>
-                            </Select>
+                            {
+                                getFieldDecorator('roleIds', {
+                                    rules: [
+                                        {
+                                            required: true,
+                                            message: '请输入确认密码',
+                                        },
+                                    ],
+                                })(<Select defaultValue="请输入角色名称"><Option value="全部">全部</Option><Option value="123" >123</Option></Select>)
+                            }
                         </Form.Item>
                     </Form>
                 </Modal>

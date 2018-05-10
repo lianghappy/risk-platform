@@ -5,12 +5,12 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import { message } from 'antd';
 import { DURATION } from 'utils/constants';
-import { signature } from 'utils/request';
+// import { signature } from 'utils/request';
 import { initSession } from 'models/session';
 import './index.css';
 
 moment.locale('zh-cn');
-signature(); // 签名
+// signature(); // 签名
 
 // 1. Initialize
 const app = dva({

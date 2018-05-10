@@ -70,16 +70,47 @@ class Sandboxie extends React.PureComponent {
             form,
             dispatch,
         } = this.props;
+        const userInfo = sessionStorage.getItem('userInfo');
+        let operator = '';
+        if (userInfo) {
+            operator = JSON.parse(userInfo).user.userName;
+        }
         new Promise((resolve) => {
             dispatch({
                 type: 'sandboxie/updataEnable',
                 payload: {
-                    data: { id, isEnable: (Number(isEnable) + 1) },
+                    data: { id, isEnable: (Number(isEnable) + 1), operator },
                     resolve,
                 },
             });
         }).then(() => {
             message.success('操作成功', DURATION);
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
+    onDelete(ids) {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'sandboxie/del',
+                payload: {
+                    data: { id: ids },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
@@ -111,7 +142,6 @@ class Sandboxie extends React.PureComponent {
         default:
             break;
         }
-
         new Promise((resolve) => {
             dispatch({
                 type: url,
@@ -145,9 +175,13 @@ class Sandboxie extends React.PureComponent {
             payload,
         });
     }
+    history = (e, value) => {
+        e.preventDefault();
+        this.props.history.push(`/history/${value.id}`);
+    }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(`sandboxie/${value.id}`);
+        this.props.history.push(`/strategies/${value.id}`);
     }
     render() {
         const rowSelection = {
@@ -161,19 +195,6 @@ class Sandboxie extends React.PureComponent {
             list: dataSource,
             loading,
         } = this.props;
-        const menu = (
-            <Menu>
-                <Menu.Item>
-                    <span>阶段管理</span>
-                </Menu.Item>
-                <Menu.Item>
-                    <span>编辑</span>
-                </Menu.Item>
-                <Menu.Item>
-                    <span>删除</span>
-                </Menu.Item>
-            </Menu>
-        );
         const columns = [
             { title: '策略标识', dataIndex: 'id', key: 'id' },
             { title: '策略名称', dataIndex: 'name', key: 'name' },
@@ -219,12 +240,25 @@ class Sandboxie extends React.PureComponent {
                                 :
                                 null
                         }
-                        <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>实验历史记录</span>
+                        <span role="button" tabIndex="-1" onClick={(e) => this.history(e, rest[1])} className={style.stage}>实验历史记录</span>
                         {
                             rest[1].isEnable > 0 ?
                                 <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                 :
-                                <Dropdown overlay={menu}>
+                                <Dropdown overlay={(
+                                    <Menu>
+                                        <Menu.Item>
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.edit(e, rest[1])}>编辑</span>
+                                        </Menu.Item>
+                                        <Menu.Item>
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
+                                        </Menu.Item>
+                                    </Menu>
+                                )}
+                                >
                                     <a className="ant-dropdown-link" href="#">
                                         更多<Icon type="down" />
                                     </a>

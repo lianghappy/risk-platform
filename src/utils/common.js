@@ -37,6 +37,14 @@ export const menuKeyPick = (pathname) => {
         if (path[2] === '0') key.push('app');
         else key.push('app');
         break;
+    case 'strategy':
+        if (path[2] === '0') key.push('policy');
+        else key.push('policy');
+        break;
+    case 'strategies':
+        if (path[2] === '0') key.push('sandboxie');
+        else key.push('sandboxie');
+        break;
     default:
         key.push(router);
     }

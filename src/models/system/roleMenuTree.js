@@ -1,6 +1,6 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
-// import { SYSID } from 'utils/constants';
+import { SYSID } from 'utils/constants';
 
 export default {
     namespace: 'tree',
@@ -29,7 +29,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/addRole') {
+                if (pathname === '/role/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['系统管理', '角色管理', '新增角色'],
@@ -37,7 +37,7 @@ export default {
                     dispatch({
                         type: 'getTreeList',
                         payload: {
-                            sysId: 'merchant',
+                            sysId: SYSID,
                         },
                     });
                 }

@@ -56,6 +56,7 @@ class RoleIndex extends React.PureComponent {
            pageSize,
            loading,
        } = this.props;
+       const { getFieldDecorator } = this.props.form;
        const columns = [
            { title: '用户账号', dataIndex: 'account', key: 'account' },
            { title: '用户姓名', dataIndex: 'name', key: 'name' },
@@ -70,13 +71,14 @@ class RoleIndex extends React.PureComponent {
            <Layout className={style.containers}>
                <Form layout="inline" className={style.inputs}>
                    <FormItem label="角色名称">
-                       <Input />
+                       {
+                           getFieldDecorator('roleName')(<Input />)
+                       }
                    </FormItem>
                    <FormItem label="角色类型">
-                       <Select style={{ width: 100 }} defaultValue="全部">
-                           <Option value="全部">全部</Option>
-                           <Option value="123" >123</Option>
-                       </Select>
+                       {
+                           getFieldDecorator('type')(<Select style={{ width: 100 }} defaultValue="全部"><Option value="全部">全部</Option><Option value="123" >公司内</Option><Option value="123" >公司外</Option></Select>)
+                       }
                    </FormItem>
                    <FormItem>
                        <Button type="primary" htmlType="submit">
@@ -125,4 +127,4 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.role,
     sysId: state.role.sysId,
 });
-export default connect(mapStateToProps)(CSSModules(RoleIndex));
+export default connect(mapStateToProps)(Form.create()(CSSModules(RoleIndex)));

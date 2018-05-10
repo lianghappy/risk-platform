@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Select, Button, Table, Popconfirm } from 'antd';
+import { Layout, Form, Input, Select, Button, Table, Popconfirm, message } from 'antd';
 import CSSModules from 'react-css-modules';
+import { DURATION } from 'utils/constants';
 import style from './account.scss';
 import AddAccount from './AddAccount';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -42,14 +43,78 @@ class DecisionIndex extends React.PureComponent {
        });
    };
    onReset = () => {
-       console.log('11111');
+       const { pageSize, form } = this.props;
+       form.resetFields();
+       this.query({
+           pageNum: 1,
+           pageSize,
+       });
    }
    onDelete = (id) => {
-       console.log(id);
+       const {
+           pageSize,
+           pageNum,
+           form,
+           dispatch,
+       } = this.props;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'strategy/del',
+               payload: {
+                   data: { id },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           message.success('删除成功', DURATION);
+           form.validateFields((errors, values) => {
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
    }
-   handleSubmit = (e) => {
-       e.preventDefault();
-   }
+   modalOk = (data, callback) => {
+       const {
+           dispatch,
+           pageSize,
+           pageNum,
+           form,
+       } = this.props;
+       const content = data.id !== undefined ? '更新成功' : '新增成功';
+       let url = '';
+       switch (data.title) {
+       case 'add':
+           url = 'account/add';
+           break;
+       case 'edit':
+           url = 'account/update';
+           break;
+       default:
+           break;
+       }
+       new Promise((resolve) => {
+           dispatch({
+               type: url,
+               payload: {
+                   data,
+                   resolve,
+               },
+           });
+       }).then(() => {
+           callback();
+           message.success(content, DURATION);
+           form.validateFields((errors, values) => {
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
+   };
    query(payload) {
        this.props.dispatch({
            type: 'archive/queryAccountList',
@@ -91,16 +156,16 @@ class DecisionIndex extends React.PureComponent {
                <Form layout="inline" className={style.inputs}>
                    <FormItem label="用户账号">
                        {
-                           getFieldDecorator('account')(<Input />)
+                           getFieldDecorator('account')(<Input placeholder="请输入用户账号" />)
                        }
                    </FormItem>
                    <FormItem label="用户姓名">
                        {
-                           getFieldDecorator('userName')(<Input />)
+                           getFieldDecorator('userName')(<Input placeholder="请输入用户姓名" />)
                        }
                    </FormItem>
                    <FormItem label="角色名称">
-                       {getFieldDecorator('roleType')(<Select style={{ width: 100 }} defaultValue="全部" allowClear><Option value="全部">全部</Option><Option value="123" >123</Option></Select>)}
+                       {getFieldDecorator('roleType')(<Select style={{ width: 100 }} defaultValue="全部"><Option value="全部">全部</Option><Option value="123" >123</Option></Select>)}
                    </FormItem>
                    <FormItem>
                        <Button type="primary" htmlType="submit" isabled={this.props.loading}>

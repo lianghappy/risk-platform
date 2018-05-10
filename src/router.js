@@ -153,12 +153,26 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/Sandboxie.js'),
         ],
     });
+    // 阶段
+    const Strategies = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/Strategy'),
+        models: () => [
+            import('models/sandboxie/sandbox/Strategy'),
+        ],
+    });
+    // 开始实验
     const Experiment = dynamic({
         app,
         component: () => import('routes/sandboxie/sandbox/Experiment.js'),
         models: () => [
             import('models/sandboxie/Experiment.js'),
         ],
+    });
+    // 实验历史记录
+    const History = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/History'),
     });
     return (
         <Router history={history}>
@@ -190,6 +204,8 @@ function RouterConfig({ history, app }) {
                     <Route path="/black" exact component={Black} />
                     <Route path="/sandboxie" exact component={sandboxie} />
                     <Route path="/sandboxie/:id" exact component={Experiment} />
+                    <Route path="/strategies/:id" exact component={Strategies} />
+                    <Route path="/history/:id" exact component={History} />
                 </Main>
             </Switch>
         </Router>

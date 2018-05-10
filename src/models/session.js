@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { setToken, post, setUserId, setDeviceId } from 'utils/request';
+import { setToken, post, setUserId, setDeviceId, signature } from 'utils/request';
 import API from 'utils/api';
 
 export const getUserInfo = (state) => state.session.user;
@@ -24,12 +24,12 @@ export const initSession = () => {
         userInfo = JSON.parse(userInfo);
         session = { ...userInfo, isLogin: true };
         setToken(userInfo.token);
-        // setUserId(userInfo.user.id);
+        setUserId(userInfo.user.id);
+        signature(); // 签名
         // setDeviceId(userInfo.user.type);
     } else {
         setToken(null);
-        // setUserId(null);
-        // setDeviceId(null);
+        signature(); // 签名
     }
     return {
         session,
@@ -50,9 +50,9 @@ export default {
         * login({ payload }, { call, put }) {
             const response = yield call(post, API.login, payload);
             yield sessionStorage.setItem('userInfo', JSON.stringify(response));
-            yield setToken(response.token);
-            yield setUserId(response.user.id);
-            yield setDeviceId(response.user.type);
+            yield call(setToken, response.token);
+            yield call(setUserId, response.user.id);
+            yield call(setDeviceId, response.user.type);
             yield put({
                 type: 'loginSuc',
                 payload: response,
@@ -77,8 +77,6 @@ export default {
                 if (pathname === '/login') {
                     sessionStorage.clear();
                     setToken(null);
-                    setUserId(null);
-                    setDeviceId(null);
                     dispatch({
                         type: 'logoutSuc',
                     });

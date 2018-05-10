@@ -33,7 +33,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/systemManage') {
+                if (pathname === '/role') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['系统管理', '角色管理'],

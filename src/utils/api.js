@@ -19,6 +19,12 @@ const api = {
     editUser: `${API}/api/risk/manager/user/update/v1`,
     // 查询用户
     selectUser: `${API}/api/risk/manager/user/select/v1`,
+    // 增加账号
+    addAccount: `${API}/api/risk/manager/user/add/v1`,
+    // 删除用户
+    delAccount: `${API}/api/risk/manager/user/delete/v1`,
+    // 更新用户
+    updateAccount: `${API}/api/risk/manager/user/update/v1`,
 
     // 权限列表
     getPermission: `${API_RBAC}/api/rbac/service/menuPlus/list/v2`,
