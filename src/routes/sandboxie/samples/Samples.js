@@ -1,9 +1,9 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
-// import { connect } from 'dva';
+import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table } from 'antd';
-import style from './index.scss';
+import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
@@ -122,13 +122,12 @@ class Samples extends React.PureComponent {
         );
     }
 }
-//
-// const mapStateToProps = (state) => ({
-//     list: state.samples.list,
-//     sysId: state.samples.sysId,
-//     loading: state.loading.models.samples,
-//     pageNum: state.samples.pageNum,
-//     pageSize: state.samples.pageSize,
-// });
-// export default connect(mapStateToProps)(Form.create()(CSSModules(Samples)));
-export default Form.create()(CSSModules(Samples));
+
+const mapStateToProps = (state) => ({
+    list: state.samples.list,
+    sysId: state.samples.sysId,
+    loading: state.loading.models.samples,
+    pageNum: state.samples.pageNum,
+    pageSize: state.samples.pageSize,
+});
+export default connect(mapStateToProps)(Form.create()(CSSModules(Samples)));

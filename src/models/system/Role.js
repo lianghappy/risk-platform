@@ -24,6 +24,12 @@ export default {
                 },
             });
         },
+        // 删除
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delRole, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         getRoleListSuc(state, { payload }) {

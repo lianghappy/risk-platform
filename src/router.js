@@ -174,6 +174,22 @@ function RouterConfig({ history, app }) {
         app,
         component: () => import('routes/sandboxie/sandbox/History'),
     });
+    // 实验样本
+    const samples = dynamic({
+        app,
+        component: () => import('routes/sandboxie/samples/Samples'),
+        models: () => [
+            import('models/sandboxie/samples/Samples'),
+        ],
+    });
+    // 沙箱样本
+    const SandSamples = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandSamples/SandSamples'),
+        models: () => [
+            import('models/sandboxie/sandSamples/SandSamples'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -206,6 +222,8 @@ function RouterConfig({ history, app }) {
                     <Route path="/sandboxie/:id" exact component={Experiment} />
                     <Route path="/strategies/:id" exact component={Strategies} />
                     <Route path="/history/:id" exact component={History} />
+                    <Route path="/samples" exact component={samples} />
+                    <Route path="/SandSamples" exact component={SandSamples} />
                 </Main>
             </Switch>
         </Router>

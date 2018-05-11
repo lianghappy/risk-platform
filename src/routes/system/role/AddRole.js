@@ -2,72 +2,54 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Tree, Button } from 'antd';
+import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
+import { DURATION } from 'utils/constants';
+import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TreeNode = Tree.TreeNode;
 
-const treeData = [{
-    title: '系统管理',
-    key: '0-0',
-    children: [{
-        title: '系统管理',
-        key: '0-0-0',
-        children: [
-            { title: '0-0-0-0', key: '0-0-0-0' },
-            { title: '0-0-0-1', key: '0-0-0-1' },
-            { title: '0-0-0-2', key: '0-0-0-2' },
-        ],
-    }, {
-        title: '应用管理',
-        key: '0-0-1',
-        children: [
-            { title: '0-0-1-0', key: '0-0-1-0' },
-            { title: '0-0-1-1', key: '0-0-1-1' },
-            { title: '0-0-1-2', key: '0-0-1-2' },
-        ],
-    }, {
-        title: '决策引擎',
-        key: '0-0-2',
-    }],
-}, {
-    title: '应用管理',
-    key: '0-1',
-    children: [
-        { title: '0-1-0-0', key: '0-1-0-0' },
-        { title: '0-1-0-1', key: '0-1-0-1' },
-        { title: '0-1-0-2', key: '0-1-0-2' },
-    ],
-}, {
-    title: '决策引擎',
-    key: '0-2',
-}];
 class AddRole extends React.PureComponent {
     static propTypes ={
+        form: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
         sysId: PropTypes.string.isRequired,
+        loading: PropTypes.bool.isRequired,
     };
     state = {
         expandedKeys: ['0-0-0', '0-0-1'],
         autoExpandParent: true,
-        checkedKeys: ['0-0-0'],
+        checkedKeys: [],
         selectedKeys: [],
     }
-    onQuery = () => {
+    onQuery = (e) => {
+        e.preventDefault();
         const {
-            dispatch,
-            sysId,
+            loading,
+            form,
         } = this.props;
-        dispatch({
-            type: 'account/getAccountListSuc',
-            payload: {
-                sysId,
-            },
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            const menuId = this.state.checkedKeys;
+            Object.assign(values, { menuId });
+            Object.assign(values, { sysId: 'risk' });
+            new Promise((resolve) => {
+                this.props.dispatch({
+                    type: 'tree/add',
+                    payload: {
+                        data: { ...values },
+                        resolve,
+                    },
+                });
+            }).then(() => {
+                message.success('操作成功', DURATION);
+                this.props.history.push('/role');
+            });
         });
-    };
+    }
  onExpand = (expandedKeys) => {
      console.log('onExpand', arguments);
      // if not set autoExpandParent to false, if children expanded, parent can not collapse.
@@ -77,13 +59,9 @@ class AddRole extends React.PureComponent {
          autoExpandParent: false,
      });
  }
-  onCheck = (checkedKeys) => {
-      console.log('onCheck', checkedKeys);
+  onCheck = (checkedKeys, e) => {
+      console.log('onCheck', checkedKeys, e.node);
       this.setState({ checkedKeys });
-  }
-  onSelect = (selectedKeys, info) => {
-      console.log('onSelect', info);
-      this.setState({ selectedKeys });
   }
   renderTreeNodes = (data) => {
       return data.map((item) => {
@@ -107,37 +85,106 @@ class AddRole extends React.PureComponent {
           },
       };
       const {
-          list: dataSource,
+          form,
       } = this.props;
-      console.log(dataSource);
+      const {
+          getFieldDecorator,
+      } = form;
+      const data = this.props.list;
+      const treeDatas = [{
+          title: '系统管理',
+          key: 'M_system',
+          children: treeConvert({
+              pId: 'pid',
+              rootId: 'M_system',
+              id: 'id', // 原始数据Id
+              name: 'name',
+              tId: 'key',
+              tName: 'title',
+          }, data),
+      }, {
+          title: '应用管理',
+          key: 'M_application',
+          children: treeConvert({
+              pId: 'pid',
+              rootId: 'M_application',
+              id: 'id', // 原始数据Id
+              name: 'name',
+              tId: 'key',
+              tName: 'title',
+          }, data),
+      }, {
+          title: '决策引擎',
+          key: 'M_policy',
+          children: treeConvert({
+              pId: 'pid',
+              rootId: 'M_policy',
+              id: 'id', // 原始数据Id
+              name: 'name',
+              tId: 'key',
+              tName: 'title',
+          }, data),
+      }, {
+          title: '策略沙箱',
+          key: 'M_sandboxie',
+          children: treeConvert({
+              pId: 'pid',
+              rootId: 'M_sandboxie',
+              id: 'id', // 原始数据Id
+              name: 'name',
+              tId: 'key',
+              tName: 'title',
+          }, data),
+      }, {
+          title: '黑白名单',
+          key: 'M_blackAndWhite',
+          children: treeConvert({
+              pId: 'pid',
+              rootId: 'M_blackAndWhite',
+              id: 'id', // 原始数据Id
+              name: 'name',
+              tId: 'key',
+              tName: 'title',
+          }, data),
+      }];
+      // const system = treeConvert({
+      //     pId: 'pid',
+      //     rootId: 'M_system',
+      //     id: 'id', // 原始数据Id
+      //     name: 'name',
+      //     tId: 'key',
+      //     tName: 'title',
+      // }, data);
       return (
           <Layout className={style.container}>
-              <Form layout="vertical">
+              <Form layout="vertical" onSubmit={this.onQuery}>
                   <FormItem label="角色类型" {...formItemLayout}>
-                      <Select defaultValue="请选择角色类型">
-                          <Option value="公司内">公司内</Option>
-                          <Option value="公司外">公司外</Option>
-                      </Select>
+                      {
+                          getFieldDecorator('type')(<Select><Option value="公司内">公司内</Option><Option value="公司外">公司外</Option></Select>)
+                      }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>
-                      <Input placeholder="请输入角色名称" />
+                      {
+                          getFieldDecorator('roleName')(<Input />)
+                      }
                   </FormItem>
                   <FormItem label="角色权限" {...formItemLayout}>
-                      <Tree
-                          checkable
-                          onExpand={this.onExpand}
-                          expandedKeys={this.state.expandedKeys}
-                          autoExpandParent={this.state.autoExpandParent}
-                          onCheck={this.onCheck}
-                          checkedKeys={this.state.checkedKeys}
-                          onSelect={this.onSelect}
-                          selectedKeys={this.state.selectedKeys}
-                      >
-                          {this.renderTreeNodes(treeData)}
-                      </Tree>
+                      {
+                          getFieldDecorator('menuId')(<Tree
+                              checkable
+                              onExpand={this.onExpand}
+                              expandedKeys={this.state.expandedKeys}
+                              autoExpandParent={this.state.autoExpandParent}
+                              onCheck={this.onCheck}
+                              checkedKeys={this.state.checkedKeys}
+                              onSelect={this.onSelect}
+                              selectedKeys={this.state.selectedKeys}
+                          >{this.renderTreeNodes(treeDatas)}
+                                                      </Tree>)
+                      }
                   </FormItem>
                   <FormItem>
-                      <Button type="primary" className={style.save}>保存</Button>
+                      <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>保存</Button>
                       <Button>取消</Button>
                   </FormItem>
               </Form>
@@ -149,5 +196,6 @@ class AddRole extends React.PureComponent {
 const mapStateToProps = (state) => ({
     list: state.tree.list,
     sysId: state.tree.sysId,
+    loading: state.loading.models.tree,
 });
-export default connect(mapStateToProps)(CSSModules(AddRole));
+export default connect(mapStateToProps)(Form.create()(CSSModules(AddRole)));

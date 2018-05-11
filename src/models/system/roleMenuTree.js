@@ -6,7 +6,7 @@ export default {
     namespace: 'tree',
     state: {
         list: [],
-        sysId: 'merchant',
+        sysId: 'risk',
     },
     effects: {
         * getTreeList({ payload }, { call, put }) {
@@ -19,6 +19,12 @@ export default {
                     sysId: payload.sysId,
                 },
             });
+        },
+        // 增加
+        * add({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.addRole, data);
+            yield call(resolve);
         },
     },
     reducers: {

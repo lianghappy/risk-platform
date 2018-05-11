@@ -18,23 +18,30 @@ export default function (attributes, data = []) {
         name = 'name', // 原始数据名称
         tId = 'id', // 树节点Id
         tName = 'name', // 树节点名称
+        otherKeys = [], // 其他属性
     } = attributes;
     const restData = [...data]; // 原始数据
     const treeData = []; // 树对象数据结构数组
-
     // 根节点解析
     for (let i = 0, iLen = restData.length; i < iLen; i++) {
         if (restData[i][pId] === rootId) {
-            treeData.push({
+            const node = {
                 [tId]: restData[i][id],
                 [tName]: restData[i][name],
-            });
+            };
+            if (otherKeys.length !== 0) {
+                otherKeys.forEach((key) => {
+                    Object.assign(node, {
+                        [key]: restData[i][key],
+                    });
+                });
+            }
+            treeData.push(node);
             restData.splice(i, 1);
             iLen -= 1;
             i -= 1;
         }
     }
-
     // 子节点解析
     function pickChild(node) {
         if (restData.length !== 0) {
@@ -42,10 +49,18 @@ export default function (attributes, data = []) {
                 for (let j = 0, jLen = restData.length; j < jLen; j++) {
                     if (node[i][tId] === restData[j][pId]) {
                         if (!node[i].children) node[i].children = [];
-                        node[i].children.push({
+                        const child = {
                             [tId]: restData[j][id],
                             [tName]: restData[j][name],
-                        });
+                        };
+                        if (otherKeys.length !== 0) {
+                            otherKeys.forEach((key) => {
+                                Object.assign(child, {
+                                    [key]: restData[j][key],
+                                });
+                            });
+                        }
+                        node[i].children.push(child);
                         restData.splice(j, 1);
                         jLen -= 1;
                         j -= 1;
@@ -56,6 +71,5 @@ export default function (attributes, data = []) {
         }
     }
     pickChild(treeData);
-
     return treeData;
 }

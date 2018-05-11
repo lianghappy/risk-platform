@@ -1,10 +1,12 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
-// import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table } from 'antd';
-import style from './index.scss';
+import { connect } from 'dva';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
+import { DURATION } from 'utils/constants';
+import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
+import SamplesModal from './SampleModal';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -43,6 +45,33 @@ class SandSamples extends React.PureComponent {
             });
         });
     }
+    onDelete(ids) {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'sandSamples/del',
+                payload: {
+                    data: { id: ids },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            form.validateFields((errors, values) => {
+                Object.assign(values, { sysId: this.props.sysId });
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
@@ -53,7 +82,7 @@ class SandSamples extends React.PureComponent {
     };
     query(payload) {
         this.props.dispatch({
-            type: 'rule/getRuleList',
+            type: 'sandSamples/getSandSamplesList',
             payload,
         });
     }
@@ -66,15 +95,29 @@ class SandSamples extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '实验记录ID', dataIndex: 'id', key: 'id' },
-            { title: '策略标识', dataIndex: 'name', key: 'name' },
-            { title: '策略名称', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '样本ID', dataIndex: 'code', key: 'code' },
-            { title: '实验开始时间', dataIndex: 'channel', key: 'channel' },
-            { title: '实验结束时间', dataIndex: 'valueType', key: 'valueType' },
-            { title: '实验用户姓名', dataIndex: 'valueType', key: 'valueType' },
-            { title: '实验状态', dataIndex: 'valueType', key: 'valueType' },
-            { title: '操作', dataIndex: 'valueType', key: 'valueType' },
+            { title: '样本ID', dataIndex: 'id', key: 'id' },
+            { title: '样本名称', dataIndex: 'name', key: 'name' },
+            { title: '样本总数量', dataIndex: 'num', key: 'num' },
+            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
+            { title: '样本生成进度', dataIndex: 'sampleProgress', key: 'sampleProgress' },
+            { title: '操作',
+                dataIndex: 'operate',
+                key: 'operate',
+                render: (...rest) => (
+                    <div>
+                        <SamplesModal>
+                            <span className="jm-operate">样本筛选条件</span>
+                        </SamplesModal>
+                        <span className="jm-del">样本明细</span>
+                        <Popconfirm
+                            placement="topRight"
+                            title="是否确定删除？"
+                            onConfirm={() => this.onDelete(rest[1].id)}
+                        >
+                            <span className="jm-del">删除</span>
+                        </Popconfirm>
+                    </div>
+                ) },
         ];
         const options = [];
         if (this.props.typeList) {
@@ -87,15 +130,15 @@ class SandSamples extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="样本ID" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('analysisSampleId')(<Input placeholder="请输入样本ID" />)
                         }
                     </FormItem>
                     <FormItem label="样本名称" >
-                        {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)}
+                        {getFieldDecorator('name')(<Select style={{ width: 150 }} placeholder="请选择样本名称">{options}</Select>)}
                     </FormItem>
                     <FormItem label="样本生成时间" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
+                            getFieldDecorator('code')(<Input placeholder="请输入样本生成时间" />)
                         }
                     </FormItem>
                     <FormItem>
@@ -103,6 +146,9 @@ class SandSamples extends React.PureComponent {
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                     </FormItem>
                 </Form>
+                <div>
+                    <Button type="primary" style={{ marginLeft: '12px' }}>创建样本</Button>
+                </div>
                 <Table
                     columns={columns}
                     loading={loading}
@@ -121,12 +167,11 @@ class SandSamples extends React.PureComponent {
     }
 }
 //
-// const mapStateToProps = (state) => ({
-//     list: state.samples.list,
-//     sysId: state.samples.sysId,
-//     loading: state.loading.models.samples,
-//     pageNum: state.samples.pageNum,
-//     pageSize: state.samples.pageSize,
-// });
-// export default connect(mapStateToProps)(Form.create()(CSSModules(Samples)));
-export default Form.create()(CSSModules(SandSamples));
+const mapStateToProps = (state) => ({
+    list: state.sandSamples.list,
+    sysId: state.sandSamples.sysId,
+    loading: state.loading.models.sandSamples,
+    pageNum: state.sandSamples.pageNum,
+    pageSize: state.sandSamples.pageSize,
+});
+export default connect(mapStateToProps)(Form.create()(CSSModules(SandSamples)));
