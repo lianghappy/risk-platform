@@ -7,6 +7,7 @@ import { DURATION } from 'utils/constants';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import SamplesModal from './SampleModal';
+import SampleDetail from './SampleDetail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -20,11 +21,22 @@ class SandSamples extends React.PureComponent {
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
     };
+    state = {
+        visible: false,
+        show: false,
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
             pageNum,
             pageSize,
             sysId,
+            type: 1,
+        });
+    };
+    onPage = (pageNum, pageSize, analysisSampleId) => {
+        this.props.dispatch({
+            type: 'sandSamples/querySelect',
+            payload: { analysisSampleId, pageNum, pageSize },
         });
     };
     onQuery = (e) => {
@@ -45,7 +57,7 @@ class SandSamples extends React.PureComponent {
             });
         });
     }
-    onDelete(ids) {
+    onDelete(analysisSampleId) {
         const {
             pageSize,
             pageNum,
@@ -56,7 +68,7 @@ class SandSamples extends React.PureComponent {
             dispatch({
                 type: 'sandSamples/del',
                 payload: {
-                    data: { id: ids },
+                    data: { analysisSampleId },
                     resolve,
                 },
             });
@@ -64,6 +76,7 @@ class SandSamples extends React.PureComponent {
             message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
                 Object.assign(values, { sysId: this.props.sysId });
+                Object.assign(values, { type: 1 });
                 this.query({
                     ...values,
                     pageNum,
@@ -73,13 +86,47 @@ class SandSamples extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form } = this.props;
+        const { pageSize, form, pageNum } = this.props;
         form.resetFields();
         this.query({
-            pageNum: 1,
+            pageNum,
             pageSize,
+            type: 1,
         });
     };
+    handleShow = (analysisSampleId) => {
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'sandSamples/querySelect',
+                payload: {
+                    data: { analysisSampleId },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                visible: true,
+            });
+        });
+    }
+    handlePage =(analysisSampleId) => {
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'sandSamples/queryDetail',
+                payload: {
+                    data: { analysisSampleId, pageSize: 10, pageNum: 1 },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                show: true,
+            });
+        });
+    }
+    create = () => {
+        this.props.history.push('/sandSamples/create');
+    }
     query(payload) {
         this.props.dispatch({
             type: 'sandSamples/getSandSamplesList',
@@ -105,10 +152,19 @@ class SandSamples extends React.PureComponent {
                 key: 'operate',
                 render: (...rest) => (
                     <div>
-                        <SamplesModal>
-                            <span className="jm-operate">样本筛选条件</span>
+                        <SamplesModal
+                            visible={this.state.visible}
+                        >
+                            <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
                         </SamplesModal>
-                        <span className="jm-del">样本明细</span>
+                        <SampleDetail
+                            pageSize={pageSize}
+                            pageNum={pageNum}
+                            visible={this.state.show}
+                            onPageChange={() => this.onPage(rest[1].id)}
+                        >
+                            <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
+                        </SampleDetail>
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -147,7 +203,7 @@ class SandSamples extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div>
-                    <Button type="primary" style={{ marginLeft: '12px' }}>创建样本</Button>
+                    <Button type="primary" onClick={this.create} style={{ marginLeft: '12px', marginBottom: '20px' }}>创建样本</Button>
                 </div>
                 <Table
                     columns={columns}

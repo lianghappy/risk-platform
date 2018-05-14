@@ -4,12 +4,21 @@ import {
     Form,
     Modal,
     Button,
+    Row,
+    Col,
 } from 'antd';
+import moment from 'moment';
 import { connect } from 'dva';
+import style from '../index.scss';
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
+const mapStateToProps = (state) => ({
+    selects: state.sandSamples.selects,
+});
+@connect(mapStateToProps)
+
 class SamplesModal extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
@@ -39,8 +48,9 @@ class SamplesModal extends React.PureComponent {
         const {
             form,
             children,
-            // record,
+            selects,
         } = this.props;
+        const content = selects.id !== undefined ? JSON.parse(selects.qureyCondition) : {};
         const {
             getFieldsError,
         } = form;
@@ -53,6 +63,8 @@ class SamplesModal extends React.PureComponent {
                     title={this.state.title}
                     visible={this.state.visible}
                     onOk={this.handleCancel}
+                    onCancel={this.handleCancel}
+                    width="682px"
                     footer={[
                         <Button
                             key="submit"
@@ -64,10 +76,109 @@ class SamplesModal extends React.PureComponent {
                         </Button>,
                     ]}
                 >
-                    <span></span>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>渠道类型：</span>
+                            <span className={style.result}>{content.channelType}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>逾期期数：</span>
+                            <span className={style.result}>{content.overduePeriods}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>商品类型：</span>
+                            <span className={style.result}>{content.productType}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>已付期数：</span>
+                            <span className={style.result}>{content.paidPeriods}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>订单状态：</span>
+                            <span className={style.result}>{content.orderStatus}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>审核状态：</span>
+                            <span className={style.result}>{content.channelType}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>业务流程：</span>
+                            <span className={style.result}>{content.businessProcess}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>第一阶段结果：</span>
+                            <span className={style.result}>{content.firstStageResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>下单时间：</span>
+                            <span className={style.result}>{moment(content.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd).format('YYYY-MM-DD')}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>第二阶段结果：</span>
+                            <span className={style.result}>{content.secondStageResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>历史最大逾期天数：</span>
+                            <span className={style.result}>{content.historyMaxOverdueDays}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>第三阶段结果：</span>
+                            <span className={style.result}>{content.thirdStageResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>当前最大逾期天数：</span>
+                            <span className={style.result}>{content.nowMaxOverdueDays}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>第四阶段结果：</span>
+                            <span className={style.result}>{content.fourthStageResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>PLD评分：</span>
+                            <span className={style.result}>{content.pldScorelower}&nbsp;-&nbsp;{content.pldScoreUpper}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>第五阶段结果：</span>
+                            <span className={style.result}>{content.fifthStageResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>芝麻分：</span>
+                            <span className={style.result}>{content.zhiMaScorelower}&nbsp;-&nbsp;{content.zhiMaScoreUpper}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>机审结果：</span>
+                            <span className={style.result}>{content.machineResult}</span>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
+                        <Col span="12">
+                            <span>PLD结果：</span>
+                            <span className={style.result}>{content.pldResult}</span>
+                        </Col>
+                        <Col span="12">
+                            <span>综合结果：</span>
+                            <span className={style.result}>{content.synthesizeResult}</span>
+                        </Col>
+                    </Row>
                 </Modal>
             </span>
         );
     }
 }
-export default connect()(Form.create()(SamplesModal));
+export default Form.create()(SamplesModal);

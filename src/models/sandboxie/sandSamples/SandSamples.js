@@ -9,6 +9,8 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        details: [],
+        selects: {},
     },
     effects: {
         // 获取规则类别列表
@@ -31,15 +33,40 @@ export default {
             yield call(post, API.delSandSamples, data);
             yield call(resolve);
         },
-        // 删除
-        * queryDetail({ payload }, { call }) {
-            const { data, resolve } = payload;
-            yield call(post, API.detailSandSamples, data);
-            yield call(resolve);
+        // 明细
+        * queryDetail({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.detailSandSamples, data);
+            yield put({
+                type: 'queryDetailSuc',
+                payload: {
+                    details: response,
+                    pageNum: payload.pageNum,
+                    pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        // 样本筛选条件
+        * querySelect({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.selectSandSamples, data);
+            yield put({
+                type: 'querySelectSuc',
+                payload: {
+                    selects: response,
+                    sysId: SYSID,
+                },
+            });
         },
     },
     reducers: {
         getSandSamplesListSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
+        querySelectSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
+        queryDetailSuc(state, { payload }) {
             return { ...state, ...payload };
         },
     },

@@ -134,6 +134,10 @@ const api = {
     detailSandSamples: `${API}/api/risk/manager/collector/analysisSample/sampleDetail/v1`,
     // 筛选条件
     selectSandSamples: `${API}/api/risk/manager/collector/analysisSample/get/v1`,
+    // 获取所有的数据源
+    getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
+    // 沙箱样本创建样本
+    addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
 };
 
 export default api;

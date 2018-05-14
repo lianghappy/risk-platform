@@ -190,6 +190,14 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/sandSamples/SandSamples'),
         ],
     });
+    // 生成宽表
+    const Create = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandSamples/CreateSamples'),
+        models: () => [
+             import('models/sandboxie/sandSamples/CreateSamples'),
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -224,6 +232,7 @@ function RouterConfig({ history, app }) {
                     <Route path="/history/:id" exact component={History} />
                     <Route path="/samples" exact component={samples} />
                     <Route path="/SandSamples" exact component={SandSamples} />
+                    <Route path="/SandSamples/create" exact component={Create} />
                 </Main>
             </Switch>
         </Router>
