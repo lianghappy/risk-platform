@@ -8,6 +8,8 @@ import {
     Select,
 } from 'antd';
 import { connect } from 'dva';
+import { SYSID } from 'utils/constants';
+import MD5 from 'utils/MD5';
 
 
 function hasErrors(fieldsError) {
@@ -16,14 +18,14 @@ function hasErrors(fieldsError) {
 const Option = Select.Option;
 class AddAccount extends React.PureComponent {
     static propTypes = {
-        visible: PropTypes.bool.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.element,
         ]).isRequired,
-        dispatch: PropTypes.func.isRequired,
-        pageNum: PropTypes.number.isRequired,
-        pageSize: PropTypes.number.isRequired,
+        onOk: PropTypes.func.isRequired,
+        type: PropTypes.string.isRequired,
+        record: PropTypes.object.isRequired,
+        visible: PropTypes.bool.isRequired,
     };
 
     state = {
@@ -31,9 +33,27 @@ class AddAccount extends React.PureComponent {
     };
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        const {
+            form,
+            record,
+            type,
+            onOk,
+        } = this.props;
+        form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                new Promise(resolve => {
+                    if (type === 'edit') {
+                        Object.assign(values, { id: record.id });
+                    }
+                    Object.assign(values, { userName: values.name });
+                    Object.assign(values, { sysId: SYSID });
+                    Object.assign(values, { type });
+                    Object.assign(values, { state: false });
+                    Object.assign(values, { password: MD5(values.password) });
+                    onOk(values, resolve);
+                }).then(() => {
+                    this.handleCancel();
+                });
             }
         });
     };
@@ -106,7 +126,7 @@ class AddAccount extends React.PureComponent {
                                         { required: true, message: '请输入用户账号' },
                                         { max: 20, message: '*用户账号最好为姓名全拼，不能输入汉字，最多20个字符' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入用户账号" />)
+                                })(<Input placeholder="请输入用户账号" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -114,11 +134,11 @@ class AddAccount extends React.PureComponent {
                             label="用户姓名"
                         >
                             {
-                                getFieldDecorator('userName', {
+                                getFieldDecorator('name', {
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
                                     ],
-                                })(<Input type="userName" placeholder="请输入用户姓名" />)
+                                })(<Input placeholder="请输入用户姓名" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -185,7 +205,15 @@ class AddAccount extends React.PureComponent {
                                             message: '请输入确认密码',
                                         },
                                     ],
-                                })(<Select defaultValue="请输入角色名称"><Option value="全部">全部</Option><Option value="123" >123</Option></Select>)
+                                })(<Select>
+                                    {
+                                        this.props.roleNameList.map((item) => {
+                                            return (
+                                                <Option key={item.id} value={item.id}>{item.roleName}</Option>
+                                            );
+                                        })
+                                    }
+                                   </Select>)
                             }
                         </Form.Item>
                     </Form>
@@ -194,4 +222,7 @@ class AddAccount extends React.PureComponent {
         );
     }
 }
-export default connect()(Form.create()(AddAccount));
+const mapStateToProps = (state) => ({
+    roleNameList: state.account.roleNameList,
+});
+export default connect(mapStateToProps)(Form.create()(AddAccount));

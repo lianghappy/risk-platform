@@ -33,11 +33,11 @@ class AddCompany extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        parent: PropTypes.array.isRequired,
+        modalData: PropTypes.object.isRequired,
     };
     state = {
         visible: this.props.visible || false,
-        modalData: null,
+        modalData: this.props.modalData || {},
         citys: {
             provice: null,
             city: null,
@@ -157,6 +157,7 @@ class AddCompany extends React.PureComponent {
                         values.provice = that.state.citys.provice;
                         values.city = that.state.citys.city;
                         values.regoin = that.state.citys.regoin;
+                        Object.assign(values, { img: this.state.modalData.imgUrl });
                         onOk(values, resolve);
                     }).then(() => {
                         this.handleCancel();
@@ -167,14 +168,10 @@ class AddCompany extends React.PureComponent {
             }
         });
     };
-    imgChange(value) {
-        const modalData = this.state.modalData;
-        if (modalData.activityGoodsImg) {
-            modalData.activityGoodsImg[0].img = value.imgUrl;
-        } else {
-            modalData.activityGoodsImg = [{ img: value.imgUrl }];
-        }
-        this.setState({ modalData });
+    imgChange = (values) => {
+        this.setState({
+            modalData: values,
+        });
     }
     handleCancel = () => {
         this.props.form.resetFields();
@@ -196,10 +193,10 @@ class AddCompany extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        const value = [];
+        const values = [];
         const arr = ['租赁', '电商', '信息安全', '银行', '保险', '证券／期货', '基金', '信托', '其他'];
         for (let i = 0; i < arr.length; i++) {
-            value.push(<Option key={arr[i]} value={arr[i]}>{arr[i]}</Option>);
+            values.push(<Option key={arr[i]} value={arr[i]}>{arr[i]}</Option>);
         }
         return (
             <span>
@@ -235,7 +232,7 @@ class AddCompany extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入公司名称' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入公司名称" />)
+                                })(<Input placeholder="请输入公司名称" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -248,7 +245,7 @@ class AddCompany extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入联系人姓名' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入联系人姓名" />)
+                                })(<Input placeholder="请输入联系人姓名" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -261,7 +258,7 @@ class AddCompany extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入联系人手机号' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入联系人手机号" />)
+                                })(<Input placeholder="请输入联系人手机号" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -274,7 +271,7 @@ class AddCompany extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入联系人邮箱' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入联系人邮箱" />)
+                                })(<Input placeholder="请输入联系人邮箱" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -301,7 +298,7 @@ class AddCompany extends React.PureComponent {
                                     initialValue: record.industry,
                                     rules: [
                                         { required: true, message: '请选择公司所属行业' },
-                                    ] })(<Select placeholder="请选择公司所属行业">{value}</Select>)
+                                    ] })(<Select placeholder="请选择公司所属行业">{values}</Select>)
                             }
                         </Form.Item>
                         <Form.Item
@@ -320,8 +317,13 @@ class AddCompany extends React.PureComponent {
                             label="公司logo"
                             {...formItemLayout}
                         >
-                            <span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span>
-                            <PicInput type="manual" value={record && { imgUrl: record.img }} onChange={this.imgChange} />
+                            {
+                                getFieldDecorator('img', {
+                                    initialValue: record.img,
+                                    rules: [
+                                        { required: true, message: '请上传应用图片' },
+                                    ],
+                                })(<div><span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span><PicInput type="manual" value={this.state.modalData} onChange={(value) => this.imgChange(value)} /></div>) }
                         </Form.Item>
                     </Form>
                 </Modal>

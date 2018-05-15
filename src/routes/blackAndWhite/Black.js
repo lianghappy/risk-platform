@@ -157,21 +157,21 @@ class Black extends React.PureComponent {
                 key: 'valueType',
                 render: (...rest) => (
                     <div className={style.edits}>
-                        <Popconfirm
-                            placement="topRight"
-                            title="是否确认删除"
-                            onConfirm={() => this.delete(rest[1].id)}
-                        >
-                            <span className={style.isEnable}>删除</span>
-                        </Popconfirm>
                         <AddModal
                             type="edit"
                             record={rest[1]}
                             onOk={this.modalOk}
                             category={this.props.category}
                         >
-                            <span>编辑</span>
+                            <span className="jm-operate">编辑</span>
                         </AddModal>
+                        <Popconfirm
+                            placement="topRight"
+                            title="是否确认删除"
+                            onConfirm={() => this.delete(rest[1].id)}
+                        >
+                            <span className="jm-del">删除</span>
+                        </Popconfirm>
                     </div>) },
         ];
         const options = [];

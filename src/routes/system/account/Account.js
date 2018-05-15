@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, Popconfirm, message } from 'antd';
 import CSSModules from 'react-css-modules';
-import { DURATION } from 'utils/constants';
+import { DURATION, SYSID } from 'utils/constants';
 import style from './account.scss';
 import AddAccount from './AddAccount';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -18,7 +18,6 @@ class DecisionIndex extends React.PureComponent {
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
         sysId: PropTypes.string.isRequired,
-        roleNameList: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -48,6 +47,7 @@ class DecisionIndex extends React.PureComponent {
        this.query({
            pageNum: 1,
            pageSize,
+           sysId: SYSID,
        });
    }
    onDelete = (id) => {
@@ -59,7 +59,7 @@ class DecisionIndex extends React.PureComponent {
        } = this.props;
        new Promise((resolve) => {
            dispatch({
-               type: 'strategy/del',
+               type: 'account/del',
                payload: {
                    data: { id },
                    resolve,
@@ -68,6 +68,7 @@ class DecisionIndex extends React.PureComponent {
        }).then(() => {
            message.success('删除成功', DURATION);
            form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: SYSID });
                this.query({
                    ...values,
                    pageNum,
@@ -85,7 +86,7 @@ class DecisionIndex extends React.PureComponent {
        } = this.props;
        const content = data.id !== undefined ? '更新成功' : '新增成功';
        let url = '';
-       switch (data.title) {
+       switch (data.type) {
        case 'add':
            url = 'account/add';
            break;
@@ -107,6 +108,7 @@ class DecisionIndex extends React.PureComponent {
            callback();
            message.success(content, DURATION);
            form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: SYSID });
                this.query({
                    ...values,
                    pageNum,
@@ -117,7 +119,7 @@ class DecisionIndex extends React.PureComponent {
    };
    query(payload) {
        this.props.dispatch({
-           type: 'archive/queryAccountList',
+           type: 'account/queryAccountList',
            payload,
        });
    }
@@ -129,7 +131,6 @@ class DecisionIndex extends React.PureComponent {
            pageSize,
            loading,
        } = this.props;
-       console.log(this.props.roleNameList);
        const columns = [
            { title: '用户账号', dataIndex: 'account', key: 'account' },
            { title: '用户姓名', dataIndex: 'name', key: 'name' },
@@ -165,7 +166,15 @@ class DecisionIndex extends React.PureComponent {
                        }
                    </FormItem>
                    <FormItem label="角色名称">
-                       {getFieldDecorator('roleType')(<Select style={{ width: 100 }} defaultValue="全部"><Option value="全部">全部</Option><Option value="123" >123</Option></Select>)}
+                       {getFieldDecorator('roleId')(<Select style={{ width: 100 }}>
+                           {
+                               this.props.roleNameList.map((item) => {
+                                   return (
+                                       <Option key={item.id} value={item.id}>{item.roleName}</Option>
+                                   );
+                               })
+                           }
+                                                    </Select>)}
                    </FormItem>
                    <FormItem>
                        <Button type="primary" htmlType="submit" isabled={this.props.loading}>
@@ -178,7 +187,12 @@ class DecisionIndex extends React.PureComponent {
                        </Button>
                    </FormItem>
                </Form>
-               <AddAccount visible={false} >
+               <AddAccount
+                   visible={false}
+                   type="add"
+                   onOk={this.modalOk}
+                   record={{}}
+               >
                    <Button
                        type="primary"
                        className={style.btns}
@@ -196,7 +210,9 @@ class DecisionIndex extends React.PureComponent {
                    pageSize={pageSize}
                    dataSize={dataSource.length}
                    onChange={this.onPageChange}
+                   pageSizeOptions={['10']}
                    showQuickJumper
+                   showSizeChanger={false}
                />
            </Layout>);
    }

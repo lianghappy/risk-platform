@@ -14,9 +14,9 @@ class CompanyIndex extends React.PureComponent {
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
         sysId: PropTypes.string.isRequired,
-        loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
+        loading: PropTypes.bool.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -85,7 +85,7 @@ class CompanyIndex extends React.PureComponent {
             form,
         } = this.props;
         const content = data.id !== undefined ? '更新成功' : '新增成功';
-        const url = data.id !== undefined ? 'company/updata' : 'company/add';
+        const url = data.id !== undefined ? 'company/update' : 'company/add';
 
         new Promise((resolve) => {
             dispatch({
@@ -129,7 +129,12 @@ class CompanyIndex extends React.PureComponent {
             { title: '联系人姓名', dataIndex: 'contactName', key: 'contactName' },
             { title: '联系人手机', dataIndex: 'contactPhone', key: 'contactPhone' },
             { title: '联系人邮箱', dataIndex: 'contactEmail', key: 'contactEmail' },
-            { title: '公司所在地', dataIndex: 'provice.city.regoin', key: 'provice.city.regoin' },
+            { title: '公司所在地',
+                dataIndex: 'address',
+                key: 'address',
+                render: (...rest) => (
+                    <span>{rest[1].provice + rest[1].city}{ rest[1].regoin !== undefined ? rest[1].regoin : '' }</span>
+                ) },
             { title: '公司所属行业', dataIndex: 'industry', key: 'industry' },
             { title: '操作',
                 dataIndex: 'operator',
@@ -139,6 +144,7 @@ class CompanyIndex extends React.PureComponent {
                             type="edit"
                             record={rest[1]}
                             onOk={this.modalOk}
+                            modalData={{ imgUrl: rest[1].img }}
                         >
                             <Button icon="edit" style={{ marginRight: 5 }} />
                         </AddCompany>
@@ -152,15 +158,6 @@ class CompanyIndex extends React.PureComponent {
                     </div>),
             },
         ];
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
         return (
             <Layout className={style.container}>
                 <Form
@@ -188,6 +185,7 @@ class CompanyIndex extends React.PureComponent {
                     type="add"
                     record={{}}
                     onOk={this.modalOk}
+                    modalData={{}}
                 >
                     <Button
                         type="primary"
@@ -197,7 +195,6 @@ class CompanyIndex extends React.PureComponent {
                     </Button>
                 </AddCompany>
                 <Table
-                    rowSelection={rowSelection}
                     columns={columns}
                     dataSource={dataSource}
                     pagination={false}
@@ -208,7 +205,9 @@ class CompanyIndex extends React.PureComponent {
                     pageSize={pageSize}
                     dataSize={dataSource.length}
                     onChange={this.onPageChange}
+                    pageSizeOptions={['10']}
                     showQuickJumper
+                    showSizeChanger={false}
                 />
             </Layout>);
     }

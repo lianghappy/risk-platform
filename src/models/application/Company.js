@@ -63,7 +63,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/application') {
+                if (pathname === '/company') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['应用管理', '公司管理'],

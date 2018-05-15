@@ -135,7 +135,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('idCardName', {
-                                    initialValue: record.name,
+                                    initialValue: record.idCardName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
                                     ],
