@@ -112,6 +112,14 @@ const api = {
     updateStrategy: `${API}/api/risk/manager/policy/stage/update/v1`,
     delStrategy: `${API}/api/risk/manager/policy/stage/delete/v1`,
 
+    /* ---------- 阶段管理-规则管理 ----------*/
+    regular: `${API}/api/risk/manager/policy/norm/list/v1`,
+    regularDel: `${API}/api/risk/manager/policy/norm/delete/v1`,
+    regularAdd: `${API}/api/risk/manager/policy/norm/create/v1`,
+    regularUpdate: `${API}/api/risk/manager/policy/norm/update/v1`,
+    regularClone: `${API}/api/risk/manager/policy/norm/clone/v1`,
+
+
     // 黑白名单
     getBlack: `${API}/api/risk/manager/blackAndWhite/list/v1`,
     // 增加

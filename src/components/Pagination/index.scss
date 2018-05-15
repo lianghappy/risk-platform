@@ -1,5 +1,5 @@
-:global(.jimi-pagination) {
-    margin: 12px 0;
+.jm-pagination {
+    margin: 12px 20px;
     list-style: none;
     box-sizing: border-box;
     text-align: right;
@@ -43,25 +43,23 @@
             margin-left: 8px;
         }
     }
-}
-
-:global(.jimi-pagination .ant-pagination-options) {
-    margin-right: 16px;
-}
-:global(.jimi-pagination-prev),
-:global(.jimi-pagination-next) {
-    color: rgba(0, 0, 0, .65);
-    user-select: none;
-    cursor: pointer;
-}
-:global(.jimi-pagination-options-pages),
-:global(.jimi-pagination-options-jumper) {
-    display: inline-block;
-}
-
-:global(.jimi-pagination-disabled),
-:global(.jimi-pagination-disabled:hover),
-:global(.jimi-pagination-disabled:focus) {
-    cursor: not-allowed;
-    color: rgba(0, 0, 0, 0.25) !important;
+    .jm-pagination-options {
+        margin-right: 16px;
+    }
+    .jm-pagination-prev,
+    .jm-pagination-next {
+        color: rgba(0, 0, 0, .65);
+        user-select: none;
+        cursor: pointer;
+    }
+    .jm-pagination-options-pages,
+    .jm-pagination-options-jumper {
+        display: inline-block;
+    }
+    .jm-pagination-disabled,
+    .jm-pagination-disabled:hover,
+    .jm-pagination-disabled:focus {
+        cursor: not-allowed;
+        color: rgba(0, 0, 0, 0.25) !important;
+    }
 }

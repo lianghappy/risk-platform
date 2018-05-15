@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
+import base64 from 'utils/base64';
 import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -12,6 +13,7 @@ const FormItem = Form.Item;
 
 class Policy extends React.PureComponent {
     static propTypes ={
+        history: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
         sysId: PropTypes.string.isRequired,
@@ -142,9 +144,16 @@ class Policy extends React.PureComponent {
             payload,
         });
     }
-    stage = (e) => {
-        e.preventDefault();
-        window.location.href = '';
+    stage = (id, record) => {
+        // this.props.history.push(`/regular/${base64.encode(id)}`);
+        this.props.history.push({
+            pathname: `/regular/${base64.encode(id)}`,
+            // state: record.name,
+            state: {
+                name: record.name,
+                type: record.type,
+            }
+        });
     }
     render() {
         const rowSelection = {
@@ -181,7 +190,7 @@ class Policy extends React.PureComponent {
                         >
                             <span>编辑</span>
                         </AddStrategy>
-                        <span role="button" tabIndex="-1" onClick={this.stage} className={style.stage}>规则管理</span>
+                        <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
