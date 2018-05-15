@@ -137,6 +137,14 @@ function RouterConfig({ history, app }) {
             import('models/policy/policies/Strategy'),
         ],
     });
+    // 规则管理
+    const Regular = dynamic({
+        app,
+        component: () => import('routes/policy/policies/regular/Regular'),
+        models: () => [
+            import('models/policy/policies/regular'),
+        ],
+    });
     // 黑名单
     const Black = dynamic({
         app,
@@ -200,6 +208,7 @@ function RouterConfig({ history, app }) {
                     <Route path="/rule" exact component={Rules} />
                     <Route path="/policy" exact component={Policy} />
                     <Route path="/strategy/:id" component={Strategy} />
+                    <Route path="/regular/:id" component={Regular} />
                     <Route path="/permission" exact component={Permission} />
                     <Route path="/black" exact component={Black} />
                     <Route path="/sandboxie" exact component={sandboxie} />

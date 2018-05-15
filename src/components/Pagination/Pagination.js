@@ -15,29 +15,42 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import CSSModules from 'react-css-modules';
 import cs from 'classnames';
-import './index.scss';
+import styles from './index.scss';
 
 const defaultPageSize = 10; // 默认页面条数
 const defaultPageSizeOptions = ['10', '20', '30', '40']; // 默认指定每页可以显示条数
 
 class Pagination extends React.PureComponent {
     static propTypes = {
-        current: PropTypes.number.isRequired,
-        dataSize: PropTypes.number.isRequired,
-        onChange: PropTypes.func.isRequired,
-        pageSize: PropTypes.number.isRequired,
-        pageSizeOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
-        showQuickJumper: PropTypes.bool.isRequired,
-        showSizeChanger: PropTypes.bool.isRequired,
+        current: PropTypes.number,
+        dataSize: PropTypes.number,
+        onChange: PropTypes.func,
+        pageSize: PropTypes.number,
+        pageSizeOptions: PropTypes.arrayOf(PropTypes.string),
+        showQuickJumper: PropTypes.bool,
+        showSizeChanger: PropTypes.bool,
     };
 
     state = {
         pageSize: this.props.pageSize || defaultPageSize, // 每页条数
+        pageSizeOptions: ['10', '20', '30', '40'], // 每页可以显示条数
         current: 1, // 当前页数
         propsWithCurrent: typeof this.props.current !== 'undefined', // 是否传入当前页属性current
         jumpPage: '', // 跳转至指定某页
     };
+
+    componentWillMount() {
+        const {
+            pageSizeOptions = defaultPageSizeOptions,
+            pageSize = defaultPageSize,
+        } = this.props;
+        const set = new Set([...pageSizeOptions, `${pageSize}`]);
+        this.setState({
+            pageSizeOptions: [...set].sort((a, b) => a - b),
+        });
+    }
 
     // 跳转至某页
     onJumper = (e) => {
@@ -55,7 +68,7 @@ class Pagination extends React.PureComponent {
             });
 
             if (/^\d+$/.test(jumpPage)) {
-            // 页数正整数时跳转
+            // 页码正整数判断
                 if (!propsWithCurrent) {
                     this.setState({
                         current: Number(jumpPage),
@@ -121,25 +134,27 @@ class Pagination extends React.PureComponent {
 
     render() {
         const {
-            pageSizeOptions = defaultPageSizeOptions,
             current,
             dataSize,
             showQuickJumper,
             showSizeChanger,
         } = this.props;
-        const { pageSize } = this.state;
+        const {
+            pageSize,
+            pageSizeOptions,
+        } = this.state;
         const page = this.state.propsWithCurrent ? current : this.state.current;
         const isFirst = page === 1; // 是否第一页
         const isLast = dataSize < pageSize; // 是否最后一页
 
         return (
-            <ul className="jimi-pagination" unselectable="unselectable">
+            <ul styleName="jm-pagination" unselectable="unselectable">
                 {
                     (showQuickJumper || showSizeChanger) &&
-                    <li className="jimi-pagination-options">
+                    <li styleName="jm-pagination-options">
                         {
                             showQuickJumper &&
-                            <div className="jimi-pagination-options-jumper">
+                            <div styleName="jm-pagination-options-jumper">
                                 跳至
                                 <input
                                     type="text"
@@ -153,7 +168,7 @@ class Pagination extends React.PureComponent {
                         }
                         {
                             showSizeChanger &&
-                            <div className="jimi-pagination-options-pages">
+                            <div styleName="jm-pagination-options-pages">
                                 <select
                                     value={pageSize}
                                     onChange={this.onPageSizeChange}
@@ -169,18 +184,18 @@ class Pagination extends React.PureComponent {
 
                     </li>
                 }
-                <li className="jimi-pagination-pages">
+                <li className="jm-pagination-pages">
                     页码: {page}
                 </li>
                 <li
-                    className={cs('jimi-pagination-prev', isFirst ? 'jimi-pagination-disabled' : '')}
+                    styleName={cs('jm-pagination-prev', isFirst ? 'jm-pagination-disabled' : '')}
                     onClick={() => this.onPageChange('prev')}
                     role="button"
                 >
                     上一页
                 </li>
                 <li
-                    className={cs('jimi-pagination-next', isLast ? 'jimi-pagination-disabled' : '')}
+                    styleName={cs('jm-pagination-next', isLast ? 'jm-pagination-disabled' : '')}
                     onClick={() => this.onPageChange('next')}
                     role="button"
                 >
@@ -191,4 +206,4 @@ class Pagination extends React.PureComponent {
     }
 }
 
-export default Pagination;
+export default CSSModules(Pagination, styles, { allowMultiple: true });

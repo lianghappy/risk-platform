@@ -7,7 +7,7 @@ import { message } from 'antd';
 import { DURATION } from 'utils/constants';
 // import { signature } from 'utils/request';
 import { initSession } from 'models/session';
-import './index.css';
+import './index.scss';
 
 moment.locale('zh-cn');
 // signature(); // 签名

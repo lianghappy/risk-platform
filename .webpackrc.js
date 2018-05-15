@@ -32,7 +32,6 @@ export default {
         'Android >= 4',
     ],
     hash: true,
-    sass: {},
     define: {
         jimiEnv: constants.JIMI_ENV, //环境变量
         version: constants.VERSION, // 版本号
