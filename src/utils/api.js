@@ -26,6 +26,11 @@ const api = {
     // 更新用户
     updateAccount: `${API}/api/risk/manager/user/update/v1`,
 
+    // 增加角色
+    addRole: `${API_RBAC}/api/rbac/service/rolePlus/addMenuRole/v2`,
+    // 删除
+    delRole: `${API_RBAC}/api/rbac/service/rolePlus/delCheck/v1`,
+
     // 权限列表
     getPermission: `${API_RBAC}/api/rbac/service/menuPlus/list/v2`,
 
@@ -125,6 +130,22 @@ const api = {
     updateBlack: `${API}/api/risk/manager/blackAndWhite/update/v1`,
     // 来源
     getBlackType: `${API}/api/risk/manager/policy/channelBank/list/v1`,
+
+    // 实验样本
+    getSamples: `${API}/api/risk/manager/collector/analysisSample/listByWideTable/v1`,
+
+    // 沙箱样本
+    getSandSamples: `${API}/api/risk/manager/collector/analysisSample/listByWideTable/v1`,
+    // 删除
+    delSandSamples: `${API}/api/risk/manager/collector/analysisSample/deleteAnalysisSample/v1`,
+    // 明细
+    detailSandSamples: `${API}/api/risk/manager/collector/analysisSample/sampleDetail/v1`,
+    // 筛选条件
+    selectSandSamples: `${API}/api/risk/manager/collector/analysisSample/get/v1`,
+    // 获取所有的数据源
+    getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
+    // 沙箱样本创建样本
+    addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
 };
 
 export default api;

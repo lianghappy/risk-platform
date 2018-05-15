@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Select, Button, Table } from 'antd';
+import { Layout, Form, Input, Select, Button, Table, message, Popconfirm } from 'antd';
 import CSSModules from 'react-css-modules';
+import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -18,36 +19,69 @@ class RoleIndex extends React.PureComponent {
         sysId: PropTypes.string.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.props.dispatch({
-            type: 'role/getroleListSuc',
-            payload: {
-                pageNum,
-                pageSize,
-                sysId,
-            },
+        this.query({
+            pageNum,
+            pageSize,
+            sysId,
         });
     };
-   onQuery = () => {
+   onQuery = (e) => {
+       e.preventDefault();
        const {
            pageSize,
-           dispatch,
+           loading,
+           form,
            sysId,
        } = this.props;
-       dispatch({
-           type: 'role/getRoleListSuc',
-           payload: {
+       if (loading) return;
+       form.validateFields((errors, values) => {
+           this.query({
+               ...values,
                pageNum: 1,
                pageSize,
                sysId,
-           },
+           });
        });
    };
-   handleSubmit = (e) => {
-       e.preventDefault();
+   onDetail = () => {
+
+   }
+   onDelete(ids) {
+       const {
+           pageSize,
+           pageNum,
+           form,
+           dispatch,
+       } = this.props;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'role/del',
+               payload: {
+                   data: { id: ids },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           message.success('删除成功', DURATION);
+           form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: this.props.sysId });
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
    }
    addrole = (e) => {
        e.preventDefault();
        this.props.history.push('/role/addRole');
+   }
+   query(payload) {
+       this.props.dispatch({
+           type: 'role/getRoleList',
+           payload,
+       });
    }
    render() {
        const {
@@ -58,14 +92,24 @@ class RoleIndex extends React.PureComponent {
        } = this.props;
        const { getFieldDecorator } = this.props.form;
        const columns = [
-           { title: '用户账号', dataIndex: 'account', key: 'account' },
-           { title: '用户姓名', dataIndex: 'name', key: 'name' },
-           { title: '用户手机号', dataIndex: 'tel', key: 'tel' },
-           { title: '公司名称', dataIndex: 'connectName', key: 'connectName' },
            { title: '角色类型', dataIndex: 'type', key: 'type' },
            { title: '角色名称', dataIndex: 'roleName', key: 'roleName' },
-           { title: '启用状态', dataIndex: 'status', key: 'status' },
-           { title: '操作', dataIndex: 'operator', key: 'operator' },
+           { title: '创建时间', dataIndex: 'createTime', key: 'createTime' },
+           { title: '操作',
+               dataIndex: 'operator',
+               key: 'operator',
+               render: (...rest) => (
+                   <div>
+                       <span role="button" tabIndex="-1" className="jm-operate" onClick={() => this.onDetail(rest[1].id)}>详情</span>
+                       <Popconfirm
+                           placement="topRight"
+                           title="是否确定删除？"
+                           onConfirm={() => this.onDelete(rest[1].id)}
+                       >
+                           <span className="jm-del">删除</span>
+                       </Popconfirm>
+                   </div>
+               ) },
        ];
        return (
            <Layout className={style.containers}>
@@ -100,16 +144,13 @@ class RoleIndex extends React.PureComponent {
                        >新增角色
                        </Button>
                    </FormItem>
-                   <FormItem>
-                       <Button
-                           type="primary"
-                           className={style.btns}
-                           onClick={this.showModal}
-                       >批量删除
-                       </Button>
-                   </FormItem>
                </Form>
-               <Table columns={columns} loading={loading} />
+               <Table
+                   columns={columns}
+                   loading={loading}
+                   dataSource={dataSource}
+                   pagination={false}
+               />
                <Pagination
                    current={pageNum}
                    pageSize={pageSize}

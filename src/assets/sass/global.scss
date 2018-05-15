@@ -49,3 +49,12 @@ table {
         }
     }
 }
+:global(.jm-del){
+    color: #1F92FD;
+    margin-left: 12px;
+    cursor: pointer;
+}
+:global(.jm-operate){
+    color: #1F92FD;
+    cursor: pointer;
+}

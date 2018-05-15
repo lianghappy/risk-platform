@@ -1,50 +1,49 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
-import { SYSID } from 'utils/constants';
+import { PAGE_SIZE, SYSID } from 'utils/constants';
 
 export default {
-    namespace: 'tree',
+    namespace: 'creates',
     state: {
         list: [],
-        sysId: 'risk',
+        sysId: SYSID,
+        pageNum: 1,
+        pageSize: PAGE_SIZE,
     },
     effects: {
-        * getTreeList({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getMenuTreeList, payload, data);
+        // 获取下拉菜单
+        * getSelect({ payload }, { call, put }) {
+            const response = yield call(post, API.getAllType, payload);
             yield put({
-                type: 'getTreeListSuc',
+                type: 'getSelectSuc',
                 payload: {
                     list: response,
-                    sysId: payload.sysId,
+                    sysId: SYSID,
                 },
             });
         },
         // 增加
         * add({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.addRole, data);
+            yield call(post, API.addCreateSamples, data);
             yield call(resolve);
         },
     },
     reducers: {
-        getTreeListSuc(state, { payload }) {
+        getSelectSuc(state, { payload }) {
             return { ...state, ...payload };
         },
     },
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/role/addRole') {
+                if (pathname === '/sandSamples/create') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['系统管理', '角色管理', '新增角色'],
+                        payload: ['策略沙箱', '沙箱样本', '创建样本'],
                     });
                     dispatch({
-                        type: 'getTreeList',
-                        payload: {
-                            sysId: SYSID,
-                        },
+                        type: 'getSelect',
                     });
                 }
             });
