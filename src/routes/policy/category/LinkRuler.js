@@ -2,14 +2,16 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu, Tree } from 'antd';
 import { DURATION } from 'utils/constants';
 import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
+import RegularModal from './RegularModal';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const TreeNode = Tree.TreeNode;
 
 class LinkRuler extends React.PureComponent {
     static propTypes ={
@@ -26,6 +28,9 @@ class LinkRuler extends React.PureComponent {
         selectedRows: [],
         disabled: true,
         current: '.$linkRuler',
+        idList: [],
+        selectedKeys: '',
+        ruleName: '',
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -88,8 +93,13 @@ class LinkRuler extends React.PureComponent {
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
         if (selectedRows.length > 0) {
+            const idList = [];
+            selectedRows.forEach((item) => {
+                idList.push(item.categoryId);
+            });
             this.setState({
                 disabled: false,
+                idList,
             });
         } else {
             this.setState({
@@ -97,22 +107,107 @@ class LinkRuler extends React.PureComponent {
             });
         }
     }
+    onSelect = (selectedKeys) => {
+        const {
+            pageSize,
+            pageNum,
+            form,
+        } = this.props;
+        this.setState({ selectedKeys: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
+        const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
+        form.validateFields((errors, values) => {
+            Object.assign(values, { categoryId });
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
+        });
+        this.props.categoryList.forEach((item) => {
+            if (categoryId === item.id) {
+                this.setState({ ruleName: item.name });
+            }
+        });
+    }
+    modalOk = (data, callback) => {
+        const {
+            dispatch,
+            pageSize,
+            pageNum,
+            form,
+        } = this.props;
+
+        new Promise((resolve) => {
+            dispatch({
+                type: 'linkRuler/add',
+                payload: {
+                    data,
+                    resolve,
+                },
+            });
+        }).then(() => {
+            callback();
+            message.success('规则新增成功', DURATION);
+            const categoryId = this.state.selectedKeys;
+            form.validateFields((errors, values) => {
+                Object.assign(values, { categoryId });
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    };
     query(payload) {
         this.props.dispatch({
             type: 'linkRuler/getLinkRulerList',
             payload,
         });
     }
+    delList = () => {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        const { idList } = this.state;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'linkRuler/delList',
+                payload: {
+                    data: { idList },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
+    messages = () => {
+        message.error('请选择类别');
+    }
+    renderTreeNodes = (data) => {
+        return data.map((item) => {
+            if (item.children) {
+                return (
+                    <TreeNode title={item.title} key={item.key} dataRef={item}>
+                        {this.renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.key} />;
+        });
+    }
     render() {
-        const lists = this.props.categoryList;
-        console.log(treeConvert({
-            id: 'id',
-            name: 'name',
-            pId: 'p',
-            rootId: '100000',
-            tId: 'value',
-            tName: 'label',
-        }, lists));
         const { getFieldDecorator } = this.props.form;
         const {
             pageSize,
@@ -152,6 +247,25 @@ class LinkRuler extends React.PureComponent {
             selectedRows,
             onChange: this.onSelectChange,
         };
+        const treeDatas = [];
+        const { categoryList } = this.props;
+        // 树结构
+        this.props.categoryList.forEach((item) => {
+            if (Number(item.level) === 1) {
+                treeDatas.push({
+                    title: item.name,
+                    key: item.id,
+                    children: treeConvert({
+                        pId: 'pid',
+                        rootId: item.id,
+                        id: 'id',
+                        name: 'pname',
+                        tId: 'key',
+                        tName: 'title',
+                    }, categoryList),
+                });
+            }
+        });
         return (
             <Layout className={style.container}>
                 <Menu
@@ -166,60 +280,81 @@ class LinkRuler extends React.PureComponent {
                         关联规则
                     </Menu.Item>
                 </Menu>
-                <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                    <FormItem label="规则编号" >
-                        {
-                            getFieldDecorator('ruleId')(<Input placeholder="请输入规则编号" />)
-                        }
-                    </FormItem>
-                    <FormItem label="规则来源" >
-                        {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)}
-                    </FormItem>
-                    <FormItem label="风险代码" >
-                        {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
-                        }
-                    </FormItem>
-                    <FormItem label="规则名称" >
-                        {
-                            getFieldDecorator('ruleName')(<Input placeholder="请输入规则名称" />)
-                        }
-                    </FormItem>
-                    <FormItem>
-                        <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
-                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
-                    </FormItem>
-                </Form>
-                <div>
-                    <Button
-                        type="primary"
-                        onClick={this.showModal}
-                        className={style.addBtn}
-                    >新增规则
-                    </Button>
-                    <Button
-                        type="primary"
-                        onClick={this.showModal}
-                        className={style.addBtn}
-                        disabled={this.state.disabled}
-                    >批量删除
-                    </Button>
+                <div className={style.layout}>
+                    <div className={style.left}>
+                        <Tree
+                            onSelect={this.onSelect}
+                        >{this.renderTreeNodes(treeDatas)}
+                        </Tree>
+                    </div>
+                    <div className={style.right}>
+                        <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
+                            <FormItem label="规则编号" >
+                                {
+                                    getFieldDecorator('ruleId')(<Input placeholder="请输入规则编号" />)
+                                }
+                            </FormItem>
+                            <FormItem label="规则来源" >
+                                {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)}
+                            </FormItem>
+                            <FormItem label="风险代码" >
+                                {
+                                    getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
+                                }
+                            </FormItem>
+                            <FormItem label="规则名称" >
+                                {
+                                    getFieldDecorator('ruleName')(<Input placeholder="请输入规则名称" />)
+                                }
+                            </FormItem>
+                            <FormItem>
+                                <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                                <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                            </FormItem>
+                        </Form>
+                        <div>
+                            {
+                                this.state.selectedKeys ?
+                                    <RegularModal
+                                        onOk={this.modalOk}
+                                        categoryId={this.state.selectedKeys}
+                                        ruleName={this.state.ruleName}
+                                    >
+                                        <Button type="primary" style={{ marginRight: 20 }}>
+                                        新增规则
+                                        </Button>
+                                    </RegularModal>
+                                    :
+                                    <Button type="primary" style={{ marginRight: 20 }} onClick={() => this.messages()}>
+                                    新增规则
+                                    </Button>
+                            }
+                            <Button
+                                type="primary"
+                                onClick={this.delList}
+                                className={style.addBtn}
+                                disabled={this.state.disabled}
+                            >批量删除
+                            </Button>
+                        </div>
+                        <Table
+                            columns={columns}
+                            loading={loading}
+                            dataSource={dataSource}
+                            pagination={false}
+                            rowSelection={rowSelection}
+                        />
+                        <Pagination
+                            current={pageNum}
+                            pageSize={pageSize}
+                            dataSize={dataSource.length}
+                            onChange={this.onPageChange}
+                            showQuickJumper
+                        />
+                    </div>
                 </div>
-                <Table
-                    columns={columns}
-                    loading={loading}
-                    dataSource={dataSource}
-                    pagination={false}
-                    rowSelection={rowSelection}
-                />
-                <Pagination
-                    current={pageNum}
-                    pageSize={pageSize}
-                    dataSize={dataSource.length}
-                    onChange={this.onPageChange}
-                    showQuickJumper
-                />
             </Layout>
+
         );
     }
 }

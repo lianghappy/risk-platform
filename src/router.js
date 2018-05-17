@@ -174,7 +174,7 @@ function RouterConfig({ history, app }) {
         app,
         component: () => import('routes/sandboxie/sandbox/Experiment.js'),
         models: () => [
-            import('models/sandboxie/Experiment.js'),
+            import('models/sandboxie/sandbox/Experiment.js'),
         ],
     });
     // 实验历史记录
@@ -236,7 +236,7 @@ function RouterConfig({ history, app }) {
                     <Route path="/permission" exact component={Permission} />
                     <Route path="/black" exact component={Black} />
                     <Route path="/sandboxie" exact component={sandboxie} />
-                    <Route path="/sandboxie/:id" exact component={Experiment} />
+                    <Route path="/experiment/:id" exact component={Experiment} />
                     <Route path="/strategies/:id" exact component={Strategies} />
                     <Route path="/history/:id" exact component={History} />
                     <Route path="/samples" exact component={samples} />

@@ -11,6 +11,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
 moment.locale('zh-cn');
+const InputGroup = Input.Group;
 
 const mapStateToProps = (state) => ({
     list: state.creates.list,
@@ -350,23 +351,29 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="风控评分" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('pldScorelower')(<Input />)
+                                    getFieldDecorator('pldScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最大年龄" />)
                                 }
-                                <span>-</span>
+                                <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
-                                    getFieldDecorator('pldScoreUpper')(<Input />)
+                                    getFieldDecorator('pldScoreUpper')(
+                                        <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最小年龄" />
+                                    )
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="芝麻分" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('zhiMaScorelower')(<Input width="20" />)
-                                }
-                                <span>-</span>
-                                {
-                                    getFieldDecorator('zhiMaScoreUpper')(<Input width="20" />)
-                                }
+                                <InputGroup compact>
+                                    {
+                                        getFieldDecorator('zhiMaScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最大年龄" />)
+                                    }
+                                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                                    {
+                                        getFieldDecorator('zhiMaScoreUpper')(
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最小年龄" />
+                                        )
+                                    }
+                                </InputGroup>
                             </FormItem>
                         </Col>
                     </Row>

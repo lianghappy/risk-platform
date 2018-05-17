@@ -32,7 +32,7 @@ export default class Regular extends React.PureComponent {
         dispatch: PropTypes.func.isRequired,
         loading: PropTypes.bool.isRequired,
         form: PropTypes.object.isRequired,
-        list: PropTypes.array.isRequired,
+        list: PropTypes.object.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
         categories: PropTypes.array.isRequired,
@@ -217,12 +217,13 @@ export default class Regular extends React.PureComponent {
         const {
             form,
             loading,
-            list: dataSource,
+            list,
             pageSize,
             pageNum,
             categories,
             channels,
         } = this.props;
+        const dataSource = list.normList ? list.dataSource : [];
         const { getFieldDecorator } = form;
         const {
             selectedRowKeys,

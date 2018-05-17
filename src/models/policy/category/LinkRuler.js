@@ -11,6 +11,7 @@ export default {
         pageSize: PAGE_SIZE,
         typeList: [],
         categoryList: [],
+        regulars: [],
     },
     effects: {
         // 获取类别关联规则信息
@@ -63,6 +64,22 @@ export default {
             yield call(post, API.delListCategoryRule, data);
             yield call(resolve);
         },
+        * queryRegular({ payload }, { call, put }) {
+            const response = yield call(post, API.getRules, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    regulars: response,
+                    _pageNum: payload.pageNum,
+                },
+            });
+        },
+        // 增加规则
+        * add({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.categoryAndRule, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         getLinkRulerListSuc(state, { payload }) {
@@ -72,6 +89,9 @@ export default {
             return { ...state, ...payload };
         },
         getCategoryListSuc(state, { payload }) {
+            return { ...state, ...payload };
+        },
+        querySuc(state, { payload }) {
             return { ...state, ...payload };
         },
     },

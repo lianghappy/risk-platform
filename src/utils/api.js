@@ -97,6 +97,8 @@ const api = {
     delListCategoryRule: `${API}/api/risk/manager/policy/categoryAndRule/deletes/v1`,
     // 获取全部规则类别的list
     getCategoryList: `${API}/api/risk/manager/policy/category/list/all/v1`,
+    // 新增规则-类别数据
+    categoryAndRule: `${API}/api/risk/manager/policy/categoryAndRule/create/v1`,
 
     // 策略
     getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,
@@ -146,6 +148,10 @@ const api = {
     getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
     // 沙箱样本创建样本
     addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
+
+
+    // 沙箱实验
+    startExpe: `${API}/api/risk/manager/collector/analysisSample/selectSample/v1`,
 };
 
 export default api;

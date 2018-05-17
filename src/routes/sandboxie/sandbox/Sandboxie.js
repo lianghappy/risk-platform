@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
 import { DURATION } from 'utils/constants';
+import base64 from 'utils/base64';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
-// import AddPolicy from './AddPolicy';
+import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
 
@@ -164,9 +165,9 @@ class Sandboxie extends React.PureComponent {
     };
     exciese = () => {
         if (this.state.disabled) {
-            message.info('请选择策略');
+            message.error('请选择策略');
         } else {
-            this.props.history.push('/experiment');
+            this.props.history.push(`/experiment/${base64.encode(this.state.clone.id)}`);
         }
     }
     query(payload) {
@@ -251,7 +252,13 @@ class Sandboxie extends React.PureComponent {
                                             <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                         </Menu.Item>
                                         <Menu.Item>
-                                            <span role="button" tabIndex="-1" onClick={(e) => this.edit(e, rest[1])}>编辑</span>
+                                            <AddPolicy
+                                                type="edit"
+                                                record={rest[1]}
+                                                onOk={this.modalOk}
+                                            >
+                                                <span>编辑</span>
+                                            </AddPolicy>
                                         </Menu.Item>
                                         <Menu.Item>
                                             <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
@@ -291,7 +298,13 @@ class Sandboxie extends React.PureComponent {
                 </Form>
                 <div className={style.btns}>
                     <Button type="primary" onClick={() => this.exciese()}>开始实验</Button>
-                    <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                    <AddPolicy
+                        type="clone"
+                        record={this.state.clone}
+                        onOk={this.modalOk}
+                    >
+                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                    </AddPolicy>
                 </div>
                 <Table
                     columns={columns}
