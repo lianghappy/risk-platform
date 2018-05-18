@@ -76,7 +76,7 @@ export default {
                 if (pathname === '/sandSamples') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '沙箱样本'],
+                        payload: ['沙箱样本'],
                     });
                     dispatch({
                         type: 'getSandSamplesList',

@@ -33,7 +33,7 @@ class Exper extends React.PureComponent {
                  this.state.current === '.$new' ?
                      <StartExper {...this.props} />
                      :
-                     <OldExpr />
+                     <OldExpr {...this.props} />
              }
          </Layout>
      );

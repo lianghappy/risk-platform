@@ -62,20 +62,14 @@ export default {
                 },
             });
         },
-        // 开始实验
-        // * add({ payload }, { call, put }) {
-        //     const response = yield call(post, API.addStartExpers, payload);
-        //     yield put({
-        //         type: 'startSuc',
-        //         payload: {
-        //             success: response,
-        //             sysId: SYSID,
-        //         },
-        //     });
-        //     },
         * add({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.addStartExpers, data);
+            yield call(resolve);
+        },
+        * startsExper({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.oldStartExpers, data);
             yield call(resolve);
         },
 
@@ -89,7 +83,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = pathname.split('/');
-                if (path[1] === '/experiment') {
+                if (path[1] === 'experiment') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['策略沙箱', '开始实验'],

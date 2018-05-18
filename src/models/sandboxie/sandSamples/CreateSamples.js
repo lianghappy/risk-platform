@@ -40,7 +40,7 @@ export default {
                 if (pathname === '/sandSamples/create') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '沙箱样本', '创建样本'],
+                        payload: ['沙箱样本', '创建样本'],
                     });
                     dispatch({
                         type: 'getSelect',

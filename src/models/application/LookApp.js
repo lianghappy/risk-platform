@@ -111,7 +111,7 @@ export default {
                     const ids = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['应用管理', '查看应用'],
+                        payload: ['查看应用'],
                     });
                     dispatch({
                         type: 'getAppDetailList',

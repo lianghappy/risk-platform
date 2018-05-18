@@ -160,6 +160,8 @@ const api = {
     getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
     // 沙箱样本创建样本
     addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
+    // 已有的样本开始实验
+    oldStartExpers: `${API}/api/risk/manager/analysis/analysisRecord/start/with/v1`,
 
     // 沙箱实验
     startExpe: `${API}/api/risk/manager/collector/analysisSample/selectSample/v1`,

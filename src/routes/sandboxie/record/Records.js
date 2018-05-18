@@ -56,21 +56,6 @@ class RecordHistory extends React.PureComponent {
             dispatch,
         } = this.props;
         const operators = JSON.parse(sessionStorage.userInfo).user.realName;
-        // new Promise((resolve) => {
-        //     dispatch({
-        //         type: 'recordHistory/download',
-        //         payload: {
-        //             data: {
-        //                 analysisRecordId: rest.id,
-        //                 operators,
-        //                 record: rest.record,
-        //             },
-        //             resolve,
-        //         }
-        //     });
-        // }).then(() => {
-        //     message.success('下载成功');
-        // });
         dispatch({
             type: 'recordHistory/download',
             payload: {
@@ -80,7 +65,7 @@ class RecordHistory extends React.PureComponent {
             }
         });
         console.log(this.props.download);
-        window.open(this.props.download.url);
+        // window.location.href = this.props.download.url;
     }
     query(payload) {
         this.props.dispatch({

@@ -53,7 +53,7 @@ export default {
                 if (pathname === '/recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['决策引擎', '规则库管理'],
+                        payload: ['实验记录'],
                     });
                     dispatch({
                         type: 'recordHistoryList',

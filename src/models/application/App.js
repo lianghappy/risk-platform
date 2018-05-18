@@ -70,7 +70,7 @@ export default {
                 if (pathname === '/app') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['应用管理', '应用管理'],
+                        payload: ['应用管理'],
                     });
                     dispatch({
                         type: 'getAppList',

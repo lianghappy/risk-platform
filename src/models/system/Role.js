@@ -42,7 +42,7 @@ export default {
                 if (pathname === '/role') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['系统管理', '角色管理'],
+                        payload: ['角色管理'],
                     });
                     dispatch({
                         type: 'getRoleList',

@@ -58,7 +58,7 @@ export default {
                     const ids = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '策略沙箱', '阶段管理'],
+                        payload: ['策略沙箱', '阶段管理'],
                     });
                     dispatch({
                         type: 'getStrategyList',

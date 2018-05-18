@@ -61,7 +61,7 @@ export default {
                 if (pathname === '/policy') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['决策引擎', '策略管理'],
+                        payload: ['策略管理'],
                     });
                     dispatch({
                         type: 'getPolicyList',

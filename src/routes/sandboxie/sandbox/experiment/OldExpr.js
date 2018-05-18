@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table } from 'antd';
+import base64 from 'utils/base64';
 import LookModal from './LookModal';
 import style from '../index.scss';
 import Pagination from '../../../../components/Pagination/Pagination';
@@ -64,6 +65,28 @@ class OldExpr extends React.PureComponent {
             pageSize,
         });
     };
+    starts = (values) => {
+        const {
+            dispatch,
+        } = this.props;
+        const username = JSON.parse(sessionStorage.userInfo).user.realName;
+        const strategyId = base64.decode(this.props.match.params.id);
+        new Promise((resolve) => {
+            dispatch({
+                type: 'experiment/startsExper',
+                payload: {
+                    data: {
+                        strategyId,
+                        username,
+                        sampleId: values.id,
+                    },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.props.history.push('/sandboxie/recordHistory');
+        });
+    }
     query(payload) {
         this.props.dispatch({
             type: 'experiment/queryList',
@@ -83,7 +106,7 @@ class OldExpr extends React.PureComponent {
             { title: '样本名称', dataIndex: 'name', key: 'name' },
             { title: '样本总数量', dataIndex: 'num', key: 'num' },
             { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
-            { title: '数据源', dataIndex: 'type', key: 'type', render: (...rest) => (<span>{rest[1].type === 0 ? '内部' : '宽表'}</span>) },
+            { title: '数据源', dataIndex: 'type', key: 'type', render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '内部'}</span>) },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -95,7 +118,7 @@ class OldExpr extends React.PureComponent {
                         >
                             <a style={{ marginRight: 5 }}>样本筛选条件</a>
                         </LookModal>
-                        <span>开始实验</span>
+                        <a role="button" tabIndex="-1" onClick={() => this.starts(rest[1])}>开始实验</a>
                     </div>
                 ) },
         ];

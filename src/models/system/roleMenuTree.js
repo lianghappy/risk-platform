@@ -38,7 +38,7 @@ export default {
                 if (pathname === '/role/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['系统管理', '角色管理', '新增角色'],
+                        payload: ['角色管理', '新增角色'],
                     });
                     dispatch({
                         type: 'getTreeList',

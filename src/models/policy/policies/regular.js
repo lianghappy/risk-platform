@@ -98,7 +98,7 @@ export default {
 
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['决策引擎', '策略管理', '阶段管理', '规则管理'],
+                        payload: ['策略管理', '阶段管理', '规则管理'],
                     });
                     dispatch({
                         type: 'query',

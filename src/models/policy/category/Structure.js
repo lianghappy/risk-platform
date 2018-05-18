@@ -57,7 +57,7 @@ export default {
                 if (pathname === '/categoryStru') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['决策引擎', '类别管理'],
+                        payload: ['类别管理'],
                     });
                     dispatch({
                         type: 'getStructureList',

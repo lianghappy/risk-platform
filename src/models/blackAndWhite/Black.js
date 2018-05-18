@@ -70,7 +70,7 @@ export default {
                 if (pathname === '/black') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['黑白名单', '黑名单'],
+                        payload: ['黑名单'],
                     });
                     dispatch({
                         type: 'getBlackList',
