@@ -9,7 +9,7 @@
     "lint": "eslint --ext .js src test",
     "fix": "eslint src --fix",
     "precommit": "lint-staged",
-    "f": "eslint src/routes/policy/policies/regular/RegularModal.js --fix"
+    "f": "eslint src/utils/treeConvert.js --fix"
   },
   "lint-staged": {
     "src/**/*.js": "eslint"
