@@ -2,8 +2,8 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table } from 'antd';
-import style from '../index.scss';
+import { Layout, Input, Form, Button, Table, message } from 'antd';
+import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
@@ -16,7 +16,6 @@ class RecordHistory extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
-        download: PropTypes.object.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -56,31 +55,21 @@ class RecordHistory extends React.PureComponent {
             dispatch,
         } = this.props;
         const operators = JSON.parse(sessionStorage.userInfo).user.realName;
-        // new Promise((resolve) => {
-        //     dispatch({
-        //         type: 'recordHistory/download',
-        //         payload: {
-        //             data: {
-        //                 analysisRecordId: rest.id,
-        //                 operators,
-        //                 record: rest.record,
-        //             },
-        //             resolve,
-        //         }
-        //     });
-        // }).then(() => {
-        //     message.success('下载成功');
-        // });
-        dispatch({
-            type: 'recordHistory/download',
-            payload: {
-                analysisRecordId: rest.id,
-                operators,
-                record: rest.record,
-            }
+        new Promise((resolve) => {
+            dispatch({
+                type: 'recordHistory/download',
+                payload: {
+                    data: {
+                        analysisRecordId: rest.id,
+                        operators,
+                        record: rest.record,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            message.info('下载成功');
         });
-        console.log(this.props.download);
-        window.open(this.props.download.url);
     }
     query(payload) {
         this.props.dispatch({
@@ -164,6 +153,5 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.recordHistory,
     pageNum: state.recordHistory.pageNum,
     pageSize: state.recordHistory.pageSize,
-    download: state.recordHistory.download,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(RecordHistory)));

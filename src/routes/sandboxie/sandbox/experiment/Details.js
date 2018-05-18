@@ -5,35 +5,38 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from '../../../../components/Pagination/Pagination';
 
 const mapStateToProps = (state) => ({
-    details: state.sandSamples.details,
+    details: state.experiment.details,
+    pageNum: state.experiment.pageNum,
+    pageSize: state.experiment.pageSize,
 });
 @connect(mapStateToProps)
 export default class SampleDetail extends React.PureComponent {
     static propTypes = {
-        // form: PropTypes.object.isRequired,
-        // record: PropTypes.object.isRequired,
         children: PropTypes.oneOfType([
             PropTypes.string,
             PropTypes.element,
         ]).isRequired,
         pageNum: PropTypes.number.isRequired,
-        pageSize: PropTypes.number.isRequired,
         details: PropTypes.array.isRequired,
     };
     state = {
         visible: this.props.visible || false,
-        pageSize: this.props.pageSize,
-        pageNum: this.props.pageNum,
     };
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            pageNum: nextProps.pageNum,
-            pageSize: nextProps.pageSize,
+    onPageChange = (pageNum, pageSize) => {
+        const {
+            loading,
+            values,
+        } = this.props;
+        if (loading) return;
+        this.query({
+            ...values,
+            pageNum,
+            pageSize,
         });
-    }
+    };
     onCancel = () => {
         this.setState({
             visible: false,
@@ -45,16 +48,35 @@ export default class SampleDetail extends React.PureComponent {
         });
     }
     handleShow = () => {
-        // this.props.form.validateFields();
+        const {
+            dispatch,
+            values,
+            pageNum,
+        } = this.props;
+        dispatch({
+            type: 'experiment/details',
+            payload: {
+                ...values,
+                pageNum,
+                pageSize: 5,
+            }
+        });
         this.setState({
             visible: true,
         });
     };
+    query(payload) {
+        this.props.dispatch({
+            type: 'experiment/details',
+            payload,
+        });
+    }
     render() {
         const {
             loading,
             children,
             details,
+            pageNum,
         } = this.props;
         const columns = [{
             title: '样本ID',
@@ -108,7 +130,8 @@ export default class SampleDetail extends React.PureComponent {
                     visible={this.state.visible}
                     footer={null}
                     onCancel={this.onCancel}
-                    width="900px"
+                    width="1000px"
+                    height="700px"
                 >
                     <Table
                         bordered
@@ -119,8 +142,8 @@ export default class SampleDetail extends React.PureComponent {
                         pagination={false}
                     />
                     <Pagination
-                        current={this.state.pageNum}
-                        pageSize={this.state.pageSize}
+                        current={pageNum}
+                        pageSize={5}
                         dataSize={details.length}
                         onChange={this.onPageChange}
                         showQuickJumper

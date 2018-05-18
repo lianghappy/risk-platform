@@ -133,9 +133,21 @@ const api = {
     // 来源
     getBlackType: `${API}/api/risk/manager/policy/channelBank/list/v1`,
 
+    /* ---------- 策略沙箱-开始实验 ----------*/
     // 实验样本
     getSamples: `${API}/api/risk/manager/collector/analysisSample/listByWideTable/v1`,
+    experDetails: `${API}/api/risk/manager/collector/analysisSample/trainingSampleDetail/v1`,
+    experList: `${API}/api/risk/manager/collector/analysisSample/list/v1`,
+    //  样本筛选条件
+    experSelect: `${API}/api/risk/manager/collector/analysisSample/get/v1`,
+    // 开始实验
+    addStartExpers: `${API}/api/risk/manager/analysis/analysisRecord/start/without/v1`,
+    // 实验记录
+    recordHistoryList: `${API}/api/risk/manager/analysis/analysisRecord/list/v1`,
+    // 下载实验结果
+    download: `${API}/api/risk/manager/analysis/analysisRecord/download/v1`,
 
+    /* ---------- 沙箱样本 ----------*/
     // 沙箱样本
     getSandSamples: `${API}/api/risk/manager/collector/analysisSample/listByWideTable/v1`,
     // 删除
@@ -148,7 +160,6 @@ const api = {
     getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
     // 沙箱样本创建样本
     addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
-
 
     // 沙箱实验
     startExpe: `${API}/api/risk/manager/collector/analysisSample/selectSample/v1`,

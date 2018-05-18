@@ -206,6 +206,21 @@ function RouterConfig({ history, app }) {
              import('models/sandboxie/sandSamples/CreateSamples'),
         ],
     });
+    // 实验记录
+    const Record = dynamic({
+        app,
+        component: () => import('routes/sandboxie/record/Records'),
+        models: () => [
+            import('models/sandboxie/record/Records'),
+        ],
+    });
+    const HistoryRecord = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/RecordHistory'),
+        models: () => [
+            import('models/sandboxie/sandbox/RecordHistory')
+        ],
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -242,6 +257,8 @@ function RouterConfig({ history, app }) {
                     <Route path="/samples" exact component={samples} />
                     <Route path="/SandSamples" exact component={SandSamples} />
                     <Route path="/SandSamples/create" exact component={Create} />
+                    <Route path="/recordHistory" exact component={Record} />
+                    <Route path="/sandboxie/recordHistory" exact component={HistoryRecord} />
                 </Main>
             </Switch>
         </Router>

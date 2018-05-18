@@ -9,7 +9,6 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
-        download: {},
     },
     effects: {
         // 获取规则类别列表
@@ -26,21 +25,12 @@ export default {
                 },
             });
         },
-        * download({ payload }, { call, put }) {
-            const response = yield call(post, API.download, payload);
-            yield put({
-                type: 'querySuc',
-                payload: {
-                    download: response,
-                    sysId: SYSID,
-                },
-            });
+        // 增加策略
+        * download({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.download, data);
+            yield call(resolve);
         },
-        // * download({ payload }, { call }) {
-        //     const { data, resolve } = payload;
-        //     yield call(post, API.download, data);
-        //     yield call(resolve);
-        // },
     },
     reducers: {
         querySuc(state, { payload }) {
@@ -50,10 +40,10 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/recordHistory') {
+                if (pathname === '/sandboxie/recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['决策引擎', '规则库管理'],
+                        payload: ['策略沙箱', '开始实验', '实验历史记录'],
                     });
                     dispatch({
                         type: 'recordHistoryList',

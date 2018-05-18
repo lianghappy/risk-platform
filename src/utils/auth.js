@@ -56,8 +56,8 @@ export default [
             router: '/samples',
         }, {
             name: '实验记录',
-            key: 'records',
-            router: '/records',
+            key: 'recordHistory',
+            router: '/recordHistory',
         }, {
             name: '沙箱样本',
             key: 'sandSamples',
