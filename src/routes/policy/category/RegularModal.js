@@ -46,8 +46,8 @@ export default class RegularModal extends React.PureComponent {
         const lists = [];
         this.state.selectedRows.forEach((item) => {
             lists.push({
-                ruleId: item.id,
-                ruleName: item.name,
+                id: item.id,
+                name: item.name,
                 code: item.code,
                 judgeKey: item.judgeKey,
                 channel: item.channel,

@@ -9,12 +9,15 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        details: [],
+        selects: {},
+        category: [],
     },
     effects: {
         // 获取规则类别列表
         * getSamplesList({ payload }, { call, put }) {
             const { data } = payload;
-            const response = yield call(post, API.getSamples, payload, data);
+            const response = yield call(post, API.experList, payload, data);
             yield put({
                 type: 'getSamplesListSuc',
                 payload: {
@@ -22,6 +25,48 @@ export default {
                     sysId: SYSID,
                     pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        // 删除
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delSandSamples, data);
+            yield call(resolve);
+        },
+        // 明细
+        * queryDetail({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.detailSandSamples, data);
+            yield put({
+                type: 'queryDetailSuc',
+                payload: {
+                    details: response,
+                    pageNum: payload.pageNum,
+                    pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        // 样本筛选条件
+        * querySelect({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.selectSandSamples, data);
+            yield put({
+                type: 'querySelectSuc',
+                payload: {
+                    selects: response,
+                    sysId: SYSID,
+                },
+            });
+        },
+        // 获取来源
+        * getType({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getBlackType, payload, data);
+            yield put({
+                type: 'getSamplesListSuc',
+                payload: {
+                    category: response,
                 },
             });
         },
@@ -37,7 +82,7 @@ export default {
                 if (pathname === '/samples') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['沙箱样本'],
+                        payload: ['实验样本'],
                     });
                     dispatch({
                         type: 'getSamplesList',
@@ -46,6 +91,13 @@ export default {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                             type: 1,
+                        },
+                    });
+                    dispatch({
+                        type: 'getType',
+                        payload: {
+                            sysId: SYSID,
+                            type: 'sampleSource',
                         },
                     });
                 }

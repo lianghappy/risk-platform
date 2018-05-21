@@ -56,16 +56,22 @@ class RecordHistory extends React.PureComponent {
             dispatch,
         } = this.props;
         const operators = JSON.parse(sessionStorage.userInfo).user.realName;
-        dispatch({
-            type: 'recordHistory/download',
-            payload: {
-                analysisRecordId: rest.id,
-                operators,
-                record: rest.record,
-            }
+        new Promise((resolve) => {
+            dispatch({
+                type: 'recordHistory/download',
+                payload: {
+                    data: {
+                        analysisRecordId: rest.id,
+                        operators,
+                        record: rest.record,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            // console.log(this.props.download);
+            window.location.href = this.props.download.url;
         });
-        console.log(this.props.download);
-        // window.location.href = this.props.download.url;
     }
     query(payload) {
         this.props.dispatch({

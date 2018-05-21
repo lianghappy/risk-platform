@@ -27,7 +27,9 @@ export default {
             });
         },
         * download({ payload }, { call, put }) {
-            const response = yield call(post, API.download, payload);
+            const { data, resolve } = payload;
+            yield call(post, API.download, data);
+            const response = yield call(post, API.download, data);
             yield put({
                 type: 'querySuc',
                 payload: {
@@ -35,12 +37,8 @@ export default {
                     sysId: SYSID,
                 },
             });
+            yield call(resolve);
         },
-        // * download({ payload }, { call }) {
-        //     const { data, resolve } = payload;
-        //     yield call(post, API.download, data);
-        //     yield call(resolve);
-        // },
     },
     reducers: {
         querySuc(state, { payload }) {

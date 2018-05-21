@@ -2,13 +2,11 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import moment from 'moment';
-import { Layout, Form } from 'antd';
+import { Layout } from 'antd';
 import Start from './Start';
 import Select from './Select';
 import style from '../index.scss';
 
-moment.locale('zh-cn');
 
 class StartExper extends React.PureComponent {
     static propTypes ={
@@ -49,4 +47,4 @@ const mapStateToProps = (state) => ({
     sysId: state.experiment.sysId,
     loading: state.loading.models.experiment,
 });
-export default connect(mapStateToProps)(Form.create()(CSSModules(StartExper)));
+export default connect(mapStateToProps)((CSSModules(StartExper)));

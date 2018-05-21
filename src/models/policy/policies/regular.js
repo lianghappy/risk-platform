@@ -2,12 +2,12 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
 import base64 from 'utils/base64';
-import treeConvert from 'utils/treeConvert';
+// import treeConvert from 'utils/treeConvert';
 
 export default {
     namespace: 'regular',
     state: {
-        list: [], // 规则列表
+        list: {}, // 规则列表
         pageNum: 1,
         pageSize: PAGE_SIZE,
         categories: [], // 规则类型
@@ -49,12 +49,12 @@ export default {
         },
         // 规则类型
         * queryCategory(action, { call, put }) {
-            let response = yield call(post, API.getCategoryList);
-            response = treeConvert({
-                pId: 'pid',
-                tId: 'value',
-                tName: 'label',
-            }, response);
+            const response = yield call(post, API.getCategoryList);
+            // response = treeConvert({
+            //     pId: 'pid',
+            //     tId: 'value',
+            //     tName: 'label',
+            // }, response);
 
             yield put({
                 type: 'querySuc',

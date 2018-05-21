@@ -2,12 +2,17 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, DatePicker } from 'antd';
+import moment from 'moment';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
+import SamplesModal from './SampleModal';
+import SampleDetail from './SampleDetail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
+moment.locale('zh-cn');
 
 class Samples extends React.PureComponent {
     static propTypes ={
@@ -17,7 +22,12 @@ class Samples extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
+        category: PropTypes.array.isRequired,
     };
+    state = {
+        visible: false,
+        show: false,
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
             pageNum,
@@ -35,6 +45,11 @@ class Samples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.times) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                delete values.times;
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -51,9 +66,39 @@ class Samples extends React.PureComponent {
             pageSize,
         });
     };
+    handleShow = (analysisSampleId) => {
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'samples/querySelect',
+                payload: {
+                    data: { analysisSampleId },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                visible: true,
+            });
+        });
+    }
+    handlePage =(analysisSampleId) => {
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'samples/queryDetail',
+                payload: {
+                    data: { analysisSampleId, pageSize: 10, pageNum: 1 },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                show: true,
+            });
+        });
+    }
     query(payload) {
         this.props.dispatch({
-            type: 'rule/getRuleList',
+            type: 'samples/getSamplesList',
             payload,
         });
     }
@@ -63,41 +108,72 @@ class Samples extends React.PureComponent {
             pageSize,
             pageNum,
             list: dataSource,
+            category,
             loading,
         } = this.props;
+        console.log(category);
         const columns = [
             { title: '样本ID', dataIndex: 'id', key: 'id' },
             { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本使用次数', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '样本总数量', dataIndex: 'code', key: 'code' },
+            { title: '样本总数量', dataIndex: 'num', key: 'num' },
             { title: '样本生成时间', dataIndex: 'channel', key: 'channel' },
-            { title: '数据源', dataIndex: 'valueType', key: 'valueType' },
+            { title: '数据源',
+                dataIndex: 'valueType',
+                key: 'valueType',
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '内部'}</span>) },
+            { title: '操作',
+                dataIndex: 'operate',
+                key: 'operate',
+                render: (...rest) => (
+                    <div>
+                        <SamplesModal
+                            visible={this.state.visible}
+                        >
+                            <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
+                        </SamplesModal>
+                        <SampleDetail
+                            pageSize={pageSize}
+                            pageNum={pageNum}
+                            visible={this.state.show}
+                            onPageChange={() => this.onPage(rest[1].id)}
+                        >
+                            <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
+                        </SampleDetail>
+                        <Popconfirm
+                            placement="topRight"
+                            title="是否确定删除？"
+                            onConfirm={() => this.onDelete(rest[1].id)}
+                        >
+                            <span className="jm-del">删除</span>
+                        </Popconfirm>
+                    </div>
+                ) },
         ];
         const options = [];
-        if (this.props.typeList) {
-            this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
+        if (category) {
+            category.forEach((item) => {
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
         return (
             <Layout className={style.container}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                    <FormItem label="规则编号" >
+                    <FormItem label="样本ID" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('analysisSampleId')(<Input placeholder="请输入样本ID" />)
                         }
                     </FormItem>
-                    <FormItem label="规则来源" >
-                        {getFieldDecorator('channel')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)}
+                    <FormItem label="样本生成时间" >
+                        {getFieldDecorator('times')(<RangePicker
+                            showTime={{
+                                hideDisabledOptions: true,
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                            }}
+                        />)}
                     </FormItem>
-                    <FormItem label="风险代码" >
+                    <FormItem label="样本来源" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
-                        }
-                    </FormItem>
-                    <FormItem label="规则名称" >
-                        {
-                            getFieldDecorator('name')(<Input placeholder="请输入规则名称" />)
+                            getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)
                         }
                     </FormItem>
                     <FormItem>
@@ -129,5 +205,6 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.samples,
     pageNum: state.samples.pageNum,
     pageSize: state.samples.pageSize,
+    category: state.samples.category,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Samples)));

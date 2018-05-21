@@ -53,6 +53,8 @@ export default class LookModal extends React.PureComponent {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
+                    width="810px"
+                    height="700px"
                 >
                     <div>
                         <Row>

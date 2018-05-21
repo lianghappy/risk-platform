@@ -6,16 +6,19 @@ import {
     Table,
     Select,
     Button,
-    Cascader,
     Popconfirm,
+    Tree,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+import treeConvert from 'utils/treeConvert';
 import Pagination from 'components/Pagination/Pagination';
 import { rowSelect } from 'utils/common';
 import styles from './RegularModal.scss';
 
+const TreeNode = Tree.TreeNode;
 @connect((state) => ({
     channels: state.regular.channels,
     categories: state.regular.categories,
@@ -41,15 +44,31 @@ export default class RegularModal extends React.PureComponent {
         visible: false,
         selectedRows: [], // 选中规则
         selectedRowKeys: [],
+        categorieId: '',
+        categoryName: '',
     };
 
     onOk = (e) => {
         e.preventDefault();
 
         new Promise(resolve => {
+            const lists = [];
+            this.state.selectedRows.forEach((item) => {
+                lists.push({
+                    id: item.id,
+                    categoryId: item.categorieId,
+                    categoryName: item.categoryName,
+                    ruleId: item.ruleId,
+                    ruleName: item.ruleName,
+                    code: item.code,
+                    judgeKey: item.judgeKey,
+                    channel: item.channel,
+                    valueType: item.valueType,
+                });
+            });
             this.props.onOk({
                 stageId: this.props.stageId,
-                categoryAndRuleList: this.state.selectedRows,
+                categoryAndRuleList: lists,
             }, resolve);
         }).then(() => {
             this.handleCancel();
@@ -57,6 +76,10 @@ export default class RegularModal extends React.PureComponent {
     };
 
     onSelectAll = (selected, selectedRows, changeRows) => {
+        if (this.state.categorieId === '') {
+            message.error('请先选择规则类目');
+            return;
+        }
         const result = rowSelect.onSelectAll(this.state, selected, changeRows);
         const _selectedRows = result.selectedRows;
         const { selectedRowKeys } = result;
@@ -68,11 +91,14 @@ export default class RegularModal extends React.PureComponent {
     };
 
     onSelect = (record, selected) => {
+        if (this.state.categorieId === '') {
+            message.error('请先选择规则类目');
+            return;
+        }
         const {
             selectedRows,
             selectedRowKeys,
         } = rowSelect.onSelect(this.state, record, selected);
-
         this.setState({
             selectedRows,
             selectedRowKeys,
@@ -106,7 +132,28 @@ export default class RegularModal extends React.PureComponent {
             });
         });
     };
-
+    onSelects = (selectedKeys) => {
+        const {
+            pageSize,
+            pageNum,
+            form,
+        } = this.props;
+        this.setState({ categorieId: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
+        const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
+        form.validateFields((errors, values) => {
+            Object.assign(values, { categoryId });
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
+        });
+        this.props.categories.forEach((item) => {
+            if (item.id === categoryId) {
+                this.setState({ categoryName: item.name });
+            }
+        });
+    }
     onReset = () => {
         this.props.form.resetFields();
         this.query({
@@ -154,11 +201,22 @@ export default class RegularModal extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'publish/queryRegular',
+            type: 'regular/queryRegular',
             payload,
         });
     }
-
+    renderTreeNodes = (data) => {
+        return data.map((item) => {
+            if (item.children) {
+                return (
+                    <TreeNode title={item.title} key={item.key} dataRef={item}>
+                        {this.renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.key} />;
+        });
+    }
     render() {
         const {
             regulars: dataSource,
@@ -226,7 +284,11 @@ export default class RegularModal extends React.PureComponent {
             width: 50,
             render: (text, record) => <Button icon="delete" onClick={() => this.onDelete(record.id)} />,
         }];
-
+        const treeDatas = treeConvert({
+            pId: 'pid',
+            tId: 'key',
+            tName: 'title',
+        }, categories);
         return (
             <span>
                 <span
@@ -247,23 +309,18 @@ export default class RegularModal extends React.PureComponent {
                 >
                     <div className={styles.layout}>
                         <div className={styles.left}>
+                            <Tree
+                                onSelect={this.onSelects}
+                            >
+                                {this.renderTreeNodes(treeDatas)}
+                            </Tree>
+                        </div>
+                        <div className={styles.left}>
                             <Form
                                 className={cs('jm-searchForm', styles.form)}
                                 layout="inline"
                                 onSubmit={this.onQuery}
                             >
-                                <Form.Item label="规则类型">
-                                    {
-                                        getFieldDecorator('categoryId')(
-                                            <Cascader
-                                                options={categories}
-                                                placeholder=""
-                                                changeOnSelect
-                                                style={{ width: '270px' }}
-                                            />
-                                        )
-                                    }
-                                </Form.Item>
                                 <Form.Item label="规则来源">
                                     {getFieldDecorator('channel')(
                                         <Select allowClear>
@@ -305,8 +362,8 @@ export default class RegularModal extends React.PureComponent {
                                 rowSelection={rowSelection}
                                 size="small"
                                 dataSource={dataSource}
-                                style={{ height: 230 }}
-                                scroll={{ y: 190 }}
+                                style={{ height: 430 }}
+                                scroll={{ y: 390 }}
                                 rowKey="id"
                                 loading={loading}
                                 pagination={false}
@@ -324,11 +381,11 @@ export default class RegularModal extends React.PureComponent {
                             <Table
                                 bordered
                                 columns={columnsRight}
-                                scroll={{ y: 244 }}
+                                scroll={{ y: 444 }}
                                 size="small"
                                 dataSource={selectedRows}
                                 rowKey="id"
-                                style={{ height: 300 }}
+                                style={{ height: 500 }}
                                 pagination={false}
                             />
                             <div className={styles.bottom}>

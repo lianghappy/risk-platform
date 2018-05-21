@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import base64 from 'utils/base64';
 import Pagination from 'components/Pagination/Pagination';
 import { DURATION } from 'utils/constants';
+import treeConvert from 'utils/treeConvert';
 import RegularModal from './RegularModal';
 import RegularEdit from './RegularEdit';
 import RegularDetail from './RegularDetail';
@@ -42,7 +43,6 @@ export default class Regular extends React.PureComponent {
     state = {
         stageId: base64.decode(this.props.match.params.id),
         ruleName: this.props.history.location.state.name,
-        type: this.props.history.location.state.type,
         selectedRow: {},
         selectedRowKeys: [],
     };
@@ -223,16 +223,20 @@ export default class Regular extends React.PureComponent {
             categories,
             channels,
         } = this.props;
-        const dataSource = list.normList ? list.dataSource : [];
+        const categoryList = treeConvert({
+            pId: 'pid',
+            tId: 'value',
+            tName: 'label',
+        }, categories);
+        const dataSource = list.normList !== undefined ? list.normList : [];
         const { getFieldDecorator } = form;
         const {
             selectedRowKeys,
             selectedRow,
             stageId,
             ruleName,
-            type,
         } = this.state;
-
+        const type = list.stage !== undefined ? list.stage.type : '2';
         const columns = [{
             title: '规则编号',
             dataIndex: 'id',
@@ -336,7 +340,7 @@ export default class Regular extends React.PureComponent {
                     <Form.Item label="规则类型">
                         {
                             getFieldDecorator('categoryId')(<Cascader
-                                options={categories}
+                                options={categoryList}
                                 placeholder=""
                                 changeOnSelect
                                 style={{ width: '270px' }}
