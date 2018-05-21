@@ -9,7 +9,8 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
-        category: [],
+        rosterType: [],
+        rosterChannel: [],
     },
     effects: {
         // 获取规则类别列表
@@ -33,7 +34,18 @@ export default {
             yield put({
                 type: 'getTypeSuc',
                 payload: {
-                    category: response,
+                    rosterType: response,
+                },
+            });
+        },
+        // 获取来源
+        * rosterChannel({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getBlackType, payload, data);
+            yield put({
+                type: 'getTypeSuc',
+                payload: {
+                    rosterChannel: response,
                 },
             });
         },
@@ -84,7 +96,13 @@ export default {
                     dispatch({
                         type: 'getType',
                         payload: {
-                            type: 'rule',
+                            type: 'rosterType',
+                        },
+                    });
+                    dispatch({
+                        type: 'rosterChannel',
+                        payload: {
+                            type: 'rosterChannel',
                         },
                     });
                 }

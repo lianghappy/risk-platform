@@ -19,7 +19,7 @@ class Black extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
-        category: PropTypes.array.isRequired,
+        rosterChannel: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -161,7 +161,8 @@ class Black extends React.PureComponent {
                             type="edit"
                             record={rest[1]}
                             onOk={this.modalOk}
-                            category={this.props.category}
+                            rosterChannel={this.props.rosterChannel}
+                            rosterType={this.props.rosterType}
                         >
                             <span className="jm-operate">编辑</span>
                         </AddModal>
@@ -210,7 +211,8 @@ class Black extends React.PureComponent {
                     type="add"
                     record={{}}
                     onOk={this.modalOk}
-                    category={this.props.category}
+                    rosterChannel={this.props.rosterChannel}
+                    rosterType={this.props.rosterType}
                 >
                     <Button type="primary" className={style.add}>新增</Button>
                 </AddModal>
@@ -238,6 +240,7 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.black,
     pageNum: state.black.pageNum,
     pageSize: state.black.pageSize,
-    category: state.black.category,
+    rosterChannel: state.black.rosterChannel,
+    rosterType: state.black.rosterType,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Black)));

@@ -45,6 +45,14 @@ export const menuKeyPick = (pathname) => {
         if (path[2] === '0') key.push('sandboxie');
         else key.push('sandboxie');
         break;
+    case 'experiment':
+        if (path[2] === '0') key.push('sandboxie');
+        else key.push('sandboxie');
+        break;
+    case 'regular':
+        if (path[2] === '0') key.push('policy');
+        else key.push('policy');
+        break;
     default:
         key.push(router);
     }

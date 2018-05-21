@@ -153,6 +153,22 @@ function RouterConfig({ history, app }) {
             import('models/blackAndWhite/Black.js'),
         ],
     });
+    // 白名单
+    const White = dynamic({
+        app,
+        component: () => import('routes/blackAndWhite/White.js'),
+        models: () => [
+            import('models/blackAndWhite/White.js'),
+        ],
+    });
+    // 灰名单
+    const Gray = dynamic({
+        app,
+        component: () => import('routes/blackAndWhite/Gray.js'),
+        models: () => [
+            import('models/blackAndWhite/Gray.js'),
+        ],
+    });
     // 策略沙箱
     const sandboxie = dynamic({
         app,
@@ -250,6 +266,8 @@ function RouterConfig({ history, app }) {
                     <Route path="/regular/:id" component={Regular} />
                     <Route path="/permission" exact component={Permission} />
                     <Route path="/black" exact component={Black} />
+                    <Route path="/white" exact component={White} />
+                    <Route path="/gray" exact component={Gray} />
                     <Route path="/sandboxie" exact component={sandboxie} />
                     <Route path="/experiment/:id" exact component={Experiment} />
                     <Route path="/strategies/:id" exact component={Strategies} />

@@ -24,18 +24,21 @@ class AddModal extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         type: PropTypes.string.isRequired,
-        category: PropTypes.array.isRequired,
+        rosterType: PropTypes.array.isRequired,
+        rosterChannel: PropTypes.array.isRequired,
     };
     state = {
         visible: this.props.visible || false,
         title: this.props.title === 'add' ? '新增' : '更新',
-        category: this.props.category,
+        rosterType: this.props.rosterType,
+        rosterChannel: this.props.rosterChannel,
         // type: this.props.type,
     };
     componentWillReceiveProps(nextProps) {
         if (nextProps) {
             this.setState({
-                category: nextProps.category,
+                rosterType: nextProps.rosterType,
+                rosterChannel: nextProps.rosterChannel,
             });
         }
     }
@@ -90,8 +93,12 @@ class AddModal extends React.PureComponent {
             getFieldsError,
         } = form;
         const options = [];
-        this.state.category.forEach((item) => {
+        const rosterChannel = [];
+        this.state.rosterType.forEach((item) => {
             options.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
+        });
+        this.state.rosterChannel.forEach((item) => {
+            rosterChannel.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
         });
         return (
             <span>
@@ -178,7 +185,7 @@ class AddModal extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入名单来源' },
                                     ],
-                                })(<Select>{options}</Select>)
+                                })(<Select>{rosterChannel}</Select>)
                             }
                         </Form.Item>
                         <Form.Item
