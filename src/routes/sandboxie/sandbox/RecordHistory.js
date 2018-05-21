@@ -2,11 +2,14 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message } from 'antd';
+import { Layout, Form, Button, Table, message, DatePicker } from 'antd';
+import moment from 'moment';
+import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
+const { RangePicker } = DatePicker;
 
 class RecordHistory extends React.PureComponent {
     static propTypes ={
@@ -34,6 +37,14 @@ class RecordHistory extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values.start) {
+                Object.assign(values, { startTimes: moment(values.start[0]._d).startOf('day').format('X') });
+                Object.assign(values, { startTimee: moment(values.start[1]._d).startOf('day').format('X') });
+            }
+            if (values.end) {
+                Object.assign(values, { endTimes: moment(values.end[0]._d).startOf('day').format('X') });
+                Object.assign(values, { endTimee: moment(values.end[1]._d).startOf('day').format('X') });
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -72,6 +83,8 @@ class RecordHistory extends React.PureComponent {
         });
     }
     query(payload) {
+        const strategyId = base64.decode(this.props.match.params.id);
+        payload.strategyId = strategyId;
         this.props.dispatch({
             type: 'recordHistory/recordHistoryList',
             payload,
@@ -116,12 +129,22 @@ class RecordHistory extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="开始时间" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('start')(<RangePicker
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                }}
+                            />)
                         }
                     </FormItem>
                     <FormItem label="结束时间" >
                         {
-                            getFieldDecorator('name')(<Input placeholder="请输入规则名称" />)
+                            getFieldDecorator('end')(<RangePicker
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                }}
+                            />)
                         }
                     </FormItem>
                     <FormItem>

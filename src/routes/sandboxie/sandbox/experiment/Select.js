@@ -38,7 +38,8 @@ class StartExper extends React.PureComponent {
                         payload: { ...values },
                     });
                 }).then(() => {
-                    // this.props.history.push('/sandboxie/recordHistory');
+                    console.log(this.props.match.params.id);
+                    this.props.history.push(`/sandboxie/recordHistory/${this.props.match.params.id}`);
                 });
             }
         });

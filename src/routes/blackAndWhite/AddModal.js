@@ -29,7 +29,7 @@ class AddModal extends React.PureComponent {
     };
     state = {
         visible: this.props.visible || false,
-        title: this.props.title === 'add' ? '新增' : '更新',
+        title: this.props.type === 'add' ? '新增' : '更新',
         rosterType: this.props.rosterType,
         rosterChannel: this.props.rosterChannel,
         // type: this.props.type,
@@ -194,7 +194,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('description', {
-                                    initialValue: record.describ,
+                                    initialValue: record.description,
                                     rules: [{ required: true, message: '请描述该策略的内容及业务上的使用场景' },
                                         { max: 100, message: '描述内容最多100个字' }],
                                 })(<TextArea height={100} placeholder="请描述该策略的内容及业务上的使用场景" />)

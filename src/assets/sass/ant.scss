@@ -3,16 +3,17 @@
         padding: 0 20px !important;
         // height: 100px !important;
         // background: #0082FD !important;
+        background: #fff!important;
     }
     .ant-breadcrumb {
         float: left;
         margin-top: 43px!important;
-        color: rgba(255,255,255,.85) !important;
+        // color: rgba(255,255,255,.85) !important;
     }
     .ant-breadcrumb > span:last-child {
-        color: rgb(255,255,255) !important;
+        // color: rgb(255,255,255) !important;
     }
     .ant-breadcrumb-separator {
-        color: rgba(255,255,255,.85) !important;
+        // color: rgba(255,255,255,.85) !important;
     }
 }

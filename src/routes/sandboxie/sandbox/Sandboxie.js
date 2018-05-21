@@ -62,7 +62,6 @@ class Sandboxie extends React.PureComponent {
             clone: selectedRows,
             disabled: false,
         });
-        console.log(this.state.clone);
     }
     onEdit = (id, isEnable) => {
         const {
@@ -178,7 +177,7 @@ class Sandboxie extends React.PureComponent {
     }
     history = (e, value) => {
         e.preventDefault();
-        this.props.history.push(`/history/${value.id}`);
+        this.props.history.push(`/sandboxie/recordHistory/${base64.encode(value.id)}`);
     }
     stage = (e, value) => {
         e.preventDefault();

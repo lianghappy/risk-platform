@@ -154,7 +154,7 @@ class DecisionIndex extends React.PureComponent {
        ];
        return (
            <Layout className={style.container}>
-               <Form layout="inline" className={style.inputs}>
+               <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                    <FormItem label="用户账号">
                        {
                            getFieldDecorator('account')(<Input placeholder="请输入用户账号" />)

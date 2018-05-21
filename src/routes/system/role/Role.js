@@ -113,7 +113,7 @@ class RoleIndex extends React.PureComponent {
        ];
        return (
            <Layout className={style.containers}>
-               <Form layout="inline" className={style.inputs}>
+               <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                    <FormItem label="角色名称">
                        {
                            getFieldDecorator('roleName')(<Input />)
@@ -121,7 +121,7 @@ class RoleIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem label="角色类型">
                        {
-                           getFieldDecorator('type')(<Select style={{ width: 100 }} defaultValue="全部"><Option value="全部">全部</Option><Option value="123" >公司内</Option><Option value="123" >公司外</Option></Select>)
+                           getFieldDecorator('type')(<Select style={{ width: 100 }}><Option value="公司内" >公司内</Option><Option value="公司外" >公司外</Option></Select>)
                        }
                    </FormItem>
                    <FormItem>

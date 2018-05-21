@@ -54,7 +54,7 @@ class Start extends React.PureComponent {
                         },
                     });
                 }).then(() => {
-                    this.props.history.push('/sandboxie/recordHistory');
+                    this.props.history.push(`/sandboxie/recordHistory/${this.props.match.params.id}`);
                 });
             }
         });

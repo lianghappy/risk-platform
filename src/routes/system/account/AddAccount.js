@@ -50,6 +50,8 @@ class AddAccount extends React.PureComponent {
                     Object.assign(values, { type });
                     Object.assign(values, { state: false });
                     Object.assign(values, { password: MD5(values.password) });
+                    Object.assign(values, { confirm: MD5(values.confirm) });
+                    Object.assign(values, { roleIds: [values.roleIds] });
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -156,9 +158,7 @@ class AddAccount extends React.PureComponent {
                             label="公司名称"
                         >
                             {
-                                getFieldDecorator('company', {
-                                    rules: [{ required: true, message: '请输入公司名称' }],
-                                })(<Input placeholder="请输入公司名称" />)
+                                getFieldDecorator('company')(<Input placeholder="请输入公司名称" />)
                             }
                         </Form.Item>
                         <Form.Item

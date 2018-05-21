@@ -1,5 +1,6 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
+import base64 from 'utils/base64';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 
 export default {
@@ -40,17 +41,21 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/sandboxie/recordHistory') {
+                const path = pathname.split('/');
+                if (path[2] === 'recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['策略沙箱', '开始实验', '实验历史记录'],
                     });
+                    console.log(base64.decode(path[3]));
+                    const strategyId = base64.decode(path[3]);
                     dispatch({
                         type: 'recordHistoryList',
                         payload: {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            strategyId,
                         },
                     });
                 }

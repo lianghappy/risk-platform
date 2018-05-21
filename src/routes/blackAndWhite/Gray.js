@@ -91,7 +91,7 @@ class Black extends React.PureComponent {
             form,
         } = this.props;
         const content = data.id !== undefined ? '更新成功' : '新增成功';
-        const url = data.id !== undefined ? 'gray/updata' : 'gray/add';
+        const url = data.id !== undefined ? 'gray/update' : 'gray/add';
         // switch (data.type) {
         // case 'add':
         //     url = 'black/add';
@@ -104,7 +104,7 @@ class Black extends React.PureComponent {
         // }
         const userInfo = sessionStorage.getItem('userInfo');
         if (JSON.parse(userInfo).user.userName) {
-            data.operators = JSON.parse(userInfo).user.userName;
+            data.operators = JSON.parse(userInfo).user.realName;
         }
         data.type = 2;
         new Promise((resolve) => {
@@ -168,7 +168,7 @@ class Black extends React.PureComponent {
                         <Popconfirm
                             placement="topRight"
                             title="是否确认删除"
-                            onConfirm={() => this.delete(rest[1].id)}
+                            onConfirm={() => this.onDelete(rest[1].id)}
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>

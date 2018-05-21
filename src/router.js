@@ -3,7 +3,8 @@ import { Router, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import PropTypes from 'prop-types';
 import Main from 'components/layout/Main';
-import { isLogin } from 'models/session';
+import { isLogin, initAuth } from 'models/session';
+import _app from './index';
 
 let appClone = null;
 
@@ -246,37 +247,37 @@ function RouterConfig({ history, app }) {
                         path="/"
                         exact
                         render={() => (
-                            <Redirect to="/index" />
+                            <Redirect to={initAuth(_app._store.getState())} />
                         )}
                     />
                     <PrivateRoute path="/index" exact component={Index} />
-                    <Route path="/account" exact component={Account} />
-                    <Route path="/role" exact component={Role} />
-                    <Route path="/role/addRole" exact component={AddRole} />
-                    <Route path="/user" exact component={User} />
-                    <Route path="/app" exact component={appManage} />
-                    <Route path="/apps/:id" exact component={LookApp} />
-                    <Route path="/company" exact component={Application} />
-                    <Route path="/applicationManage" exact component={appManage} />
-                    <Route path="/categoryStru" exact component={construct} />
-                    <Route path="/linkRuler" exact component={LinkRuler} />
-                    <Route path="/rule" exact component={Rules} />
-                    <Route path="/policy" exact component={Policy} />
-                    <Route path="/strategy/:id" component={Strategy} />
-                    <Route path="/regular/:id" component={Regular} />
-                    <Route path="/permission" exact component={Permission} />
-                    <Route path="/black" exact component={Black} />
-                    <Route path="/white" exact component={White} />
-                    <Route path="/gray" exact component={Gray} />
-                    <Route path="/sandboxie" exact component={sandboxie} />
-                    <Route path="/experiment/:id" exact component={Experiment} />
-                    <Route path="/strategies/:id" exact component={Strategies} />
-                    <Route path="/history/:id" exact component={History} />
-                    <Route path="/samples" exact component={samples} />
-                    <Route path="/SandSamples" exact component={SandSamples} />
-                    <Route path="/SandSamples/create" exact component={Create} />
-                    <Route path="/recordHistory" exact component={Record} />
-                    <Route path="/sandboxie/recordHistory" exact component={HistoryRecord} />
+                    <PrivateRoute path="/account" exact component={Account} />
+                    <PrivateRoute path="/role" exact component={Role} />
+                    <PrivateRoute path="/role/addRole" exact component={AddRole} />
+                    <PrivateRoute path="/user" exact component={User} />
+                    <PrivateRoute path="/app" exact component={appManage} />
+                    <PrivateRoute path="/apps/:id" exact component={LookApp} />
+                    <PrivateRoute path="/company" exact component={Application} />
+                    <PrivateRoute path="/applicationManage" exact component={appManage} />
+                    <PrivateRoute path="/categoryStru" exact component={construct} />
+                    <PrivateRoute path="/linkRuler" exact component={LinkRuler} />
+                    <PrivateRoute path="/rule" exact component={Rules} />
+                    <PrivateRoute path="/policy" exact component={Policy} />
+                    <PrivateRoute path="/strategy/:id" component={Strategy} />
+                    <PrivateRoute path="/regular/:id" component={Regular} />
+                    <PrivateRoute path="/permission" exact component={Permission} />
+                    <PrivateRoute path="/black" exact component={Black} />
+                    <PrivateRoute path="/white" exact component={White} />
+                    <PrivateRoute path="/gray" exact component={Gray} />
+                    <PrivateRoute path="/sandboxie" exact component={sandboxie} />
+                    <PrivateRoute path="/experiment/:id" exact component={Experiment} />
+                    <PrivateRoute path="/strategies/:id" exact component={Strategies} />
+                    <PrivateRoute path="/history/:id" exact component={History} />
+                    <PrivateRoute path="/samples" exact component={samples} />
+                    <PrivateRoute path="/SandSamples" exact component={SandSamples} />
+                    <PrivateRoute path="/SandSamples/create" exact component={Create} />
+                    <PrivateRoute path="/recordHistory" exact component={Record} />
+                    <PrivateRoute path="/sandboxie/recordHistory/:id" exact component={HistoryRecord} />
                 </Main>
             </Switch>
         </Router>

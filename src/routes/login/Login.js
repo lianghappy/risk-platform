@@ -7,6 +7,7 @@ import MD5 from 'utils/MD5';
 import styles from './index.scss';
 import imgs from '../../assets/images/背景图.svg';
 import logoImg from '../../assets/images/logo.svg';
+import jimi from '../../assets/images/jimi.svg';
 
 class Login extends React.PureComponent {
   handleSubmit = e => {
@@ -33,7 +34,10 @@ class Login extends React.PureComponent {
                   <div styleName="card">
                       <img src={imgs} alt="背景" styleName="imgs" />
                       <div styleName="logins">
-                          <img src={logoImg} alt="logo" styleName="logoImg" />
+                          <div>
+                              <img src={logoImg} alt="logo" styleName="logoImg" />
+                              <img src={jimi} alt="logo" styleName="jimiImg" />
+                          </div>
                           <div styleName="inputLogin">
                               <span styleName="texts">PLD风控系统</span>
                               <Form layout="horizontal" onSubmit={this.handleSubmit}>

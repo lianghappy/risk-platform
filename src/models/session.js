@@ -1,6 +1,54 @@
 import { routerRedux } from 'dva/router';
 import { setToken, post, setUserId, setDeviceId, signature } from 'utils/request';
+import treeConvert from 'utils/treeConvert';
 import API from 'utils/api';
+
+// 权限解析
+const authConvert = (menus) => {
+    let rootId = 'platform';
+    menus.some((el) => {
+        if (el.parentId === 'recycler') {
+            rootId = 'auctionRoot';
+            return true;
+        }
+        return false;
+    });
+    let auths = [];
+    if (menus.length > 0) {
+        menus.forEach((el) => {
+            el.key = el.id;
+            el.router = `/${el.id}`;
+        });
+        auths = treeConvert({
+            pId: 'parentId',
+            otherKeys: ['key', 'router'],
+            rootId,
+        }, menus);
+    }
+    return auths;
+};
+
+/* eslint-disable consistent-return */
+const pickAuth = (menus) => {
+    for (let i = 0, iLen = menus.length; i < iLen; i++) {
+        if (menus[i].children) {
+            for (let j = 0, jLen = menus[i].children.length; j < jLen; j++) {
+                return pickAuth(menus[i].children);
+            }
+        } else {
+            return menus[i].key;
+        }
+    }
+};
+
+export const initAuth = (state) => {
+    const { auths } = state.session;
+    let auth = 'login';
+    if (auths.length > 0) {
+        auth = pickAuth(auths);
+    }
+    return auth;
+};
 
 export const getUserInfo = (state) => state.session.user;
 export const getUserName = (state) => {
@@ -17,12 +65,13 @@ export const initSession = () => {
     let session = {
         user: null,
         menus: null,
+        auths: [],
         token: null,
         isLogin: false,
     };
     if (userInfo) {
         userInfo = JSON.parse(userInfo);
-        session = { ...userInfo, isLogin: true };
+        session = { ...userInfo, isLogin: true, auths: authConvert(userInfo.menus), };
         setToken(userInfo.token);
         setUserId(userInfo.user.id);
         signature(); // 签名
@@ -55,7 +104,10 @@ export default {
             yield call(setDeviceId, response.user.type);
             yield put({
                 type: 'loginSuc',
-                payload: response,
+                payload: {
+                    ...response,
+                    auths: authConvert(response.menus),
+                },
             });
         },
         // 登出
