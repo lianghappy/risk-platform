@@ -180,7 +180,7 @@ class DecisionIndex extends React.PureComponent {
            { title: '启用状态',
                dataIndex: 'status',
                key: 'status',
-               render: (...rest) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state} />) },
+               render: (...rest) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state === 'true'} />) },
            { title: '操作',
                dataIndex: 'operator',
                key: 'operator',

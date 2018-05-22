@@ -28,6 +28,10 @@ const api = {
 
     // 增加角色
     addRole: `${API_RBAC}/api/rbac/service/rolePlus/addMenuRole/v2`,
+    // 详情
+    getMenuTreeDetails: `${API_RBAC}/api/rbac/service/rolePlus/get/v2`,
+    // 更新角色
+    updateRole: `${API_RBAC}/api/rbac/service/rolePlus/update/v2`,
     // 删除
     delRole: `${API_RBAC}/api/rbac/service/rolePlus/delCheck/v1`,
 

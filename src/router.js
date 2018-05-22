@@ -98,6 +98,14 @@ function RouterConfig({ history, app }) {
             import('models/system/roleMenuTree'),
         ],
     });
+    // 角色详情/编辑角色
+    const RoleDetail = dynamic({
+        app,
+        component: () => import('routes/system/role/RoleDetails'),
+        models: () => [
+            import('models/system/RoleDetails'),
+        ],
+    });
     // 类别构建
     const construct = dynamic({
         app,
@@ -254,6 +262,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path="/account" exact component={Account} />
                     <PrivateRoute path="/role" exact component={Role} />
                     <PrivateRoute path="/role/addRole" exact component={AddRole} />
+                    <PrivateRoute path="/role/detailRole/:id" exact component={RoleDetail} />
                     <PrivateRoute path="/user" exact component={User} />
                     <PrivateRoute path="/app" exact component={appManage} />
                     <PrivateRoute path="/apps/:id" exact component={LookApp} />

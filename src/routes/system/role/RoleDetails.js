@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
 import { DURATION } from 'utils/constants';
-import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 
 const FormItem = Form.Item;
@@ -15,9 +14,10 @@ const mapStateToProps = (state) => ({
     list: state.tree.list,
     sysId: state.tree.sysId,
     loading: state.loading.models.tree,
+    details: state.tree.details,
 });
 @connect(mapStateToProps)
-class AddRole extends React.PureComponent {
+class RoleDetail extends React.PureComponent {
     static propTypes ={
         form: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired,
@@ -26,7 +26,7 @@ class AddRole extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
     };
     state = {
-        checkedKeys: [],
+        checkedKeys: this.props.details.menus,
     }
     onQuery = (e) => {
         e.preventDefault();
@@ -37,11 +37,13 @@ class AddRole extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             const menuId = this.state.checkedKeys;
+            const id = this.props.details.id;
             Object.assign(values, { menuId });
             Object.assign(values, { sysId: 'risk' });
+            Object.assign(values, { id });
             new Promise((resolve) => {
                 this.props.dispatch({
-                    type: 'tree/add',
+                    type: 'tree/update',
                     payload: {
                         data: { ...values },
                         resolve,
@@ -79,78 +81,27 @@ class AddRole extends React.PureComponent {
       };
       const {
           form,
+          details,
+          list,
       } = this.props;
       const {
           getFieldDecorator,
       } = form;
-      const data = this.props.list;
-      const treeDatas = [{
-          title: '系统管理',
-          key: 'M_system',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_system',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '应用管理',
-          key: 'M_application',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_application',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '决策引擎',
-          key: 'M_policy',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_policy',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '策略沙箱',
-          key: 'M_sandboxie',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_sandboxie',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '黑白名单',
-          key: 'M_blackAndWhite',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_blackAndWhite',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }];
       return (
           <Layout className={style.container}>
               <Form layout="vertical" onSubmit={this.onQuery}>
                   <FormItem label="角色类型" {...formItemLayout}>
                       {
-                          getFieldDecorator('type')(<Select><Option value="公司内">公司内</Option><Option value="公司外">公司外</Option></Select>)
+                          getFieldDecorator('type', {
+                              initialValue: details.type,
+                          })(<Select><Option value="公司内">公司内</Option><Option value="公司外">公司外</Option></Select>)
                       }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>
                       {
-                          getFieldDecorator('roleName')(<Input />)
+                          getFieldDecorator('roleName', {
+                              initialValue: details.name,
+                          })(<Input />)
                       }
                   </FormItem>
                   <FormItem label="角色权限" {...formItemLayout}>
@@ -160,7 +111,7 @@ class AddRole extends React.PureComponent {
                               checkable
                               checkedKeys={this.state.checkedKeys}
                               onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
-                          >{this.renderTreeNodes(treeDatas)}
+                          >{this.renderTreeNodes(list)}
                                                       </Tree>)
                       }
                   </FormItem>
@@ -174,4 +125,4 @@ class AddRole extends React.PureComponent {
   }
 }
 
-export default Form.create()(CSSModules(AddRole));
+export default Form.create()(CSSModules(RoleDetail));

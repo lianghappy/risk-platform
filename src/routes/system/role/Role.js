@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, message, Popconfirm } from 'antd';
 import CSSModules from 'react-css-modules';
 import { DURATION } from 'utils/constants';
+import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -43,8 +44,8 @@ class RoleIndex extends React.PureComponent {
            });
        });
    };
-   onDetail = () => {
-
+   onDetail = (id) => {
+       this.props.history.push(`/role/detailRole/${base64.encode(id)}`);
    }
    onDelete(ids) {
        const {
