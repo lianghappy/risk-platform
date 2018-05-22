@@ -41,14 +41,14 @@ const pickAuth = (menus) => {
     }
 };
 
-export const initAuth = (state) => {
-    const { auths } = state.session;
-    let auth = 'login';
-    if (auths.length > 0) {
-        auth = pickAuth(auths);
-    }
-    return auth;
-};
+// export const initAuth = (state) => {
+//     const { auths } = state.session;
+//     let auth = 'login';
+//     if (auths.length > 0) {
+//         auth = pickAuth(auths);
+//     }
+//     return auth;
+// };
 
 export const getUserInfo = (state) => state.session.user;
 export const getUserName = (state) => {

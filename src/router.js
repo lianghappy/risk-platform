@@ -3,8 +3,7 @@ import { Router, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import PropTypes from 'prop-types';
 import Main from 'components/layout/Main';
-import { isLogin, initAuth } from 'models/session';
-import _app from './index';
+import { isLogin } from 'models/session';
 
 let appClone = null;
 
@@ -255,7 +254,7 @@ function RouterConfig({ history, app }) {
                         path="/"
                         exact
                         render={() => (
-                            <Redirect to={initAuth(_app._store.getState())} />
+                            <Redirect to="/index" />
                         )}
                     />
                     <PrivateRoute path="/index" exact component={Index} />
