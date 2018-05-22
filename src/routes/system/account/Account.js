@@ -57,11 +57,12 @@ class DecisionIndex extends React.PureComponent {
            form,
            dispatch,
        } = this.props;
+       const userId = JSON.parse(sessionStorage.userInfo).user.id;
        new Promise((resolve) => {
            dispatch({
                type: 'account/del',
                payload: {
-                   data: { id },
+                   data: { id, userId, sysId: SYSID },
                    resolve,
                },
            });

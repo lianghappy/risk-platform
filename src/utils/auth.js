@@ -1,3 +1,27 @@
+import treeConvert from 'utils/treeConvert';
+
+const menus = [];
+const treedate = [];
+if (sessionStorage.userInfo) {
+    JSON.parse(sessionStorage.userInfo).menus.forEach((item) => {
+        if (!item.parentId) {
+            menus.push(item.id);
+        }
+    });
+    menus.forEach((item) => {
+        treedate.push({
+            name: item,
+            id: treeConvert({
+                pId: 'parentId',
+                rootId: item,
+                id: 'id', // 原始数据Id
+                name: 'name',
+                tId: 'id',
+                tName: 'name',
+            }, JSON.parse(sessionStorage.userInfo).menus),
+        });
+    });
+}
 export default [
     {
         name: '系统管理',

@@ -54,6 +54,7 @@ class AddRole extends React.PureComponent {
         });
     }
   onCheck = (keys) => {
+      console.log(keys);
       this.setState({ checkedKeys: keys });
   }
   renderTreeNodes = (data) => {

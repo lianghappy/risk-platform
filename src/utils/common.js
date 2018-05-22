@@ -146,3 +146,13 @@ export const rowSelect = {
         };
     },
 };
+
+// 判断是否有权限
+export const roles = (name) => {
+    const menus = JSON.parse(sessionStorage.userInfo).menus;
+    let flag = false;
+    menus.forEach((item) => {
+        if (item.name === name) flag = true;
+    });
+    return flag;
+};
