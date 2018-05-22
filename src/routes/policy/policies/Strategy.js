@@ -43,7 +43,7 @@ class Policy extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            const strategyId = this.props.list[0].strategyId;
+            const strategyId = base64.decode(this.props.match.params.id);
             this.query({
                 ...values,
                 pageNum: 1,
@@ -56,7 +56,7 @@ class Policy extends React.PureComponent {
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
-        const strategyId = this.props.list[0].strategyId;
+        const strategyId = base64.decode(this.props.match.params.id);
         this.query({
             pageNum: 1,
             pageSize,
@@ -115,7 +115,7 @@ class Policy extends React.PureComponent {
         default:
             break;
         }
-        const strategyId = this.props.list[0].strategyId;
+        const strategyId = base64.decode(this.props.match.params.id);
         data.strategyId = strategyId;
         new Promise((resolve) => {
             dispatch({
@@ -218,7 +218,7 @@ class Policy extends React.PureComponent {
                         title="add"
                         record={{}}
                         onOk={this.modalOk}
-                        type="1"
+                        type={1}
                     >
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>

@@ -9,6 +9,8 @@ import Pagination from '../../../components/Pagination/Pagination';
 
 const mapStateToProps = (state) => ({
     details: state.samples.details,
+    pageNum: state.samples.pageNum,
+    pageSize: state.samples.pageSize,
 });
 @connect(mapStateToProps)
 export default class SampleDetail extends React.PureComponent {
@@ -20,18 +22,18 @@ export default class SampleDetail extends React.PureComponent {
             PropTypes.element,
         ]).isRequired,
         pageNum: PropTypes.number.isRequired,
-        pageSize: PropTypes.number.isRequired,
         details: PropTypes.array.isRequired,
+        visible: PropTypes.bool.isRequired,
     };
     state = {
         visible: this.props.visible || false,
-        pageSize: this.props.pageSize,
-        pageNum: this.props.pageNum,
     };
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            pageNum: nextProps.pageNum,
-            pageSize: nextProps.pageSize,
+    onPageChange = (pageNum) => {
+        this.query({
+            pageNum,
+            pageSize: 5,
+            analysisSampleId: '402894d1636d6ba501636d9238150000',
+            type: 0,
         });
     }
     onCancel = () => {
@@ -45,16 +47,39 @@ export default class SampleDetail extends React.PureComponent {
         });
     }
     handleShow = () => {
-        // this.props.form.validateFields();
-        this.setState({
-            visible: true,
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'samples/queryDetail',
+                payload: {
+                    data: { analysisSampleId: '402894d1636d6ba501636d9238150000', type: 0, pageSize: 5, pageNum: 1 },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                visible: true,
+            });
         });
     };
+    query = (data) => {
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'samples/queryDetail',
+                payload: {
+                    data,
+                },
+                resolve,
+            });
+        }).then(() => {
+            console.log('chenggong');
+        });
+    }
     render() {
         const {
             loading,
             children,
-            details,
+            details: dataSource,
+            pageNum,
         } = this.props;
         const columns = [{
             title: '样本ID',
@@ -113,15 +138,15 @@ export default class SampleDetail extends React.PureComponent {
                     <Table
                         bordered
                         columns={columns}
-                        dataSource={details}
+                        dataSource={dataSource}
                         loading={loading}
                         onCancel={this.handleCancel}
                         pagination={false}
                     />
                     <Pagination
-                        current={this.state.pageNum}
-                        pageSize={this.state.pageSize}
-                        dataSize={details.length}
+                        current={pageNum}
+                        pageSize={5}
+                        dataSize={dataSource.length}
                         onChange={this.onPageChange}
                         showQuickJumper
                     />

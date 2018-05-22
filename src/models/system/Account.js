@@ -13,12 +13,9 @@ export default {
     },
     effects: {
         // 查询角色名称列表
-        * getRoleNameList(action, { call, put }) {
-            const response = yield call(post, API.roleNameList, {
-                pageSize: 9999,
-                pageNum: 1,
-                sysId: SYSID,
-            });
+        * getRoleNameList({ payload }, { call, put }) {
+            // const { data } = payload;
+            const response = yield call(post, API.roleNameList, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
@@ -28,8 +25,8 @@ export default {
         },
         // 查询账号管理
         * queryAccountList({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getAccountList, payload, data);
+            // const { data } = payload;
+            const response = yield call(post, API.getAccountList, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
@@ -84,7 +81,7 @@ export default {
                         type: 'getRoleNameList',
                         payload: {
                             pageNum: 1,
-                            pageSize: PAGE_SIZE,
+                            pageSize: 9999,
                             sysId: SYSID,
                         },
                     });

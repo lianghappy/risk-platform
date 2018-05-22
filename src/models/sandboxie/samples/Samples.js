@@ -36,16 +36,18 @@ export default {
         },
         // 明细
         * queryDetail({ payload }, { call, put }) {
-            const { data } = payload;
+            const { data, resolve } = payload;
+            yield call(post, API.detailSandSamples, data);
             const response = yield call(post, API.detailSandSamples, data);
             yield put({
-                type: 'queryDetailSuc',
+                type: 'getSamplesListSuc',
                 payload: {
                     details: response,
                     pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
                 },
             });
+            yield call(resolve);
         },
         // 样本筛选条件
         * querySelect({ payload }, { call, put }) {

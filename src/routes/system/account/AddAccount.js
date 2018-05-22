@@ -39,12 +39,15 @@ class AddAccount extends React.PureComponent {
             type,
             onOk,
         } = this.props;
+        const userId = JSON.parse(sessionStorage.userInfo).user.id;
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
                     }
+                    Object.assign(values, { userId });
+                    Object.assign(values, { account: values.acount });
                     Object.assign(values, { userName: values.name });
                     Object.assign(values, { sysId: SYSID });
                     Object.assign(values, { type });
@@ -90,13 +93,13 @@ class AddAccount extends React.PureComponent {
             wrapperCol: { span: 14 },
         };
         const forms = this.props.form;
-        const { children } = this.props;
+        const { children, record } = this.props;
         const {
             getFieldDecorator,
             getFieldsError,
         } = forms;
         return (
-            <section>
+            <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
                     {children}
                 </span>
@@ -124,6 +127,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('acount', {
+                                    initialValue: record.account,
                                     rules: [
                                         { required: true, message: '请输入用户账号' },
                                         { max: 20, message: '*用户账号最好为姓名全拼，不能输入汉字，最多20个字符' },
@@ -137,6 +141,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('name', {
+                                    initialValue: record.userName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
                                     ],
@@ -149,6 +154,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('phone', {
+                                    initialValue: record.phone,
                                     rules: [{ required: true, message: '请输入用户手机号' }],
                                 })(<Input placeholder="请输入用户手机号" />)
                             }
@@ -158,7 +164,9 @@ class AddAccount extends React.PureComponent {
                             label="公司名称"
                         >
                             {
-                                getFieldDecorator('company')(<Input placeholder="请输入公司名称" />)
+                                getFieldDecorator('company', {
+                                    initialValue: record.company,
+                                })(<Input placeholder="请输入公司名称" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -167,6 +175,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
+                                    initialValue: record.password,
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -180,6 +189,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
+                                    initialValue: record.password,
                                     rules: [
                                         {
                                             required: true,
@@ -199,10 +209,11 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('roleIds', {
+                                    initialValue: record.rolesId,
                                     rules: [
                                         {
                                             required: true,
-                                            message: '请输入确认密码',
+                                            message: '请选择角色名称',
                                         },
                                     ],
                                 })(<Select>
@@ -218,7 +229,7 @@ class AddAccount extends React.PureComponent {
                         </Form.Item>
                     </Form>
                 </Modal>
-            </section>
+            </span>
         );
     }
 }

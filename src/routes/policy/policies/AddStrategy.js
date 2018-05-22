@@ -30,11 +30,11 @@ class AddStrategy extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
         title: this.props.title === 'add' ? '新增阶段' : '更新阶段',
-        type: this.props.type,
+        type: Number(this.props.type),
     };
     onSelect = (value) => {
         this.setState({
-            type: value,
+            type: Number(value),
         });
     }
     handleSubmit = (e) => {
@@ -50,7 +50,7 @@ class AddStrategy extends React.PureComponent {
             if (!err) {
                 new Promise(resolve => {
                     if (title === 'edit') {
-                        Object.assign(values, { strategyId: record.strategyId });
+                        Object.assign(values, { id: record.id });
                     }
                     values.title = that.props.title;
                     onOk(values, resolve);
@@ -87,6 +87,7 @@ class AddStrategy extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
+        console.log(this.state.title);
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -139,7 +140,7 @@ class AddStrategy extends React.PureComponent {
                             }
                         </Form.Item>
                         {
-                            this.state.title === 'add' ?
+                            this.props.title === 'add' ?
                                 <Form.Item
                                     {...formItemLayout}
                                     label="阶段模式"
@@ -160,12 +161,12 @@ class AddStrategy extends React.PureComponent {
                                         getFieldDecorator('type', {
                                             initialValue: record.type,
                                             setFieldsValue: '1',
-                                        })(<span>{record.type === '1' ? '最坏匹配' : '权重匹配'}</span>)
+                                        })(<span>{Number(record.type) === 1 ? '最坏匹配' : '权重匹配'}</span>)
                                     }
                                 </Form.Item>
                         }
                         {
-                            this.state.type === '2' ?
+                            Number(this.state.type) === 2 ?
                                 <Form.Item
                                     {...formItemLayout}
                                     label="风险阈值"

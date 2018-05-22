@@ -81,20 +81,8 @@ class Samples extends React.PureComponent {
             });
         });
     }
-    handlePage =(analysisSampleId) => {
-        new Promise((resolve) => {
-            this.props.dispatch({
-                type: 'samples/queryDetail',
-                payload: {
-                    data: { analysisSampleId, pageSize: 10, pageNum: 1 },
-                    resolve,
-                },
-            });
-        }).then(() => {
-            this.setState({
-                show: true,
-            });
-        });
+    handlePage = () => {
+        this.setState({ show: true });
     }
     query(payload) {
         this.props.dispatch({
@@ -116,7 +104,7 @@ class Samples extends React.PureComponent {
             { title: '样本ID', dataIndex: 'id', key: 'id' },
             { title: '样本名称', dataIndex: 'name', key: 'name' },
             { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'channel', key: 'channel' },
+            { title: '样本生成时间', dataIndex: 'createTime', key: 'createTime' },
             { title: '数据源',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -134,10 +122,11 @@ class Samples extends React.PureComponent {
                         <SampleDetail
                             pageSize={pageSize}
                             pageNum={pageNum}
+                            type={rest[1].type}
+                            analysisSampleId={rest[1].id}
                             visible={this.state.show}
-                            onPageChange={() => this.onPage(rest[1].id)}
                         >
-                            <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
+                            <span role="button" tabIndex="-1" onClick={() => this.handlePage()} className="jm-del">样本明细</span>
                         </SampleDetail>
                         <Popconfirm
                             placement="topRight"

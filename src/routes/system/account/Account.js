@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Select, Button, Table, Popconfirm, message } from 'antd';
+import { Layout, Form, Input, Select, Button, Table, Popconfirm, message, Switch } from 'antd';
 import CSSModules from 'react-css-modules';
 import { DURATION, SYSID } from 'utils/constants';
 import style from './account.scss';
@@ -117,6 +117,39 @@ class DecisionIndex extends React.PureComponent {
            });
        });
    };
+   changes = (value, e) => {
+       const {
+           dispatch,
+           pageNum,
+           pageSize,
+           form,
+       } = this.props;
+       delete value.state;
+       delete value.createTime;
+       const userId = JSON.parse(sessionStorage.userInfo).user.id;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'account/update',
+               payload: {
+                   data: {
+                       state: e,
+                       ...value,
+                       userId,
+                   },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: SYSID });
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
+   }
    query(payload) {
        this.props.dispatch({
            type: 'account/queryAccountList',
@@ -133,23 +166,42 @@ class DecisionIndex extends React.PureComponent {
        } = this.props;
        const columns = [
            { title: '用户账号', dataIndex: 'account', key: 'account' },
-           { title: '用户姓名', dataIndex: 'name', key: 'name' },
-           { title: '用户手机号', dataIndex: 'tel', key: 'tel' },
-           { title: '公司名称', dataIndex: 'connectName', key: 'connectName' },
-           { title: '角色类型', dataIndex: 'type', key: 'type' },
-           { title: '角色名称', dataIndex: 'roleName', key: 'roleName' },
-           { title: '启用状态', dataIndex: 'status', key: 'status' },
+           { title: '用户姓名', dataIndex: 'userName', key: 'userName' },
+           { title: '用户手机号', dataIndex: 'phone', key: 'phone' },
+           { title: '公司名称', dataIndex: 'company', key: 'company' },
+           { title: '角色类型',
+               dataIndex: 'roleType',
+               key: 'roleType',
+               render: (...rest) => (<span>{rest[1].roles[0].roleType}</span>) },
+           { title: '角色名称',
+               dataIndex: 'roleName',
+               key: 'roleName',
+               render: (...rest) => (<span>{rest[1].roles[0].roleName}</span>) },
+           { title: '启用状态',
+               dataIndex: 'status',
+               key: 'status',
+               render: (...rest) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state} />) },
            { title: '操作',
                dataIndex: 'operator',
                key: 'operator',
                render: (...rest) => (
-                   <Popconfirm
-                       placement="topRight"
-                       title="是否确定删除？"
-                       onConfirm={() => this.onDelete(rest[1].id)}
-                   >
-                       <Button icon="delete" />
-                   </Popconfirm>
+                   <div>
+                       <AddAccount
+                           visible={false}
+                           type="edit"
+                           onOk={this.modalOk}
+                           record={rest[1]}
+                       >
+                           <span className="jm-operate">修改</span>
+                       </AddAccount>
+                       <Popconfirm
+                           placement="topRight"
+                           title="是否确定删除？"
+                           onConfirm={() => this.onDelete(rest[1].id)}
+                       >
+                           <span className="jm-del">删除</span>
+                       </Popconfirm>
+                   </div>
                ) },
        ];
        return (
@@ -204,6 +256,7 @@ class DecisionIndex extends React.PureComponent {
                    columns={columns}
                    loading={loading}
                    pagination={false}
+                   dataSource={dataSource}
                />
                <Pagination
                    current={pageNum}

@@ -9,12 +9,15 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 
-
+const Option = Select.Option;
+const { TextArea } = Input;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
-const Option = Select.Option;
-const { TextArea } = Input;
+const mapStateToProps = (state) => ({
+    parentlist: state.structure.parentlist,
+});
+@connect(mapStateToProps)
 class AddStruc extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
@@ -82,8 +85,8 @@ class AddStruc extends React.PureComponent {
             getFieldsError,
         } = form;
         const childrens = [];
-        if (this.props.parent) {
-            this.props.parent.forEach((item) => {
+        if (this.props.parentlist) {
+            this.props.parentlist.forEach((item) => {
                 childrens.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
             });
         }
@@ -151,4 +154,4 @@ class AddStruc extends React.PureComponent {
         );
     }
 }
-export default connect()(Form.create()(AddStruc));
+export default Form.create()(AddStruc);
