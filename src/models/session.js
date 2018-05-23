@@ -74,12 +74,12 @@ export const initSession = () => {
         session = { ...userInfo, isLogin: true, auths: authConvert(userInfo.menus), };
         setToken(userInfo.token);
         setUserId(userInfo.user.id);
-        signature(); // 签名
         // setDeviceId(userInfo.user.type);
     } else {
         setToken(null);
-        signature(); // 签名
     }
+    signature(); // 签名
+
     return {
         session,
     };
@@ -102,6 +102,7 @@ export default {
             yield call(setToken, response.token);
             yield call(setUserId, response.user.id);
             yield call(setDeviceId, response.user.type);
+            yield call(signature);
             yield put({
                 type: 'loginSuc',
                 payload: {
