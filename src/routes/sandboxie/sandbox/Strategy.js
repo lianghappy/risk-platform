@@ -164,7 +164,7 @@ class Policy extends React.PureComponent {
                 dataIndex: 'type',
                 key: 'type',
                 render: (...rest) => (
-                    <span>{rest[1].type === '1' ? '最坏匹配' : '权重匹配'}</span>
+                    <span>{Number(rest[1].type) === 1 ? '最坏匹配' : '权重匹配'}</span>
                 ) },
             { title: '权重', dataIndex: 'weight', key: 'weight' },
             { title: '阶段描述', dataIndex: 'describ', key: 'describ' },
@@ -209,7 +209,7 @@ class Policy extends React.PureComponent {
                         title="add"
                         record={{}}
                         onOk={this.modalOk}
-                        type="1"
+                        type={1}
                     >
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>

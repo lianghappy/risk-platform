@@ -74,7 +74,7 @@ export const initSession = () => {
         session = { ...userInfo, isLogin: true, auths: authConvert(userInfo.menus), };
         setToken(userInfo.token);
         setUserId(userInfo.user.id);
-        // setDeviceId(userInfo.user.type);
+        setDeviceId(userInfo.user.type);
     } else {
         setToken(null);
     }

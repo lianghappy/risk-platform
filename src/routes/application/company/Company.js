@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import style from './company.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddCompany from './addCompany';
@@ -140,6 +141,8 @@ class CompanyIndex extends React.PureComponent {
                 dataIndex: 'operator',
                 render: (...rest) => (
                     <div>
+                        {
+                            roles('B_application_company_edit') &&
                         <AddCompany
                             type="edit"
                             record={rest[1]}
@@ -148,6 +151,9 @@ class CompanyIndex extends React.PureComponent {
                         >
                             <Button icon="edit" style={{ marginRight: 5 }} />
                         </AddCompany>
+                        }
+                        {
+                            roles('B_application_company_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -155,6 +161,7 @@ class CompanyIndex extends React.PureComponent {
                         >
                             <Button icon="delete" />
                         </Popconfirm>
+                        }
                     </div>),
             },
         ];
@@ -170,17 +177,25 @@ class CompanyIndex extends React.PureComponent {
                             getFieldDecorator('name')(<Input placeholder="请输入公司名称" />)
                         }
                     </FormItem>
+                    {
+                        roles('B_application_company_view') &&
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                   查询
                         </Button>
                     </FormItem>
+                    }
+                    {
+                        roles('B_application_company_reset') &&
                     <FormItem>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                         </Button>
                     </FormItem>
+                    }
                 </Form>
+                {
+                    roles('B_application_company_add') &&
                 <AddCompany
                     type="add"
                     record={{}}
@@ -194,6 +209,7 @@ class CompanyIndex extends React.PureComponent {
                     >新增
                     </Button>
                 </AddCompany>
+                }
                 <Table
                     columns={columns}
                     dataSource={dataSource}

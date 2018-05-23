@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu, Tree } from 'antd';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 import RegularModal from './RegularModal';
@@ -231,7 +232,10 @@ class LinkRuler extends React.PureComponent {
                         title="您确定要删除吗？"
                         onConfirm={() => this.onDelete(rest[1].categoryId)}
                     >
+                        {
+                            roles('B_policy_catg_linkrl_del') &&
                         <Button icon="delete" />
+                        }
                     </Popconfirm>
                 ),
             },
@@ -308,13 +312,19 @@ class LinkRuler extends React.PureComponent {
                                 }
                             </FormItem>
                             <FormItem>
+                                {
+                                    roles('B_policy_catg_linkrl_view') &&
                                 <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                                }
+                                {
+                                    roles('B_policy_catg_linkrl_reset') &&
                                 <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                                }
                             </FormItem>
                         </Form>
                         <div>
                             {
-                                this.state.selectedKeys ?
+                                this.state.selectedKeys && roles('B_policy_catg_linkrl_add') ?
                                     <RegularModal
                                         onOk={this.modalOk}
                                         categoryId={this.state.selectedKeys}
@@ -329,6 +339,8 @@ class LinkRuler extends React.PureComponent {
                                     新增规则
                                     </Button>
                             }
+                            {
+                                roles('B_policy_catg_linkrl_listdel') &&
                             <Button
                                 type="primary"
                                 onClick={this.delList}
@@ -336,6 +348,7 @@ class LinkRuler extends React.PureComponent {
                                 disabled={this.state.disabled}
                             >批量删除
                             </Button>
+                            }
                         </div>
                         <Table
                             columns={columns}

@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { roles } from 'utils/common';
 import { Layout, Input, Form, Select, Button, Table } from 'antd';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -102,8 +103,14 @@ class Rules extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_policy_rule_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_policy_rule_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <Table

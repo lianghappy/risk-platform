@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import base64 from 'utils/base64';
 import style from './company.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -135,7 +136,12 @@ class AppIndex extends React.PureComponent {
                 dataIndex: 'operator',
                 render: (...rest) => (
                     <div>
+                        {
+                            roles('B_application_app_edit') &&
                         <span role="button" tabIndex="-1" style={{ marginRight: 5, color: 'rgba(59,153,252,1)' }} onClick={() => this.look(rest[1].id)}>查看</span>
+                        }
+                        {
+                            roles('B_application_app_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="您确定要删除该公司吗？"
@@ -143,6 +149,7 @@ class AppIndex extends React.PureComponent {
                         >
                             <span style={{ color: 'rgba(59,153,252,1)' }}>删除</span>
                         </Popconfirm>
+                        }
                     </div>),
             },
         ];
@@ -163,17 +170,25 @@ class AppIndex extends React.PureComponent {
                             getFieldDecorator('partnerName')(<Input placeholder="请输入公司名称" />)
                         }
                     </FormItem>
+                    {
+                        roles('B_application_app_view') &&
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                   查询
                         </Button>
                     </FormItem>
+                    }
+                    {
+                        roles('B_application_app_reset') &&
                     <FormItem>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                         </Button>
                     </FormItem>
+                    }
                 </Form>
+                {
+                    roles('B_application_app_add') &&
                 <AddApp
                     type="add"
                     record={{}}
@@ -188,6 +203,7 @@ class AppIndex extends React.PureComponent {
                     >新增
                     </Button>
                 </AddApp>
+                }
                 <Table
                     columns={columns}
                     dataSource={dataSource}

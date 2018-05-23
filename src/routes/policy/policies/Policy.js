@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -198,6 +199,8 @@ class Policy extends React.PureComponent {
                                 :
                                 null
                         }
+                        {
+                            roles('B_policy_policies_edit') &&
                         <AddPolicy
                             type="edit"
                             record={rest[1]}
@@ -205,6 +208,7 @@ class Policy extends React.PureComponent {
                         >
                             <span>编辑</span>
                         </AddPolicy>
+                        }
                         <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>阶段管理</span>
                     </div>) },
         ];
@@ -217,11 +221,19 @@ class Policy extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_policy_policies_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_policy_policies_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
+                    {
+                        roles('B_policy_policies_add') &&
                     <AddPolicy
                         type="add"
                         record={{}}
@@ -229,6 +241,9 @@ class Policy extends React.PureComponent {
                     >
                         <Button type="primary">新增策略</Button>
                     </AddPolicy>
+                    }
+                    {
+                        roles('B_policy_policies_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}
@@ -236,6 +251,7 @@ class Policy extends React.PureComponent {
                     >
                         <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
+                    }
                 </div>
                 <Table
                     columns={columns}

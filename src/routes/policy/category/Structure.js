@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { roles } from 'utils/common';
 import { Layout, Input, Form, Select, Button, Table, message, Tooltip, Menu } from 'antd';
 import { DURATION } from 'utils/constants';
 import style from './index.scss';
@@ -122,6 +123,9 @@ class Structure extends React.PureComponent {
                 dataIndex: 'operator',
                 key: 'operator',
                 render: (...rest) => (
+                    <div>
+                        {
+                            roles('B_policy_catg_str_edit') &&
                     <AddStruc
                         type="edit"
                         record={rest[1]}
@@ -130,6 +134,8 @@ class Structure extends React.PureComponent {
                     >
                         <Button icon="edit" style={{ marginRight: 5 }} />
                     </AddStruc>
+                        }
+                    </div>
                 ) },
         ];
         return (
@@ -156,10 +162,18 @@ class Structure extends React.PureComponent {
                         {getFieldDecorator('level')(<Select style={{ width: 150 }} placeholder="请选择类别级别"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_policy_catg_str_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_policy_catg_str_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
+                {
+                    roles('B_policy_catg_str_add') &&
                 <AddStruc
                     visible={false}
                     type="add"
@@ -174,6 +188,7 @@ class Structure extends React.PureComponent {
                     >新增
                     </Button>
                 </AddStruc>
+                }
                 <Table
                     columns={columns}
                     loading={loading}

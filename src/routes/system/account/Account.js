@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, Popconfirm, message, Switch } from 'antd';
 import CSSModules from 'react-css-modules';
 import { DURATION, SYSID } from 'utils/constants';
+import { roles } from 'utils/common';
 import style from './account.scss';
 import AddAccount from './AddAccount';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -230,14 +231,20 @@ class DecisionIndex extends React.PureComponent {
                                                     </Select>)}
                    </FormItem>
                    <FormItem>
-                       <Button type="primary" htmlType="submit" isabled={this.props.loading}>
-                  查询
-                       </Button>
+                      {
+                          roles('B_system_user_view') &&
+                          <Button type="primary" htmlType="submit" isabled={this.props.loading}>
+                     查询
+                          </Button>
+                      }
                    </FormItem>
                    <FormItem>
+                       {
+                           roles('B_system_user_reset') &&
                        <Button type="primary" onClick={this.onReset} isabled={this.props.loading}>
                   重置
                        </Button>
+                        }
                    </FormItem>
                </Form>
                <AddAccount

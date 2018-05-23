@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { roles } from 'utils/common';
 import { Layout, Input, Form, Select, Button, Table } from 'antd';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -84,8 +85,14 @@ class Permission extends React.PureComponent {
                         {getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择权限类型"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_system_auth_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_system_auth_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <Table

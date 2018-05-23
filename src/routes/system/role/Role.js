@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, message, Popconfirm } from 'antd';
 import CSSModules from 'react-css-modules';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -101,7 +102,12 @@ class RoleIndex extends React.PureComponent {
                key: 'operator',
                render: (...rest) => (
                    <div>
+                       {
+                           roles('B_system_role_detail') &&
                        <span role="button" tabIndex="-1" className="jm-operate" onClick={() => this.onDetail(rest[1].id)}>详情</span>
+                       }
+                       {
+                           roles('B_system_role_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="是否确定删除？"
@@ -109,6 +115,7 @@ class RoleIndex extends React.PureComponent {
                        >
                            <span className="jm-del">删除</span>
                        </Popconfirm>
+                   }
                    </div>
                ) },
        ];
@@ -126,16 +133,24 @@ class RoleIndex extends React.PureComponent {
                        }
                    </FormItem>
                    <FormItem>
+                       {
+                           roles('B_system_role_view') &&
                        <Button type="primary" htmlType="submit">
                   查询
                        </Button>
+                   }
                    </FormItem>
                    <FormItem>
+                       {
+                           roles('B_system_role_reset') &&
                        <Button type="primary" htmlType="submit">
                   重置
                        </Button>
+                   }
                    </FormItem>
                </Form>
+               {
+                   roles('B_system_role_add') &&
                <Form layout="inline">
                    <FormItem>
                        <Button
@@ -146,6 +161,7 @@ class RoleIndex extends React.PureComponent {
                        </Button>
                    </FormItem>
                </Form>
+           }
                <Table
                    columns={columns}
                    loading={loading}

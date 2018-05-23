@@ -152,7 +152,7 @@ export const roles = (name) => {
     const menus = JSON.parse(sessionStorage.userInfo).menus;
     let flag = false;
     menus.forEach((item) => {
-        if (item.name === name) flag = true;
+        if (item.id === name) flag = true;
     });
     return flag;
 };
