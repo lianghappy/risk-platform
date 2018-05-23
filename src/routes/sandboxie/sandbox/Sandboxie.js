@@ -265,7 +265,7 @@ class Sandboxie extends React.PureComponent {
                                     </Menu>
                                 )}
                                 >
-                                    <a className="ant-dropdown-link" href="#">
+                                    <a className="ant-dropdown-link">
                                         更多<Icon type="down" />
                                     </a>
                                 </Dropdown>
