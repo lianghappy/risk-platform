@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import style from './index.scss';
 import Pagination from '../../components/Pagination/Pagination';
 import AddModal from './AddModal';
@@ -156,6 +157,8 @@ class Black extends React.PureComponent {
                 key: 'valueType',
                 render: (...rest) => (
                     <div className={style.edits}>
+                        {
+                            roles('B_blackAndWhite_gray_edit') &&
                         <AddModal
                             type="edit"
                             record={rest[1]}
@@ -165,6 +168,9 @@ class Black extends React.PureComponent {
                         >
                             <span className="jm-operate">编辑</span>
                         </AddModal>
+                        }
+                        {
+                            roles('B_blackAndWhite_gray_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确认删除"
@@ -172,6 +178,7 @@ class Black extends React.PureComponent {
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>
+                        }
                     </div>) },
         ];
         const options = [];
@@ -202,10 +209,18 @@ class Black extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_blackAndWhite_gray_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_blackAndWhite_gray_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
+                {
+                    roles('B_blackAndWhite_gray_add') &&
                 <AddModal
                     type="add"
                     record={{}}
@@ -215,6 +230,7 @@ class Black extends React.PureComponent {
                 >
                     <Button type="primary" className={style.add}>新增</Button>
                 </AddModal>
+                }
                 <Table
                     columns={columns}
                     loading={loading}

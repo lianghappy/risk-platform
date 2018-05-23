@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table } from 'antd';
+import { roles } from 'utils/common';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -127,8 +128,14 @@ class RecordHistory extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_sandboxie_record_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_sandboxie_record_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <Table

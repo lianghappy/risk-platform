@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import base64 from 'utils/base64';
 import Pagination from 'components/Pagination/Pagination';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import treeConvert from 'utils/treeConvert';
 import RegularModal from './RegularModal';
 import RegularEdit from './RegularEdit';
@@ -278,6 +279,8 @@ export default class Regular extends React.PureComponent {
             width: 100,
             render: (text, record) => (
                 <div>
+                    {
+                        roles('B_policy_policy_st_rule_edit') &&
                     <RegularEdit
                         type="update"
                         stageType={type}
@@ -287,6 +290,9 @@ export default class Regular extends React.PureComponent {
                     >
                         <a style={{ marginRight: 5 }}>编辑</a>
                     </RegularEdit>
+                    }
+                    {
+                        roles('B_policy_policy_st_rule_detail') &&
                     <RegularDetail
                         record={record}
                         type={type}
@@ -294,12 +300,16 @@ export default class Regular extends React.PureComponent {
                     >
                         <a style={{ marginRight: 5 }}>详情</a>
                     </RegularDetail>
+                    }
+                    {
+                        roles('B_policy_policy_st_rule_del') &&
                     <Popconfirm
                         title="你确定要删除改规则吗"
                         onConfirm={() => this.onDelete(record.id)}
                     >
                         <a style={{ marginRight: 5 }}>删除</a>
                     </Popconfirm>
+                    }
                 </div>
             ),
         }];
@@ -373,6 +383,8 @@ export default class Regular extends React.PureComponent {
                             getFieldDecorator('name')(<Input />)
                         }
                     </Form.Item>
+                    {
+                        roles('B_policy_policy_st_rule_view') &&
                     <Form.Item>
                         <Button
                             type="primary"
@@ -382,6 +394,9 @@ export default class Regular extends React.PureComponent {
                             查询
                         </Button>
                     </Form.Item>
+                    }
+                    {
+                        roles('B_policy_policy_st_del') &&
                     <Form.Item>
                         <Button
                             onClick={this.onReset}
@@ -390,8 +405,11 @@ export default class Regular extends React.PureComponent {
                             重置
                         </Button>
                     </Form.Item>
+                    }
                 </Form>
                 <div className="jm-toolBar">
+                    {
+                        roles('B_policy_policy_st_rule_add') &&
                     <RegularModal
                         stageId={stageId}
                         ruleName={ruleName}
@@ -401,6 +419,9 @@ export default class Regular extends React.PureComponent {
                             新增规则
                         </Button>
                     </RegularModal>
+                    }
+                    {
+                        roles('B_policy_policy_st_rule_clone') &&
                     <RegularEdit
                         type="clone"
                         stageType={type}
@@ -412,6 +433,7 @@ export default class Regular extends React.PureComponent {
                             克隆规则
                         </Button>
                     </RegularEdit>
+                    }
                 </div>
                 <Table
                     bordered

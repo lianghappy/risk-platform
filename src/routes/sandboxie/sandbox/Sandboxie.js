@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import base64 from 'utils/base64';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -235,12 +236,18 @@ class Sandboxie extends React.PureComponent {
                                     title={Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '是否下架？' : '是否上架？'}
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
+                                    {
+                                        roles('B_policy_policy_st_rule_detail') &&
                                     <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
+                                    }
                                 </Popconfirm>
                                 :
                                 null
                         }
+                        {
+                            roles('B_sandboxie_sandbox_history') &&
                         <span role="button" tabIndex="-1" onClick={(e) => this.history(e, rest[1])} className={style.stage}>实验历史记录</span>
+                        }
                         {
                             rest[1].isEnable > 0 ?
                                 <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
@@ -250,6 +257,8 @@ class Sandboxie extends React.PureComponent {
                                         <Menu.Item>
                                             <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                         </Menu.Item>
+                                        {
+                                            roles('B_sandboxie_sandbox_edit') &&
                                         <Menu.Item>
                                             <AddPolicy
                                                 type="edit"
@@ -259,9 +268,13 @@ class Sandboxie extends React.PureComponent {
                                                 <span>编辑</span>
                                             </AddPolicy>
                                         </Menu.Item>
+                                        }
+                                        {
+                                            roles('B_sandboxie_sandbox_del') &&
                                         <Menu.Item>
                                             <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
                                         </Menu.Item>
+                                        }
                                     </Menu>
                                 )}
                                 >
@@ -291,12 +304,23 @@ class Sandboxie extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_sandboxie_sandbox_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_sandboxie_sandbox_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
+                    {
+                        roles('B_sandboxie_sandbox_expe') &&
                     <Button type="primary" onClick={() => this.exciese()}>开始实验</Button>
+                    }
+                    {
+                        roles('B_sandboxie_sandbox_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}
@@ -304,6 +328,7 @@ class Sandboxie extends React.PureComponent {
                     >
                         <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
+                    }
                 </div>
                 <Table
                     columns={columns}

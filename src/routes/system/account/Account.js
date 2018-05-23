@@ -182,7 +182,16 @@ class DecisionIndex extends React.PureComponent {
            { title: '启用状态',
                dataIndex: 'status',
                key: 'status',
-               render: (...rest) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state === 'true'} />) },
+               render: (...rest) => (
+                   <div>
+                       {
+                           roles('B_system_user_state') ?
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state === 'true'} />
+                               :
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={rest[1].state === 'true'} />
+                       }
+                   </div>
+               ) },
            { title: '操作',
                dataIndex: 'operator',
                key: 'operator',
@@ -196,6 +205,8 @@ class DecisionIndex extends React.PureComponent {
                        >
                            <span className="jm-operate">修改</span>
                        </AddAccount>
+                       {
+                           roles('B_system_user_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="是否确定删除？"
@@ -203,6 +214,7 @@ class DecisionIndex extends React.PureComponent {
                        >
                            <span className="jm-del">删除</span>
                        </Popconfirm>
+                       }
                    </div>
                ) },
        ];
@@ -231,22 +243,21 @@ class DecisionIndex extends React.PureComponent {
                                                     </Select>)}
                    </FormItem>
                    <FormItem>
-                      {
-                          roles('B_system_user_view') &&
+                       {
+                           roles('B_system_user_view') &&
                           <Button type="primary" htmlType="submit" isabled={this.props.loading}>
                      查询
                           </Button>
-                      }
+                       }
                    </FormItem>
                    <FormItem>
-                       {
-                           roles('B_system_user_reset') &&
                        <Button type="primary" onClick={this.onReset} isabled={this.props.loading}>
                   重置
                        </Button>
-                        }
                    </FormItem>
                </Form>
+               {
+                   roles('B_system_user_add') &&
                <AddAccount
                    visible={false}
                    type="add"
@@ -260,6 +271,7 @@ class DecisionIndex extends React.PureComponent {
                    >新增账号
                    </Button>
                </AddAccount>
+               }
                <Table
                    columns={columns}
                    loading={loading}

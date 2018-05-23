@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, DatePicker } from 'antd';
+import { roles } from 'utils/common';
 import moment from 'moment';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -99,7 +100,6 @@ class Samples extends React.PureComponent {
             category,
             loading,
         } = this.props;
-        console.log(category);
         const columns = [
             { title: '样本ID', dataIndex: 'id', key: 'id' },
             { title: '样本名称', dataIndex: 'name', key: 'name' },
@@ -114,11 +114,16 @@ class Samples extends React.PureComponent {
                 key: 'operate',
                 render: (...rest) => (
                     <div>
+                        {
+                            roles('B_sandboxie_samples_select') &&
                         <SamplesModal
                             visible={this.state.visible}
                         >
                             <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
                         </SamplesModal>
+                        }
+                        {
+                            roles('B_sandboxie_samples_detail') &&
                         <SampleDetail
                             pageSize={pageSize}
                             pageNum={pageNum}
@@ -128,6 +133,9 @@ class Samples extends React.PureComponent {
                         >
                             <span role="button" tabIndex="-1" onClick={() => this.handlePage()} className="jm-del">样本明细</span>
                         </SampleDetail>
+                        }
+                        {
+                            roles('B_sandboxie_samples_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -135,6 +143,7 @@ class Samples extends React.PureComponent {
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>
+                        }
                     </div>
                 ) },
         ];
@@ -166,8 +175,14 @@ class Samples extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_sandboxie_samples_reset') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_sandboxie_samples_del') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <Table

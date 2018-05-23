@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import SamplesModal from './SampleModal';
@@ -152,11 +153,16 @@ class SandSamples extends React.PureComponent {
                 key: 'operate',
                 render: (...rest) => (
                     <div>
+                        {
+                            roles('B_sandboxie_sandsamples_select') &&
                         <SamplesModal
                             visible={this.state.visible}
                         >
                             <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
                         </SamplesModal>
+                        }
+                        {
+                            roles('B_sandboxie_sandsamples_detail') &&
                         <SampleDetail
                             pageSize={pageSize}
                             pageNum={pageNum}
@@ -165,6 +171,9 @@ class SandSamples extends React.PureComponent {
                         >
                             <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
                         </SampleDetail>
+                        }
+                        {
+                            roles('B_sandboxie_sandsamples_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -172,6 +181,7 @@ class SandSamples extends React.PureComponent {
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>
+                        }
                     </div>
                 ) },
         ];
@@ -198,12 +208,21 @@ class SandSamples extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_sandboxie_sandsamples_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_sandboxie_sandsamples_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div>
+                    {
+                        roles('B_sandboxie_sandsamples_gener') &&
                     <Button type="primary" onClick={this.create} style={{ marginLeft: '12px', marginBottom: '20px' }}>创建样本</Button>
+                    }
                 </div>
                 <Table
                     columns={columns}

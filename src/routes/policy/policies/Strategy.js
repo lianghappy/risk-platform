@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import base64 from 'utils/base64';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddStrategy from './AddStrategy';
@@ -173,7 +174,7 @@ class Policy extends React.PureComponent {
                 dataIndex: 'type',
                 key: 'type',
                 render: (...rest) => (
-                    <span>{rest[1].type === '1' ? '最坏匹配' : '权重匹配'}</span>
+                    <span>{Number(rest[1].type) === 1 ? '最坏匹配' : '权重匹配'}</span>
                 ) },
             { title: '权重', dataIndex: 'weight', key: 'weight' },
             { title: '阶段描述', dataIndex: 'describ', key: 'describ' },
@@ -182,6 +183,8 @@ class Policy extends React.PureComponent {
                 key: 'valueType',
                 render: (...rest) => (
                     <div className={style.edits}>
+                        {
+                            roles('B_policy_policy_st_edit') &&
                         <AddStrategy
                             title="edit"
                             record={rest[1]}
@@ -190,7 +193,10 @@ class Policy extends React.PureComponent {
                         >
                             <span>编辑</span>
                         </AddStrategy>
+                        }
                         <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
+                        {
+                            roles('B_policy_policy_st_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -198,6 +204,7 @@ class Policy extends React.PureComponent {
                         >
                             <span className={style.stage}>删除</span>
                         </Popconfirm>
+                        }
                     </div>) },
         ];
         return (
@@ -209,11 +216,19 @@ class Policy extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('B_policy_policy_st_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('B_policy_policy_st_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
+                    {
+                        roles('B_policy_policy_st_add') &&
                     <AddStrategy
                         title="add"
                         record={{}}
@@ -222,6 +237,7 @@ class Policy extends React.PureComponent {
                     >
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>
+                    }
                 </div>
                 <Table
                     columns={columns}
