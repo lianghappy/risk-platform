@@ -290,12 +290,12 @@ class Sandboxie extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="策略标识" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入策略名称" />)
+                            getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
                         }
                     </FormItem>
                     <FormItem label="商家状态" >
                         {
-                            getFieldDecorator('status')(<Input placeholder="请输入策略名称" />)
+                            getFieldDecorator('status')(<Input placeholder="请输入商家状态" />)
                         }
                     </FormItem>
                     <FormItem label="策略名称" >

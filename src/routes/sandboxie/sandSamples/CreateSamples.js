@@ -351,12 +351,12 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="风控评分" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('pldScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最大年龄" />)
+                                    getFieldDecorator('pldScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
                                 }
                                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
                                     getFieldDecorator('pldScoreUpper')(
-                                        <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最小年龄" />
+                                        <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最高分" />
                                     )
                                 }
                             </FormItem>
@@ -365,12 +365,12 @@ class CreateSamples extends React.PureComponent {
                             <FormItem label="芝麻分" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
-                                        getFieldDecorator('zhiMaScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最大年龄" />)
+                                        getFieldDecorator('zhiMaScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
                                     }
                                     <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                     {
                                         getFieldDecorator('zhiMaScoreUpper')(
-                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最小年龄" />
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最高分" />
                                         )
                                     }
                                 </InputGroup>

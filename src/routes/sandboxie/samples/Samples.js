@@ -171,7 +171,7 @@ class Samples extends React.PureComponent {
                     </FormItem>
                     <FormItem label="样本来源" >
                         {
-                            getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择规则来源">{options}</Select>)
+                            getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择样本来源">{options}</Select>)
                         }
                     </FormItem>
                     <FormItem>

@@ -2,7 +2,8 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
+import moment from 'moment';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, DatePicker } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import style from '../index.scss';
@@ -12,6 +13,7 @@ import SampleDetail from './SampleDetail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 class SandSamples extends React.PureComponent {
     static propTypes ={
@@ -200,11 +202,16 @@ class SandSamples extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem label="样本名称" >
-                        {getFieldDecorator('name')(<Select style={{ width: 150 }} placeholder="请选择样本名称">{options}</Select>)}
+                        {getFieldDecorator('name')(<Input placeholder="请输入样本名称" />)}
                     </FormItem>
                     <FormItem label="样本生成时间" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入样本生成时间" />)
+                            getFieldDecorator('times')(<RangePicker
+                                showTime={{
+                                    hideDisabledOptions: true,
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                }}
+                            />)
                         }
                     </FormItem>
                     <FormItem>

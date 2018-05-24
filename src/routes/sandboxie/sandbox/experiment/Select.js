@@ -96,12 +96,12 @@ class StartExper extends React.PureComponent {
 
                             <InputGroup compact>
                                 {
-                                    getFieldDecorator('age')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最大年龄" />)
+                                    getFieldDecorator('age')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最小年龄" />)
                                 }
                                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
                                     getFieldDecorator('age')(
-                                        <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最小年龄" />
+                                        <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大年龄" />
                                     )
                                 }
                             </InputGroup>
