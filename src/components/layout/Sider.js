@@ -11,7 +11,7 @@ import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
-const openKeys = authMap.map((item) => item.key);
+// const openKeys = authMap.map((item) => item.key);
 // const SubMenu = Menu.SubMenu;
 const Sider = ({ location }) => {
     const menuKey = menuKeyPick(location.pathname);
@@ -26,7 +26,6 @@ const Sider = ({ location }) => {
                 mode="inline"
                 inlineIndent={10}
                 className="jm-menu"
-                defaultOpenKeys={openKeys}
                 selectedKeys={menuKey}
                 style={{ userSelect: 'none' }}
             >
