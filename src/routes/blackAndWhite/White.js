@@ -242,7 +242,7 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.white,
     pageNum: state.white.pageNum,
     pageSize: state.white.pageSize,
-    rosterChannel: state.black.rosterChannel,
-    rosterType: state.black.rosterType,
+    rosterChannel: state.white.rosterChannel,
+    rosterType: state.white.rosterType,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Black)));

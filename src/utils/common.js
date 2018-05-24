@@ -28,8 +28,8 @@ export const textPick = (_key, source, attributes = {}) => {
 };
 
 // 导航选中
-export const menuKeyPick = (pathname) => {
-    const path = pathname.split('/');
+export const menuKeyPick = (location) => {
+    const path = location.pathname.split('/');
     const router = path[1];
     const key = [];
     switch (router) {

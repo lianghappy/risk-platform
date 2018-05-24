@@ -8,7 +8,7 @@ import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { authss } from 'utils/auth';
-// import { menuKeyPick } from 'utils/common';
+import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
@@ -19,12 +19,14 @@ const mapStateToProps = (state) => ({
 export default class Sider extends React.PureComponent {
     static propTypes = {
        auths: PropTypes.array.isRequired,
+       location: PropTypes.object.isRequired,
    };
    render() {
        const {
            auths,
+           location,
        } = this.props;
-       // const menuKey = menuKeyPick(location);
+       const menuKey = menuKeyPick(location);
        return (
            <Layout.Sider breakpoint="lg" className="jm-sider" >
                <div className={styles.logo}>
@@ -36,7 +38,7 @@ export default class Sider extends React.PureComponent {
                    mode="inline"
                    inlineIndent={10}
                    className="jm-menu"
-                   // selectedKeys={menuKey}
+                   selectedKeys={menuKey}
                    style={{ userSelect: 'none' }}
                >
 
