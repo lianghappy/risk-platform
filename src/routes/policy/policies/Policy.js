@@ -71,11 +71,16 @@ class Policy extends React.PureComponent {
             form,
             dispatch,
         } = this.props;
+        const userInfo = sessionStorage.getItem('userInfo');
+        let operator = '';
+        if (userInfo) {
+            operator = JSON.parse(userInfo).user.realName;
+        }
         new Promise((resolve) => {
             dispatch({
                 type: 'policy/updataEnable',
                 payload: {
-                    data: { id, isEnable: (Number(isEnable) + 1) },
+                    data: { id, isEnable: (Number(isEnable) + 1), operator },
                     resolve,
                 },
             });

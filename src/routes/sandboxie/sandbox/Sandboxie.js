@@ -74,7 +74,7 @@ class Sandboxie extends React.PureComponent {
         const userInfo = sessionStorage.getItem('userInfo');
         let operator = '';
         if (userInfo) {
-            operator = JSON.parse(userInfo).user.userName;
+            operator = JSON.parse(userInfo).user.realName;
         }
         new Promise((resolve) => {
             dispatch({
