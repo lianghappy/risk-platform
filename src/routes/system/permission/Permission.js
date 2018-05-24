@@ -14,16 +14,15 @@ class Permission extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         list: PropTypes.array.isRequired,
-        sysId: PropTypes.string.isRequired,
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
     };
-    onPageChange = (pageNum, pageSize, sysId) => {
+    onPageChange = (pageNum, pageSize) => {
         this.query({
             pageNum,
             pageSize,
-            sysId,
+            sysId: 'risk',
         });
     };
     onQuery = (e) => {
@@ -32,7 +31,6 @@ class Permission extends React.PureComponent {
             pageSize,
             loading,
             form,
-            sysId,
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
@@ -40,7 +38,7 @@ class Permission extends React.PureComponent {
                 ...values,
                 pageNum: 1,
                 pageSize,
-                sysId,
+                sysId: 'risk',
             });
         });
     }
@@ -50,6 +48,7 @@ class Permission extends React.PureComponent {
         this.query({
             pageNum: 1,
             pageSize,
+            sysId: 'risk',
         });
     };
     query(payload) {
@@ -115,7 +114,6 @@ class Permission extends React.PureComponent {
 
 const mapStateToProps = (state) => ({
     list: state.permission.list,
-    sysId: state.permission.sysId,
     loading: state.loading.models.permission,
     pageNum: state.permission.pageNum,
     pageSize: state.permission.pageSize,
