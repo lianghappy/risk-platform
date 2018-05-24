@@ -57,7 +57,7 @@ class Login extends React.PureComponent {
                                       })(<Input
                                           prefix={<Icon type="lock" />}
                                           type="password"
-                                          placeholder="请输入用户名"
+                                          placeholder="请输入密码"
                                           className={styles.antinput}
                                       />)}
                                   </Form.Item>
