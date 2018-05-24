@@ -115,7 +115,7 @@ class Samples extends React.PureComponent {
                 render: (...rest) => (
                     <div>
                         {
-                            roles('B_sandboxie_samples_select') &&
+                            roles('R_B_SB_samples_select') &&
                         <SamplesModal
                             visible={this.state.visible}
                         >
@@ -123,7 +123,7 @@ class Samples extends React.PureComponent {
                         </SamplesModal>
                         }
                         {
-                            roles('B_sandboxie_samples_detail') &&
+                            roles('R_B_SB_samples_detail') &&
                         <SampleDetail
                             pageSize={pageSize}
                             pageNum={pageNum}
@@ -135,7 +135,7 @@ class Samples extends React.PureComponent {
                         </SampleDetail>
                         }
                         {
-                            roles('B_sandboxie_samples_del') &&
+                            roles('R_B_SB_samples_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -176,11 +176,11 @@ class Samples extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_sandboxie_samples_reset') &&
+                            roles('R_B_SB_samples_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_sandboxie_samples_del') &&
+                            roles('R_B_SB_samples_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>

@@ -23,7 +23,6 @@ function Header({ userName, logout, breadcrumbItems }) {
             </Menu.Item>
         </Menu>
     );
-
     return (
         <section>
             <div className="jm-clearfix" style={{ float: 'right' }}>

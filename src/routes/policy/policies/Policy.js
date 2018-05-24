@@ -200,7 +200,7 @@ class Policy extends React.PureComponent {
                                 null
                         }
                         {
-                            roles('B_policy_policies_edit') &&
+                            roles('R_B_PLY_policies_edit') &&
                         <AddPolicy
                             type="edit"
                             record={rest[1]}
@@ -222,18 +222,18 @@ class Policy extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_policy_policies_view') &&
+                            roles('R_B_PLY_policies_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_policy_policies_reset') &&
+                            roles('R_B_PLY_policies_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('B_policy_policies_add') &&
+                        roles('R_B_PLY_policies_add') &&
                     <AddPolicy
                         type="add"
                         record={{}}
@@ -243,7 +243,7 @@ class Policy extends React.PureComponent {
                     </AddPolicy>
                     }
                     {
-                        roles('B_policy_policies_clone') &&
+                        roles('R_B_PLY_policies_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}

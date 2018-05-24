@@ -245,7 +245,7 @@ class Sandboxie extends React.PureComponent {
                                 null
                         }
                         {
-                            roles('B_sandboxie_sandbox_history') &&
+                            roles('R_B_SB_sandbox_history') &&
                         <span role="button" tabIndex="-1" onClick={(e) => this.history(e, rest[1])} className={style.stage}>实验历史记录</span>
                         }
                         {
@@ -258,7 +258,7 @@ class Sandboxie extends React.PureComponent {
                                             <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                         </Menu.Item>
                                         {
-                                            roles('B_sandboxie_sandbox_edit') &&
+                                            roles('R_B_SB_sandbox_edit') &&
                                         <Menu.Item>
                                             <AddPolicy
                                                 type="edit"
@@ -270,7 +270,7 @@ class Sandboxie extends React.PureComponent {
                                         </Menu.Item>
                                         }
                                         {
-                                            roles('B_sandboxie_sandbox_del') &&
+                                            roles('R_B_SB_sandbox_del') &&
                                         <Menu.Item>
                                             <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
                                         </Menu.Item>
@@ -305,22 +305,22 @@ class Sandboxie extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_sandboxie_sandbox_view') &&
+                            roles('R_B_SB_sandbox_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_sandboxie_sandbox_reset') &&
+                            roles('R_B_SB_sandbox_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('B_sandboxie_sandbox_expe') &&
+                        roles('R_B_SB_sandbox_expe') &&
                     <Button type="primary" onClick={() => this.exciese()}>开始实验</Button>
                     }
                     {
-                        roles('B_sandboxie_sandbox_clone') &&
+                        roles('R_B_SB_sandbox_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}

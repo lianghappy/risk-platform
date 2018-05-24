@@ -142,7 +142,7 @@ class CompanyIndex extends React.PureComponent {
                 render: (...rest) => (
                     <div>
                         {
-                            roles('B_application_company_edit') &&
+                            roles('R_B_app_company_edit') &&
                         <AddCompany
                             type="edit"
                             record={rest[1]}
@@ -153,7 +153,7 @@ class CompanyIndex extends React.PureComponent {
                         </AddCompany>
                         }
                         {
-                            roles('B_application_company_del') &&
+                            roles('R_B_app_company_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -178,7 +178,7 @@ class CompanyIndex extends React.PureComponent {
                         }
                     </FormItem>
                     {
-                        roles('B_application_company_view') &&
+                        roles('R_B_app_company_view') &&
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                   查询
@@ -186,7 +186,7 @@ class CompanyIndex extends React.PureComponent {
                     </FormItem>
                     }
                     {
-                        roles('B_application_company_reset') &&
+                        roles('R_B_app_company_reset') &&
                     <FormItem>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>
                   重置
@@ -195,7 +195,7 @@ class CompanyIndex extends React.PureComponent {
                     }
                 </Form>
                 {
-                    roles('B_application_company_add') &&
+                    roles('R_B_app_company_add') &&
                 <AddCompany
                     type="add"
                     record={{}}

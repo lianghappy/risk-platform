@@ -154,7 +154,7 @@ class SandSamples extends React.PureComponent {
                 render: (...rest) => (
                     <div>
                         {
-                            roles('B_sandboxie_sandsamples_select') &&
+                            roles('R_B_SB_sandsamples_select') &&
                         <SamplesModal
                             visible={this.state.visible}
                         >
@@ -162,7 +162,7 @@ class SandSamples extends React.PureComponent {
                         </SamplesModal>
                         }
                         {
-                            roles('B_sandboxie_sandsamples_detail') &&
+                            roles('R_B_SB_sandsamples_detail') &&
                         <SampleDetail
                             pageSize={pageSize}
                             pageNum={pageNum}
@@ -173,7 +173,7 @@ class SandSamples extends React.PureComponent {
                         </SampleDetail>
                         }
                         {
-                            roles('B_sandboxie_sandsamples_del') &&
+                            roles('R_B_SB_sandsamples_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -209,18 +209,18 @@ class SandSamples extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_sandboxie_sandsamples_view') &&
+                            roles('R_B_SB_sandsamples_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_sandboxie_sandsamples_reset') &&
+                            roles('R_B_SB_sandsamples_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div>
                     {
-                        roles('B_sandboxie_sandsamples_gener') &&
+                        roles('R_B_SB_sandsamples_gener') &&
                     <Button type="primary" onClick={this.create} style={{ marginLeft: '12px', marginBottom: '20px' }}>创建样本</Button>
                     }
                 </div>

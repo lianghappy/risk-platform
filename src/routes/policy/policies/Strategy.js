@@ -184,7 +184,7 @@ class Policy extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            roles('B_policy_policy_st_edit') &&
+                            roles('R_B_PLY_policy_st_edit') &&
                         <AddStrategy
                             title="edit"
                             record={rest[1]}
@@ -196,7 +196,7 @@ class Policy extends React.PureComponent {
                         }
                         <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
                         {
-                            roles('B_policy_policy_st_del') &&
+                            roles('R_B_PLY_policy_st_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -217,18 +217,18 @@ class Policy extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_policy_policy_st_view') &&
+                            roles('R_B_PLY_policy_st_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_policy_policy_st_reset') &&
+                            roles('R_B_PLY_policy_st_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('B_policy_policy_st_add') &&
+                        roles('R_B_PLY_policy_st_add') &&
                     <AddStrategy
                         title="add"
                         record={{}}

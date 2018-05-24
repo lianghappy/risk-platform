@@ -137,11 +137,11 @@ class AppIndex extends React.PureComponent {
                 render: (...rest) => (
                     <div>
                         {
-                            roles('B_application_app_edit') &&
+                            roles('R_B_app_app_edit') &&
                         <span role="button" tabIndex="-1" style={{ marginRight: 5, color: 'rgba(59,153,252,1)' }} onClick={() => this.look(rest[1].id)}>查看</span>
                         }
                         {
-                            roles('B_application_app_del') &&
+                            roles('R_B_app_app_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="您确定要删除该公司吗？"
@@ -171,7 +171,7 @@ class AppIndex extends React.PureComponent {
                         }
                     </FormItem>
                     {
-                        roles('B_application_app_view') &&
+                        roles('R_B_app_app_view') &&
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                   查询
@@ -179,7 +179,7 @@ class AppIndex extends React.PureComponent {
                     </FormItem>
                     }
                     {
-                        roles('B_application_app_reset') &&
+                        roles('R_B_app_app_reset') &&
                     <FormItem>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>
                   重置
@@ -188,7 +188,7 @@ class AppIndex extends React.PureComponent {
                     }
                 </Form>
                 {
-                    roles('B_application_app_add') &&
+                    roles('R_B_app_app_add') &&
                 <AddApp
                     type="add"
                     record={{}}

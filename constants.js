@@ -1,6 +1,6 @@
 
 exports.PORT = process.env.PORT || 8000;
-exports.JIMI_ENV = process.env.JIMI_ENV || 'dev';
+exports.JIMI_ENV = process.env.JIMI_ENV || 'test';
 exports.VERSION = '1.0';
 
 // 秘钥

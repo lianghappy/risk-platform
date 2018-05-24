@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "start": "roadhog dev",
-    "build": "roadhog build",
+    "build": "NODE_ENV=production roadhog build",
     "sandbox": "JIMI_ENV=sandbox roadhog build",
     "deploy": "JIMI_ENV=prod roadhog build",
     "server": "node ./server.js",
@@ -44,6 +44,6 @@
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.22.1",
     "redbox-react": "^1.4.3",
-    "roadhog": "^2.0.0"
+    "roadhog": "^2.4.1"
   }
 }

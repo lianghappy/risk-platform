@@ -149,7 +149,7 @@ class Black extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            roles('B_blackAndWhite_black_edit') &&
+                            roles('R_B_BAW_black_edit') &&
                         <AddModal
                             type="edit"
                             record={rest[1]}
@@ -161,7 +161,7 @@ class Black extends React.PureComponent {
                         </AddModal>
                         }
                         {
-                            roles('B_blackAndWhite_black_del') &&
+                            roles('R_B_BAW_black_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确认删除"
@@ -198,17 +198,17 @@ class Black extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_blackAndWhite_black_view') &&
+                            roles('R_B_BAW_black_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_blackAndWhite_black_reset') &&
+                            roles('R_B_BAW_black_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 {
-                    roles('B_blackAndWhite_black_add') &&
+                    roles('R_B_BAW_black_add') &&
                 <AddModal
                     type="add"
                     record={{}}

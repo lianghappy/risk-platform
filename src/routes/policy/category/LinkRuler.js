@@ -233,7 +233,7 @@ class LinkRuler extends React.PureComponent {
                         onConfirm={() => this.onDelete(rest[1].categoryId)}
                     >
                         {
-                            roles('B_policy_catg_linkrl_del') &&
+                            roles('R_B_PLY_catg_linkrl_del') &&
                         <Button icon="delete" />
                         }
                     </Popconfirm>
@@ -313,18 +313,18 @@ class LinkRuler extends React.PureComponent {
                             </FormItem>
                             <FormItem>
                                 {
-                                    roles('B_policy_catg_linkrl_view') &&
+                                    roles('R_B_PLY_catg_linkrl_view') &&
                                 <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                                 }
                                 {
-                                    roles('B_policy_catg_linkrl_reset') &&
+                                    roles('R_B_PLY_catg_linkrl_reset') &&
                                 <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                                 }
                             </FormItem>
                         </Form>
                         <div>
                             {
-                                this.state.selectedKeys && roles('B_policy_catg_linkrl_add') ?
+                                this.state.selectedKeys && roles('R_B_PLY_catg_linkrl_add') ?
                                     <RegularModal
                                         onOk={this.modalOk}
                                         categoryId={this.state.selectedKeys}
@@ -340,7 +340,7 @@ class LinkRuler extends React.PureComponent {
                                     </Button>
                             }
                             {
-                                roles('B_policy_catg_linkrl_listdel') &&
+                                roles('R_B_PLY_catg_linkrl_listdel') &&
                             <Button
                                 type="primary"
                                 onClick={this.delList}

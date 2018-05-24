@@ -93,6 +93,7 @@ export default {
         menus: null, // 权限表
         token: null, // token
         idLogin: false,
+        auths: [],
     },
     effects: {
         // 登录

@@ -185,10 +185,10 @@ class DecisionIndex extends React.PureComponent {
                render: (...rest) => (
                    <div>
                        {
-                           roles('B_system_user_state') ?
+                           roles('R_B_system_user_state') ?
                                <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state === 'true'} />
                                :
-                               <Switch checkedChildren="开启" unCheckedChildren="关闭" defaultChecked={rest[1].state === 'true'} />
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled defaultChecked={rest[1].state === 'true'} />
                        }
                    </div>
                ) },
@@ -206,7 +206,7 @@ class DecisionIndex extends React.PureComponent {
                            <span className="jm-operate">修改</span>
                        </AddAccount>
                        {
-                           roles('B_system_user_del') &&
+                           roles('R_B_system_user_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="是否确定删除？"
@@ -244,20 +244,23 @@ class DecisionIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem>
                        {
-                           roles('B_system_user_view') &&
+                           roles('R_B_system_user_view') &&
                           <Button type="primary" htmlType="submit" isabled={this.props.loading}>
                      查询
                           </Button>
                        }
                    </FormItem>
+                   {
+                       roles('R_B_system_user_reset') &&
                    <FormItem>
                        <Button type="primary" onClick={this.onReset} isabled={this.props.loading}>
                   重置
                        </Button>
                    </FormItem>
+                   }
                </Form>
                {
-                   roles('B_system_user_add') &&
+                   roles('R_B_system_user_add') &&
                <AddAccount
                    visible={false}
                    type="add"

@@ -86,11 +86,11 @@ class Permission extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_system_auth_view') &&
+                            roles('R_B_system_auth_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_system_auth_reset') &&
+                            roles('R_B_system_auth_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>

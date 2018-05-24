@@ -1,6 +1,7 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
+import { roles } from 'utils/common';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
@@ -173,6 +174,8 @@ class Policy extends React.PureComponent {
                 key: 'valueType',
                 render: (...rest) => (
                     <div className={style.edits}>
+                        {
+                            roles('R_B_SB_sand_st_edit') &&
                         <AddStrategy
                             title="edit"
                             record={rest[1]}
@@ -181,7 +184,10 @@ class Policy extends React.PureComponent {
                         >
                             <span>编辑</span>
                         </AddStrategy>
+                    }
                         <span role="button" tabIndex="-1" onClick={this.stage} className={style.stage}>规则管理</span>
+                        {
+                            roles('R_B_SB_sand_st_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -189,6 +195,7 @@ class Policy extends React.PureComponent {
                         >
                             <span className={style.stage}>删除</span>
                         </Popconfirm>
+                    }
                     </div>) },
         ];
         return (
@@ -200,11 +207,19 @@ class Policy extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
+                        {
+                            roles('R_B_SB_sand_st_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('R_B_SB_sand_st_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
+                    {
+                        roles('R_B_SB_sand_st_add') &&
                     <AddStrategy
                         title="add"
                         record={{}}
@@ -213,6 +228,7 @@ class Policy extends React.PureComponent {
                     >
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>
+                }
                 </div>
                 <Table
                     columns={columns}

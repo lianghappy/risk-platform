@@ -60,7 +60,7 @@ function RouterConfig({ history, app }) {
         ],
     });
     // 欢迎页面
-    const Index = dynamic({
+    const IndexPage = dynamic({
         app,
         component: () => import('routes/IndexPage'),
     });
@@ -254,10 +254,10 @@ function RouterConfig({ history, app }) {
                         path="/"
                         exact
                         render={() => (
-                            <Redirect to="/index" />
+                            <Redirect to="/IndexPage" />
                         )}
                     />
-                    <PrivateRoute path="/index" exact component={Index} />
+                    <PrivateRoute path="/IndexPage" exact component={IndexPage} />
                     <PrivateRoute path="/account" exact component={Account} />
                     <PrivateRoute path="/role" exact component={Role} />
                     <PrivateRoute path="/role/addRole" exact component={AddRole} />

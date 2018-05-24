@@ -129,11 +129,11 @@ class RecordHistory extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('B_sandboxie_record_view') &&
+                            roles('R_B_SB_record_view') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('B_sandboxie_record_reset') &&
+                            roles('R_B_SB_record_reset') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
