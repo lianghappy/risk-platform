@@ -127,11 +127,11 @@ class OldExpr extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="样本ID" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                            getFieldDecorator('id')(<Input placeholder="请输入样本ID" />)
                         }
                     </FormItem>
                     <FormItem label="样本来源" >
-                        {getFieldDecorator('channel')(<Input />)}
+                        {getFieldDecorator('channel')(<Input placeholder="请输入样本来源" />)}
                     </FormItem>
                     <FormItem label="风险代码" >
                         {
