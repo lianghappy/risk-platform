@@ -5,8 +5,8 @@ import { connect } from 'dva';
 import moment from 'moment';
 import base64 from 'utils/base64';
 import { Form, Button, Col, Row, Input } from 'antd';
-import SampleDetail from './Details';
 import { setPath } from 'utils/path';
+import SampleDetail from './Details';
 import style from '../index.scss';
 
 const FormItem = Form.Item;
