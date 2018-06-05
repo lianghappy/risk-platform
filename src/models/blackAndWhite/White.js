@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'white',
@@ -79,7 +80,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/white') {
+                if (filterPath(pathname) === '/white') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['黑名单'],

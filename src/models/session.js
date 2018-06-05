@@ -2,6 +2,7 @@ import { routerRedux } from 'dva/router';
 import { setToken, post, setUserId, setDeviceId, signature } from 'utils/request';
 import treeConvert from 'utils/treeConvert';
 import API from 'utils/api';
+import { setPath, filterPath } from 'utils/path';
 
 // 权限解析
 const authConvert = (menus) => {
@@ -114,7 +115,7 @@ export default {
         },
         // 登出
         * logout(action, { put }) {
-            yield put(routerRedux.push('/login'));
+            yield put(routerRedux.push(setPath('/login')));
         },
     },
     reducers: {
@@ -128,7 +129,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/login') {
+                if (filterPath(pathname) === '/login') {
                     sessionStorage.clear();
                     setToken(null);
                     dispatch({

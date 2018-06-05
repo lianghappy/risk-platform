@@ -3,6 +3,7 @@ import { Router, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 import PropTypes from 'prop-types';
 import Main from 'components/layout/Main';
+import { setPath } from 'utils/path';
 import { isLogin } from 'models/session';
 
 let appClone = null;
@@ -16,7 +17,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
             ) : (
                 <Redirect
                     to={{
-                        pathname: '/login',
+                        pathname: setPath('/login'),
                         state: { from: props.location },
                     }}
                 />
@@ -248,44 +249,44 @@ function RouterConfig({ history, app }) {
     return (
         <Router history={history}>
             <Switch>
-                <Route path="/login" exact component={Login} />
+                <Route path={setPath('/login')} exact component={Login} />
                 <Main location={history.location}>
                     <Route
                         path="/"
                         exact
                         render={() => (
-                            <Redirect to="/IndexPage" />
+                            <Redirect to={setPath('/IndexPage')} />
                         )}
                     />
-                    <PrivateRoute path="/IndexPage" exact component={IndexPage} />
-                    <PrivateRoute path="/account" exact component={Account} />
-                    <PrivateRoute path="/role" exact component={Role} />
-                    <PrivateRoute path="/role/addRole" exact component={AddRole} />
-                    <PrivateRoute path="/role/detailRole/:id" exact component={RoleDetail} />
-                    <PrivateRoute path="/user" exact component={User} />
-                    <PrivateRoute path="/app" exact component={appManage} />
-                    <PrivateRoute path="/apps/:id" exact component={LookApp} />
-                    <PrivateRoute path="/company" exact component={Application} />
-                    <PrivateRoute path="/applicationManage" exact component={appManage} />
-                    <PrivateRoute path="/categoryStru" exact component={construct} />
-                    <PrivateRoute path="/linkRuler" exact component={LinkRuler} />
-                    <PrivateRoute path="/rule" exact component={Rules} />
-                    <PrivateRoute path="/policy" exact component={Policy} />
-                    <PrivateRoute path="/strategy/:id" component={Strategy} />
-                    <PrivateRoute path="/regular/:id" component={Regular} />
-                    <PrivateRoute path="/permission" exact component={Permission} />
-                    <PrivateRoute path="/black" exact component={Black} />
-                    <PrivateRoute path="/white" exact component={White} />
-                    <PrivateRoute path="/gray" exact component={Gray} />
-                    <PrivateRoute path="/sandboxie" exact component={sandboxie} />
-                    <PrivateRoute path="/experiment/:id" exact component={Experiment} />
-                    <PrivateRoute path="/strategies/:id" exact component={Strategies} />
-                    <PrivateRoute path="/history/:id" exact component={History} />
-                    <PrivateRoute path="/samples" exact component={samples} />
-                    <PrivateRoute path="/SandSamples" exact component={SandSamples} />
-                    <PrivateRoute path="/SandSamples/create" exact component={Create} />
-                    <PrivateRoute path="/recordHistory" exact component={Record} />
-                    <PrivateRoute path="/sandboxie/recordHistory/:id" exact component={HistoryRecord} />
+                    <PrivateRoute path={setPath('/IndexPage')} exact component={IndexPage} />
+                    <PrivateRoute path={setPath('/account')} exact component={Account} />
+                    <PrivateRoute path={setPath('/role')} exact component={Role} />
+                    <PrivateRoute path={setPath('/role/addRole')} exact component={AddRole} />
+                    <PrivateRoute path={setPath('/role/detailRole/:id')} exact component={RoleDetail} />
+                    <PrivateRoute path={setPath('/user')} exact component={User} />
+                    <PrivateRoute path={setPath('/app')} exact component={appManage} />
+                    <PrivateRoute path={setPath('/apps/:id')} exact component={LookApp} />
+                    <PrivateRoute path={setPath('/company')} exact component={Application} />
+                    <PrivateRoute path={setPath('/applicationManage')} exact component={appManage} />
+                    <PrivateRoute path={setPath('/categoryStru')} exact component={construct} />
+                    <PrivateRoute path={setPath('/linkRuler')} exact component={LinkRuler} />
+                    <PrivateRoute path={setPath('/rule')} exact component={Rules} />
+                    <PrivateRoute path={setPath('/policy')} exact component={Policy} />
+                    <PrivateRoute path={setPath('/strategy/:id')} component={Strategy} />
+                    <PrivateRoute path={setPath('/regular/:id')} component={Regular} />
+                    <PrivateRoute path={setPath('/permission')} exact component={Permission} />
+                    <PrivateRoute path={setPath('/black')} exact component={Black} />
+                    <PrivateRoute path={setPath('/white')} exact component={White} />
+                    <PrivateRoute path={setPath('/gray')} exact component={Gray} />
+                    <PrivateRoute path={setPath('/sandboxie')} exact component={sandboxie} />
+                    <PrivateRoute path={setPath('/experiment/:id')} exact component={Experiment} />
+                    <PrivateRoute path={setPath('/strategies/:id')} exact component={Strategies} />
+                    <PrivateRoute path={setPath('/history/:id')} exact component={History} />
+                    <PrivateRoute path={setPath('/samples')} exact component={samples} />
+                    <PrivateRoute path={setPath('/SandSamples')} exact component={SandSamples} />
+                    <PrivateRoute path={setPath('/SandSamples/create')} exact component={Create} />
+                    <PrivateRoute path={setPath('/recordHistory')} exact component={Record} />
+                    <PrivateRoute path={setPath('/sandboxie/recordHistory/:id')} exact component={HistoryRecord} />
                 </Main>
             </Switch>
         </Router>

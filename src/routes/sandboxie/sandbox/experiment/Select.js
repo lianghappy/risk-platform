@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import moment from 'moment';
+import { setPath } from 'utils/path';
 import { Input, Form, Button, Col, Row, DatePicker } from 'antd';
 import style from '../index.scss';
 
@@ -39,7 +40,7 @@ class StartExper extends React.PureComponent {
                     });
                 }).then(() => {
                     console.log(this.props.match.params.id);
-                    this.props.history.push(`/sandboxie/recordHistory/${this.props.match.params.id}`);
+                    this.props.history.push(setPath(`/sandboxie/recordHistory/${this.props.match.params.id}`));
                 });
             }
         });

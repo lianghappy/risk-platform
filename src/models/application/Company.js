@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'company',
@@ -63,7 +64,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/company') {
+                if (filterPath(pathname) === '/company') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['公司管理'],

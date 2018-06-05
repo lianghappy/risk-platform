@@ -6,6 +6,7 @@ import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import base64 from 'utils/base64';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
+import { setPath } from 'utils/path';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddStrategy from './AddStrategy';
@@ -148,7 +149,7 @@ class Policy extends React.PureComponent {
     stage = (id, record) => {
         // this.props.history.push(`/regular/${base64.encode(id)}`);
         this.props.history.push({
-            pathname: `/regular/${base64.encode(id)}`,
+            pathname: setPath(`/regular/${base64.encode(id)}`),
             // state: record.name,
             state: {
                 name: record.name,

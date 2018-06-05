@@ -3,6 +3,7 @@ import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
 import base64 from 'utils/base64';
 // import treeConvert from 'utils/treeConvert';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'regular',
@@ -92,7 +93,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const path = pathname.split('/');
+                const path = filterPath(pathname).split('/');
                 if (path[1] === 'regular') {
                     const id = base64.decode(path[2]);
 

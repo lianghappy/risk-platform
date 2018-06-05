@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'rule',
@@ -49,7 +50,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/rule') {
+                if (filterPath(pathname) === '/rule') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['规则库管理'],

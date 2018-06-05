@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
+import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -167,7 +168,7 @@ class Sandboxie extends React.PureComponent {
         if (this.state.disabled) {
             message.error('请选择策略');
         } else {
-            this.props.history.push(`/experiment/${base64.encode(this.state.clone.id)}`);
+            this.props.history.push(setPath(`/experiment/${base64.encode(this.state.clone.id)}`));
         }
     }
     query(payload) {
@@ -178,11 +179,11 @@ class Sandboxie extends React.PureComponent {
     }
     history = (e, value) => {
         e.preventDefault();
-        this.props.history.push(`/sandboxie/recordHistory/${base64.encode(value.id)}`);
+        this.props.history.push(setPath(`/sandboxie/recordHistory/${base64.encode(value.id)}`));
     }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(`/strategies/${value.id}`);
+        this.props.history.push(setPath(`/strategies/${value.id}`));
     }
     render() {
         const rowSelection = {

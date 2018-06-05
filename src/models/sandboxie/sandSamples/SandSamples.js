@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'sandSamples',
@@ -73,7 +74,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/sandSamples') {
+                if (filterPath(pathname) === '/sandSamples') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['沙箱样本'],

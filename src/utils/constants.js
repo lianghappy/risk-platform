@@ -14,6 +14,8 @@ export const ERR_MSG = '系统错误，请稍后重试';
 export const DURATION = 3;
 // 系统参数sysId
 export const SYSID = 'risk';
+// 基于根目录的项目路径
+export const PATHS = paths;
 // 上下架
 export const OPRA = [{
     key: '0',

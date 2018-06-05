@@ -5,6 +5,7 @@ import { Layout, Form, Input, Select, Button, Table, message, Popconfirm } from 
 import CSSModules from 'react-css-modules';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
+import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -46,7 +47,7 @@ class RoleIndex extends React.PureComponent {
        });
    };
    onDetail = (id) => {
-       this.props.history.push(`/role/detailRole/${base64.encode(id)}`);
+       this.props.history.push(setPath(`/role/detailRole/${base64.encode(id)}`));
    }
    onDelete(ids) {
        const {
@@ -77,7 +78,7 @@ class RoleIndex extends React.PureComponent {
    }
    addrole = (e) => {
        e.preventDefault();
-       this.props.history.push('/role/addRole');
+       this.props.history.push(setPath('/role/addRole'));
    }
    query(payload) {
        this.props.dispatch({

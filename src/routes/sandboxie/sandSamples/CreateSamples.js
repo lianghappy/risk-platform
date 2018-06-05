@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Row, Col, DatePicker } from 'antd';
 import moment from 'moment';
 // import { DURATION } from 'utils/constants';
+import { setPath } from 'utils/path';
 import style from '../index.scss';
 
 const FormItem = Form.Item;
@@ -46,7 +47,7 @@ class CreateSamples extends React.PureComponent {
                     },
                 });
             }).then(() => {
-                this.props.history.push('/sandSamples');
+                this.props.history.push(setPath('/sandSamples'));
             });
         });
     }

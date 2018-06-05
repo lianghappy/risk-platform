@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table } from 'antd';
 import base64 from 'utils/base64';
+import { setPath } from 'utils/path';
 import LookModal from './LookModal';
 import style from '../index.scss';
 import Pagination from '../../../../components/Pagination/Pagination';
@@ -84,7 +85,7 @@ class OldExpr extends React.PureComponent {
                 },
             });
         }).then(() => {
-            this.props.history.push(`/sandboxie/recordHistory/${this.props.match.params.id}`);
+            this.props.history.push(setPath(`/sandboxie/recordHistory/${this.props.match.params.id}`));
         });
     }
     query(payload) {

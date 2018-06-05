@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'common',
@@ -34,7 +35,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/linkRuler') {
+                if (filterPath(pathname) === '/linkRuler') {
                     dispatch({
                         type: 'getChannel',
                         payload: {

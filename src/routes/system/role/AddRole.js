@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
 import { DURATION } from 'utils/constants';
+import { setPath } from 'utils/path';
 import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 
@@ -49,7 +50,7 @@ class AddRole extends React.PureComponent {
                 });
             }).then(() => {
                 message.success('操作成功', DURATION);
-                this.props.history.push('/role');
+                this.props.history.push(setPath('/role'));
             });
         });
     }

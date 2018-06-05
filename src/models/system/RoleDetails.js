@@ -3,6 +3,7 @@ import API from 'utils/api';
 import base64 from 'utils/base64';
 import treeConvert from 'utils/treeConvert';
 import { SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'tree',
@@ -116,7 +117,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const path = pathname.split('/');
+                const path = filterPath(pathname).split('/');
                 if (path[2] === 'detailRole') {
                     const id = base64.decode(path[3]);
                     dispatch({

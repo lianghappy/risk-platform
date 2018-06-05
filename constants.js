@@ -1,7 +1,8 @@
 
-exports.PORT = process.env.PORT || 8000;
-exports.JIMI_ENV = process.env.JIMI_ENV || 'test';
-exports.VERSION = '1.0';
+const PORT = process.env.PORT || 8000;
+const JIMI_ENV = process.env.JIMI_ENV || 'test';
+const VERSION = '1.0';
+const PATHS = process.env.PATHS || '';
 
 // 秘钥
 exports.PASSWORD = {
@@ -42,3 +43,8 @@ exports.API_USER = {
     sandbox: 'https://testcommon.jimistore.com',
     prod: 'https://user-api.jimistore.com',
 }[exports.JIMI_ENV];
+
+exports.PORT = PORT;
+exports.JIMI_ENV = JIMI_ENV;
+exports.PATHS = PATHS;
+exports.VERSION = VERSION;

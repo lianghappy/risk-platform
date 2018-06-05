@@ -73,13 +73,13 @@ export const authss = (menus) => {
                 if (item.name === 'R_M_application') {
                     item.id.forEach((items) => {
                         switch (items.name) {
-                        case '公司管理':
-                            app.children.push({
-                                name: '公司管理',
-                                key: 'company',
-                                router: '/company',
-                            });
-                            break;
+                        // case '公司管理':
+                        //     app.children.push({
+                        //         name: '公司管理',
+                        //         key: 'company',
+                        //         router: '/company',
+                        //     });
+                        //     break;
                         case '应用管理':
                             app.children.push({
                                 name: '应用管理',

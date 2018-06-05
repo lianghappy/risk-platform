@@ -2,6 +2,7 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 import base64 from 'utils/base64';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'lookApp',
@@ -106,7 +107,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const path = pathname.split('/');
+                const path = filterPath(pathname).split('/');
                 if (path[1] === 'apps') {
                     const ids = base64.decode(path[2]);
                     dispatch({

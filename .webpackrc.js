@@ -1,5 +1,9 @@
 const path = require('path');
 const constants = require('./constants');
+let publicPath = `/${constants.VERSION}/`;
+if (constants.PATHS) {
+    publicPath = `/${constants.PATHS}/${constants.VERSION}/`;
+}
 
 export default {
     entry: 'src/index.js',
@@ -16,9 +20,10 @@ export default {
         },
         production: {
             outputPath: path.join(__dirname, `dist/${constants.VERSION}`),
-            publicPath: `/${constants.VERSION}/`,
+            // publicPath: `/${constants.VERSION}/`,
+            publicPath,
             html: {
-                template: 'src/index.ejs',
+                // template: 'src/index.ejs',
                 filename: '../index.html',
             },
         },
@@ -36,6 +41,7 @@ export default {
         jimiEnv: constants.JIMI_ENV, //环境变量
         version: constants.VERSION, // 版本号
         password: constants.PASSWORD, // 签名秘钥
+        paths: constants.PATHS, // 基于根目录的项目路径
         API: constants.API,
         API_COMMON: constants.API_COMMON,
         API_USER: constants.API_USER,

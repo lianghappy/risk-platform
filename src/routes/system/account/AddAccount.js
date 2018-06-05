@@ -65,13 +65,21 @@ class AddAccount extends React.PureComponent {
 
     handleConfirmPassword = (rule, value, callback) => {
         const { getFieldValue } = this.props.form;
-        const newPwd = getFieldValue('new');
+        const newPwd = getFieldValue('confirm');
         if (!newPwd || !value) {
             callback();
         } else if (!Object.is(newPwd, value)) {
             callback(rule.message);
         }
     };
+
+    phoneCheck = (rule, value, callback) => {
+        if (value.length > 0 && !(/\d{11}/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
 
     handleShow = () => {
         // this.props.form.validateFields();
@@ -155,7 +163,10 @@ class AddAccount extends React.PureComponent {
                             {
                                 getFieldDecorator('phone', {
                                     initialValue: record.phone,
-                                    rules: [{ required: true, message: '请输入用户手机号' }],
+                                    rules: [
+                                        { required: true, message: '请输入用户手机号' },
+                                        { validator: this.phoneCheck, message: '请输入正确的手机号' }
+                                        ],
                                 })(<Input placeholder="请输入用户手机号" />)
                             }
                         </Form.Item>

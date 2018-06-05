@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
+import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -146,7 +147,7 @@ class Policy extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(`strategy/${base64.encode(value.id)}`);
+        this.props.history.push(setPath(`strategy/${base64.encode(value.id)}`));
     }
     render() {
         const rowSelection = {

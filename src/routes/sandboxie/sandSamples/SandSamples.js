@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, DatePicker } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
+import { setPath } from 'utils/path';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import SamplesModal from './SampleModal';
@@ -128,7 +129,7 @@ class SandSamples extends React.PureComponent {
         });
     }
     create = () => {
-        this.props.history.push('/sandSamples/create');
+        this.props.history.push(setPath('/sandSamples/create'));
     }
     query(payload) {
         this.props.dispatch({

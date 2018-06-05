@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'recordHistory',
@@ -48,7 +49,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/recordHistory') {
+                if (filterPath(pathname) === '/recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['实验记录'],

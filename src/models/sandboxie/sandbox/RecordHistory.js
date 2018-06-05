@@ -2,6 +2,7 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import base64 from 'utils/base64';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'recordHistory',
@@ -41,7 +42,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                const path = pathname.split('/');
+                const path = filterPath(pathname).split('/');
                 if (path[2] === 'recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',

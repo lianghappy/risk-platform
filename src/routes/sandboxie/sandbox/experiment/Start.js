@@ -6,6 +6,7 @@ import moment from 'moment';
 import base64 from 'utils/base64';
 import { Form, Button, Col, Row, Input } from 'antd';
 import SampleDetail from './Details';
+import { setPath } from 'utils/path';
 import style from '../index.scss';
 
 const FormItem = Form.Item;
@@ -54,7 +55,7 @@ class Start extends React.PureComponent {
                         },
                     });
                 }).then(() => {
-                    this.props.history.push(`/sandboxie/recordHistory/${this.props.match.params.id}`);
+                    this.props.history.push(setPath(`/sandboxie/recordHistory/${this.props.match.params.id}`));
                 });
             }
         });

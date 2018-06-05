@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { SYSID } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'tree',
@@ -35,7 +36,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/role/addRole') {
+                if (filterPath(pathname) === '/role/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: ['角色管理', '新增角色'],
