@@ -1,7 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'experiment',
@@ -87,7 +87,7 @@ export default {
                 if (path[1] === 'experiment') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '开始实验'],
+                        payload: [{ name: '策略沙箱', link: setPath('/sandboxie') }, { name: '开始实验' }],
                     });
                 }
             });

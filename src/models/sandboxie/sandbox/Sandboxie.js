@@ -62,7 +62,7 @@ export default {
                 if (filterPath(pathname) === '/sandboxie') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱'],
+                        payload: [{ name: '策略沙箱' }],
                     });
                     dispatch({
                         type: 'getPolicyList',

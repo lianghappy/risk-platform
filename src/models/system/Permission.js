@@ -38,7 +38,7 @@ export default {
                 if (filterPath(pathname) === '/permission') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['权限管理'],
+                        payload: [{ name: '权限管理' }],
                     });
                     dispatch({
                         type: 'getPermissionList',

@@ -95,7 +95,7 @@ class RoleDetail extends React.PureComponent {
                       {
                           getFieldDecorator('type', {
                               initialValue: details.type,
-                          })(<Select><Option value="公司内">公司内</Option><Option value="公司外">公司外</Option></Select>)
+                          })(<Select><Option value="风控策略部" >风控策略部</Option><Option value="风控执行部" >风控执行部</Option><Option value="技术研发部" >技术研发部</Option></Select>)
                       }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>

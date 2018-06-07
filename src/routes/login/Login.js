@@ -20,7 +20,6 @@ class Login extends React.PureComponent {
           }
       });
   };
-
   render() {
       const { getFieldDecorator } = this.props.form;
       const { from } = this.props.location.state || { from: { pathname: '/' } };
@@ -43,7 +42,9 @@ class Login extends React.PureComponent {
                               <Form layout="horizontal" onSubmit={this.handleSubmit}>
                                   <Form.Item>
                                       {getFieldDecorator('userName', {
-                                          rules: [{ required: true, message: '请输入用户名' }],
+                                          rules: [
+                                              { required: true, message: '账号不能为空' }
+                                        ],
                                       })(<Input
                                           prefix={<Icon type="user" />}
                                           placeholder="请输入用户名"
@@ -53,7 +54,7 @@ class Login extends React.PureComponent {
                                   </Form.Item>
                                   <Form.Item>
                                       {getFieldDecorator('passWord', {
-                                          rules: [{ required: true, message: '请输入密码' }],
+                                          rules: [{ required: true, message: '密码不能为空' }],
                                       })(<Input
                                           prefix={<Icon type="lock" />}
                                           type="password"

@@ -67,7 +67,7 @@ export default {
                 if (filterPath(pathname) === '/company') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['公司管理'],
+                        payload: [{ name: '公司管理' }],
                     });
                     dispatch({
                         type: 'getCompanyList',

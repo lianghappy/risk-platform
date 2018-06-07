@@ -2,7 +2,7 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 import base64 from 'utils/base64';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'strategy',
@@ -59,7 +59,7 @@ export default {
                     const ids = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '阶段管理'],
+                        payload: [{ name: '策略沙箱', link: setPath('/sandboxie') }, { name: '阶段管理' }],
                     });
                     dispatch({
                         type: 'getStrategyList',

@@ -2,7 +2,7 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
 import base64 from 'utils/base64';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'lookApp',
@@ -112,7 +112,7 @@ export default {
                     const ids = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['查看应用'],
+                        payload: [{ name: '应用管理', link: setPath('/applicationManage') }, { name: '查看应用', link: setPath(`/apps/${ids}`) }],
                     });
                     dispatch({
                         type: 'getAppDetailList',

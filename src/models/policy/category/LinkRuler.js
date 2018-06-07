@@ -102,7 +102,7 @@ export default {
                 if (filterPath(pathname) === '/linkRuler') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['类别管理'],
+                        payload: [{ name: '类别管理' }],
                     });
                     dispatch({
                         type: 'getLinkRulerList',

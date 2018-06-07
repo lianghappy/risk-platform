@@ -116,7 +116,7 @@ class RoleIndex extends React.PureComponent {
                        >
                            <span className="jm-del">删除</span>
                        </Popconfirm>
-                   }
+                       }
                    </div>
                ) },
        ];
@@ -130,7 +130,7 @@ class RoleIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem label="角色类型">
                        {
-                           getFieldDecorator('type')(<Select style={{ width: 100 }}><Option value="公司内" >公司内</Option><Option value="公司外" >公司外</Option></Select>)
+                           getFieldDecorator('type')(<Select style={{ width: 100 }}><Option value="风控策略部" >风控策略部</Option><Option value="风控执行部" >风控执行部</Option><Option value="技术研发部" >技术研发部</Option></Select>)
                        }
                    </FormItem>
                    <FormItem>
@@ -139,7 +139,7 @@ class RoleIndex extends React.PureComponent {
                        <Button type="primary" htmlType="submit">
                   查询
                        </Button>
-                   }
+                       }
                    </FormItem>
                    <FormItem>
                        {
@@ -147,7 +147,7 @@ class RoleIndex extends React.PureComponent {
                        <Button type="primary" htmlType="submit">
                   重置
                        </Button>
-                   }
+                       }
                    </FormItem>
                </Form>
                {
@@ -162,7 +162,7 @@ class RoleIndex extends React.PureComponent {
                        </Button>
                    </FormItem>
                </Form>
-           }
+               }
                <Table
                    columns={columns}
                    loading={loading}

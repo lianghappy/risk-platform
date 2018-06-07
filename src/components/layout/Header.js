@@ -23,6 +23,8 @@ function Header({ userName, logout, breadcrumbItems }) {
             </Menu.Item>
         </Menu>
     );
+    console.log(breadcrumbItems);
+
     return (
         <section>
             <div className="jm-clearfix" style={{ float: 'right' }}>
@@ -35,11 +37,20 @@ function Header({ userName, logout, breadcrumbItems }) {
             </div>
             <Breadcrumb separator=">">
                 {
-                    breadcrumbItems.map((name, index) => (
-                        <Breadcrumb.Item key={index + name}>
-                            {name}
-                        </Breadcrumb.Item>
-                    ))
+                    breadcrumbItems.map((item, index) => {
+                        if (item.link) {
+                            return (
+                                <Breadcrumb.Item key={index + item.name}>
+                                    <a href={item.link}>{item.name}</a>
+                                </Breadcrumb.Item>
+                            );
+                        }
+                        return (
+                            <Breadcrumb.Item key={index + item.name}>
+                                {item.name}
+                            </Breadcrumb.Item>
+                        );
+                    })
                 }
             </Breadcrumb>
         </section>

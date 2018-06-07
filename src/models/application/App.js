@@ -71,7 +71,7 @@ export default {
                 if (filterPath(pathname) === '/app') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['应用管理'],
+                        payload: [{ name: '应用管理' }],
                     });
                     dispatch({
                         type: 'getAppList',

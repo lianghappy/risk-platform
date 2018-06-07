@@ -78,6 +78,20 @@ class AddModal extends React.PureComponent {
             visible: false,
         });
     };
+    phoneCheck = (rule, value, callback) => {
+        if (value.length > 0 && !(/\d{11}/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+    identityCheck = (rule, value, callback) => {
+        if (value.length > 0 && (!(/^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$/.test(value)) || (!/^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value)))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 6 },
@@ -132,6 +146,7 @@ class AddModal extends React.PureComponent {
                                     initialValue: record.phone,
                                     rules: [
                                         { required: true, message: '请输入用户手机号' },
+                                        { validator: this.phoneCheck, message: '请输入正确的手机号' }
                                     ],
                                 })(<Input placeholder="请输入用户手机号" />)
                             }
@@ -158,6 +173,7 @@ class AddModal extends React.PureComponent {
                                     initialValue: record.idCard,
                                     rules: [
                                         { required: true, message: '请输入用户身份证' },
+                                        { validator: this.identityCheck, message: '请输入正确的手机号' }
                                     ],
                                 })(<Input placeholder="请输入用户身份证" />)
                             }

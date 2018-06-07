@@ -1,7 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { SYSID } from 'utils/constants';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'tree',
@@ -39,7 +39,7 @@ export default {
                 if (filterPath(pathname) === '/role/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['角色管理', '新增角色'],
+                        payload: [{ name: '角色管理', link: setPath('/role') }, { name: '新增角色' }],
                     });
                     dispatch({
                         type: 'getTreeList',

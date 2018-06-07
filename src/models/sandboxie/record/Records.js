@@ -52,7 +52,7 @@ export default {
                 if (filterPath(pathname) === '/recordHistory') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['实验记录'],
+                        payload: [{ name: '实验记录' }],
                     });
                     dispatch({
                         type: 'recordHistoryList',

@@ -147,12 +147,16 @@ class AddRole extends React.PureComponent {
               <Form layout="vertical" onSubmit={this.onQuery}>
                   <FormItem label="角色类型" {...formItemLayout}>
                       {
-                          getFieldDecorator('type')(<Select><Option value="公司内">公司内</Option><Option value="公司外">公司外</Option></Select>)
+                          getFieldDecorator('type',
+                              { rules: [{ required: true, message: '请选择角色类型' }] }
+                          )(<Select><Option value="风控策略部" >风控策略部</Option><Option value="风控执行部" >风控执行部</Option><Option value="技术研发部" >技术研发部</Option></Select>)
                       }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>
                       {
-                          getFieldDecorator('roleName')(<Input />)
+                          getFieldDecorator('roleName',
+                              { rules: [{ required: true, message: '请输入角色名称' }] }
+                          )(<Input placeholder="请输入角色名称" />)
                       }
                   </FormItem>
                   <FormItem label="角色权限" {...formItemLayout}>

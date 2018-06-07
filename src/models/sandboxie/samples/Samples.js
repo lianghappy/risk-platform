@@ -85,7 +85,7 @@ export default {
                 if (filterPath(pathname) === '/samples') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['实验样本'],
+                        payload: [{ name: '实验样本' }],
                     });
                     dispatch({
                         type: 'getSamplesList',

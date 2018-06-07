@@ -36,19 +36,21 @@ class CreateSamples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            Object.assign(values, { orderTimeStart: (values.times[0]._d).getTime() });
-            Object.assign(values, { orderTimeEnd: (values.times[1]._d).getTime() });
-            new Promise((resolve) => {
-                dispatch({
-                    type: 'creates/add',
-                    payload: {
-                        data: { ...values },
-                        resolve,
-                    },
+            if (!errors) {
+                Object.assign(values, { orderTimeStart: (values.times[0]._d).getTime() });
+                Object.assign(values, { orderTimeEnd: (values.times[1]._d).getTime() });
+                new Promise((resolve) => {
+                    dispatch({
+                        type: 'creates/add',
+                        payload: {
+                            data: { ...values },
+                            resolve,
+                        },
+                    });
+                }).then(() => {
+                    this.props.history.push(setPath('/sandSamples'));
                 });
-            }).then(() => {
-                this.props.history.push(setPath('/sandSamples'));
-            });
+            }
         });
     }
     render() {
@@ -104,34 +106,28 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="渠道类型" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('channelType', {
-                                        rules: [
-                                            { required: true, message: '请选择渠道类型' },
-                                        ],
-                                    })(<Select placeholder="请选择渠道类型" width="200">
+                                    getFieldDecorator('channelType')(<Select placeholder="请选择渠道类型" width="200">
                                         {
                                             lists.channelType.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                     </Select>)
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="商品类型" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('productType', {
-                                        rules: [
-                                            { required: true, message: '请选择商品类型' },
-                                        ],
-                                    })(<Select placeholder="请选择商品类型">
+                                    getFieldDecorator('productType')(<Select placeholder="请选择商品类型">
                                         {
                                             lists.productType.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                     </Select>)
                                 }
                             </FormItem>
                         </Col>
@@ -140,34 +136,28 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="订单状态" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('orderStatus', {
-                                        rules: [
-                                            { required: true, message: '请选择订单状态' },
-                                        ],
-                                    })(<Select placeholder="请选择订单状态">
+                                    getFieldDecorator('orderStatus')(<Select placeholder="请选择订单状态">
                                         {
                                             lists.orderType.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                     </Select>)
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="业务流程" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('businessProcess', {
-                                        rules: [
-                                            { required: true, message: '请选择业务流程' },
-                                        ],
-                                    })(<Select placeholder="请选择业务流程">
+                                    getFieldDecorator('businessProcess')(<Select placeholder="请选择业务流程">
                                         {
                                             lists.businessProcess.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                         </Select>)
                                 }
                             </FormItem>
                         </Col>
@@ -228,34 +218,28 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="PLD结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('pldResult', {
-                                        rules: [
-                                            { required: true, message: '请输入策略名称' },
-                                        ],
-                                    })(<Select placeholder="请选择PLD结果" width="200">
+                                    getFieldDecorator('pldResult')(<Select placeholder="请选择PLD结果" width="200">
                                         {
                                             lists.pldResult.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                   </Select>)
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="机审结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('machineResult', {
-                                        rules: [
-                                            { required: true, message: '请选择机审结果' },
-                                        ],
-                                    })(<Select placeholder="请选择机审结果">
+                                    getFieldDecorator('machineResult')(<Select placeholder="请选择机审结果">
                                         {
                                             lists.machineResult.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
+                                        <Option value="">全部</Option>
+                                                                       </Select>)
                                 }
                             </FormItem>
                         </Col>
@@ -264,91 +248,17 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="综合结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('synthesizeResult', {
-                                        rules: [
-                                            { required: true, message: '请选择综合结果' },
-                                        ],
-                                    })(<Select placeholder="请选择综合结果">
+                                    getFieldDecorator('synthesizeResult')(<Select placeholder="请选择综合结果">
                                         {
                                             lists.synthesizeResult.map((item) => {
                                                 return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                             })
                                         }
-                                       </Select>)
-                                }
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem label="第一阶段结果" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('firstStageResult')(<Select placeholder="请选择第一阶段结果">
-                                        {
-                                            lists.businessProcess.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
+                                        <Option value="">全部</Option>
                                                                           </Select>)
                                 }
                             </FormItem>
                         </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <FormItem label="第二阶段结果" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('secondStageResult')(<Select placeholder="请选择第二阶段结果" width="200">
-                                        {
-                                            lists.channelType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                                                           </Select>)
-                                }
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem label="第三阶段结果" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('thirdStageResult')(<Select placeholder="请选择第三阶段结果">
-                                        {
-                                            lists.productType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                                                          </Select>)
-                                }
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <FormItem label="第四阶段结果" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('fourthStageResult')(<Select placeholder="请选择第四阶段结果">
-                                        {
-                                            lists.orderType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                                                           </Select>)
-                                }
-                            </FormItem>
-                        </Col>
-                        <Col span={12}>
-                            <FormItem label="第五阶段结果" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('fifthStageResult')(<Select placeholder="请选择第五阶段结果">
-                                        {
-                                            lists.businessProcess.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                                                          </Select>)
-                                }
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
                         <Col span={12}>
                             <FormItem label="风控评分" {...formItemLayout}>
                                 {
@@ -359,6 +269,19 @@ class CreateSamples extends React.PureComponent {
                                     getFieldDecorator('pldScoreUpper')(
                                         <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最高分" />
                                     )
+                                }
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <FormItem label="样本名称" {...formItemLayout}>
+                                {
+                                    getFieldDecorator('analysisSampleName', {
+                                        rules: [
+                                            { required: true, message: '请输入样本名称' },
+                                        ],
+                                    })(<Input placeholder="请输入样本名称" />)
                                 }
                             </FormItem>
                         </Col>
@@ -375,19 +298,6 @@ class CreateSamples extends React.PureComponent {
                                         )
                                     }
                                 </InputGroup>
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={12}>
-                            <FormItem label="样本名称" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('analysisSampleName', {
-                                        rules: [
-                                            { required: true, message: '请输入样本名称' },
-                                        ],
-                                    })(<Input placeholder="请输入样本名称" />)
-                                }
                             </FormItem>
                         </Col>
                     </Row>

@@ -80,7 +80,20 @@ class AddAccount extends React.PureComponent {
             callback();
         }
     }
-
+    validateAccount = (rule, value, callback) => {
+        if (value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+    checkPwd = (rule, value, callback) => {
+        if (value.length > 6 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     handleShow = () => {
         // this.props.form.validateFields();
         this.setState({
@@ -138,7 +151,8 @@ class AddAccount extends React.PureComponent {
                                     initialValue: record.account,
                                     rules: [
                                         { required: true, message: '请输入用户账号' },
-                                        { max: 20, message: '*用户账号最好为姓名全拼，不能输入汉字，最多20个字符' },
+                                        { max: 20, message: '*用户账号最多20个字符' },
+                                        { validator: this.validateAccount, message: '*用户账号最好为姓名全拼，不能输入汉字' }
                                     ],
                                 })(<Input placeholder="请输入用户账号" />)
                             }
@@ -166,7 +180,7 @@ class AddAccount extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入用户手机号' },
                                         { validator: this.phoneCheck, message: '请输入正确的手机号' }
-                                        ],
+                                    ],
                                 })(<Input placeholder="请输入用户手机号" />)
                             }
                         </Form.Item>
@@ -190,6 +204,8 @@ class AddAccount extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
+                                        { max: 15, message: '密码最大长度15位' },
+                                        { validator: this.checkPwd, message: '*您输入的密码不符合规则，密码需包含：大写字母、小写字母、数字中的两种' }
                                     ],
                                 })(<Input type="password" placeholder="请输入密码" />)
                             }
