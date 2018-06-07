@@ -4,7 +4,7 @@ import createLoading from 'dva-loading';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import { message } from 'antd';
-import { DURATION, ERR_MSG } from 'utils/constants';
+import { DURATION } from 'utils/constants';
 // import { signature } from 'utils/request';
 import { initSession } from 'models/session';
 import './index.scss';
@@ -23,7 +23,13 @@ const app = dva({
                 type: 'session/logout',
             });
         }
-        if (e.message === 'Failed to fetch') e.message = ERR_MSG;
+        if (e.code === '40101') {
+            // token失效
+            dispatch({
+                type: 'session/logout',
+            });
+        }
+        // if (e.message === 'Failed to fetch') e.message = ERR_MSG;
         message.error(e.message, DURATION);
     },
 });

@@ -3,7 +3,7 @@ import API from 'utils/api';
 import base64 from 'utils/base64';
 import treeConvert from 'utils/treeConvert';
 import { SYSID } from 'utils/constants';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'tree',
@@ -122,7 +122,7 @@ export default {
                     const id = base64.decode(path[3]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['角色管理', '角色详情'],
+                        payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],
                     });
                     dispatch({
                         type: 'getTreeList',

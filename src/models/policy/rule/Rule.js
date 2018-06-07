@@ -53,7 +53,7 @@ export default {
                 if (filterPath(pathname) === '/rule') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['规则库管理'],
+                        payload: [{ name: '规则库管理' }],
                     });
                     dispatch({
                         type: 'getRuleList',

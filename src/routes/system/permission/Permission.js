@@ -68,7 +68,26 @@ class Permission extends React.PureComponent {
         const columns = [
             { title: '权限ID', dataIndex: 'id', key: 'id' },
             { title: '权限名称', dataIndex: 'name', key: 'name' },
-            { title: '权限类型', dataIndex: 'type', key: 'type' },
+            { title: '权限类型',
+                dataIndex: 'type',
+                key: 'type',
+                render: (...rest) => {
+                    let types = '';
+                    switch (rest[1].type) {
+                    case 'button':
+                        types = '按钮';
+                        break;
+                    case 'menu':
+                        types = '菜单';
+                        break;
+                    case 'module':
+                        types = '模块';
+                        break;
+                    default:
+                        break;
+                    }
+                    return (<span>{types}</span>);
+                } },
             { title: '是否显示', dataIndex: 'isShow', key: 'isShow' },
             { title: '排序', dataIndex: 'sort', key: 'sort' },
         ];
@@ -81,7 +100,7 @@ class Permission extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem label="权限类型" >
-                        {getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择权限类型"><Option value="1">一级类别</Option><Option value="2">二级类别</Option><Option value="3">三级类别</Option></Select>)}
+                        {getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择权限类型"><Option value="菜单">菜单</Option><Option value="模块">模块</Option><Option value="按钮">按钮</Option></Select>)}
                     </FormItem>
                     <FormItem>
                         {

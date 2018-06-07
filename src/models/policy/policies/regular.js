@@ -3,7 +3,7 @@ import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
 import base64 from 'utils/base64';
 // import treeConvert from 'utils/treeConvert';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'regular',
@@ -99,7 +99,9 @@ export default {
 
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略管理', '阶段管理', '规则管理'],
+                        payload: [{ name: '策略管理', link: setPath('/policy') },
+                            { name: '阶段管理', link: setPath(`/strategy/${id}`) },
+                            { name: '规则管理' }],
                     });
                     dispatch({
                         type: 'query',

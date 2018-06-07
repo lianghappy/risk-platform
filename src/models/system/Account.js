@@ -68,7 +68,7 @@ export default {
                 if (filterPath(pathname) === '/account') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['账号管理'],
+                        payload: [{ name: '账号管理' }],
                     });
                     dispatch({
                         type: 'queryAccountList',

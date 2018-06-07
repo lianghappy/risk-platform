@@ -2,7 +2,7 @@ import { post } from 'utils/request';
 import API from 'utils/api';
 import base64 from 'utils/base64';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'recordHistory',
@@ -44,12 +44,13 @@ export default {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
                 if (path[2] === 'recordHistory') {
+                    const strategyId = base64.decode(path[3]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['策略沙箱', '开始实验', '实验历史记录'],
+                        payload: [{ name: '策略沙箱', link: setPath('/sandboxie') },
+                            { name: '开始实验', link: setPath(`/experiment/${strategyId}`) },
+                            { name: '实验历史记录' }],
                     });
-                    console.log(base64.decode(path[3]));
-                    const strategyId = base64.decode(path[3]);
                     dispatch({
                         type: 'recordHistoryList',
                         payload: {

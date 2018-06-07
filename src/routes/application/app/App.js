@@ -145,7 +145,7 @@ class AppIndex extends React.PureComponent {
                             roles('R_B_app_app_del') &&
                         <Popconfirm
                             placement="topRight"
-                            title="您确定要删除该公司吗？"
+                            title="您确定要删除该应用吗？"
                             onConfirm={() => this.onDelete(rest[1].id)}
                         >
                             <span style={{ color: 'rgba(59,153,252,1)' }}>删除</span>

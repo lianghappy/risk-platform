@@ -1,7 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
-import { filterPath } from 'utils/path';
+import { filterPath, setPath } from 'utils/path';
 
 export default {
     namespace: 'creates',
@@ -41,7 +41,7 @@ export default {
                 if (filterPath(pathname) === '/sandSamples/create') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: ['沙箱样本', '创建样本'],
+                        payload: [{ name: '沙箱样本', link: setPath('/sandSamples') }, { name: '创建样本' }],
                     });
                     dispatch({
                         type: 'getSelect',

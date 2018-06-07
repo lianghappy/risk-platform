@@ -209,7 +209,7 @@ class DecisionIndex extends React.PureComponent {
                            roles('R_B_system_user_del') &&
                        <Popconfirm
                            placement="topRight"
-                           title="是否确定删除？"
+                           title="您确定要删除该账号吗？"
                            onConfirm={() => this.onDelete(rest[1].id)}
                        >
                            <span className="jm-del">删除</span>
