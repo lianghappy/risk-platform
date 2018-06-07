@@ -1,25 +1,25 @@
 import React from 'react';
-import { connect } from 'dva';
+// import { connect } from 'dva';
 import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { authss } from 'utils/auth';
+import auth from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
-const mapStateToProps = state => ({
-    auths: state.session.menus
-});
-@connect(mapStateToProps)
+// const mapStateToProps = state => ({
+//     auths: state.session.menus
+// });
+// @connect(mapStateToProps)
 export default class Sider extends React.PureComponent {
     static propTypes = {
-        auths: PropTypes.array.isRequired,
+        // auths: PropTypes.array.isRequired,
         location: PropTypes.object.isRequired
     };
     render() {
-        const { auths, location } = this.props;
+        const { location } = this.props;
         const menuKey = menuKeyPick(location);
         return (
             <Layout.Sider breakpoint="lg" className="jm-sider">
@@ -33,17 +33,17 @@ export default class Sider extends React.PureComponent {
                     inlineIndent={10}
                     className="jm-menu"
                     selectedKeys={menuKey}
-                    style={{ userSelect: "none" }}
+                    style={{ userSelect: 'none' }}
                 >
-                    {authss(auths).map(m => (
+                    {auth.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={
                                 <span>
                                     <i
                                         className={cs(
-                                            "jm-icon",
-                                            "anticon",
+                                            'jm-icon',
+                                            'anticon',
                                             styles[m.key]
                                         )}
                                     />

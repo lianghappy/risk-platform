@@ -246,6 +246,11 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/sandbox/RecordHistory')
         ],
     });
+    // 报警收件人
+    const WarningPeople = dynamic({
+        app,
+        component: () => import('routes/warningPeople/object/Index'),
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -287,6 +292,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/SandSamples/create')} exact component={Create} />
                     <PrivateRoute path={setPath('/recordHistory')} exact component={Record} />
                     <PrivateRoute path={setPath('/sandboxie/recordHistory/:id')} exact component={HistoryRecord} />
+                    <PrivateRoute path={setPath('/warningPeople')} exact component={WarningPeople} />
                 </Main>
             </Switch>
         </Router>
