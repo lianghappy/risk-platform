@@ -88,7 +88,7 @@ class AddAccount extends React.PureComponent {
         }
     }
     checkPwd = (rule, value, callback) => {
-        if (value.length > 6 && (/[\u4e00-\u9fa5]$/.test(value))) {
+        if (value.length > 6 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -204,7 +204,8 @@ class AddAccount extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
-                                        { validator: this.checkPwd, message: '*用户账号最好为姓名全拼，不能输入汉字' }
+                                        { max: 15, message: '密码最大长度15位' },
+                                        { validator: this.checkPwd, message: '*您输入的密码不符合规则，密码需包含：大写字母、小写字母、数字中的两种' }
                                     ],
                                 })(<Input type="password" placeholder="请输入密码" />)
                             }
