@@ -250,6 +250,9 @@ function RouterConfig({ history, app }) {
     const WarningPeople = dynamic({
         app,
         component: () => import('routes/warningPeople/object/Index'),
+        models: () => [
+            import('models/warning/WarningPeople')
+        ],
     });
     return (
         <Router history={history}>

@@ -169,6 +169,10 @@ const api = {
 
     // 沙箱实验
     startExpe: `${API}/api/risk/manager/collector/analysisSample/selectSample/v1`,
+
+    /* ---------- 报警对象-报警收件人 ----------*/
+    warningPeople: `${API}/api/risk/manager/monitor/getSleuthPersonListByReq/v1`,
+
 };
 
 export default api;
