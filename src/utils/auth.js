@@ -229,8 +229,8 @@ export const authFirst = [
         key: 'earlyWarning',
         children: [{
             name: '监控大盘',
-            key: 'account',
-            router: '/account',
+            key: 'disk',
+            router: '/disk',
         }, {
             name: '报警历史',
             key: 'role',

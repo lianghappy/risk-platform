@@ -254,6 +254,11 @@ function RouterConfig({ history, app }) {
             import('models/warning/WarningPeople')
         ],
     });
+    // 监控大盘
+    const Disk = dynamic({
+        app,
+        component: () => import('routes/earlyWarning/disk/Disk'),
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -296,6 +301,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/recordHistory')} exact component={Record} />
                     <PrivateRoute path={setPath('/sandboxie/recordHistory/:id')} exact component={HistoryRecord} />
                     <PrivateRoute path={setPath('/warningPeople')} exact component={WarningPeople} />
+                    <PrivateRoute path={setPath('/disk')} exact component={Disk} />
                 </Main>
             </Switch>
         </Router>
