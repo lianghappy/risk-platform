@@ -4,7 +4,7 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import auth from 'utils/auth';
+import { authFirst } from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
@@ -35,7 +35,7 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
-                    {auth.map(m => (
+                    {authFirst.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={

@@ -223,7 +223,7 @@
 //     return lists;
 // };
 
-export default [
+export const authFirst = [
     {
         name: '监控中心',
         key: 'earlyWarning',
@@ -274,7 +274,10 @@ export default [
                 key: 'app',
                 router: '/app',
             }],
-    }, {
+    },
+];
+export const authsSecond = [
+    {
         name: '策略中心',
         key: 'policy',
         children: [{
@@ -316,7 +319,7 @@ export default [
         children: [{
             name: '报警规则',
             key: 'black',
-            router: '/black',
+            router: '/warningRule',
         }, {
             name: '报警收件人',
             key: 'warningPeople',

@@ -1,5 +1,5 @@
 const PORT = process.env.PORT || 8000;
-const JIMI_ENV = process.env.JIMI_ENV || 'test';
+const JIMI_ENV = process.env.JIMI_ENV || 'dev';
 const VERSION = '1.0';
 const PATHS = process.env.PATHS || '';
 // 秘钥
