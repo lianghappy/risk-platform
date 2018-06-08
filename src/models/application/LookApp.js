@@ -112,7 +112,7 @@ export default {
                     const ids = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: [{ name: '应用管理', link: setPath('/applicationManage') }, { name: '查看应用', link: setPath(`/apps/${ids}`) }],
+                        payload: [{ name: '应用管理', link: setPath('/app') }, { name: '查看应用' }],
                     });
                     dispatch({
                         type: 'getAppDetailList',

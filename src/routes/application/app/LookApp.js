@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
 import style from './LookApp.scss';
 import Product from './Product';
+import OldProduct from './oldProduct';
 import AddApp from './AddApp';
 
 class AppIndex extends React.PureComponent {
@@ -146,15 +147,28 @@ class AppIndex extends React.PureComponent {
                         未选产品
                     </Menu.Item>
                 </Menu>
-                <Product
-                    loading={loading}
-                    dataSource={this.state.current === '.$del' ? listSign : listNoSign}
-                    current={pageNum}
-                    pageSize={pageSize}
-                    type={this.state.current}
-                    pageNum={pageNum}
-                    appId={this.props.list.id}
-                />
+                {
+                    this.state.current === '.$del' ?
+                        <OldProduct
+                            loading={loading}
+                            dataSource={listSign}
+                            current={pageNum}
+                            pageSize={pageSize}
+                            type={this.state.current}
+                            pageNum={pageNum}
+                            appId={this.props.list.id}
+                        />
+                        :
+                        <Product
+                            loading={loading}
+                            dataSource={listNoSign}
+                            current={pageNum}
+                            pageSize={pageSize}
+                            type={this.state.current}
+                            pageNum={pageNum}
+                            appId={this.props.list.id}
+                        />
+                }
             </Layout>);
     }
 }

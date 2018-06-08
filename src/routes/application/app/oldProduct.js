@@ -1,12 +1,13 @@
 import React from 'react';
-import { Layout, Form, Button, Table, message } from 'antd';
+import { Layout, Form, Button, Table, Popconfirm, message } from 'antd';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { DURATION } from 'utils/constants';
 import style from './LookApp.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
-class Product extends React.PureComponent {
+class OldProduct extends React.PureComponent {
     static propTypes ={
         dispatch: PropTypes.func.isRequired,
         dataSource: PropTypes.array.isRequired,
@@ -35,8 +36,41 @@ class Product extends React.PureComponent {
             sysId,
         });
     };
+    onDelete(id) {
+        const {
+            pageSize,
+            pageNum,
+            dispatch,
+        } = this.props;
+        const appId = this.state.appId;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'lookApp/del',
+                payload: {
+                    data: { id },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            this.query({
+                pageNum,
+                pageSize,
+                appId,
+            });
+        });
+    }
+    onReset = () => {
+        const { pageSize, form } = this.props;
+        form.resetFields();
+        this.query({
+            pageNum: 1,
+            pageSize,
+        });
+    };
     onSelectChange = (selectedRowKeys, selectedRows) => {
         this.setState({ selectedRows });
+        console.log(selectedRows);
     }
     query(payload) {
         let url = '';
@@ -48,35 +82,6 @@ class Product extends React.PureComponent {
         this.props.dispatch({
             type: url,
             payload,
-        });
-    }
-    add = (rest) => {
-        const {
-            pageSize,
-            pageNum,
-            dispatch,
-        } = this.props;
-        const appId = this.state.appId;
-        new Promise((resolve) => {
-            dispatch({
-                type: 'lookApp/create',
-                payload: {
-                    data: {
-                        appId,
-                        productName: rest.name,
-                        productDesc: rest.description,
-                        productId: rest.id,
-                    },
-                    resolve,
-                },
-            });
-        }).then(() => {
-            message.success('添加成功');
-            this.query({
-                pageNum,
-                pageSize,
-                appId,
-            });
         });
     }
     all = () => {
@@ -92,32 +97,28 @@ class Product extends React.PureComponent {
         if (this.state.selectedRows.length > 0) {
             this.state.selectedRows.forEach((item) => {
                 listAppProduct.push({
-                    productId: item.id,
-                    productName: item.name,
-                    productDesc: item.id,
-                    appId,
+                    id: item.id,
                 });
             });
-            url = 'lookApp/listCreate';
-            text = '添加成功';
-
-            new Promise((resolve) => {
-                dispatch({
-                    type: url,
-                    payload: {
-                        data: { listAppProduct },
-                        resolve,
-                    },
-                });
-            }).then(() => {
-                message.success(text);
-                this.query({
-                    pageNum,
-                    pageSize,
-                    appId,
-                });
-            });
+            url = 'lookApp/listDel';
+            text = '删除成功';
         }
+        new Promise((resolve) => {
+            dispatch({
+                type: url,
+                payload: {
+                    data: { listAppProduct },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success(text);
+            this.query({
+                pageNum,
+                pageSize,
+                appId,
+            });
+        });
     }
     render() {
         const {
@@ -125,12 +126,24 @@ class Product extends React.PureComponent {
             pageNum,
             loading,
         } = this.props;
-        const adds = [
-            { title: '产品名称', dataIndex: 'name', key: 'name' },
-            { title: '产品介绍', dataIndex: 'description', key: 'description' },
+        const dels = [
+            { title: '产品名称', dataIndex: 'productName', key: 'productName' },
+            { title: '产品介绍', dataIndex: 'productDesc', key: 'productDesc' },
+            { title: '签约开始时间', dataIndex: 'signStartDate', key: 'signStartDate' },
+            { title: '失效时间', dataIndex: 'signExpiredDate', key: 'signExpiredDate' },
+            { title: '状态', dataIndex: 'signStatus', key: 'signStatus' },
             { title: '操作',
                 dataIndex: 'operator',
-                render: (...rest) => (<span className={style.add} role="button" tabIndex="-1" onClick={() => this.add(rest[1])}>添加</span>),
+                render: (...rest) => (
+                    <div>
+                        <Popconfirm
+                            placement="topRight"
+                            title="您确定要删除吗？"
+                            onConfirm={() => this.onDelete(rest[1].id)}
+                        >
+                            <Button icon="delete" />
+                        </Popconfirm>
+                    </div>),
             },
         ];
         const { selectedRows } = this.state.selectedRows;
@@ -140,10 +153,10 @@ class Product extends React.PureComponent {
         };
         return (
             <Layout className={style.containers}>
-                <Button className={style.btns} type="primary" onClick={this.all}>批量增加</Button>
+                <Button className={style.btns} type="primary" onClick={this.all}>批量删除</Button>
                 <Table
                     rowSelection={rowSelection}
-                    columns={adds}
+                    columns={dels}
                     dataSource={this.state.dataSource}
                     pagination={false}
                     loading={loading}
@@ -158,4 +171,4 @@ class Product extends React.PureComponent {
             </Layout>);
     }
 }
-export default connect()(Form.create()(CSSModules(Product)));
+export default connect()(Form.create()(CSSModules(OldProduct)));
