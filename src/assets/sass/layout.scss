@@ -20,6 +20,9 @@
     .jm-menu {
         flex: 1;
         overflow: auto;
+        .ant-menu-item{
+            padding-left: 50px!important;
+        }
     }
     .jm-main {
         margin: 16px;
