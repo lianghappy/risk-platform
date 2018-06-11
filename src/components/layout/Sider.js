@@ -4,6 +4,7 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
+// import { authFirst, authsSecond } from 'utils/auth';
 import { authFirst } from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
@@ -20,6 +21,8 @@ export default class Sider extends React.PureComponent {
     };
     render() {
         const { location } = this.props;
+        console.log(location);
+
         const menuKey = menuKeyPick(location);
         return (
             <Layout.Sider breakpoint="lg" className="jm-sider">

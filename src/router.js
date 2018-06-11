@@ -259,6 +259,13 @@ function RouterConfig({ history, app }) {
         app,
         component: () => import('routes/earlyWarning/disk/Disk'),
     });
+    const historyPolice = dynamic({
+        app,
+        component: () => import('routes/earlyWarning/history/History'),
+        models: () => [
+            import('models/earlyWarning/History')
+        ]
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -302,6 +309,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/sandboxie/recordHistory/:id')} exact component={HistoryRecord} />
                     <PrivateRoute path={setPath('/warningPeople')} exact component={WarningPeople} />
                     <PrivateRoute path={setPath('/disk')} exact component={Disk} />
+                    <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
                 </Main>
             </Switch>
         </Router>

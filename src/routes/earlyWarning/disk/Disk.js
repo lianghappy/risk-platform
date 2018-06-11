@@ -33,7 +33,7 @@ export default class Disk extends React.PureComponent {
                             <Form.Item
                                 label="当前监控大盘"
                             >
-                                <Select>
+                                <Select style={{ width: '206px' }}>
                                     <Select.Option value="333">222</Select.Option>
                                 </Select>
                             </Form.Item>
@@ -56,7 +56,12 @@ export default class Disk extends React.PureComponent {
                             }
                         </div>
                         <div className={styles.addCharts}>
-                            <Button type="default">添加图表</Button>
+                            <Button type="default" size="small">添加图表</Button>
+                        </div>
+                    </div>
+                    <div className={styles.disk}>
+                        <div className={styles.bigDisk}>
+
                         </div>
                     </div>
                 </div>

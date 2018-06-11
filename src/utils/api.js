@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-console.log(jimiEnv);
+
 const api = {
     // 地址库
     address: 'https://product.jimistore.com/area/manageContAddrProd.json',
@@ -174,6 +174,9 @@ const api = {
     warningPeople: `${API}/api/risk/manager/monitor/getSleuthPersonListByReq/v1`,
 
     warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
+
+    /* ---------- 监控-报警历史 ----------*/
+    historyPolice: `${API}/api/risk/manager/monitor/sleuthHistory/list/v1`,
 
 };
 

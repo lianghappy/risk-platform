@@ -233,8 +233,8 @@ export const authFirst = [
             router: '/disk',
         }, {
             name: '报警历史',
-            key: 'role',
-            router: '/role',
+            key: 'historyPolice',
+            router: '/historyPolice',
         }],
     },
     {

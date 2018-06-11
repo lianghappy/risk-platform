@@ -37,6 +37,7 @@ const API_USER = {
     sandbox: 'https://testcommon.jimistore.com',
     prod: 'https://user-api.jimistore.com',
 }[JIMI_ENV];
+
 exports.PORT = PORT;
 exports.JIMI_ENV = JIMI_ENV;
 exports.PATHS = PATHS;

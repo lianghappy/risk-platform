@@ -6,7 +6,6 @@ export const ENV = jimiEnv;
 export const VERSION = version;
 // 秘钥
 export const PASSWORD = password;
-console.log(ENV, PASSWORD);
 // 表格每页条数
 export const PAGE_SIZE = 10;
 // 错误提示
