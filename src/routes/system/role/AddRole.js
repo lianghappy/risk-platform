@@ -5,7 +5,6 @@ import { connect } from 'dva';
 import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
 import { DURATION } from 'utils/constants';
 import { setPath } from 'utils/path';
-import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 
 const FormItem = Form.Item;
@@ -114,7 +113,7 @@ class AddRole extends React.PureComponent {
                               checkedKeys={this.state.checkedKeys}
                               onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
                           >{this.renderTreeNodes(list)}
-                          </Tree>)
+                                                      </Tree>)
                       }
                   </FormItem>
                   <FormItem>
