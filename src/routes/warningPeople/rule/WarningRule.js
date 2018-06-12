@@ -25,13 +25,13 @@ export default class WarningRule extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '收件人姓名', dataIndex: 'id', key: 'id' },
-            { title: '收件人手机号', dataIndex: 'name', key: 'name' },
-            { title: '钉钉机器人', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '所属报警组', dataIndex: 'code', key: 'code' },
+            { title: '报警ID', dataIndex: 'id', key: 'id' },
+            { title: '策略名称', dataIndex: 'strategyName', key: 'strategyName' },
+            { title: '报警规则名称', dataIndex: 'judgeKey', key: 'judgeKey' },
+            { title: '通知对象', dataIndex: 'code', key: 'code' },
             { title: '添加人', dataIndex: 'channel', key: 'channel' },
             { title: '添加时间', dataIndex: 'valueType', key: 'valueType' },
-            { title: '',
+            { title: '操作',
                 key: 'operator',
                 render: () => (<span></span>) }
         ];
@@ -51,6 +51,9 @@ export default class WarningRule extends React.PureComponent {
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                     </FormItem>
                 </Form>
+                <div>
+                    <Button type="primary">新增</Button>
+                </div>
                 <Table
                     columns={columns}
                     loading={loading}

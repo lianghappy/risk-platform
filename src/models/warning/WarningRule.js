@@ -30,10 +30,20 @@ export default {
             return history.listen(({ pathname }) => {
                 if (pathname === '/warningRule') {
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: [{ name: '报警规则' }],
+                    });
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                    const appId = '3';
+                    const productId = '22';
+                    dispatch({
                         type: 'getWarningRuleList',
                         payload: {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            companyId,
+                            appId,
+                            productId,
                         }
                     });
                 }

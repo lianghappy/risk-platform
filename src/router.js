@@ -254,11 +254,28 @@ function RouterConfig({ history, app }) {
             import('models/warning/WarningPeople')
         ],
     });
+    // 报警规则
+    const warningRule = dynamic({
+        app,
+        component: () => import('routes/warningPeople/rule/WarningRule'),
+        models: () => [
+            import('models/warning/WarningRule'),
+        ]
+    });
+    // 添加报警规则
+    const addWarningRule = dynamic({
+        app,
+        component: () => import('routes/warningPeople/rule/AddRule'),
+        // models: () => [
+        //     import('models/warning/WarningRule'),
+        // ]
+    });
     // 监控大盘
     const Disk = dynamic({
         app,
         component: () => import('routes/earlyWarning/disk/Disk'),
     });
+    // 报警历史
     const historyPolice = dynamic({
         app,
         component: () => import('routes/earlyWarning/history/History'),
@@ -308,8 +325,10 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/recordHistory')} exact component={Record} />
                     <PrivateRoute path={setPath('/sandboxie/recordHistory/:id')} exact component={HistoryRecord} />
                     <PrivateRoute path={setPath('/warningPeople')} exact component={WarningPeople} />
+                    <PrivateRoute path={setPath('/warningRule')} exact component={warningRule} />
                     <PrivateRoute path={setPath('/disk')} exact component={Disk} />
                     <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
+                    <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
                 </Main>
             </Switch>
         </Router>
