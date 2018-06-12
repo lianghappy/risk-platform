@@ -4,6 +4,7 @@ import {
     Row,
     Col,
 } from 'antd';
+import moment from 'moment';
 import { connect } from 'dva';
 import styles from './RegularDetail.scss';
 
@@ -100,7 +101,7 @@ export default class LookModal extends React.PureComponent {
                         <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>下单时间：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
+                                <Col span={16}>{moment(experSelects.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(experSelects.orderTimeEnd).format('YYYY-MM-DD')}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>第二阶段结果：</Col>

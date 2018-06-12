@@ -18,10 +18,10 @@ export default {
             const response = yield call(post, API.getMenuTreeList, payload, data);
             const treeDatas = [{
                 title: '系统管理',
-                key: 'M_system',
+                key: 'R_M_system',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_system',
+                    rootId: 'R_M_system',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -29,10 +29,10 @@ export default {
                 }, response),
             }, {
                 title: '应用管理',
-                key: 'M_application',
+                key: 'R_M_application',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_application',
+                    rootId: 'R_M_application',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -40,10 +40,10 @@ export default {
                 }, response),
             }, {
                 title: '决策引擎',
-                key: 'M_policy',
+                key: 'R_M_policy',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_policy',
+                    rootId: 'R_M_policy',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -51,10 +51,10 @@ export default {
                 }, response),
             }, {
                 title: '策略沙箱',
-                key: 'M_sandboxie',
+                key: 'R_M_sandboxie',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_sandboxie',
+                    rootId: 'R_M_sandboxie',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -62,10 +62,10 @@ export default {
                 }, response),
             }, {
                 title: '黑白名单',
-                key: 'M_blackAndWhite',
+                key: 'R_M_blackAndWhite',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_blackAndWhite',
+                    rootId: 'R_M_blackAndWhite',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -99,6 +99,7 @@ export default {
                 payload: {
                     details: del,
                     sysId: payload.sysId,
+                    menus: del.menus,
                 },
             });
         },

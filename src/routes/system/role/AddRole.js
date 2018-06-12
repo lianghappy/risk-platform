@@ -58,6 +58,9 @@ class AddRole extends React.PureComponent {
       console.log(keys);
       this.setState({ checkedKeys: keys });
   }
+  cancelS = () => {
+      window.history.back(-1);
+  }
   renderTreeNodes = (data) => {
       return data.map((item) => {
           if (item.children) {
@@ -81,67 +84,11 @@ class AddRole extends React.PureComponent {
       };
       const {
           form,
+          list,
       } = this.props;
       const {
           getFieldDecorator,
       } = form;
-      const data = this.props.list;
-      const treeDatas = [{
-          title: '系统管理',
-          key: 'M_system',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_system',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '应用管理',
-          key: 'M_application',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_application',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '决策引擎',
-          key: 'M_policy',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_policy',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '策略沙箱',
-          key: 'M_sandboxie',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_sandboxie',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }, {
-          title: '黑白名单',
-          key: 'M_blackAndWhite',
-          children: treeConvert({
-              pId: 'pid',
-              rootId: 'M_blackAndWhite',
-              id: 'id', // 原始数据Id
-              name: 'name',
-              tId: 'key',
-              tName: 'title',
-          }, data),
-      }];
       return (
           <Layout className={style.container}>
               <Form layout="vertical" onSubmit={this.onQuery}>
@@ -166,13 +113,13 @@ class AddRole extends React.PureComponent {
                               checkable
                               checkedKeys={this.state.checkedKeys}
                               onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
-                          >{this.renderTreeNodes(treeDatas)}
-                                                      </Tree>)
+                          >{this.renderTreeNodes(list)}
+                          </Tree>)
                       }
                   </FormItem>
                   <FormItem>
                       <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>保存</Button>
-                      <Button>取消</Button>
+                      <Button onClick={() => this.cancelS()}>取消</Button>
                   </FormItem>
               </Form>
           </Layout>

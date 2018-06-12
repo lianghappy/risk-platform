@@ -16,6 +16,7 @@ const mapStateToProps = (state) => ({
     sysId: state.tree.sysId,
     loading: state.loading.models.tree,
     details: state.tree.details,
+    menus: state.tree.menus,
 });
 @connect(mapStateToProps)
 class RoleDetail extends React.PureComponent {
@@ -27,7 +28,7 @@ class RoleDetail extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
     };
     state = {
-        checkedKeys: this.props.details.menus,
+        checkedKeys: this.props.menus,
     }
     onQuery = (e) => {
         e.preventDefault();
@@ -59,6 +60,9 @@ class RoleDetail extends React.PureComponent {
   onCheck = (keys) => {
       this.setState({ checkedKeys: keys });
   }
+  cancelS = () => {
+      window.history.back(-1);
+  }
   renderTreeNodes = (data) => {
       return data.map((item) => {
           if (item.children) {
@@ -88,6 +92,7 @@ class RoleDetail extends React.PureComponent {
       const {
           getFieldDecorator,
       } = form;
+      console.log(this.props.menus);
       return (
           <Layout className={style.container}>
               <Form layout="vertical" onSubmit={this.onQuery}>
@@ -118,7 +123,7 @@ class RoleDetail extends React.PureComponent {
                   </FormItem>
                   <FormItem>
                       <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>保存</Button>
-                      <Button>取消</Button>
+                      <Button onClick={() => this.cancelS()}>取消</Button>
                   </FormItem>
               </Form>
           </Layout>

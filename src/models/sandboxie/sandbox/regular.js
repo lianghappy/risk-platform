@@ -94,12 +94,12 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
-                if (path[1] === 'regular') {
+                if (path[1] === 'regulars') {
                     const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: [{ name: '策略管理', link: setPath('/policy') },
-                            { name: '阶段管理', link: setPath(`/strategy/${path[3]}`) },
+                        payload: [{ name: '策略沙箱', link: setPath('/sandboxie') },
+                            { name: '阶段管理', link: setPath(`/strategies/${path[3]}`) },
                             { name: '规则管理' }],
                     });
                     dispatch({
