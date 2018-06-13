@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import base64 from 'utils/base64';
 import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
 import { DURATION } from 'utils/constants';
 import { setPath } from 'utils/path';
@@ -29,6 +30,23 @@ class RoleDetail extends React.PureComponent {
     };
     state = {
         checkedKeys: this.props.menus,
+    }
+    componentDidMount() {
+        const id = base64.decode(this.props.match.params.id);
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'tree/getDetails',
+                payload: {
+                    sysId: 'risk',
+                    id,
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                checkedKeys: this.props.menus,
+            });
+        });
     }
     onQuery = (e) => {
         e.preventDefault();
@@ -92,7 +110,6 @@ class RoleDetail extends React.PureComponent {
       const {
           getFieldDecorator,
       } = form;
-      console.log(this.props.menus);
       return (
           <Layout className={style.container}>
               <Form layout="vertical" onSubmit={this.onQuery}>

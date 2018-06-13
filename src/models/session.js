@@ -6,14 +6,14 @@ import { setPath, filterPath } from 'utils/path';
 
 // 权限解析
 const authConvert = (menus) => {
-    let rootId = 'platform';
-    menus.some((el) => {
+    // let rootId = '';
+    /* menus.some((el) => {
         if (el.parentId === 'recycler') {
             rootId = 'auctionRoot';
             return true;
         }
         return false;
-    });
+    }); */
     let auths = [];
     if (menus.length > 0) {
         menus.forEach((el) => {
@@ -23,9 +23,9 @@ const authConvert = (menus) => {
         auths = treeConvert({
             pId: 'parentId',
             otherKeys: ['key', 'router'],
-            rootId,
         }, menus);
     }
+    console.log(auths);
     return auths;
 };
 

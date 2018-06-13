@@ -1,6 +1,6 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
-import base64 from 'utils/base64';
+// import base64 from 'utils/base64';
 import treeConvert from 'utils/treeConvert';
 import { SYSID } from 'utils/constants';
 import { filterPath, setPath } from 'utils/path';
@@ -81,8 +81,8 @@ export default {
             });
         },
         * getDetails({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getMenuTreeDetails, payload, data);
+            const { resolve } = payload;
+            const response = yield call(post, API.getMenuTreeDetails, payload);
             const del = {
                 type: response.type,
                 id: response.id,
@@ -102,6 +102,7 @@ export default {
                     menus: del.menus,
                 },
             });
+            yield call(resolve);
         },
         // 增加
         * update({ payload }, { call }) {
@@ -120,7 +121,7 @@ export default {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
                 if (path[2] === 'detailRole') {
-                    const id = base64.decode(path[3]);
+                    // const id = base64.decode(path[3]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],
@@ -131,13 +132,13 @@ export default {
                             sysId: SYSID,
                         },
                     });
-                    dispatch({
+                    /* dispatch({
                         type: 'getDetails',
                         payload: {
                             sysId: SYSID,
                             id,
                         },
-                    });
+                    }); */
                 }
             });
         },

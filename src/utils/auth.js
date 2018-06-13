@@ -65,7 +65,7 @@ export const authss = (menus) => {
         }
         if (roles('R_M_application')) {
             const app = {
-                name: '应用管理',
+                name: '应用中心',
                 key: 'application',
                 children: [],
             };
