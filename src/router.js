@@ -154,6 +154,14 @@ function RouterConfig({ history, app }) {
             import('models/policy/policies/regular'),
         ],
     });
+    // 策略管理规则管理
+    const Regulars = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/regular/Regular'),
+        models: () => [
+            import('models/sandboxie/sandbox/regular'),
+        ],
+    });
     // 黑名单
     const Black = dynamic({
         app,
@@ -310,7 +318,8 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/rule')} exact component={Rules} />
                     <PrivateRoute path={setPath('/policy')} exact component={Policy} />
                     <PrivateRoute path={setPath('/strategy/:id')} component={Strategy} />
-                    <PrivateRoute path={setPath('/regular/:id')} component={Regular} />
+                    <PrivateRoute path={setPath('/regular/:id/:strageId')} component={Regular} />
+                    <PrivateRoute path={setPath('/regulars/:id/:strageId')} component={Regulars} />
                     <PrivateRoute path={setPath('/permission')} exact component={Permission} />
                     <PrivateRoute path={setPath('/black')} exact component={Black} />
                     <PrivateRoute path={setPath('/white')} exact component={White} />

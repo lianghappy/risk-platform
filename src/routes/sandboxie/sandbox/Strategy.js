@@ -5,6 +5,8 @@ import { roles } from 'utils/common';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
+import { setPath } from 'utils/path';
+import base64 from 'utils/base64';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddStrategy from './AddStrategy';
@@ -143,9 +145,17 @@ class Policy extends React.PureComponent {
             payload,
         });
     }
-    stage = (e) => {
-        e.preventDefault();
-        window.location.href = '';
+    stage = (id, record) => {
+        const strategyId = base64.decode(this.props.match.params.id);
+        // this.props.history.push(`/regular/${base64.encode(id)}`);
+        this.props.history.push({
+            pathname: setPath(`/regulars/${base64.encode(id)}/${base64.encode(strategyId)}`),
+            // state: record.name,
+            state: {
+                name: record.name,
+                type: record.type,
+            }
+        });
     }
     render() {
         const rowSelection = {
@@ -184,8 +194,8 @@ class Policy extends React.PureComponent {
                         >
                             <span>编辑</span>
                         </AddStrategy>
-                    }
-                        <span role="button" tabIndex="-1" onClick={this.stage} className={style.stage}>规则管理</span>
+                        }
+                        <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
                         {
                             roles('R_B_SB_sand_st_del') &&
                         <Popconfirm
@@ -195,7 +205,7 @@ class Policy extends React.PureComponent {
                         >
                             <span className={style.stage}>删除</span>
                         </Popconfirm>
-                    }
+                        }
                     </div>) },
         ];
         return (
@@ -228,7 +238,7 @@ class Policy extends React.PureComponent {
                     >
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>
-                }
+                    }
                 </div>
                 <Table
                     columns={columns}

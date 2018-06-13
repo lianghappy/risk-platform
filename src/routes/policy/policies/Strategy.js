@@ -147,9 +147,10 @@ class Policy extends React.PureComponent {
         });
     }
     stage = (id, record) => {
+        const strategyId = base64.decode(this.props.match.params.id);
         // this.props.history.push(`/regular/${base64.encode(id)}`);
         this.props.history.push({
-            pathname: setPath(`/regular/${base64.encode(id)}`),
+            pathname: setPath(`/regular/${base64.encode(id)}/${base64.encode(strategyId)}`),
             // state: record.name,
             state: {
                 name: record.name,

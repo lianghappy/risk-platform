@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import base64 from 'utils/base64';
 import { Layout, Input, Form, Select, Tree, Button, message } from 'antd';
 import { DURATION } from 'utils/constants';
 import { setPath } from 'utils/path';
@@ -16,6 +17,7 @@ const mapStateToProps = (state) => ({
     sysId: state.tree.sysId,
     loading: state.loading.models.tree,
     details: state.tree.details,
+    menus: state.tree.menus,
 });
 @connect(mapStateToProps)
 class RoleDetail extends React.PureComponent {
@@ -27,7 +29,24 @@ class RoleDetail extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
     };
     state = {
-        checkedKeys: this.props.details.menus,
+        checkedKeys: this.props.menus,
+    }
+    componentDidMount() {
+        const id = base64.decode(this.props.match.params.id);
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'tree/getDetails',
+                payload: {
+                    sysId: 'risk',
+                    id,
+                    resolve,
+                },
+            });
+        }).then(() => {
+            this.setState({
+                checkedKeys: this.props.menus,
+            });
+        });
     }
     onQuery = (e) => {
         e.preventDefault();
@@ -58,6 +77,9 @@ class RoleDetail extends React.PureComponent {
     }
   onCheck = (keys) => {
       this.setState({ checkedKeys: keys });
+  }
+  cancelS = () => {
+      window.history.back(-1);
   }
   renderTreeNodes = (data) => {
       return data.map((item) => {
@@ -118,7 +140,7 @@ class RoleDetail extends React.PureComponent {
                   </FormItem>
                   <FormItem>
                       <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>保存</Button>
-                      <Button>取消</Button>
+                      <Button onClick={() => this.cancelS()}>取消</Button>
                   </FormItem>
               </Form>
           </Layout>

@@ -48,7 +48,7 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略沙箱', link: setPath('/sandboxie') },
-                            { name: '开始实验', link: setPath(`/experiment/${strategyId}`) },
+                            { name: '开始实验', link: setPath(`/experiment/${path[3]}`) },
                             { name: '实验历史记录' }],
                     });
                     dispatch({

@@ -183,7 +183,7 @@ class Sandboxie extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(setPath(`/strategies/${value.id}`));
+        this.props.history.push(setPath(`/strategies/${base64.encode(value.id)}`));
     }
     render() {
         const rowSelection = {

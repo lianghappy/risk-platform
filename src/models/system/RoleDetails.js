@@ -1,6 +1,6 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
-import base64 from 'utils/base64';
+// import base64 from 'utils/base64';
 import treeConvert from 'utils/treeConvert';
 import { SYSID } from 'utils/constants';
 import { filterPath, setPath } from 'utils/path';
@@ -18,10 +18,10 @@ export default {
             const response = yield call(post, API.getMenuTreeList, payload, data);
             const treeDatas = [{
                 title: '系统管理',
-                key: 'M_system',
+                key: 'R_M_system',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_system',
+                    rootId: 'R_M_system',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -29,10 +29,10 @@ export default {
                 }, response),
             }, {
                 title: '应用管理',
-                key: 'M_application',
+                key: 'R_M_application',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_application',
+                    rootId: 'R_M_application',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -40,10 +40,10 @@ export default {
                 }, response),
             }, {
                 title: '决策引擎',
-                key: 'M_policy',
+                key: 'R_M_policy',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_policy',
+                    rootId: 'R_M_policy',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -51,10 +51,10 @@ export default {
                 }, response),
             }, {
                 title: '策略沙箱',
-                key: 'M_sandboxie',
+                key: 'R_M_sandboxie',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_sandboxie',
+                    rootId: 'R_M_sandboxie',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -62,10 +62,10 @@ export default {
                 }, response),
             }, {
                 title: '黑白名单',
-                key: 'M_blackAndWhite',
+                key: 'R_M_blackAndWhite',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'M_blackAndWhite',
+                    rootId: 'R_M_blackAndWhite',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
@@ -81,8 +81,8 @@ export default {
             });
         },
         * getDetails({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getMenuTreeDetails, payload, data);
+            const { resolve } = payload;
+            const response = yield call(post, API.getMenuTreeDetails, payload);
             const del = {
                 type: response.type,
                 id: response.id,
@@ -99,8 +99,10 @@ export default {
                 payload: {
                     details: del,
                     sysId: payload.sysId,
+                    menus: del.menus,
                 },
             });
+            yield call(resolve);
         },
         // 增加
         * update({ payload }, { call }) {
@@ -119,7 +121,7 @@ export default {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
                 if (path[2] === 'detailRole') {
-                    const id = base64.decode(path[3]);
+                    // const id = base64.decode(path[3]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],
@@ -130,13 +132,13 @@ export default {
                             sysId: SYSID,
                         },
                     });
-                    dispatch({
+                    /* dispatch({
                         type: 'getDetails',
                         payload: {
                             sysId: SYSID,
                             id,
                         },
-                    });
+                    }); */
                 }
             });
         },
