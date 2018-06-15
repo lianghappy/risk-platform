@@ -245,6 +245,10 @@ export const authFirst = [
             key: 'account',
             router: '/account',
         }, {
+            name: '订单管理',
+            key: 'order',
+            router: '/order',
+        }, {
             name: '角色管理',
             key: 'role',
             router: '/role',

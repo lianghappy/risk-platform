@@ -1,11 +1,25 @@
 import React from 'react';
 import { Layout, Form, Input, Transfer, Select, Button } from 'antd';
+import { connect } from 'dva';
 import styles from './index.scss';
 
 const Option = Select.Option;
+const mapStateToProps = (state) => {
+    return {
+        getPeopleList: state.addWarningRule.getPeopleList,
+        sleuthTargets: state.addWarningRule.sleuthTargets,
+        strategys: state.addWarningRule.strategys,
+    };
+};
 @Form.create()
+@connect(mapStateToProps)
 export default class AddRule extends React.PureComponent {
     render() {
+        const {
+            strategys,
+            sleuthTargets,
+        } = this.props;
+        console.log(this.props.strategys);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -77,6 +91,11 @@ export default class AddRule extends React.PureComponent {
                                 ]
                             })(
                                 <Select style={{ width: '275px' }}>
+                                    {
+                                        strategys && strategys.map((item, index) => {
+                                            return (<Option value={item.id} key={index}>{item.name}</Option>);
+                                        })
+                                    }
                                     <Option value="">全部</Option>
                                 </Select>
                             )
@@ -92,6 +111,13 @@ export default class AddRule extends React.PureComponent {
                         {
                             getFieldDecorator('rules')(
                                 <div>
+                                    <Select style={{ width: '154px' }}>
+                                        {
+                                            sleuthTargets && sleuthTargets.map((item, index) => {
+                                                return (<Option value={item.id} key={index}>{item.sleuthTargetName}</Option>);
+                                            })
+                                        }
+                                    </Select>
                                     <Select style={{ width: '154px' }}>
                                         {
                                             times.map((item, index) => {

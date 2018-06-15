@@ -1,6 +1,9 @@
 .layout{
     margin: 15px;
     background-color: #fff;
+    :global(.ant-layout){
+        background-color: #fff;
+    }
 }
 .look{
     padding-top: 22px;
@@ -15,7 +18,7 @@
     }
 }
 .adds{
-    margin-top: -34px;
+    margin-top: -3px;
     float: right;
     margin-right: 35px;
 }
@@ -60,3 +63,4 @@
     margin-bottom: 20px;
     margin-right: 13px;
 }
+

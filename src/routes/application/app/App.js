@@ -81,7 +81,13 @@ class AppIndex extends React.PureComponent {
             pageSize,
         });
     };
-    look = (id) => {
+    look = (id, name) => {
+        const app = {
+            id,
+            name,
+        };
+        sessionStorage.removeItem('app');
+        sessionStorage.setItem('app', JSON.stringify(app));
         this.props.history.push(setPath(`/apps/${base64.encode(id)}`));
     }
     modalOk = (data, callback) => {
@@ -115,6 +121,8 @@ class AppIndex extends React.PureComponent {
         });
     };
     query(payload) {
+        const partnerId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { partnerId });
         this.props.dispatch({
             type: 'app/getAppList',
             payload,
@@ -130,17 +138,14 @@ class AppIndex extends React.PureComponent {
         const { getFieldDecorator } = this.props.form;
         const columns = [
             { title: '应用名称', dataIndex: 'name', key: 'name' },
-            { title: 'AppID', dataIndex: 'contactName', key: 'contactName' },
-            { title: 'secret', dataIndex: 'secret', key: 'secret' },
+            { title: 'AppID', dataIndex: 'id', key: 'id' },
+            // { title: 'secret', dataIndex: 'secret', key: 'secret' },
             { title: '公司名称', dataIndex: 'partnerName', key: 'partnerName' },
             { title: '操作',
                 dataIndex: 'operator',
                 render: (...rest) => (
                     <div>
-                        {
-                            roles('R_B_app_app_edit') &&
-                        <span role="button" tabIndex="-1" style={{ marginRight: 5, color: 'rgba(59,153,252,1)' }} onClick={() => this.look(rest[1].id)}>查看</span>
-                        }
+                        <span role="button" tabIndex="-1" style={{ marginRight: 5, color: 'rgba(59,153,252,1)' }} onClick={() => this.look(rest[1].id, rest[1].name)}>查看</span>
                         {
                             roles('R_B_app_app_del') &&
                         <Popconfirm
@@ -166,11 +171,11 @@ class AppIndex extends React.PureComponent {
                             getFieldDecorator('appName')(<Input placeholder="请输入应用名称" />)
                         }
                     </FormItem>
-                    <FormItem label="公司名称:">
+                    {/*   <FormItem label="公司名称:">
                         {
                             getFieldDecorator('partnerName')(<Input placeholder="请输入公司名称" />)
                         }
-                    </FormItem>
+                    </FormItem> */}
                     {
                         roles('R_B_app_app_view') &&
                     <FormItem>

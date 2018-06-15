@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { setPath } from 'utils/path';
 import style from './LookApp.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -75,8 +76,18 @@ class OldProduct extends React.PureComponent {
             payload,
         });
     }
-    manage = (id) => {
-        console.log(id);
+    manage = (id, name) => {
+        const product = {
+            id,
+            name,
+        };
+        sessionStorage.removeItem('product');
+        sessionStorage.setItem('product', JSON.stringify(product));
+        this.props.dispatch({
+            type: 'common/setSide',
+            flag: false,
+        });
+        this.props.history.push(setPath('/policy'));
     }
     // all = () => {
     //     const listAppProduct = [];
@@ -120,6 +131,7 @@ class OldProduct extends React.PureComponent {
             pageNum,
             loading,
         } = this.props;
+
         const dels = [
             { title: '产品名称', dataIndex: 'productName', key: 'productName' },
             { title: '产品介绍', dataIndex: 'productDesc', key: 'productDesc' },
@@ -137,7 +149,7 @@ class OldProduct extends React.PureComponent {
                         >
                             <Button icon="delete" />
                         </Popconfirm> */}
-                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id)}>管理</a>
+                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.name)}>管理</a>
                     </div>),
             },
         ];

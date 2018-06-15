@@ -5,6 +5,7 @@ export default {
     namespace: 'common',
     state: {
         breadcrumbItems: [],
+        flag: true,
     },
     reducers: {
         setBreadcrumb(state, { payload }) {
@@ -13,5 +14,11 @@ export default {
                 breadcrumbItems: payload,
             };
         },
+        setSide(state, { payload }) {
+            return {
+                ...state,
+                flag: payload,
+            };
+        }
     },
 };

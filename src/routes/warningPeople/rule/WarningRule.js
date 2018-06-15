@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Layout, Input, Form, Button, Table } from 'antd';
+import { setPath } from 'utils/path';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -16,6 +17,9 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class WarningRule extends React.PureComponent {
+    add = () => {
+        this.props.history.push(setPath('/addWarningRule'));
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         const {
@@ -52,7 +56,7 @@ export default class WarningRule extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div>
-                    <Button type="primary">新增</Button>
+                    <Button type="primary" onClick={() => this.add()}>新增</Button>
                 </div>
                 <Table
                     columns={columns}

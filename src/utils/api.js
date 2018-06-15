@@ -172,11 +172,30 @@ const api = {
 
     /* ---------- 报警对象-报警收件人 ----------*/
     warningPeople: `${API}/api/risk/manager/monitor/getSleuthPersonListByReq/v1`,
+    // 新增收件人
+    addPeople: `${API}/api/risk/manager/monitor/createPerson/v1`,
+    // 获取验证码
+    getCode: `${API}/api/risk/manager/monitor/getVerificationCodeByReq/v1`,
+    // 编辑报警收件人
+    updataPeople: `${API}/api/risk/manager/monitor/updateSleuthPersonByReq/v1`,
+    // 删除报警收件人
+    delPeople: `${API}/api/risk/manager/monitor/deleteOneSleuthPersonByReq/v1`,
+    delsPeople: `${API}/api/risk/manager/monitor/deleteSleuthPersonByReq/v1`,
+    // 获取报警组
+    warningTeamList: `${API}/api/risk/manager/monitor/getAllTeamAndPerson/v1`,
+    addTeam: `${API}/api/risk/manager/monitor/createByRequest/v1`,
+    updataTeam: `${API}/api/risk/manager/monitor/updateByRequest/v1`,
+    delTeam: `${API}/api/risk/manager/monitor/deleteSleuthTeamByRequest/v1`,
 
     warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
 
     /* ---------- 监控-报警历史 ----------*/
     historyPolice: `${API}/api/risk/manager/monitor/sleuthHistory/list/v1`,
+
+    /* ----------------报警规则------------------- */
+    getNoPeoples: `${API}/api/risk/manager/monitor/getAllTeamAndPerson/v1`,
+    // 监控指标
+    warningZB: `${API}/api/risk/manager/monitor/monitorItem/all/v1`,
 
 };
 

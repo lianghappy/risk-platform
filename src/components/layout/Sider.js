@@ -1,28 +1,29 @@
 import React from 'react';
-// import { connect } from 'dva';
+import { connect } from 'dva';
 import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 // import { authFirst, authsSecond } from 'utils/auth';
-import { authFirst } from 'utils/auth';
+import { authFirst, authsSecond } from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
-// const mapStateToProps = state => ({
-//     auths: state.session.menus
-// });
-// @connect(mapStateToProps)
+const mapStateToProps = state => ({
+    // auths: state.session.menus
+    flag: state.common.flag,
+});
+@connect(mapStateToProps)
 export default class Sider extends React.PureComponent {
     static propTypes = {
         // auths: PropTypes.array.isRequired,
-        location: PropTypes.object.isRequired
+        location: PropTypes.object.isRequired,
+        flag: PropTypes.bool.isRequired,
     };
     render() {
         const { location } = this.props;
-        console.log(location);
-
+        const auths = this.props.flag ? authFirst : authsSecond;
         const menuKey = menuKeyPick(location);
         return (
             <Layout.Sider breakpoint="lg" className="jm-sider">
@@ -38,7 +39,7 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
-                    {authFirst.map(m => (
+                    {auths.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={

@@ -274,9 +274,9 @@ function RouterConfig({ history, app }) {
     const addWarningRule = dynamic({
         app,
         component: () => import('routes/warningPeople/rule/AddRule'),
-        // models: () => [
-        //     import('models/warning/WarningRule'),
-        // ]
+        models: () => [
+            import('models/warning/AddWarning'),
+        ],
     });
     // 监控大盘
     const Disk = dynamic({
@@ -290,6 +290,11 @@ function RouterConfig({ history, app }) {
         models: () => [
             import('models/earlyWarning/History')
         ]
+    });
+    // 订单管理
+    const Orders = dynamic({
+        app,
+        component: () => import('routes/system/order/Order'),
     });
     return (
         <Router history={history}>
@@ -338,6 +343,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/disk')} exact component={Disk} />
                     <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
                     <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
+                    <PrivateRoute path={setPath('/order')} exact component={Orders} />
                 </Main>
             </Switch>
         </Router>

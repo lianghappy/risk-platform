@@ -157,6 +157,7 @@ class AppIndex extends React.PureComponent {
                             type={this.state.current}
                             pageNum={pageNum}
                             appId={this.props.list.id}
+                            history={this.props.history}
                         />
                         :
                         <Product

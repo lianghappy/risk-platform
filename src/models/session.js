@@ -139,6 +139,10 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [],
                     });
+                    dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
                 }
             });
         },

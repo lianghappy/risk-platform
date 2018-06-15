@@ -1,9 +1,12 @@
 import React from 'react';
-import { Layout, Form, Input, Table } from 'antd';
-import { Button } from 'antd/lib/radio';
+import { Layout, Form, Input, Table, Button } from 'antd';
+import styles from './index.scss';
 
 @Form.create()
 export default class Order extends React.PureComponent {
+    state = {
+        better: false,
+    }
     render() {
         const {
             form,
@@ -21,12 +24,13 @@ export default class Order extends React.PureComponent {
             { title: '策略名称', dataIndex: 'workTime', key: 'workTime' },
             { title: '用户手机号', dataIndex: 'workTime', key: 'workTime' },
             { title: '用户身份证姓名', dataIndex: 'workTime', key: 'workTime' },
-            { title: '身份证号', dataIndex: 'workTime', key: 'workTime' },
+            { title: '用户身份证号码', dataIndex: 'workTime', key: 'workTime' },
         ];
         return (
             <Layout className="layoutMar">
                 <Form
                     layout="inline"
+                    className={styles.forms}
                 >
                     <Form.Item
                         label="风控订单ID"
@@ -64,15 +68,20 @@ export default class Order extends React.PureComponent {
                             )
                         }
                     </Form.Item>
-                    <Form.Item
-                        label="风控下单时间"
-                    >
-                        {
-                            getFieldDecorator('name')(
-                                <Input />
-                            )
-                        }
-                    </Form.Item>
+                    {
+                        this.state.better &&
+                        <Form.Item
+                            label="风控下单时间"
+                        >
+                            {
+                                getFieldDecorator('name')(
+                                    <Input />
+                                )
+                            }
+                        </Form.Item>
+                    }
+                    {
+                        this.state.better &&
                     <Form.Item
                         label="风控审核状态"
                     >
@@ -82,6 +91,9 @@ export default class Order extends React.PureComponent {
                             )
                         }
                     </Form.Item>
+                    }
+                    {
+                        this.state.better &&
                     <Form.Item
                         label="身份证号"
                     >
@@ -91,6 +103,9 @@ export default class Order extends React.PureComponent {
                             )
                         }
                     </Form.Item>
+                    }
+                    {
+                        this.state.better &&
                     <Form.Item
                         label="风控审核结束时间"
                     >
@@ -100,6 +115,7 @@ export default class Order extends React.PureComponent {
                             )
                         }
                     </Form.Item>
+                    }
                     <Form.Item>
                         <Button type="primary">查询</Button>
                         <Button type="default">重置</Button>

@@ -60,9 +60,14 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/policy') {
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略管理' }],
+                    });
+                    dispatch({
+                        type: 'common/setSide',
+                        flag: false,
                     });
                     dispatch({
                         type: 'getPolicyList',
@@ -70,6 +75,7 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            companyId,
                         },
                     });
                 }

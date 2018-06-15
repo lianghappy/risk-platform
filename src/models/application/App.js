@@ -69,6 +69,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/app') {
+                    const partnerId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '应用管理' }],
@@ -79,6 +80,7 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            partnerId,
                         },
                     });
                     dispatch({

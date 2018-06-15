@@ -25,7 +25,7 @@ export default class PeopleIndex extends React.PureComponent {
                     <MenuItem key="people">报警收件人</MenuItem>
                     <MenuItem key="peoples">报警收件组</MenuItem>
                 </Menu>
-                {this.state.current === 'people' ? <People /> : <Peoples />}
+                {this.state.current === 'people' ? <People {...this.props} /> : <Peoples />}
             </Layout>
         );
     }
