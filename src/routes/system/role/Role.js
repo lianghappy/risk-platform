@@ -76,6 +76,15 @@ class RoleIndex extends React.PureComponent {
            });
        });
    }
+   onReset = () => {
+       const { pageSize, form } = this.props;
+       form.resetFields();
+       this.query({
+           pageNum: 1,
+           pageSize,
+           sysId: 'risk',
+       });
+   };
    addrole = (e) => {
        e.preventDefault();
        this.props.history.push(setPath('/role/addRole'));
