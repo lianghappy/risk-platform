@@ -18,7 +18,6 @@ class DecisionIndex extends React.PureComponent {
         list: PropTypes.array.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
-        sysId: PropTypes.string.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         this.query({
@@ -27,19 +26,21 @@ class DecisionIndex extends React.PureComponent {
             sysId,
         });
     };
-   onQuery = () => {
+   onQuery = (e) => {
+       e.preventDefault();
        const {
            pageSize,
-           dispatch,
-           sysId,
+           form,
+           loading,
        } = this.props;
-       dispatch({
-           type: 'account/queryAccountList',
-           payload: {
+       if (loading) return;
+       form.validateFields((errors, values) => {
+           this.query({
+               ...values,
                pageNum: 1,
                pageSize,
-               sysId,
-           },
+               sysId: 'risk',
+           });
        });
    };
    onReset = () => {

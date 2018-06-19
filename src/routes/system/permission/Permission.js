@@ -100,7 +100,7 @@ class Permission extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem label="权限类型" >
-                        {getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择权限类型"><Option value="菜单">菜单</Option><Option value="模块">模块</Option><Option value="按钮">按钮</Option></Select>)}
+                        {getFieldDecorator('type')(<Select style={{ width: 157 }} placeholder="请选择权限类型"><Option value="menu">菜单</Option><Option value="module">模块</Option><Option value="button">按钮</Option></Select>)}
                     </FormItem>
                     <FormItem>
                         {
