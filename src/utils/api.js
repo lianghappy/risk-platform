@@ -197,6 +197,13 @@ const api = {
     // 监控指标
     warningZB: `${API}/api/risk/manager/monitor/monitorItem/all/v1`,
 
+    /* --------------------订单管理--------------------- */
+    // 订单管理列表
+    orderList: `${API}/api/risk/manager/collector/sample/list/v1`,
+    // 订单基本信息
+    orderBasic: `${API}/api/risk/manager/collector/sample/info/byId/v1`,
+    linkOrderList: `${API}/api/risk/manager/collector/sample/relation/byId/v1`,
+
 };
 
 export default api;

@@ -57,6 +57,10 @@ export const menuKeyPick = (location) => {
         if (path[2] === '0') key.push('sandboxie');
         else key.push('sandboxie');
         break;
+    case 'orderDetail':
+        if (path[2] === '0') key.push('order');
+        else key.push('order');
+        break;
     default:
         key.push(router);
     }

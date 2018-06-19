@@ -295,6 +295,17 @@ function RouterConfig({ history, app }) {
     const Orders = dynamic({
         app,
         component: () => import('routes/system/order/Order'),
+        models: () => [
+            import('models/system/Order'),
+        ],
+    });
+    // 订单详情
+    const OrderDetail = dynamic({
+        app,
+        component: () => import('routes/system/order/detail/OrderDetail.js'),
+        models: () => [
+            import('models/system/OrderDetail.js')
+        ],
     });
     return (
         <Router history={history}>
@@ -344,6 +355,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
                     <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
                     <PrivateRoute path={setPath('/order')} exact component={Orders} />
+                    <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
                 </Main>
             </Switch>
         </Router>
