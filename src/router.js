@@ -282,6 +282,9 @@ function RouterConfig({ history, app }) {
     const Disk = dynamic({
         app,
         component: () => import('routes/earlyWarning/disk/Disk'),
+        models: () => [
+            import('models/earlyWarning/Disk.js')
+        ],
     });
     // 报警历史
     const historyPolice = dynamic({

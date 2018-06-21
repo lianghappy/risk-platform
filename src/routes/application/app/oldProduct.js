@@ -149,7 +149,7 @@ class OldProduct extends React.PureComponent {
                         >
                             <Button icon="delete" />
                         </Popconfirm> */}
-                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.name)}>管理</a>
+                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
                     </div>),
             },
         ];

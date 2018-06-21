@@ -326,7 +326,7 @@ export const authsSecond = [
         key: 'warning',
         children: [{
             name: '报警规则',
-            key: 'black',
+            key: 'warningRule',
             router: '/warningRule',
         }, {
             name: '报警收件人',

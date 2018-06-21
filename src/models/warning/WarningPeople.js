@@ -1,6 +1,7 @@
 import API from 'utils/api';
 import { post } from 'utils/request';
 import { PAGE_SIZE } from 'utils/constants';
+import { filterPath } from 'utils/path';
 
 export default {
     namespace: 'warningPeople',
@@ -85,7 +86,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (pathname === '/warningPeople') {
+                if (filterPath(pathname) === '/warningPeople') {
                     const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setSide',

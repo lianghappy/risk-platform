@@ -196,6 +196,13 @@ const api = {
     getNoPeoples: `${API}/api/risk/manager/monitor/getAllTeamAndPerson/v1`,
     // 监控指标
     warningZB: `${API}/api/risk/manager/monitor/monitorItem/all/v1`,
+    // 更新报警规则
+    updateWarnRule: `${API}/api/risk/manager/monitor/sleuthConfig/update/v1`,
+    // 创建报警规则
+    addWarnRule: `${API}/api/risk/manager/monitor/sleuthConfig/create/v1`,
+    delWarnRule: `${API}/api/risk/manager/monitor/sleuthConfig/delete/v1`,
+    // 更改状态
+    updateStatus: `${API}/api/risk/manager/monitor/sleuthConfig/change/v1`,
 
     /* --------------------订单管理--------------------- */
     // 订单管理列表
@@ -203,6 +210,10 @@ const api = {
     // 订单基本信息
     orderBasic: `${API}/api/risk/manager/collector/sample/info/byId/v1`,
     linkOrderList: `${API}/api/risk/manager/collector/sample/relation/byId/v1`,
+
+    /* ------------------------监控大盘-------------------------- */
+    dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
+    addDisks: `${API}/api/risk/manager/monitor/dashBoard/create/v1`,
 
 };
 

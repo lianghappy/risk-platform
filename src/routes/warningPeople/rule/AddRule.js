@@ -1,6 +1,9 @@
 import React from 'react';
-import { Layout, Form, Input, Transfer, Select, Button } from 'antd';
+import PropTypes from 'prop-types';
+import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
+import moment from 'moment';
 import { connect } from 'dva';
+import { setPath } from 'utils/path';
 import styles from './index.scss';
 
 const Option = Select.Option;
@@ -14,12 +17,88 @@ const mapStateToProps = (state) => {
 @Form.create()
 @connect(mapStateToProps)
 export default class AddRule extends React.PureComponent {
+    static propTypes = {
+        getPeopleList: PropTypes.array.isRequired,
+    }
+    state = {
+        targetKeys: [],
+    }
+    onQuery = (e) => {
+        e.preventDefault();
+        const {
+            dispatch,
+            form,
+            strategys,
+            sleuthTargets,
+            getPeopleList,
+        } = this.props;
+        form.validateFields((errors, values) => {
+            if (!errors) {
+                strategys.forEach(item => {
+                    if (item.id === values.strategyId) {
+                        Object.assign(values, { strategyName: item.name });
+                    }
+                });
+                sleuthTargets.forEach(item => {
+                    if (item.id === values.sleuthTargeId) {
+                        Object.assign(values, { sleuthTargetName: item.sleuthTargetName });
+                    }
+                });
+                const team = [];
+                values.sleuthTeams.forEach(item => {
+                    getPeopleList.forEach(it => {
+                        if (item === it.key) {
+                            team.push({
+                                id: it.key,
+                                name: it.title,
+                            });
+                        }
+                    });
+                });
+                const product = JSON.parse(sessionStorage.product);
+                const app = JSON.parse(sessionStorage.app);
+                const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                const addName = JSON.parse(sessionStorage.userInfo).user.realName;
+                Object.assign(values, {
+                    productId: product.id,
+                    productName: product.name,
+                    appId: app.id,
+                    appName: app.name,
+                    companyId,
+                    sleuthTeams: team,
+                    addName,
+                });
+                new Promise((resolve) => {
+                    dispatch({
+                        type: 'addWarningRule/add',
+                        payload: {
+                            data: {
+                                ...values,
+                            },
+                            resolve,
+                        },
+                    });
+                }).then(() => {
+                    message.success('成功');
+                    this.props.history.push(setPath('/warningRule'));
+                });
+            }
+        });
+    }
+    cancel = () => {
+        window.history.back(-1);
+    }
+    handleChange = (targetKeys) => {
+        this.setState({ targetKeys });
+    }
+    filterOption = (inputValue, option) => {
+        return option.description.indexOf(inputValue) > -1;
+    }
     render() {
         const {
             strategys,
             sleuthTargets,
         } = this.props;
-        console.log(this.props.strategys);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -66,7 +145,10 @@ export default class AddRule extends React.PureComponent {
         ];
         return (
             <Layout className="layoutMar">
-                <Form className={styles.addRule}>
+                <Form
+                    className={styles.addRule}
+                    onSubmit={this.onQuery}
+                >
                     <Form.Item>
                         <span className={styles.headers}>1.关联资源</span>
                     </Form.Item>
@@ -108,9 +190,10 @@ export default class AddRule extends React.PureComponent {
                         label="规则描述"
                         {...formItemLayout}
                     >
-                        {
-                            getFieldDecorator('rules')(
-                                <div>
+
+                        <div>
+                            {
+                                getFieldDecorator('sleuthTargeId')(
                                     <Select style={{ width: '154px' }}>
                                         {
                                             sleuthTargets && sleuthTargets.map((item, index) => {
@@ -118,31 +201,49 @@ export default class AddRule extends React.PureComponent {
                                             })
                                         }
                                     </Select>
-                                    <Select style={{ width: '154px' }}>
+                                )
+                            }
+                            {
+                                getFieldDecorator('threshold')(
+                                    <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             times.map((item, index) => {
-                                                return (<Option value={item.key} key={index}>{item.name}</Option>);
+                                                return (<Option value={moment.duration(Number(item.key), item.type).asSeconds()} key={index}>{item.name}</Option>);
                                             })
                                         }
                                     </Select>
-                                    <Select style={{ width: '154px' }}>
+                                )
+                            }
+                            {
+                                getFieldDecorator('judgeKey')(
+                                    <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             value.map((item, index) => {
                                                 return (<Option value={item.key} key={index}>{item.name}</Option>);
                                             })
                                         }
                                     </Select>
-                                    <Select style={{ width: '154px' }}>
+                                )
+                            }
+                            {
+                                getFieldDecorator('judgeSymbol')(
+                                    <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             judgeKey.map((item, index) => {
                                                 return (<Option value={item.key} key={index}>{item.key}</Option>);
                                             })
                                         }
                                     </Select>
-                                    <Input style={{ width: '154px' }} />
-                                </div>
-                            )
-                        }
+                                )
+                            }
+                            {
+                                getFieldDecorator('judgeValue')(
+                                    <Input style={{ width: '154px', marginLeft: '16px' }} />
+                                )
+                            }
+                        </div>
+
+
                     </Form.Item>
                     <Form.Item
                         label="通道沉默时间"
@@ -157,7 +258,7 @@ export default class AddRule extends React.PureComponent {
                                 <Select style={{ width: '154px' }}>
                                     {
                                         times.map((item, index) => {
-                                            return (<Option value={item.key} key={index}>{item.name}</Option>);
+                                            return (<Option value={moment.duration(Number(item.key), item.type).asSeconds()} key={index}>{item.name}</Option>);
                                         })
                                     }
                                 </Select>
@@ -197,13 +298,20 @@ export default class AddRule extends React.PureComponent {
                                     { required: true, message: '请选择通知对象' }
                                 ]
                             })(
-                                <Transfer />
+                                <Transfer
+                                    dataSource={this.props.getPeopleList}
+                                    showSearch
+                                    filterOption={this.filterOption}
+                                    targetKeys={this.state.targetKeys}
+                                    onChange={this.handleChange}
+                                    render={item => item.title}
+                                />
                             )
                         }
                     </Form.Item>
                     <Form.Item className={styles.addBtn}>
-                        <Button type="primary" style={{ marginRight: '20px' }}>新增</Button>
-                        <Button type="default">取消</Button>
+                        <Button type="primary" style={{ marginRight: '20px' }} htmlType="submit" disabled={this.props.loading}>新增</Button>
+                        <Button type="default" onClick={() => this.cancel()}>取消</Button>
                     </Form.Item>
                 </Form>
             </Layout>
