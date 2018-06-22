@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -11,6 +11,7 @@ import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import AddPolicy from './AddPolicy';
 
+const confirm = Modal.confirm;
 const FormItem = Form.Item;
 
 class Policy extends React.PureComponent {
@@ -96,6 +97,34 @@ class Policy extends React.PureComponent {
             });
         });
     }
+    onDelete(ids) {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'policy/del',
+                payload: {
+                    data: {
+                        id: ids,
+                    },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -149,6 +178,18 @@ class Policy extends React.PureComponent {
         e.preventDefault();
         this.props.history.push(setPath(`strategy/${base64.encode(value.id)}`));
     }
+    showDeleteConfirm = (ids) => {
+        confirm({
+            title: '您确认删除此策略吗?',
+            okText: '确认',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk: () => this.onDelete(ids),
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
     render() {
         const rowSelection = {
             type: 'radio',
@@ -194,28 +235,55 @@ class Policy extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            rest[1].isEnable < 2 ?
+                            rest[1].isEnable < 2 &&
                                 <Popconfirm
                                     placement="topRight"
-                                    title={rest[1].isEnable === 1 && rest[1].isEnable < 2 ? '是否下架？' : '是否上架？'}
+                                    title={Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '是否下架？' : '是否上架？'}
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
                                     <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
                                 </Popconfirm>
-                                :
-                                null
                         }
                         {
-                            roles('R_B_PLY_policies_edit') &&
-                        <AddPolicy
-                            type="edit"
-                            record={rest[1]}
-                            onOk={this.modalOk}
-                        >
-                            <span>编辑</span>
-                        </AddPolicy>
+                            Number(rest[1].isEnable) > 0 ?
+                                <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
+                                :
+                                <Dropdown overlay={(
+                                    <Menu>
+                                        <Menu.Item>
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
+                                        </Menu.Item>
+                                        {
+                                            roles('R_B_SB_sandbox_edit') &&
+                                        <Menu.Item>
+                                            {
+                                                roles('R_B_PLY_policies_edit') && Number(rest[1].isEnable) === 0 &&
+                                    <AddPolicy
+                                        type="edit"
+                                        record={rest[1]}
+                                        onOk={this.modalOk}
+                                    >
+                                        <span>编辑</span>
+                                    </AddPolicy>
+                                            }
+                                        </Menu.Item>
+                                        }
+                                        {
+                                            Number(rest[1].isEnable) === 0 &&
+                                        <Menu.Item>
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.showDeleteConfirm(rest[1].id)} type="dashed">
+                                                删除
+                                            </span>
+                                        </Menu.Item>
+                                        }
+                                    </Menu>
+                                )}
+                                >
+                                    <a className="ant-dropdown-link">
+                                        更多<Icon type="down" />
+                                    </a>
+                                </Dropdown>
                         }
-                        <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])} className={style.stage}>阶段管理</span>
                     </div>) },
         ];
         return (
