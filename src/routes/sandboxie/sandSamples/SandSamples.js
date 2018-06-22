@@ -85,7 +85,7 @@ class SandSamples extends React.PureComponent {
             dispatch({
                 type: 'sandSamples/del',
                 payload: {
-                    data: { analysisSampleId },
+                    data: { analysisSampleId, type: 1 },
                     resolve,
                 },
             });
