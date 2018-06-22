@@ -108,7 +108,7 @@ class Samples extends React.PureComponent {
             { title: '数据源',
                 dataIndex: 'valueType',
                 key: 'valueType',
-                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '内部'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
             { title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',

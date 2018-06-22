@@ -93,7 +93,6 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
-                            type: 1,
                         },
                     });
                     dispatch({

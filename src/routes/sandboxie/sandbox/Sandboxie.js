@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon, Modal } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon, Modal, Select } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -27,11 +27,14 @@ class Sandboxie extends React.PureComponent {
         clone: {},
         disabled: true,
     };
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onQuery = (e) => {
@@ -319,7 +322,13 @@ class Sandboxie extends React.PureComponent {
                     </FormItem>
                     <FormItem label="商家状态" >
                         {
-                            getFieldDecorator('status')(<Input placeholder="请输入商家状态" />)
+                            getFieldDecorator('isEnable')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="1">已上架</Select.Option>
+                                    <Select.Option value="0">未上架</Select.Option>
+                                    <Select.Option value="2">已下架</Select.Option>
+                                </Select>
+                            )
                         }
                     </FormItem>
                     <FormItem label="策略名称" >

@@ -29,12 +29,20 @@ class SandSamples extends React.PureComponent {
         visible: false,
         show: false,
     }
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            type: 1,
+    onPageChange = (pageNum, pageSize) => {
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            Object.assign(values, { type: 1 });
+            if (values && values.times) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                delete values.times;
+            }
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onPage = (pageNum, pageSize, analysisSampleId) => {
@@ -53,6 +61,11 @@ class SandSamples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.times) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                delete values.times;
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -132,6 +145,7 @@ class SandSamples extends React.PureComponent {
         this.props.history.push(setPath('/sandSamples/create'));
     }
     query(payload) {
+        Object.assign(payload, { type: 1 });
         this.props.dispatch({
             type: 'sandSamples/getSandSamplesList',
             payload,

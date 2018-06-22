@@ -19,10 +19,14 @@ class Permission extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
     };
     onPageChange = (pageNum, pageSize) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId: 'risk',
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId: 'risk',
+            });
         });
     };
     onQuery = (e) => {
@@ -86,6 +90,9 @@ class Permission extends React.PureComponent {
                         types = '菜单';
                         break;
                     case 'module':
+                        types = '模块';
+                        break;
+                    case 'Module':
                         types = '模块';
                         break;
                     default:
