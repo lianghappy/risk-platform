@@ -246,7 +246,7 @@ class DecisionIndex extends React.PureComponent {
                    <FormItem>
                        {
                            roles('R_B_system_user_view') &&
-                          <Button type="primary" htmlType="submit" isabled={this.props.loading}>
+                          <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                      查询
                           </Button>
                        }
@@ -254,7 +254,7 @@ class DecisionIndex extends React.PureComponent {
                    {
                        roles('R_B_system_user_reset') &&
                    <FormItem>
-                       <Button type="primary" onClick={this.onReset} isabled={this.props.loading}>
+                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                        </Button>
                    </FormItem>

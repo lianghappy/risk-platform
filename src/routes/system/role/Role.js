@@ -145,7 +145,7 @@ class RoleIndex extends React.PureComponent {
                    <FormItem>
                        {
                            roles('R_B_system_role_view') &&
-                       <Button type="primary" htmlType="submit">
+                       <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                   查询
                        </Button>
                        }
@@ -153,7 +153,7 @@ class RoleIndex extends React.PureComponent {
                    <FormItem>
                        {
                            roles('R_B_system_role_reset') &&
-                       <Button type="primary" htmlType="submit">
+                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                        </Button>
                        }

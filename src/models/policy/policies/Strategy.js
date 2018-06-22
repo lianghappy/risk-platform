@@ -11,6 +11,7 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        status: '',
     },
     effects: {
         // 获取阶段
@@ -24,6 +25,16 @@ export default {
                     sysId: SYSID,
                     pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        * getPolicyDetail({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getPolicyDetail, payload, data);
+            yield put({
+                type: 'getStrategyListSuc',
+                payload: {
+                    status: response.isEnable,
                 },
             });
         },
@@ -68,6 +79,12 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                        },
+                    });
+                    dispatch({
+                        type: 'getPolicyDetail',
+                        payload: {
+                            id: ids,
                         },
                     });
                 }

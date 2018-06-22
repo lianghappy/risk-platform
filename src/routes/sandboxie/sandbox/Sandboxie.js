@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon, Modal } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -12,6 +12,7 @@ import Pagination from '../../../components/Pagination/Pagination';
 import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 class Sandboxie extends React.PureComponent {
     static propTypes ={
@@ -136,7 +137,7 @@ class Sandboxie extends React.PureComponent {
             url = 'sandboxie/add';
             break;
         case 'edit':
-            url = 'sandboxie/updata';
+            url = 'sandboxie/update';
             break;
         case 'clone':
             url = 'sandboxie/clone';
@@ -184,6 +185,19 @@ class Sandboxie extends React.PureComponent {
     stage = (e, value) => {
         e.preventDefault();
         this.props.history.push(setPath(`/strategies/${base64.encode(value.id)}`));
+    }
+    showDeleteConfirm = (e, ids) => {
+        e.preventDefault();
+        confirm({
+            title: '您确认删除此策略吗?',
+            okText: '确认',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk: () => this.onDelete(ids),
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
     render() {
         const rowSelection = {
@@ -250,7 +264,7 @@ class Sandboxie extends React.PureComponent {
                         <span role="button" tabIndex="-1" onClick={(e) => this.history(e, rest[1])} className={style.stage}>实验历史记录</span>
                         }
                         {
-                            rest[1].isEnable > 0 ?
+                            Number(rest[1].isEnable) > 0 ?
                                 <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                 :
                                 <Dropdown overlay={(
@@ -273,7 +287,16 @@ class Sandboxie extends React.PureComponent {
                                         {
                                             roles('R_B_SB_sandbox_del') &&
                                         <Menu.Item>
-                                            <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
+                                            {/* <confirm
+                                                placement="topTop"
+                                                title="您是否确认删除此策略？"
+                                                onOk={(e) => this.onDelete(e, rest[1])}
+                                            >
+                                                <span role="button" tabIndex="-1">删除</span>
+                                            </confirm> */}
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.showDeleteConfirm(e, rest[1].id)} type="dashed">
+                                                删除
+                                            </span>
                                         </Menu.Item>
                                         }
                                     </Menu>
