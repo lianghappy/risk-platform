@@ -271,7 +271,7 @@ class Policy extends React.PureComponent {
                                         {
                                             Number(rest[1].isEnable) === 0 &&
                                         <Menu.Item>
-                                            <span role="button" tabIndex="-1" onClick={(e) => this.showDeleteConfirm(rest[1].id)} type="dashed">
+                                            <span role="button" tabIndex="-1" onClick={() => this.showDeleteConfirm(rest[1].id)} type="dashed">
                                                 删除
                                             </span>
                                         </Menu.Item>
