@@ -130,8 +130,7 @@ class AppIndex extends React.PureComponent {
         const { getFieldDecorator } = this.props.form;
         const columns = [
             { title: '应用名称', dataIndex: 'name', key: 'name' },
-            { title: 'AppID', dataIndex: 'contactName', key: 'contactName' },
-            { title: 'secret', dataIndex: 'secret', key: 'secret' },
+            { title: 'AppID', dataIndex: 'id', key: 'id' },
             { title: '公司名称', dataIndex: 'partnerName', key: 'partnerName' },
             { title: '操作',
                 dataIndex: 'operator',
