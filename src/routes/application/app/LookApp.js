@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import base64 from 'utils/base64';
 import style from './LookApp.scss';
 import Product from './Product';
 import OldProduct from './oldProduct';
@@ -59,8 +60,9 @@ class AppIndex extends React.PureComponent {
             pageNum,
         } = this.props;
         const content = '更新成功';
-        const url = 'app/updata';
-
+        const url = 'lookApp/update';
+        const id = base64.decode(this.props.match.params.id);
+        data.id = id;
         new Promise((resolve) => {
             dispatch({
                 type: url,

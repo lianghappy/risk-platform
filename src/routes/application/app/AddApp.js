@@ -111,7 +111,7 @@ class AddApp extends React.PureComponent {
                     {children}
                 </span>
                 <Modal
-                    title="公司基本信息"
+                    title="应用基本信息"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}

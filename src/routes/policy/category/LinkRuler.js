@@ -341,13 +341,19 @@ class LinkRuler extends React.PureComponent {
                             }
                             {
                                 roles('R_B_PLY_catg_linkrl_listdel') &&
-                            <Button
-                                type="primary"
-                                onClick={this.delList}
-                                className={style.addBtn}
-                                disabled={this.state.disabled}
-                            >批量删除
-                            </Button>
+                                <Popconfirm
+                                    placement="topRight"
+                                    title="您确定要批量删除吗？"
+                                    onConfirm={() => this.delList()}
+                                >
+                                    <Button
+                                        type="primary"
+                                        onClick={this.delList}
+                                        className={style.addBtn}
+                                        disabled={this.state.disabled}
+                                    >批量删除
+                                    </Button>
+                                </Popconfirm>
                             }
                         </div>
                         <Table

@@ -89,6 +89,12 @@ export default {
             yield call(post, API.listDeletePro, data);
             yield call(resolve);
         },
+        // 更新公司
+        * update({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.appUpdate, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         getAppDetailListSuc(state, { payload }) {

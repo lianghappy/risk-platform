@@ -110,7 +110,7 @@ class Policy extends React.PureComponent {
             url = 'policy/add';
             break;
         case 'edit':
-            url = 'policy/updata';
+            url = 'policy/update';
             break;
         case 'clone':
             url = 'policy/clone';
