@@ -255,7 +255,7 @@ class Sandboxie extends React.PureComponent {
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
                                     {
-                                        roles('B_policy_policy_st_rule_detail') &&
+                                        roles('R_B_SB_sandbox_up') &&
                                     <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
                                     }
                                 </Popconfirm>
@@ -320,7 +320,7 @@ class Sandboxie extends React.PureComponent {
                             getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
                         }
                     </FormItem>
-                    <FormItem label="商家状态" >
+                    <FormItem label="上架状态" >
                         {
                             getFieldDecorator('isEnable')(
                                 <Select style={{ width: '157px' }}>

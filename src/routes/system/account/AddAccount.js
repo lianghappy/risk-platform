@@ -229,7 +229,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('roleIds', {
-                                    initialValue: record.rolesId,
+                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,
