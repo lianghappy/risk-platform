@@ -13,6 +13,8 @@ export default {
         orderBasic: [],
         orderList: [],
         getReport: [],
+        getReportList: [],
+
     },
     effects: {
         // 订单基本信息
@@ -47,6 +49,7 @@ export default {
                 type: 'querySuc',
                 payload: {
                     getReport: response,
+                    getReportList: response ? response.normList : [],
                 },
             });
         },
@@ -85,7 +88,7 @@ export default {
                     dispatch({
                         type: 'getReport',
                         payload: {
-                            sampleId,
+                            sampleId: 'c291992406ab462f9bdd8b7f8c7fceed',
                         },
                     });
                 }

@@ -25,6 +25,12 @@
 .blackAndWhite:before {
     content: '\e644';
 }
+.warning:before{
+    content: "\e61f";
+}
+.earlyWarning:before{
+    content: "\e621";
+}
 .logoImgs{
     width: 50px;
     height: 50px;

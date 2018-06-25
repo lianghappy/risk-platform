@@ -14,8 +14,15 @@
     background-color: #fff;
 }
 .lists{
-    border-bottom: 1px solid #eaeaea;
+    // border-bottom: 1px solid #eaeaea;
+
 }
 .headers{
-
+    margin-bottom: 20px;
+    margin-top: 10px;
+    span{
+        color: black;
+        font-size: 16px;
+        margin-right: 30px;
+    }
 }

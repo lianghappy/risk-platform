@@ -79,6 +79,7 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '沙箱样本' }],
                     });
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'getSandSamplesList',
                         payload: {
@@ -86,6 +87,7 @@ export default {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                             type: 1,
+                            companyId,
                         },
                     });
                 }

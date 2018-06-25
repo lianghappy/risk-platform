@@ -69,12 +69,14 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略沙箱' }],
                     });
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'getPolicyList',
                         payload: {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            companyId,
                         },
                     });
                 }

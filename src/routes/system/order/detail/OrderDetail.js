@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import MenuItem from 'antd/lib/menu/MenuItem';
 import Basic from './Basic';
 import LinkOrder from './LinkOrder';
+import RiskReport from './RiskReport';
 
 
 export default class OrderDetail extends React.PureComponent {
@@ -38,7 +39,7 @@ export default class OrderDetail extends React.PureComponent {
                   }
                   {
                       this.state.current === 'risk' &&
-                      <LinkOrder />
+                      <RiskReport />
                   }
                   {
                       this.state.current === 'order' &&

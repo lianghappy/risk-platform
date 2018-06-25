@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-console.log(`${API}`);
+console.log(jimiEnv);
 const api = {
     // 地址库
     address: 'https://product.jimistore.com/area/manageContAddrProd.json',
@@ -220,6 +220,8 @@ const api = {
     /* ------------------------监控大盘-------------------------- */
     dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
     addDisks: `${API}/api/risk/manager/monitor/dashBoard/create/v1`,
+    addDiskTable: `${API}/api/risk/manager/monitor/boardAndSleuth/create/v1`,
+    dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,
 
 };
 

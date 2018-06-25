@@ -10,6 +10,10 @@ const Option = Select.Option;
 const mapStateToProps = (state) => {
     return {
         list: state.history.list,
+        app: state.history.app,
+        product: state.history.product,
+        strategy: state.history.strategy,
+        data: state.history.data,
         loading: state.loading.models.history,
         pageNum: state.history.pageNum,
         pageSize: state.history.pageSize,
@@ -87,9 +91,14 @@ export default class History extends React.PureComponent {
             pageSize,
             pageNum,
             form,
+            app,
+            product,
+            strategy,
         } = this.props;
         console.log(moment().add(-1, 'hours').format('X'));
         console.log(moment().format('X'));
+        console.log(this.props.data);
+
 
         const { getFieldDecorator } = form;
         const times = [
@@ -168,6 +177,11 @@ export default class History extends React.PureComponent {
                         {
                             getFieldDecorator('strategyId')(
                                 <Select style={{ width: '206px' }}>
+                                    {
+                                        strategy.map((item, index) => {
+                                            return (<Option value={item.id} key={index}>{item.name}</Option>);
+                                        })
+                                    }
                                     <Option value="">全部</Option>
                                 </Select>
                             )
@@ -179,6 +193,11 @@ export default class History extends React.PureComponent {
                         {
                             getFieldDecorator('appId')(
                                 <Select style={{ width: '206px' }}>
+                                    {
+                                        app.map((item, index) => {
+                                            return (<Option key={index} value={item.id}>{item.name}</Option>);
+                                        })
+                                    }
                                     <Option value="">全部</Option>
                                 </Select>
                             )
@@ -190,6 +209,11 @@ export default class History extends React.PureComponent {
                         {
                             getFieldDecorator('productId')(
                                 <Select style={{ width: '206px' }}>
+                                    {
+                                        product.map((item, index) => {
+                                            return (<Option key={index} value={item.id}>{item.name}</Option>);
+                                        })
+                                    }
                                     <Option value="">全部</Option>
                                 </Select>
                             )

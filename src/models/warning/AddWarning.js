@@ -15,7 +15,6 @@ export default {
     effects: {
         * getSelect({ payload }, { call, put }) {
             const response = yield call(post, API.warningZB, payload);
-            console.log(response.sleuthTargets);
             yield put({
                 type: 'querySuc',
                 payload: {

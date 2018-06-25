@@ -83,6 +83,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/samples') {
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '实验样本' }],
@@ -93,6 +94,7 @@ export default {
                             sysId: SYSID,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                            companyId,
                         },
                     });
                     dispatch({

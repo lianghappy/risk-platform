@@ -10,8 +10,25 @@ export default {
         pageNum: 1,
         pageSize: PAGE_SIZE,
         sysId: SYSID,
+        strategy: [],
+        product: [],
+        app: [],
+        data: {},
     },
     effects: {
+        * getSelect({ payload }, { call, put }) {
+            const response = yield call(post, API.warningZB, payload);
+            const apps = response.apps;
+            yield put({
+                type: 'querySrc',
+                payload: {
+                    data: response,
+                    strategy: response.strategys,
+                    app: apps,
+                    product: response.products,
+                },
+            });
+        },
         * getHistoryList({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.historyPolice, payload, data);
@@ -46,6 +63,12 @@ export default {
                             companyId,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
+                        },
+                    });
+                    dispatch({
+                        type: 'getSelect',
+                        payload: {
+                            companyId,
                         },
                     });
                 }
