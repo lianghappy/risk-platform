@@ -27,6 +27,7 @@ import RegularDetail from './RegularDetail';
     pageSize: state.regular.pageSize,
     channels: state.regular.channels,
     categories: state.regular.categories,
+    status: state.regular.status,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -223,6 +224,7 @@ export default class Regular extends React.PureComponent {
             pageNum,
             categories,
             channels,
+            status,
         } = this.props;
         const categoryList = treeConvert({
             pId: 'pid',
@@ -280,7 +282,7 @@ export default class Regular extends React.PureComponent {
             render: (text, record) => (
                 <div>
                     {
-                        roles('R_B_PLY_policy_st_rule_edit') &&
+                        roles('R_B_PLY_policy_st_rule_edit') && Number(status) === 0 &&
                     <RegularEdit
                         type="update"
                         stageType={type}
@@ -302,7 +304,7 @@ export default class Regular extends React.PureComponent {
                     </RegularDetail>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_del') &&
+                        roles('R_B_PLY_policy_st_rule_del') && Number(status) === 0 &&
                     <Popconfirm
                         title="你确定要删除改规则吗"
                         onConfirm={() => this.onDelete(record.id)}
@@ -409,7 +411,7 @@ export default class Regular extends React.PureComponent {
                 </Form>
                 <div className="jm-toolBar">
                     {
-                        roles('R_B_PLY_policy_st_rule_add') &&
+                        roles('R_B_PLY_policy_st_rule_add') && Number(status) === 0 &&
                     <RegularModal
                         stageId={stageId}
                         ruleName={ruleName}
@@ -421,7 +423,7 @@ export default class Regular extends React.PureComponent {
                     </RegularModal>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_cle') &&
+                        roles('R_B_PLY_policy_st_rule_cle') && Number(status) === 0 &&
                     <RegularEdit
                         type="clone"
                         stageType={type}

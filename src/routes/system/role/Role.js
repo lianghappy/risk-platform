@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Form, Input, Select, Button, Table, message, Popconfirm } from 'antd';
 import CSSModules from 'react-css-modules';
-import { DURATION } from 'utils/constants';
+import { DURATION, SYSID } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
@@ -82,7 +82,7 @@ class RoleIndex extends React.PureComponent {
        this.query({
            pageNum: 1,
            pageSize,
-           sysId: 'risk',
+           sysId: SYSID,
        });
    };
    addrole = (e) => {
@@ -90,6 +90,7 @@ class RoleIndex extends React.PureComponent {
        this.props.history.push(setPath('/role/addRole'));
    }
    query(payload) {
+       Object.assign(payload, { sysId: SYSID });
        this.props.dispatch({
            type: 'role/getRoleList',
            payload,
@@ -145,7 +146,7 @@ class RoleIndex extends React.PureComponent {
                    <FormItem>
                        {
                            roles('R_B_system_role_view') &&
-                       <Button type="primary" htmlType="submit">
+                       <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                   查询
                        </Button>
                        }
@@ -153,7 +154,7 @@ class RoleIndex extends React.PureComponent {
                    <FormItem>
                        {
                            roles('R_B_system_role_reset') &&
-                       <Button type="primary" htmlType="submit">
+                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                        </Button>
                        }

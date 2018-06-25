@@ -111,8 +111,9 @@ class AddPolicy extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入策略名称' },
+                                        { max: 50, message: '策略名称最多50位' },
                                     ],
-                                })(<Input type="acount" placeholder="请输入策略名称" />)
+                                })(<Input placeholder="请输入策略名称" />)
                             }
                         </Form.Item>
                         <Form.Item

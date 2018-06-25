@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Menu, Dropdown, Icon, Modal, Select } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -12,6 +12,7 @@ import Pagination from '../../../components/Pagination/Pagination';
 import AddPolicy from './AddPolicy';
 
 const FormItem = Form.Item;
+const confirm = Modal.confirm;
 
 class Sandboxie extends React.PureComponent {
     static propTypes ={
@@ -26,11 +27,14 @@ class Sandboxie extends React.PureComponent {
         clone: {},
         disabled: true,
     };
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onQuery = (e) => {
@@ -136,7 +140,7 @@ class Sandboxie extends React.PureComponent {
             url = 'sandboxie/add';
             break;
         case 'edit':
-            url = 'sandboxie/updata';
+            url = 'sandboxie/update';
             break;
         case 'clone':
             url = 'sandboxie/clone';
@@ -184,6 +188,19 @@ class Sandboxie extends React.PureComponent {
     stage = (e, value) => {
         e.preventDefault();
         this.props.history.push(setPath(`/strategies/${base64.encode(value.id)}`));
+    }
+    showDeleteConfirm = (e, ids) => {
+        e.preventDefault();
+        confirm({
+            title: '您确认删除此策略吗?',
+            okText: '确认',
+            okType: 'danger',
+            cancelText: '取消',
+            onOk: () => this.onDelete(ids),
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     }
     render() {
         const rowSelection = {
@@ -238,7 +255,7 @@ class Sandboxie extends React.PureComponent {
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
                                     {
-                                        roles('B_policy_policy_st_rule_detail') &&
+                                        roles('R_B_SB_sandbox_up') &&
                                     <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
                                     }
                                 </Popconfirm>
@@ -250,7 +267,7 @@ class Sandboxie extends React.PureComponent {
                         <span role="button" tabIndex="-1" onClick={(e) => this.history(e, rest[1])} className={style.stage}>实验历史记录</span>
                         }
                         {
-                            rest[1].isEnable > 0 ?
+                            Number(rest[1].isEnable) > 0 ?
                                 <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                 :
                                 <Dropdown overlay={(
@@ -273,7 +290,16 @@ class Sandboxie extends React.PureComponent {
                                         {
                                             roles('R_B_SB_sandbox_del') &&
                                         <Menu.Item>
-                                            <span role="button" tabIndex="-1" onClick={(e) => this.onDelete(e, rest[1])}>删除</span>
+                                            {/* <confirm
+                                                placement="topTop"
+                                                title="您是否确认删除此策略？"
+                                                onOk={(e) => this.onDelete(e, rest[1])}
+                                            >
+                                                <span role="button" tabIndex="-1">删除</span>
+                                            </confirm> */}
+                                            <span role="button" tabIndex="-1" onClick={(e) => this.showDeleteConfirm(e, rest[1].id)} type="dashed">
+                                                删除
+                                            </span>
                                         </Menu.Item>
                                         }
                                     </Menu>
@@ -294,9 +320,15 @@ class Sandboxie extends React.PureComponent {
                             getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
                         }
                     </FormItem>
-                    <FormItem label="商家状态" >
+                    <FormItem label="上架状态" >
                         {
-                            getFieldDecorator('status')(<Input placeholder="请输入商家状态" />)
+                            getFieldDecorator('isEnable')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="1">已上架</Select.Option>
+                                    <Select.Option value="0">未上架</Select.Option>
+                                    <Select.Option value="2">已下架</Select.Option>
+                                </Select>
+                            )
                         }
                     </FormItem>
                     <FormItem label="策略名称" >

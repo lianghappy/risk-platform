@@ -46,8 +46,9 @@ class AddAccount extends React.PureComponent {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
                     }
+                    console.log(values.acount.replace(/(^\s*)|(\s*$)/g, ''));
                     Object.assign(values, { userId });
-                    Object.assign(values, { account: values.acount });
+                    Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
                     Object.assign(values, { userName: values.name });
                     Object.assign(values, { sysId: SYSID });
                     Object.assign(values, { type });
@@ -65,11 +66,13 @@ class AddAccount extends React.PureComponent {
 
     handleConfirmPassword = (rule, value, callback) => {
         const { getFieldValue } = this.props.form;
-        const newPwd = getFieldValue('confirm');
+        const newPwd = getFieldValue('password');
         if (!newPwd || !value) {
             callback();
         } else if (!Object.is(newPwd, value)) {
             callback(rule.message);
+        } else {
+            callback();
         }
     };
 
@@ -88,7 +91,7 @@ class AddAccount extends React.PureComponent {
         }
     }
     checkPwd = (rule, value, callback) => {
-        if (value.length > 6 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+        if (value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -186,16 +189,6 @@ class AddAccount extends React.PureComponent {
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
-                            label="公司名称"
-                        >
-                            {
-                                getFieldDecorator('company', {
-                                    initialValue: record.company,
-                                })(<Input placeholder="请输入公司名称" />)
-                            }
-                        </Form.Item>
-                        <Form.Item
-                            {...formItemLayout}
                             label="密码"
                         >
                             {
@@ -236,7 +229,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('roleIds', {
-                                    initialValue: record.rolesId,
+                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,

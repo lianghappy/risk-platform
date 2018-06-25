@@ -15,6 +15,7 @@ export default {
         channels: [], // 规则来源
         regulars: [],
         _pageNum: 1,
+        status: '',
     },
     effects: {
         * query({ payload }, { call, put }) {
@@ -25,6 +26,16 @@ export default {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
+                },
+            });
+        },
+        * getPolicyDetail({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getPolicyDetail, payload, data);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    status: response.isEnable,
                 },
             });
         },
@@ -96,6 +107,7 @@ export default {
                 const path = filterPath(pathname).split('/');
                 if (path[1] === 'regular') {
                     const id = base64.decode(path[2]);
+                    const ids = base64.decode(path[3]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略管理', link: setPath('/policy') },
@@ -115,6 +127,12 @@ export default {
                         type: 'queryChannel',
                         payload: {
                             type: 'rule',
+                        },
+                    });
+                    dispatch({
+                        type: 'getPolicyDetail',
+                        payload: {
+                            id: ids,
                         },
                     });
                 }

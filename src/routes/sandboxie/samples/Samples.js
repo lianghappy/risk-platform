@@ -2,7 +2,8 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, DatePicker } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, DatePicker, message } from 'antd';
+import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import moment from 'moment';
 import style from '../index.scss';
@@ -29,11 +30,19 @@ class Samples extends React.PureComponent {
         visible: false,
         show: false,
     }
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            if (values && values.times) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                delete values.times;
+            }
+            this.query({
+                ...values,
+                pageNum: 1,
+                pageSize,
+            });
         });
     };
     onQuery = (e) => {
@@ -67,6 +76,32 @@ class Samples extends React.PureComponent {
             pageSize,
         });
     };
+    onDelete(ids) {
+        const {
+            pageSize,
+            pageNum,
+            form,
+            dispatch,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'samples/del',
+                payload: {
+                    data: { id: ids },
+                    resolve,
+                },
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
     handleShow = (analysisSampleId) => {
         new Promise((resolve) => {
             this.props.dispatch({
@@ -108,7 +143,7 @@ class Samples extends React.PureComponent {
             { title: '数据源',
                 dataIndex: 'valueType',
                 key: 'valueType',
-                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '内部'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
             { title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',

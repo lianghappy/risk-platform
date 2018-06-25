@@ -32,6 +32,11 @@ export default {
             yield call(post, API.addPolicy, data);
             yield call(resolve);
         },
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delPolicy, data);
+            yield call(resolve);
+        },
         // 更新策略
         * update({ payload }, { call }) {
             const { data, resolve } = payload;

@@ -168,7 +168,9 @@ class Policy extends React.PureComponent {
             pageNum,
             list: dataSource,
             loading,
+            status,
         } = this.props;
+        console.log(status);
         const columns = [
             { title: '阶段排序', dataIndex: 'sort', key: 'sort' },
             { title: '阶段名称', dataIndex: 'name', key: 'name' },
@@ -186,7 +188,7 @@ class Policy extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            roles('R_B_PLY_policy_st_edit') &&
+                            roles('R_B_PLY_policy_st_edit') && Number(status) === 0 &&
                         <AddStrategy
                             title="edit"
                             record={rest[1]}
@@ -198,7 +200,7 @@ class Policy extends React.PureComponent {
                         }
                         <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
                         {
-                            roles('R_B_PLY_policy_st_del') &&
+                            roles('R_B_PLY_policy_st_del') && Number(status) === 0 &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -230,7 +232,7 @@ class Policy extends React.PureComponent {
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('R_B_PLY_policy_st_add') &&
+                        roles('R_B_PLY_policy_st_add') && Number(status) === 0 &&
                     <AddStrategy
                         title="add"
                         record={{}}
@@ -266,5 +268,6 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.strategy,
     pageNum: state.strategy.pageNum,
     pageSize: state.strategy.pageSize,
+    status: state.strategy.status,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Policy)));

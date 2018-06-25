@@ -19,10 +19,14 @@ class Permission extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
     };
     onPageChange = (pageNum, pageSize) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId: 'risk',
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId: 'risk',
+            });
         });
     };
     onQuery = (e) => {
@@ -65,6 +69,11 @@ class Permission extends React.PureComponent {
             list: dataSource,
             loading,
         } = this.props;
+        const seles = [
+            { name: '菜单', key: 'menu' },
+            { name: '按钮', key: 'button' },
+            { name: '模块', key: 'module' },
+        ];
         const columns = [
             { title: '权限ID', dataIndex: 'id', key: 'id' },
             { title: '权限名称', dataIndex: 'name', key: 'name' },
@@ -81,6 +90,9 @@ class Permission extends React.PureComponent {
                         types = '菜单';
                         break;
                     case 'module':
+                        types = '模块';
+                        break;
+                    case 'Module':
                         types = '模块';
                         break;
                     default:
@@ -100,7 +112,15 @@ class Permission extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem label="权限类型" >
-                        {getFieldDecorator('type')(<Select style={{ width: 157 }} placeholder="请选择权限类型"><Option value="menu">菜单</Option><Option value="module">模块</Option><Option value="button">按钮</Option></Select>)}
+                        {getFieldDecorator('type')(
+                            <Select style={{ width: '157px' }}>
+                                {
+                                    seles.map((item, index) => {
+                                        return (<Option value={item.key} key={index}>{item.name}</Option>);
+                                    })
+                                }
+                            </Select>
+                        )}
                     </FormItem>
                     <FormItem>
                         {
@@ -109,7 +129,7 @@ class Permission extends React.PureComponent {
                         }
                         {
                             roles('R_B_system_auth_reset') &&
-                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        <Button type="default" onClick={() => this.onReset()} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>

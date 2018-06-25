@@ -53,6 +53,13 @@ class CreateSamples extends React.PureComponent {
             }
         });
     }
+    checkNum = (rule, value, callback) => {
+        if (!(/^\\d+$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -185,7 +192,11 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="历史最大逾期天数" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('historyMaxOverdueDays')(<Input />)
+                                    getFieldDecorator('historyMaxOverdueDays', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入正整数' }
+                                        ]
+                                    })(<Input />)
                                 }
                             </FormItem>
                         </Col>

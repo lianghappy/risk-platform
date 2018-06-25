@@ -16,7 +16,7 @@ class Login extends React.PureComponent {
 
       form.validateFields((err, { userName, passWord }) => {
           if (!err) {
-              login({ account: userName, password: MD5(passWord), sysId: 'risk' });
+              login({ account: userName.replace(/(^\s*)|(\s*$)/g, ''), password: MD5(passWord), sysId: 'risk' });
           }
       });
   };
@@ -43,8 +43,9 @@ class Login extends React.PureComponent {
                                   <Form.Item>
                                       {getFieldDecorator('userName', {
                                           rules: [
-                                              { required: true, message: '账号不能为空' }
-                                        ],
+                                              { required: true, message: '账号不能为空' },
+                                              { max: 20, message: '账号最长为20位' },
+                                          ],
                                       })(<Input
                                           prefix={<Icon type="user" />}
                                           placeholder="请输入用户名"
@@ -54,7 +55,11 @@ class Login extends React.PureComponent {
                                   </Form.Item>
                                   <Form.Item>
                                       {getFieldDecorator('passWord', {
-                                          rules: [{ required: true, message: '密码不能为空' }],
+                                          rules: [
+                                              { required: true, message: '密码不能为空' },
+                                              { min: 6, message: '密码最小长度为6位' },
+                                              { max: 15, message: '密码最大长度15位' },
+                                          ],
                                       })(<Input
                                           prefix={<Icon type="lock" />}
                                           type="password"
