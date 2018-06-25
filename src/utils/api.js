@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-
+console.log(`${API}`);
 const api = {
     // 地址库
     address: 'https://product.jimistore.com/area/manageContAddrProd.json',
@@ -214,6 +214,8 @@ const api = {
     // 订单基本信息
     orderBasic: `${API}/api/risk/manager/collector/sample/info/byId/v1`,
     linkOrderList: `${API}/api/risk/manager/collector/sample/relation/byId/v1`,
+    // 风控报告
+    getReport: `${API}/api/risk/manager/collector/sample/riskReport/v1`,
 
     /* ------------------------监控大盘-------------------------- */
     dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,

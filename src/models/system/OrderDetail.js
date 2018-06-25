@@ -12,6 +12,7 @@ export default {
         sysId: SYSID,
         orderBasic: [],
         orderList: [],
+        getReport: [],
     },
     effects: {
         // 订单基本信息
@@ -35,6 +36,17 @@ export default {
                     orderList: response,
                     pageSize: PAGE_SIZE,
                     pageNum: payload.pageNum,
+                },
+            });
+        },
+        // 获取风控报告
+        * getReport({ payload }, { call, put }) {
+        // const { data } = payload;
+            const response = yield call(post, API.getReport, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getReport: response,
                 },
             });
         },
@@ -68,6 +80,12 @@ export default {
                             companyId,
                             pageNum: 1,
                             pageSize: 10,
+                        },
+                    });
+                    dispatch({
+                        type: 'getReport',
+                        payload: {
+                            sampleId,
                         },
                     });
                 }

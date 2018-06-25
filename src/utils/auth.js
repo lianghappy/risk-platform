@@ -286,6 +286,10 @@ export const authFirst = [
 ];
 export const authsSecond = [
     {
+        name: '首页',
+        key: 'index'
+    },
+    {
         name: '策略中心',
         key: 'policy',
         children: [{

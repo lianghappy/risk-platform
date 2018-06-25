@@ -29,10 +29,11 @@ export default class SampleDetail extends React.PureComponent {
         visible: this.props.visible || false,
     };
     onPageChange = (pageNum) => {
+        const analysisSampleId = this.props.analysisSampleId;
         this.query({
             pageNum,
             pageSize: 5,
-            analysisSampleId: '402894d1636d6ba501636d9238150000',
+            analysisSampleId,
             type: 0,
         });
     }
@@ -47,11 +48,12 @@ export default class SampleDetail extends React.PureComponent {
         });
     }
     handleShow = () => {
+        const analysisSampleId = this.props.analysisSampleId;
         new Promise((resolve) => {
             this.props.dispatch({
                 type: 'samples/queryDetail',
                 payload: {
-                    data: { analysisSampleId: '402894d1636d6ba501636d9238150000', type: 0, pageSize: 5, pageNum: 1 },
+                    data: { analysisSampleId, type: 0, pageSize: 5, pageNum: 1 },
                     resolve,
                 },
             });
