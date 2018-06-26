@@ -175,7 +175,15 @@ export default class Regular extends React.PureComponent {
             });
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -265,6 +273,7 @@ export default class Regular extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '判断符号',
             dataIndex: 'compareSymbol',
@@ -365,8 +374,8 @@ export default class Regular extends React.PureComponent {
                                 <Select allowClear>
                                     {channels.map(item => (
                                         <Select.Option
-                                            value={item.id}
-                                            key={item.id}
+                                            value={item.code}
+                                            key={item.code}
                                         >
                                             {item.name}
                                         </Select.Option>

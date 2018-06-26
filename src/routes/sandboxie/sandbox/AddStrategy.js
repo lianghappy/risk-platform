@@ -66,7 +66,33 @@ class AddStrategy extends React.PureComponent {
             visible: true,
         });
     };
-
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/).test(value)) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+    checkType = (num) => {
+        let name = '';
+        switch (Number(num)) {
+        case 1:
+            name = '最坏匹配';
+            break;
+        case 2:
+            name = '权重匹配';
+            break;
+        case 3:
+            name = '最好匹配';
+            break;
+        case 4:
+            name = '预阶段';
+            break;
+        default:
+            break;
+        }
+        return name;
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -120,8 +146,9 @@ class AddStrategy extends React.PureComponent {
                                     initialValue: record.sort,
                                     rules: [
                                         { required: true, message: '请输入阶段排序的序号' },
+                                        { validator: this.checkNum, message: '只能输入数字' }
                                     ],
-                                })(<Input type="acount" placeholder="请输入阶段排序的序号" />)
+                                })(<Input placeholder="请输入阶段排序的序号" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -146,9 +173,17 @@ class AddStrategy extends React.PureComponent {
                                 >
                                     {
                                         getFieldDecorator('type', {
-                                            initialValue: record.type,
+                                            initialValue: record.type !== undefined
+                                                ? record.type : '1',
                                             setFieldsValue: '1',
-                                        })(<Select onSelect={this.onSelect}><Option value="1">最坏匹配</Option><Option value="2">权重匹配</Option></Select>)
+                                        })(
+                                            <Select onSelect={this.onSelect} defaultValue="1">
+                                                <Option value="1">最坏匹配</Option>
+                                                <Option value="2">权重匹配</Option>
+                                                <Option value="3">最好匹配</Option>
+                                                <Option value="4">预阶段</Option>
+                                            </Select>
+                                        )
                                     }
                                 </Form.Item>
                                 :
@@ -160,12 +195,12 @@ class AddStrategy extends React.PureComponent {
                                         getFieldDecorator('type', {
                                             initialValue: record.type,
                                             setFieldsValue: '1',
-                                        })(<span>{Number(record.type) === 1 ? '最坏匹配' : '权重匹配'}</span>)
+                                        })(<span>{this.checkType(record.type)}</span>)
                                     }
                                 </Form.Item>
                         }
                         {
-                            Number(this.state.type) === '2' ?
+                            Number(this.state.type) === '2' &&
                                 <Form.Item
                                     {...formItemLayout}
                                     label="风险阈值"
@@ -192,8 +227,6 @@ class AddStrategy extends React.PureComponent {
                                         <span>&lt;   通过  ≤</span>
                                     </div>
                                 </Form.Item>
-                                :
-                                null
                         }
                         <Form.Item
                             {...formItemLayout}
