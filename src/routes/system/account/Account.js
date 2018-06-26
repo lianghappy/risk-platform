@@ -193,9 +193,9 @@ class DecisionIndex extends React.PureComponent {
                    <div>
                        {
                            roles('R_B_system_user_state') ?
-                               <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} defaultChecked={record.state === 'true'} />
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} checked={record.state === 'true'} />
                                :
-                               <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled defaultChecked={record.state === 'true'} />
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled checked={record.state === 'true'} />
                        }
                    </div>
                ) },
