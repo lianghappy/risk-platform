@@ -356,7 +356,7 @@ export default class Regular extends React.PureComponent {
                 >
                     <Form.Item label="规则编号">
                         {
-                            getFieldDecorator('ruleId')(<Input />)
+                            getFieldDecorator('id')(<Input />)
                         }
                     </Form.Item>
                     <Form.Item label="规则类型">
