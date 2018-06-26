@@ -346,12 +346,12 @@ export default class Regular extends React.PureComponent {
                 >
                     <Form.Item label="规则编号">
                         {
-                            getFieldDecorator('id')(<Input />)
+                            getFieldDecorator('ruleId')(<Input />)
                         }
                     </Form.Item>
                     <Form.Item label="规则类型">
                         {
-                            getFieldDecorator('categoryId')(<Cascader
+                            getFieldDecorator('categoryName')(<Cascader
                                 options={categoryList}
                                 placeholder=""
                                 changeOnSelect

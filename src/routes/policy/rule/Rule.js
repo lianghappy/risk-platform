@@ -21,10 +21,13 @@ class Rules extends React.PureComponent {
         typeList: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        this.props.form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -53,6 +56,15 @@ class Rules extends React.PureComponent {
             pageSize,
         });
     };
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     query(payload) {
         this.props.dispatch({
             type: 'rule/getRuleList',
@@ -72,13 +84,16 @@ class Rules extends React.PureComponent {
             { title: '规则名称', dataIndex: 'name', key: 'name' },
             { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
             { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel' },
+            { title: '规则来源',
+                dataIndex: 'channel',
+                key: 'channel',
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>) },
             { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
         ];
         const options = [];
         if (this.props.typeList) {
             this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
         return (

@@ -42,12 +42,14 @@ class AddStruc extends React.PureComponent {
             type,
             onOk,
         } = this.props;
+        console.log(record);
 
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
+                        // Object.assign(values, { pid: record.pid });
                     }
                     onOk(values, resolve);
                 }).then(() => {
@@ -132,7 +134,7 @@ class AddStruc extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('pid', {
-                                    initialValue: record.pname,
+                                    initialValue: record.pid,
                                 })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}</Select>)
                             }
                         </Form.Item>

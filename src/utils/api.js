@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-
+console.log(jimiEnv);
 const api = {
     // 地址库
     address: 'https://product.jimistore.com/area/manageContAddrProd.json',

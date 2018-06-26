@@ -45,6 +45,13 @@ class StartExper extends React.PureComponent {
             }
         });
     }
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     query(payload) {
         this.props.dispatch({
             type: 'experiment/getPolicyList',
@@ -79,7 +86,11 @@ class StartExper extends React.PureComponent {
                     <Col span={12}>
                         <FormItem label="身份证号前6位" {...formItemLayout}>
                             {
-                                getFieldDecorator('idCardTop6')(<Input placeholder="请输入身份证号前6位" />)
+                                getFieldDecorator('idCardTop6', {
+                                    rules: [
+                                        { max: 6, message: '只能输入六位数字' }
+                                    ],
+                                })(<Input placeholder="请输入身份证号前6位" />)
                             }
                         </FormItem>
                     </Col>
@@ -88,7 +99,11 @@ class StartExper extends React.PureComponent {
                     <Col span={12}>
                         <FormItem label="手机号前7位" {...formItemLayout}>
                             {
-                                getFieldDecorator('phoneTop7')(<Input placeholder="请输入手机号前7位" />)
+                                getFieldDecorator('phoneTop7', {
+                                    rules: [
+                                        { max: 7, message: '只能输入七位数字' }
+                                    ],
+                                })(<Input placeholder="请输入手机号前7位" />)
                             }
                         </FormItem>
                     </Col>
@@ -97,11 +112,19 @@ class StartExper extends React.PureComponent {
 
                             <InputGroup compact>
                                 {
-                                    getFieldDecorator('age')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最小年龄" />)
+                                    getFieldDecorator('ages', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '只能输入数字' }
+                                        ]
+                                    })(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最小年龄" />)
                                 }
                                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
-                                    getFieldDecorator('age')(
+                                    getFieldDecorator('agee', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '只能输入数字' }
+                                        ]
+                                    })(
                                         <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大年龄" />
                                     )
                                 }

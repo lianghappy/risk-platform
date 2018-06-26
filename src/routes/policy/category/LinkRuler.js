@@ -34,10 +34,14 @@ class LinkRuler extends React.PureComponent {
         ruleName: '',
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const { form } = this.props;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -93,10 +97,12 @@ class LinkRuler extends React.PureComponent {
         });
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
+        console.log(selectedRows);
+
         if (selectedRows.length > 0) {
             const idList = [];
             selectedRows.forEach((item) => {
-                idList.push(item.categoryId);
+                idList.push(item.id);
             });
             this.setState({
                 disabled: false,
@@ -114,6 +120,7 @@ class LinkRuler extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
+
         this.setState({ selectedKeys: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
         const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
         form.validateFields((errors, values) => {
@@ -230,7 +237,7 @@ class LinkRuler extends React.PureComponent {
                     <Popconfirm
                         placement="topRight"
                         title="您确定要删除吗？"
-                        onConfirm={() => this.onDelete(rest[1].categoryId)}
+                        onConfirm={() => this.onDelete(rest[1].id)}
                     >
                         {
                             roles('R_B_PLY_catg_linkrl_del') &&
@@ -243,7 +250,7 @@ class LinkRuler extends React.PureComponent {
         const options = [];
         if (this.props.typeList) {
             this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
         const { selectedRows } = this.state;

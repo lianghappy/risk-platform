@@ -77,21 +77,21 @@ class AddAccount extends React.PureComponent {
     };
 
     phoneCheck = (rule, value, callback) => {
-        if (value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
             callback(rule.message);
         } else {
             callback();
         }
     }
     validateAccount = (rule, value, callback) => {
-        if (value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
+        if (value && value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
         }
     }
     checkPwd = (rule, value, callback) => {
-        if (value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+        if (value && value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
             callback(rule.message);
         } else {
             callback();

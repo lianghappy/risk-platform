@@ -182,17 +182,17 @@ class Black extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="用户手机号" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入用户手机号" />)
+                            getFieldDecorator('phone')(<Input placeholder="请输入用户手机号" />)
                         }
                     </FormItem>
                     <FormItem label="身份证号" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入身份证号" />)
+                            getFieldDecorator('idCard')(<Input placeholder="请输入身份证号" />)
                         }
                     </FormItem>
                     <FormItem label="用户姓名" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入用户姓名" />)
+                            getFieldDecorator('idCardName')(<Input placeholder="请输入用户姓名" />)
                         }
                     </FormItem>
                     <FormItem>
