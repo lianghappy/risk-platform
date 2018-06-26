@@ -216,11 +216,11 @@ class Sandboxie extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '策略标识', dataIndex: 'id', key: 'id' },
-            { title: '策略名称', dataIndex: 'name', key: 'name' },
-            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '上架人', dataIndex: 'workName', key: 'workName' },
-            { title: '上架时间', dataIndex: 'workTime', key: 'workTime' },
+            { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
+            { title: '上架人', dataIndex: 'workName', key: 'workName', width: 100, },
+            { title: '上架时间', dataIndex: 'workTime', key: 'workTime', width: 100, },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
@@ -242,7 +242,8 @@ class Sandboxie extends React.PureComponent {
                     return (
                         <span>{type}</span>
                     );
-                } },
+                },
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -311,7 +312,8 @@ class Sandboxie extends React.PureComponent {
                                     </a>
                                 </Dropdown>
                         }
-                    </div>) },
+                    </div>),
+                width: 100, },
         ];
         return (
             <Layout className={style.container}>

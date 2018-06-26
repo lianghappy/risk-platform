@@ -12,6 +12,7 @@ const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
     loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
+    channels: state.regular.channels,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -46,7 +47,15 @@ export default class RegularEdit extends React.PureComponent {
             visible: false,
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -135,7 +144,7 @@ export default class RegularEdit extends React.PureComponent {
                             {...formItemLayout}
                             label="规则来源"
                         >
-                            <span>{record.channel}</span>
+                            <span>{this.checkChannel(record.channel)}</span>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
