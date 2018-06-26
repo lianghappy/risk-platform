@@ -54,7 +54,7 @@ class CreateSamples extends React.PureComponent {
         });
     }
     checkNum = (rule, value, callback) => {
-        if (!(/^\\d+$/.test(value))) {
+        if (value && value.length > 0 && !(/^[0-9]*$/).test(value)) {
             callback(rule.message);
         } else {
             callback();
@@ -113,28 +113,32 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="渠道类型" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('channelType')(<Select placeholder="请选择渠道类型" width="200">
-                                        {
-                                            lists.channelType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                     </Select>)
+                                    getFieldDecorator('channelType')(
+                                        <Select placeholder="请选择渠道类型" width="200">
+                                            {
+                                                lists.channelType.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="商品类型" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('productType')(<Select placeholder="请选择商品类型">
-                                        {
-                                            lists.productType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                     </Select>)
+                                    getFieldDecorator('productType')(
+                                        <Select placeholder="请选择商品类型">
+                                            {
+                                                lists.productType.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
@@ -143,28 +147,32 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="订单状态" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('orderStatus')(<Select placeholder="请选择订单状态">
-                                        {
-                                            lists.orderType.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                     </Select>)
+                                    getFieldDecorator('orderStatus')(
+                                        <Select placeholder="请选择订单状态">
+                                            {
+                                                lists.orderType.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="业务流程" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('businessProcess')(<Select placeholder="请选择业务流程">
-                                        {
-                                            lists.businessProcess.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                         </Select>)
+                                    getFieldDecorator('businessProcess')(
+                                        <Select placeholder="请选择业务流程">
+                                            {
+                                                lists.businessProcess.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
@@ -194,7 +202,7 @@ class CreateSamples extends React.PureComponent {
                                 {
                                     getFieldDecorator('historyMaxOverdueDays', {
                                         rules: [
-                                            { validator: this.checkNum, message: '请输入正整数' }
+                                            { validator: this.checkNum, message: '请输入数字' }
                                         ]
                                     })(<Input />)
                                 }
@@ -203,7 +211,11 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="逾期期数" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('overduePeriods')(<Input />)
+                                    getFieldDecorator('overduePeriods', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ]
+                                    })(<Input />)
                                 }
                             </FormItem>
                         </Col>
@@ -212,14 +224,22 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="当前最大逾期天数" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('nowMaxOverdueDays')(<Input />)
+                                    getFieldDecorator('nowMaxOverdueDays', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ]
+                                    })(<Input />)
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="已付期数" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('paidPeriods')(<Input />)
+                                    getFieldDecorator('paidPeriods', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ]
+                                    })(<Input />)
                                 }
                             </FormItem>
                         </Col>
@@ -229,28 +249,32 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="PLD结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('pldResult')(<Select placeholder="请选择PLD结果" width="200">
-                                        {
-                                            lists.pldResult.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                   </Select>)
+                                    getFieldDecorator('pldResult')(
+                                        <Select placeholder="请选择PLD结果" width="200">
+                                            {
+                                                lists.pldResult.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="机审结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('machineResult')(<Select placeholder="请选择机审结果">
-                                        {
-                                            lists.machineResult.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                       </Select>)
+                                    getFieldDecorator('machineResult')(
+                                        <Select placeholder="请选择机审结果">
+                                            {
+                                                lists.machineResult.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
@@ -259,25 +283,35 @@ class CreateSamples extends React.PureComponent {
                         <Col span={12}>
                             <FormItem label="综合结果" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('synthesizeResult')(<Select placeholder="请选择综合结果">
-                                        {
-                                            lists.synthesizeResult.map((item) => {
-                                                return (<Option key={item.name} value={item.name}>{item.name}</Option>);
-                                            })
-                                        }
-                                        <Option value="">全部</Option>
-                                                                          </Select>)
+                                    getFieldDecorator('synthesizeResult')(
+                                        <Select placeholder="请选择综合结果">
+                                            {
+                                                lists.synthesizeResult.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
                                 }
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="风控评分" {...formItemLayout}>
                                 {
-                                    getFieldDecorator('pldScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
+                                    getFieldDecorator('pldScorelower', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ]
+                                    })(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
                                 }
                                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
-                                    getFieldDecorator('pldScoreUpper')(
+                                    getFieldDecorator('pldScoreUpper', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ]
+                                    })(
                                         <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最高分" />
                                     )
                                 }
@@ -300,11 +334,19 @@ class CreateSamples extends React.PureComponent {
                             <FormItem label="芝麻分" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
-                                        getFieldDecorator('zhiMaScorelower')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
+                                        getFieldDecorator('zhiMaScorelower', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最低分" />)
                                     }
                                     <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                     {
-                                        getFieldDecorator('zhiMaScoreUpper')(
+                                        getFieldDecorator('zhiMaScoreUpper', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(
                                             <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最高分" />
                                         )
                                     }

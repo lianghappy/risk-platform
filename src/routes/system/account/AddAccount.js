@@ -45,16 +45,23 @@ class AddAccount extends React.PureComponent {
                 new Promise(resolve => {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
+                        if (values.password === 'xxxxxx') {
+                            Object.assign(values, { password: record.password });
+                            Object.assign(values, { confirm: record.password });
+                        } else {
+                            Object.assign(values, { password: MD5(values.password) });
+                            Object.assign(values, { confirm: MD5(values.confirm) });
+                        }
+                    } else {
+                        Object.assign(values, { password: MD5(values.password) });
+                        Object.assign(values, { confirm: MD5(values.confirm) });
                     }
-                    console.log(values.acount.replace(/(^\s*)|(\s*$)/g, ''));
                     Object.assign(values, { userId });
                     Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
-                    Object.assign(values, { userName: values.name });
+                    Object.assign(values, { userName: values.name, realName: values.name });
                     Object.assign(values, { sysId: SYSID });
                     Object.assign(values, { type });
                     Object.assign(values, { state: false });
-                    Object.assign(values, { password: MD5(values.password) });
-                    Object.assign(values, { confirm: MD5(values.confirm) });
                     Object.assign(values, { roleIds: [values.roleIds] });
                     onOk(values, resolve);
                 }).then(() => {
@@ -122,6 +129,10 @@ class AddAccount extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = forms;
+        let rolesId = '';
+        if (record.roles) {
+            rolesId = record.roles[0].roleId;
+        }
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -193,7 +204,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
-                                    initialValue: record.password,
+                                    initialValue: record.password && 'xxxxxx',
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -209,7 +220,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
-                                    initialValue: record.password,
+                                    initialValue: record.password && 'xxxxxx',
                                     rules: [
                                         {
                                             required: true,
@@ -229,22 +240,24 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('roleIds', {
-                                    initialValue: record.role,
+                                    initialValue: rolesId,
                                     rules: [
                                         {
                                             required: true,
                                             message: '请选择角色名称',
                                         },
                                     ],
-                                })(<Select>
-                                    {
-                                        this.props.roleNameList.map((item) => {
-                                            return (
-                                                <Option key={item.id} value={item.id}>{item.roleName}</Option>
-                                            );
-                                        })
-                                    }
-                                   </Select>)
+                                })(
+                                    <Select>
+                                        {
+                                            this.props.roleNameList.map((item) => {
+                                                return (
+                                                    <Option key={item.id} value={item.id}>{item.roleName}</Option>
+                                                );
+                                            })
+                                        }
+                                    </Select>
+                                )
                             }
                         </Form.Item>
                     </Form>
