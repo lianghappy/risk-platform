@@ -116,26 +116,28 @@ class RoleDetail extends React.PureComponent {
                   <FormItem label="角色类型" {...formItemLayout}>
                       {
                           getFieldDecorator('type', {
-                              initialValue: details.type,
+                              initialValue: details.type !== undefined ? details.type : '',
                           })(<Select><Option value="风控策略部" >风控策略部</Option><Option value="风控执行部" >风控执行部</Option><Option value="技术研发部" >技术研发部</Option></Select>)
                       }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>
                       {
                           getFieldDecorator('roleName', {
-                              initialValue: details.name,
+                              initialValue: details.name !== undefined ? details.name : '',
                           })(<Input />)
                       }
                   </FormItem>
                   <FormItem label="角色权限" {...formItemLayout}>
                       {
-                          getFieldDecorator('menuId')(<Tree
+                          getFieldDecorator('menuId')(
+                              <Tree
                               // defaultExpandAll
-                              checkable
-                              checkedKeys={this.state.checkedKeys}
-                              onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
-                          >{this.renderTreeNodes(list)}
-                                                      </Tree>)
+                                  checkable
+                                  checkedKeys={this.state.checkedKeys}
+                                  onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
+                              >{this.renderTreeNodes(list)}
+                              </Tree>
+                          )
                       }
                   </FormItem>
                   <FormItem>

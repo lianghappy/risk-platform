@@ -27,7 +27,7 @@ class Policy extends React.PureComponent {
         clone: {},
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        const strategyId = this.props.list[0].strategyId;
+        const strategyId = base64.decode(this.props.match.params.id);
         const {
             form,
             loading,
