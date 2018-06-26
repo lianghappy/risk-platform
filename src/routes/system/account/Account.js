@@ -159,6 +159,7 @@ class DecisionIndex extends React.PureComponent {
        });
    }
    query(payload) {
+       Object.assign(payload, { sysId: 'risk' });
        this.props.dispatch({
            type: 'account/queryAccountList',
            payload,
@@ -188,13 +189,13 @@ class DecisionIndex extends React.PureComponent {
            { title: '启用状态',
                dataIndex: 'status',
                key: 'status',
-               render: (...rest) => (
+               render: (text, record) => (
                    <div>
                        {
                            roles('R_B_system_user_state') ?
-                               <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(rest[1], e)} defaultChecked={rest[1].state === 'true'} />
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} defaultChecked={record.state === 'true'} />
                                :
-                               <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled defaultChecked={rest[1].state === 'true'} />
+                               <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled defaultChecked={record.state === 'true'} />
                        }
                    </div>
                ) },
@@ -238,15 +239,17 @@ class DecisionIndex extends React.PureComponent {
                        }
                    </FormItem>
                    <FormItem label="角色名称">
-                       {getFieldDecorator('roleId')(<Select style={{ width: 100 }}>
-                           {
-                               this.props.roleNameList.map((item) => {
-                                   return (
-                                       <Option key={item.id} value={item.id}>{item.roleName}</Option>
-                                   );
-                               })
-                           }
-                                                    </Select>)}
+                       {getFieldDecorator('roleId')(
+                           <Select style={{ width: 100 }}>
+                               {
+                                   this.props.roleNameList.map((item) => {
+                                       return (
+                                           <Option key={item.id} value={item.id}>{item.roleName}</Option>
+                                       );
+                                   })
+                               }
+                           </Select>
+                       )}
                    </FormItem>
                    <FormItem>
                        {

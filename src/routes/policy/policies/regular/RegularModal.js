@@ -173,7 +173,15 @@ export default class RegularModal extends React.PureComponent {
             });
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -257,6 +265,7 @@ export default class RegularModal extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '规则值类型',
             dataIndex: 'valueType',
@@ -325,7 +334,7 @@ export default class RegularModal extends React.PureComponent {
                                     {getFieldDecorator('channel')(
                                         <Select allowClear>
                                             {channels.map(item => (
-                                                <Select.Option value={item.id} key={item.id}>
+                                                <Select.Option value={item.code} key={item.code}>
                                                     {item.name}
                                                 </Select.Option>
                                             ))}
