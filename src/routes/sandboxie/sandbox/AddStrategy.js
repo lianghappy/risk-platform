@@ -50,7 +50,7 @@ class AddStrategy extends React.PureComponent {
             if (!err) {
                 new Promise(resolve => {
                     if (title === 'edit') {
-                        Object.assign(values, { strategyId: record.strategyId });
+                        Object.assign(values, { id: record.id });
                     }
                     values.title = that.props.title;
                     onOk(values, resolve);
