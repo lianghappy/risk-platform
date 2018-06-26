@@ -6,6 +6,7 @@ import {
     Button,
     Input,
     Select,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 import { SYSID } from 'utils/constants';
@@ -42,31 +43,35 @@ class AddAccount extends React.PureComponent {
         const userId = JSON.parse(sessionStorage.userInfo).user.id;
         form.validateFields((err, values) => {
             if (!err) {
-                new Promise(resolve => {
-                    if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
-                        if (values.password === 'xxxxxx') {
-                            Object.assign(values, { password: record.password });
-                            Object.assign(values, { confirm: record.password });
+                if (values.password !== values.confirm) {
+                    message.error('两次输入密码不一致');
+                } else {
+                    new Promise(resolve => {
+                        if (type === 'edit') {
+                            Object.assign(values, { id: record.id });
+                            if (values.password === 'xxxxxx1') {
+                                Object.assign(values, { password: record.password });
+                                Object.assign(values, { confirm: record.password });
+                            } else {
+                                Object.assign(values, { password: MD5(values.password) });
+                                Object.assign(values, { confirm: MD5(values.confirm) });
+                            }
                         } else {
                             Object.assign(values, { password: MD5(values.password) });
                             Object.assign(values, { confirm: MD5(values.confirm) });
                         }
-                    } else {
-                        Object.assign(values, { password: MD5(values.password) });
-                        Object.assign(values, { confirm: MD5(values.confirm) });
-                    }
-                    Object.assign(values, { userId });
-                    Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
-                    Object.assign(values, { userName: values.name, realName: values.name });
-                    Object.assign(values, { sysId: SYSID });
-                    Object.assign(values, { type });
-                    Object.assign(values, { state: false });
-                    Object.assign(values, { roleIds: [values.roleIds] });
-                    onOk(values, resolve);
-                }).then(() => {
-                    this.handleCancel();
-                });
+                        Object.assign(values, { userId });
+                        Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
+                        Object.assign(values, { userName: values.name, realName: values.name });
+                        Object.assign(values, { sysId: SYSID });
+                        Object.assign(values, { type });
+                        Object.assign(values, { state: false });
+                        Object.assign(values, { roleIds: [values.roleIds] });
+                        onOk(values, resolve);
+                    }).then(() => {
+                        this.handleCancel();
+                    });
+                }
             }
         });
     };
@@ -98,7 +103,7 @@ class AddAccount extends React.PureComponent {
         }
     }
     checkPwd = (rule, value, callback) => {
-        if (value && value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+        if (value && value.length > 5 && value.length < 15 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -204,7 +209,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
-                                    initialValue: record.password && 'xxxxxx',
+                                    initialValue: record.password && 'xxxxxx1',
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -220,7 +225,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
-                                    initialValue: record.password && 'xxxxxx',
+                                    initialValue: record.password && 'xxxxxx1',
                                     rules: [
                                         {
                                             required: true,

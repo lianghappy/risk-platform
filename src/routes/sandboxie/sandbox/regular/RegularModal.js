@@ -266,7 +266,7 @@ export default class RegularModal extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
-            render: (text, record) => (<span>{this.checkChannel(record.type)}</span>)
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '规则值类型',
             dataIndex: 'valueType',

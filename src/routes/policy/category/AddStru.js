@@ -42,7 +42,6 @@ class AddStruc extends React.PureComponent {
             type,
             onOk,
         } = this.props;
-        console.log(record);
 
         form.validateFields((err, values) => {
             if (!err) {
@@ -124,6 +123,7 @@ class AddStruc extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入类别名称' },
+                                        { max: 20, message: '最多输入20位' }
                                     ],
                                 })(<Input type="acount" placeholder="请输入类别名称" />)
                             }

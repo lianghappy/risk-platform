@@ -36,12 +36,14 @@ class LinkRuler extends React.PureComponent {
     onPageChange = (pageNum, pageSize, sysId) => {
         const { form, loading } = this.props;
         if (loading) return;
+        const categoryId = this.state.selectedKeys;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,
                 pageNum,
                 pageSize,
                 sysId,
+                categoryId,
             });
         });
     };
@@ -55,11 +57,13 @@ class LinkRuler extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            const categoryId = this.state.selectedKeys;
             this.query({
                 ...values,
                 pageNum: 1,
                 pageSize,
                 sysId,
+                categoryId,
             });
         });
     }
@@ -178,6 +182,8 @@ class LinkRuler extends React.PureComponent {
         });
     };
     query(payload) {
+        const categoryId = this.state.selectedKeys;
+        Object.assign(payload, { categoryId });
         this.props.dispatch({
             type: 'linkRuler/getLinkRulerList',
             payload,
@@ -234,12 +240,12 @@ class LinkRuler extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '规则编号', dataIndex: 'id', key: 'id' },
-            { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName' },
-            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel', render: (text, record) => (<span>{this.checkCode(record.channel)}</span>) },
-            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
+            { title: '规则编号', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName', width: 100, },
+            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey', width: 100, },
+            { title: '风险代码', dataIndex: 'code', key: 'code', width: 100, },
+            { title: '规则来源', dataIndex: 'channel', key: 'channel', render: (text, record) => (<span>{this.checkCode(record.channel)}</span>), width: 100, },
+            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType', width: 100, },
             { title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
@@ -255,6 +261,7 @@ class LinkRuler extends React.PureComponent {
                         }
                     </Popconfirm>
                 ),
+                width: 100,
             },
         ];
         const options = [];

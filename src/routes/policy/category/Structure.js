@@ -79,14 +79,16 @@ class Structure extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
+        let url = 'structure/add';
         let content = '类别新增';
         if (data.id !== undefined) {
             content = '类别更新成功';
+            url = 'structure/update';
         }
 
         new Promise((resolve) => {
             dispatch({
-                type: 'structure/add',
+                type: url,
                 payload: {
                     data,
                     resolve,

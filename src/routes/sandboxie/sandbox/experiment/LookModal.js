@@ -94,18 +94,8 @@ export default class LookModal extends React.PureComponent {
                                 <Col span={16}>{experSelects.compareSymbol}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>第一阶段结果：</Col>
-                                <Col span={16}>{experSelects.judgeValue}</Col>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>下单时间：</Col>
                                 <Col span={16}>{moment(experSelects.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(experSelects.orderTimeEnd).format('YYYY-MM-DD')}</Col>
-                            </Col>
-                            <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>第二阶段结果：</Col>
-                                <Col span={16}>{experSelects.weight}</Col>
                             </Col>
                         </Row>
                         <Row>
@@ -114,18 +104,8 @@ export default class LookModal extends React.PureComponent {
                                 <Col span={16}>{experSelects.score}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>第三阶段结果：</Col>
-                                <Col span={16}>{experSelects.weight}</Col>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>当前最大逾期天数：</Col>
                                 <Col span={16}>{experSelects.score}</Col>
-                            </Col>
-                            <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>第四阶段结果：</Col>
-                                <Col span={16}>{experSelects.weight}</Col>
                             </Col>
                         </Row>
                         <Row>
@@ -134,25 +114,21 @@ export default class LookModal extends React.PureComponent {
                                 <Col span={16}>{experSelects.score}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>第五阶段结果：</Col>
-                                <Col span={16}>{experSelects.weight}</Col>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>芝麻分：</Col>
                                 <Col span={16}>{experSelects.score}</Col>
                             </Col>
+                        </Row>
+                        <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>机审结果：</Col>
                                 <Col span={16}>{experSelects.weight}</Col>
                             </Col>
-                        </Row>
-                        <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>PLD结果：</Col>
                                 <Col span={16}>{experSelects.score}</Col>
                             </Col>
+                        </Row>
+                        <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>综合结果：</Col>
                                 <Col span={16}>{experSelects.weight}</Col>

@@ -52,6 +52,7 @@ class OldProduct extends React.PureComponent {
                 },
             });
         }).then(() => {
+            this.setState({ selectedRows: [] });
             message.success('删除成功', DURATION);
             this.query({
                 pageNum,
@@ -70,7 +71,6 @@ class OldProduct extends React.PureComponent {
     };
     onSelectChange = (selectedRowKeys, selectedRows) => {
         this.setState({ selectedRows });
-        console.log(selectedRows);
     }
     query(payload) {
         let url = '';
@@ -153,7 +153,7 @@ class OldProduct extends React.PureComponent {
         };
         return (
             <Layout className={style.containers}>
-                <Button className={style.btns} type="primary" onClick={this.all}>批量删除</Button>
+                <Button className={style.btns} type="primary" onClick={this.all} disabled={this.state.selectedRows.length === 0}>批量删除</Button>
                 <Table
                     rowSelection={rowSelection}
                     columns={dels}

@@ -103,6 +103,7 @@ const api = {
     getCategoryList: `${API}/api/risk/manager/policy/category/list/all/v1`,
     // 新增规则-类别数据
     categoryAndRule: `${API}/api/risk/manager/policy/categoryAndRule/create/v1`,
+    updateCategory: `${API}/api/risk/manager/policy/category/update/v1`,
 
     // 策略
     getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,
