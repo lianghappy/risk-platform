@@ -138,6 +138,15 @@ class LinkRuler extends React.PureComponent {
             }
         });
     }
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -229,7 +238,7 @@ class LinkRuler extends React.PureComponent {
             { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName' },
             { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
             { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel' },
+            { title: '规则来源', dataIndex: 'channel', key: 'channel', render: (text, record) => (<span>{this.checkCode(record.channel)}</span>) },
             { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
             { title: '操作',
                 dataIndex: 'operation',
@@ -303,7 +312,7 @@ class LinkRuler extends React.PureComponent {
                         <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                             <FormItem label="规则编号" >
                                 {
-                                    getFieldDecorator('ruleId')(<Input placeholder="请输入规则编号" />)
+                                    getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
                                 }
                             </FormItem>
                             <FormItem label="规则来源" >
