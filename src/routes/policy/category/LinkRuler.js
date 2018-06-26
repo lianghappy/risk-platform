@@ -34,7 +34,8 @@ class LinkRuler extends React.PureComponent {
         ruleName: '',
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,

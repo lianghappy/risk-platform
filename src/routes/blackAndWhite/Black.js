@@ -23,11 +23,19 @@ class Black extends React.PureComponent {
         rosterChannel: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            type: 0,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+                type: 0,
+            });
         });
     };
     onQuery = (e) => {

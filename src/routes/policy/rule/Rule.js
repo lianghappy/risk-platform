@@ -21,7 +21,9 @@ class Rules extends React.PureComponent {
         typeList: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.props.form.validateFields((errors, values) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
             this.query({
                 ...values,
                 pageNum,

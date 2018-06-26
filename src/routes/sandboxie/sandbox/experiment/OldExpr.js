@@ -34,10 +34,15 @@ class OldExpr extends React.PureComponent {
         });
     }
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {

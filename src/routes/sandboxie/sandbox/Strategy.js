@@ -27,11 +27,16 @@ class Policy extends React.PureComponent {
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         const strategyId = this.props.list[0].strategyId;
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            strategyId,
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+                strategyId,
+            });
         });
     };
     onQuery = (e) => {

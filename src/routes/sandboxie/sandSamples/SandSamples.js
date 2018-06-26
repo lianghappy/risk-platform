@@ -30,7 +30,8 @@ class SandSamples extends React.PureComponent {
         show: false,
     }
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             Object.assign(values, { type: 1 });
             if (values && values.times) {

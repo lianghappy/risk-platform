@@ -28,7 +28,8 @@ class Sandboxie extends React.PureComponent {
         disabled: true,
     };
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,

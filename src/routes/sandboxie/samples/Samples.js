@@ -31,7 +31,8 @@ class Samples extends React.PureComponent {
         show: false,
     }
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             if (values && values.times) {
                 Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });

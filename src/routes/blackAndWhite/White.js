@@ -22,11 +22,19 @@ class Black extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            type: 1,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+                type: 1,
+            });
         });
     };
     onQuery = (e) => {
