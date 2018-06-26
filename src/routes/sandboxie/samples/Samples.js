@@ -77,7 +77,7 @@ class Samples extends React.PureComponent {
             pageSize,
         });
     };
-    onDelete(ids) {
+    onDelete(ids, type) {
         const {
             pageSize,
             pageNum,
@@ -88,7 +88,7 @@ class Samples extends React.PureComponent {
             dispatch({
                 type: 'samples/del',
                 payload: {
-                    data: { id: ids },
+                    data: { analysisSampleId: ids, type },
                     resolve,
                 },
             });
@@ -175,7 +175,7 @@ class Samples extends React.PureComponent {
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
-                            onConfirm={() => this.onDelete(rest[1].id)}
+                            onConfirm={() => this.onDelete(rest[1].id, rest[1].type)}
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>
