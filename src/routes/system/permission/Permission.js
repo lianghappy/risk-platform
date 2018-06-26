@@ -19,7 +19,8 @@ class Permission extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
     };
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,
@@ -100,7 +101,10 @@ class Permission extends React.PureComponent {
                     }
                     return (<span>{types}</span>);
                 } },
-            { title: '是否显示', dataIndex: 'isShow', key: 'isShow' },
+            { title: '是否显示',
+                dataIndex: 'isShow',
+                key: 'isShow',
+                render: (text, record) => (<span>{record.isShow === 'true' ? '是' : '否'}</span>) },
             { title: '排序', dataIndex: 'sort', key: 'sort' },
         ];
         return (
