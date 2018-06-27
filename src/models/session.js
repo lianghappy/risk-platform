@@ -25,7 +25,6 @@ const authConvert = (menus) => {
             otherKeys: ['key', 'router'],
         }, menus);
     }
-    console.log(auths);
     return auths;
 };
 

@@ -60,8 +60,17 @@ class AddStruc extends React.PureComponent {
 
     handleShow = () => {
         // this.props.form.validateFields();
-        this.setState({
-            visible: true,
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'structure/getParentCategory',
+                payload: {
+                    resolve,
+                }
+            });
+        }).then(() => {
+            this.setState({
+                visible: true,
+            });
         });
     };
 

@@ -39,7 +39,8 @@ export default {
             yield call(resolve);
         },
         // 获取父类别列表
-        * getParentCategory(action, { call, put }) {
+        * getParentCategory({ payload }, { call, put }) {
+            const { resolve } = payload;
             const response = yield call(post, API.getParentCategory);
             yield put({
                 type: 'getParentCategorySuc',
@@ -47,6 +48,7 @@ export default {
                     parentlist: response,
                 },
             });
+            yield call(resolve);
         },
     },
     reducers: {
@@ -73,9 +75,9 @@ export default {
                             pageSize: PAGE_SIZE,
                         },
                     });
-                    dispatch({
+                    /* dispatch({
                         type: 'getParentCategory',
-                    });
+                    }); */
                 }
             });
         },
