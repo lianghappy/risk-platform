@@ -2,10 +2,9 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu, Tree } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Tree } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
-import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 import RegularModal from './RegularModal';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -24,11 +23,11 @@ class LinkRuler extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
         typeList: PropTypes.array.isRequired,
         categoryList: PropTypes.array.isRequired,
+        treeDatas: PropTypes.array.isRequired,
     };
     state = {
         selectedRows: [],
         disabled: true,
-        current: '.$linkRuler',
         idList: [],
         selectedKeys: '',
         ruleName: '',
@@ -92,11 +91,13 @@ class LinkRuler extends React.PureComponent {
             });
         }).then(() => {
             message.success('删除成功', DURATION);
+            const categoryId = this.state.selectedKeys;
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
                     pageNum,
                     pageSize,
+                    categoryId,
                 });
             });
         });
@@ -119,19 +120,18 @@ class LinkRuler extends React.PureComponent {
             });
         }
     }
-    onSelect = (selectedKeys) => {
+    onCheck = (keys) => {
         const {
             pageSize,
             pageNum,
             form,
         } = this.props;
-
-        this.setState({ selectedKeys: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
-        const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
+        const categoryId = keys[0].substring(keys[0].indexOf('$') + 1);
+        this.setState({ selectedKeys: categoryId });
         form.validateFields((errors, values) => {
-            Object.assign(values, { categoryId });
             this.query({
                 ...values,
+                categoryId,
                 pageNum,
                 pageSize,
             });
@@ -182,8 +182,6 @@ class LinkRuler extends React.PureComponent {
         });
     };
     query(payload) {
-        const categoryId = this.state.selectedKeys;
-        Object.assign(payload, { categoryId });
         this.props.dispatch({
             type: 'linkRuler/getLinkRulerList',
             payload,
@@ -275,43 +273,13 @@ class LinkRuler extends React.PureComponent {
             selectedRows,
             onChange: this.onSelectChange,
         };
-        const treeDatas = [];
-        const { categoryList } = this.props;
-        // 树结构
-        this.props.categoryList.forEach((item) => {
-            if (Number(item.level) === 1) {
-                treeDatas.push({
-                    title: item.name,
-                    key: item.id,
-                    children: treeConvert({
-                        pId: 'pid',
-                        rootId: item.id,
-                        id: 'id',
-                        name: 'pname',
-                        tId: 'key',
-                        tName: 'title',
-                    }, categoryList),
-                });
-            }
-        });
+        const { treeDatas } = this.props;
         return (
             <Layout className={style.container}>
-                <Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[this.state.current]}
-                    mode="horizontal"
-                >
-                    <Menu.Item key="structure">
-                        <a href="/categoryStru">类别构建</a>
-                    </Menu.Item>
-                    <Menu.Item key="linkRuler">
-                        关联规则
-                    </Menu.Item>
-                </Menu>
                 <div className={style.layout}>
                     <div className={style.left}>
                         <Tree
-                            onSelect={this.onSelect}
+                            onSelect={(checkedKeys) => this.onCheck(checkedKeys)}
                         >{this.renderTreeNodes(treeDatas)}
                         </Tree>
                     </div>
@@ -410,5 +378,6 @@ const mapStateToProps = (state) => ({
     pageSize: state.linkRuler.pageSize,
     typeList: state.linkRuler.typeList,
     categoryList: state.linkRuler.categoryList,
+    treeDatas: state.linkRuler.treeDatas,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(LinkRuler)));

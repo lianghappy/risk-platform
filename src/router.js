@@ -109,16 +109,9 @@ function RouterConfig({ history, app }) {
     // 类别构建
     const construct = dynamic({
         app,
-        component: () => import('routes/policy/category/Structure'),
+        component: () => import('routes/policy/category/Index'),
         models: () => [
             import('models/policy/category/Structure'),
-        ],
-    });
-    // 关联规则
-    const LinkRuler = dynamic({
-        app,
-        component: () => import('routes/policy/category/LinkRuler'),
-        models: () => [
             import('models/policy/category/LinkRuler'),
         ],
     });
@@ -277,7 +270,6 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/company')} exact component={Application} />
                     <PrivateRoute path={setPath('/applicationManage')} exact component={appManage} />
                     <PrivateRoute path={setPath('/categoryStru')} exact component={construct} />
-                    <PrivateRoute path={setPath('/linkRuler')} exact component={LinkRuler} />
                     <PrivateRoute path={setPath('/rule')} exact component={Rules} />
                     <PrivateRoute path={setPath('/policy')} exact component={Policy} />
                     <PrivateRoute path={setPath('/strategy/:id')} component={Strategy} />

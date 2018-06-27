@@ -11,6 +11,7 @@ export default {
         list: [],
         sysId: 'risk',
         details: {},
+        datas: [],
     },
     effects: {
         * getTreeList({ payload }, { call, put }) {
@@ -77,6 +78,7 @@ export default {
                 payload: {
                     list: treeDatas,
                     sysId: payload.sysId,
+                    datas: response,
                 },
             });
         },

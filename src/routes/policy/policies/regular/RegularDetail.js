@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import styles from './RegularDetail.scss';
 
 @connect((state) => ({
-    channels: state.regular.channels,
+    channels: state.regularPly.channels,
 }))
 export default class RegularDetail extends React.PureComponent {
     state = {

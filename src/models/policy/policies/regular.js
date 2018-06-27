@@ -6,7 +6,7 @@ import base64 from 'utils/base64';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'regular',
+    namespace: 'regularPly',
     state: {
         list: {}, // 规则列表
         pageNum: 1,

@@ -1,10 +1,14 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import { Layout, Menu } from 'antd';
+import Structure from './Structure';
+import LinkRuler from './LinkRuler';
+import styles from './index.scss';
 
+const MenuItem = Menu.Item;
 class Index extends React.PureComponent {
     state = {
-        current: 'category',
+        current: '.$category',
     };
     handleClick(e) {
         this.setState({
@@ -13,22 +17,25 @@ class Index extends React.PureComponent {
     }
     render() {
         return (
-            <Layout>
+            <Layout className={styles.containerss}>
                 <Menu
-                    mode="horizontal"
+                    onClick={(e) => this.handleClick(e)}
                     selectedKeys={[this.state.current]}
-                    onClick={this.handleClick}
+                    mode="horizontal"
                 >
-                    <Menu.Item key="account">
+                    <MenuItem key="category">
                         类别管理
-                    </Menu.Item>
-                    <Menu.Item key="role">
-                        规则管理
-                    </Menu.Item>
-                    <Menu.Item key="permission">
-                        策略管理
-                    </Menu.Item>
+                    </MenuItem>
+                    <MenuItem key="linkRole">
+                        关联规则
+                    </MenuItem>
                 </Menu>
+                {
+                    this.state.current === '.$category' ?
+                        <Structure />
+                        :
+                        <LinkRuler />
+                }
             </Layout>
         );
     }

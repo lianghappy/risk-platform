@@ -11,8 +11,8 @@ import { connect } from 'dva';
 const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
-    loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
-    channels: state.regular.channels,
+    loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
+    channels: state.regularPly.channels,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {

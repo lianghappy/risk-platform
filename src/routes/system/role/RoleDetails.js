@@ -18,6 +18,7 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.detailTree,
     details: state.detailTree.details,
     menus: state.detailTree.menus,
+    datas: state.detailTree.datas,
 });
 @connect(mapStateToProps)
 class RoleDetail extends React.PureComponent {
@@ -43,6 +44,17 @@ class RoleDetail extends React.PureComponent {
                 },
             });
         }).then(() => {
+            const { menus, datas } = this.props;
+            datas.forEach(item => {
+                console.log(this.props.menus);
+
+                if (menus.includes(item.pid)) {
+                    const index = menus.findIndex((value) => {
+                        return value === item.pid;
+                    });
+                    menus.splice(index, 1);
+                }
+            });
             this.setState({
                 checkedKeys: this.props.menus,
             });
@@ -58,7 +70,27 @@ class RoleDetail extends React.PureComponent {
         form.validateFields((errors, values) => {
             const menuId = this.state.checkedKeys;
             const id = this.props.details.id;
-            Object.assign(values, { menuId });
+            const menus = [];
+            const menuIds = [];
+            this.props.datas.forEach(item => {
+                if (menuId.includes(item.id)) {
+                    menus.push(item.id);
+                    if (item.pid) {
+                        menus.push(item.pid);
+                    }
+                }
+            });
+            this.props.datas.forEach(item => {
+                if (menus.includes(item.id)) {
+                    menuIds.push(item.id);
+                    if (item.pid) {
+                        menuIds.push(item.pid);
+                    }
+                }
+            });
+            const menu = Array.from(new Set(menuIds));
+
+            Object.assign(values, { menuId: menu });
             Object.assign(values, { sysId: 'risk' });
             Object.assign(values, { id });
             new Promise((resolve) => {

@@ -21,13 +21,13 @@ import RegularEdit from './RegularEdit';
 import RegularDetail from './RegularDetail';
 
 @connect((state) => ({
-    loading: state.loading.effects['regular/query'],
-    list: state.regular.list,
-    pageNum: state.regular.pageNum,
-    pageSize: state.regular.pageSize,
-    channels: state.regular.channels,
-    categories: state.regular.categories,
-    status: state.regular.status,
+    loading: state.loading.effects['regularPly/query'],
+    list: state.regularPly.list,
+    pageNum: state.regularPly.pageNum,
+    pageSize: state.regularPly.pageSize,
+    channels: state.regularPly.channels,
+    categories: state.regularPly.categories,
+    status: state.regularPly.status,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -127,7 +127,7 @@ export default class Regular extends React.PureComponent {
         } = this.props;
         new Promise((resolve) => {
             dispatch({
-                type: 'regular/del',
+                type: 'regularPly/del',
                 payload: {
                     data: { id },
                     resolve,
@@ -190,7 +190,7 @@ export default class Regular extends React.PureComponent {
 
         new Promise((resolve) => {
             dispatch({
-                type: `regular/${type}`,
+                type: `regularPly/${type}`,
                 payload: {
                     data,
                     resolve,
@@ -241,7 +241,7 @@ export default class Regular extends React.PureComponent {
 
         new Promise((resolve) => {
             dispatch({
-                type: 'regular/add',
+                type: 'regularPly/add',
                 payload: {
                     data,
                     resolve,
@@ -276,7 +276,7 @@ export default class Regular extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'regular/query',
+            type: 'regularPly/query',
             payload: {
                 ...payload,
                 stageId: this.state.stageId,

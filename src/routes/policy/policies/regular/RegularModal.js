@@ -20,12 +20,12 @@ import styles from './RegularModal.scss';
 
 const TreeNode = Tree.TreeNode;
 @connect((state) => ({
-    channels: state.regular.channels,
-    categories: state.regular.categories,
-    regulars: state.regular.regulars,
-    pageNum: state.regular._pageNum,
-    loading: state.loading.effects['regular/queryRegular'] || false,
-    onSubmiting: state.loading.effects['regular/add'] || false,
+    channels: state.regularPly.channels,
+    categories: state.regularPly.categories,
+    regulars: state.regularPly.regulars,
+    pageNum: state.regularPly._pageNum,
+    loading: state.loading.effects['regularPly/queryRegular'] || false,
+    onSubmiting: state.loading.effects['regularPly/add'] || false,
 }))
 @Form.create()
 export default class RegularModal extends React.PureComponent {
@@ -193,7 +193,7 @@ export default class RegularModal extends React.PureComponent {
 
     showModelHandler = () => {
         this.props.dispatch({
-            type: 'regular/queryRegular',
+            type: 'regularPly/queryRegular',
             payload: {
                 pageNum: 1,
                 pageSize: 5,
@@ -209,7 +209,7 @@ export default class RegularModal extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'regular/queryRegular',
+            type: 'regularPly/queryRegular',
             payload,
         });
     }

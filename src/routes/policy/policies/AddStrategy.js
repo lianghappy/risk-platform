@@ -114,7 +114,6 @@ class AddStrategy extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        console.log(this.state.title);
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>

@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal, Select } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -300,6 +300,22 @@ class Policy extends React.PureComponent {
                     <FormItem label="策略名称" >
                         {
                             getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
+                        }
+                    </FormItem>
+                    <FormItem label="策略标识" >
+                        {
+                            getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
+                        }
+                    </FormItem>
+                    <FormItem label="上架状态" >
+                        {
+                            getFieldDecorator('isEnable')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="1">已上架</Select.Option>
+                                    <Select.Option value="0">未上架</Select.Option>
+                                    <Select.Option value="2">已下架</Select.Option>
+                                </Select>
+                            )
                         }
                     </FormItem>
                     <FormItem>

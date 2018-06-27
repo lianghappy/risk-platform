@@ -82,7 +82,7 @@ class Policy extends React.PureComponent {
         } = this.props;
         new Promise((resolve) => {
             dispatch({
-                type: 'strategy/del',
+                type: 'strategyPly/del',
                 payload: {
                     data: { id: ids },
                     resolve,
@@ -117,10 +117,10 @@ class Policy extends React.PureComponent {
         let url = '';
         switch (data.title) {
         case 'add':
-            url = 'strategy/add';
+            url = 'strategyPly/add';
             break;
         case 'edit':
-            url = 'strategy/update';
+            url = 'strategyPly/update';
             break;
         default:
             break;
@@ -150,7 +150,7 @@ class Policy extends React.PureComponent {
     };
     query(payload) {
         this.props.dispatch({
-            type: 'strategy/getStrategyList',
+            type: 'strategyPly/getStrategyList',
             payload,
         });
     }
@@ -271,11 +271,11 @@ class Policy extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.strategy.list,
-    sysId: state.strategy.sysId,
-    loading: state.loading.models.strategy,
-    pageNum: state.strategy.pageNum,
-    pageSize: state.strategy.pageSize,
-    status: state.strategy.status,
+    list: state.strategyPly.list,
+    sysId: state.strategyPly.sysId,
+    loading: state.loading.models.strategyPly,
+    pageNum: state.strategyPly.pageNum,
+    pageSize: state.strategyPly.pageSize,
+    status: state.strategyPly.status,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Policy)));

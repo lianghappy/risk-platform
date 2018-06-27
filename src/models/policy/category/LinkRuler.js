@@ -1,6 +1,7 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE, SYSID } from 'utils/constants';
+import treeConvert from 'utils/treeConvert';
 import { filterPath } from 'utils/path';
 
 export default {
@@ -13,12 +14,12 @@ export default {
         typeList: [],
         categoryList: [],
         regulars: [],
+        treeDatas: [],
     },
     effects: {
         // 获取类别关联规则信息
         * getLinkRulerList({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getLinkRuler, payload, data);
+            const response = yield call(post, API.getLinkRuler, payload);
             yield put({
                 type: 'getLinkRulerListSuc',
                 payload: {
@@ -45,11 +46,29 @@ export default {
         * getCategoryList({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.getCategoryList, payload, data);
+            const categoryLists = [];
+            response.forEach((item) => {
+                if (Number(item.level) === 1) {
+                    categoryLists.push({
+                        title: item.name,
+                        key: item.id,
+                        children: treeConvert({
+                            pId: 'pid',
+                            rootId: item.id,
+                            id: 'id',
+                            name: 'pname',
+                            tId: 'key',
+                            tName: 'title',
+                        }, response),
+                    });
+                }
+            });
             yield put({
                 type: 'getCategoryListSuc',
                 payload: {
                     categoryList: response,
                     sysId: SYSID,
+                    treeDatas: categoryLists,
                 },
             });
         },
@@ -99,7 +118,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (filterPath(pathname) === '/linkRuler') {
+                if (filterPath(pathname) === '/categoryStru') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '类别管理' }],

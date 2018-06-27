@@ -15,6 +15,7 @@ const mapStateToProps = (state) => ({
     list: state.tree.list,
     sysId: state.tree.sysId,
     loading: state.loading.models.tree,
+    datas: state.tree.datas,
 });
 @connect(mapStateToProps)
 class AddRole extends React.PureComponent {
@@ -34,10 +35,32 @@ class AddRole extends React.PureComponent {
             loading,
             form,
         } = this.props;
+        console.log(this.props.list);
+
         if (loading) return;
         form.validateFields((errors, values) => {
             const menuId = this.state.checkedKeys;
-            Object.assign(values, { menuId });
+            const menus = [];
+            const menuIds = [];
+            this.props.datas.forEach(item => {
+                if (menuId.includes(item.id)) {
+                    menus.push(item.id);
+                    if (item.pid) {
+                        menus.push(item.pid);
+                    }
+                }
+            });
+            this.props.datas.forEach(item => {
+                if (menus.includes(item.id)) {
+                    menuIds.push(item.id);
+                    if (item.pid) {
+                        menuIds.push(item.pid);
+                    }
+                }
+            });
+            const menu = Array.from(new Set(menuIds));
+
+            Object.assign(values, { menuId: menu });
             Object.assign(values, { sysId: 'risk' });
             new Promise((resolve) => {
                 this.props.dispatch({
@@ -107,13 +130,15 @@ class AddRole extends React.PureComponent {
                   </FormItem>
                   <FormItem label="角色权限" {...formItemLayout}>
                       {
-                          getFieldDecorator('menuId')(<Tree
+                          getFieldDecorator('menuId')(
+                              <Tree
                               // defaultExpandAll
-                              checkable
-                              checkedKeys={this.state.checkedKeys}
-                              onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
-                          >{this.renderTreeNodes(list)}
-                                                      </Tree>)
+                                  checkable
+                                  checkedKeys={this.state.checkedKeys}
+                                  onCheck={(checkedKeys) => this.onCheck(checkedKeys)}
+                              >{this.renderTreeNodes(list)}
+                              </Tree>
+                          )
                       }
                   </FormItem>
                   <FormItem>
