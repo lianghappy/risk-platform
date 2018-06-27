@@ -269,8 +269,8 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/IndexPage')} exact component={IndexPage} />
                     <PrivateRoute path={setPath('/account')} exact component={Account} />
                     <PrivateRoute path={setPath('/role')} exact component={Role} />
-                    <PrivateRoute path={setPath('/role/addRole')} exact component={AddRole} />
-                    <PrivateRoute path={setPath('/role/detailRole/:id')} exact component={RoleDetail} />
+                    <PrivateRoute path={setPath('/addRole')} exact component={AddRole} />
+                    <PrivateRoute path={setPath('/detailRole/:id')} exact component={RoleDetail} />
                     <PrivateRoute path={setPath('/user')} exact component={User} />
                     <PrivateRoute path={setPath('/app')} exact component={appManage} />
                     <PrivateRoute path={setPath('/apps/:id')} exact component={LookApp} />

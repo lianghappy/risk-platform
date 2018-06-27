@@ -6,11 +6,11 @@ import { SYSID } from 'utils/constants';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'tree',
+    namespace: 'detailTree',
     state: {
         list: [],
         sysId: 'risk',
-        details: [],
+        details: {},
     },
     effects: {
         * getTreeList({ payload }, { call, put }) {
@@ -120,8 +120,8 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
-                if (path[2] === 'detailRole') {
-                    // const id = base64.decode(path[3]);
+                if (path[1] === 'detailRole') {
+                    // const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],

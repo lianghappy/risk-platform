@@ -52,7 +52,7 @@ class RoleIndex extends React.PureComponent {
        });
    };
    onDetail = (id) => {
-       this.props.history.push(setPath(`/role/detailRole/${base64.encode(id)}`));
+       this.props.history.push(setPath(`/detailRole/${base64.encode(id)}`));
    }
    onDelete(ids) {
        const {
@@ -92,7 +92,7 @@ class RoleIndex extends React.PureComponent {
    };
    addrole = (e) => {
        e.preventDefault();
-       this.props.history.push(setPath('/role/addRole'));
+       this.props.history.push(setPath('/addRole'));
    }
    query(payload) {
        Object.assign(payload, { sysId: SYSID });

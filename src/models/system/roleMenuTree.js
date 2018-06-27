@@ -93,7 +93,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (filterPath(pathname) === '/role/addRole') {
+                if (filterPath(pathname) === '/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '新增角色' }],

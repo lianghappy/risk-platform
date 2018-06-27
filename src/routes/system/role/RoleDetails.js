@@ -13,11 +13,11 @@ const Option = Select.Option;
 const TreeNode = Tree.TreeNode;
 
 const mapStateToProps = (state) => ({
-    list: state.tree.list,
-    sysId: state.tree.sysId,
-    loading: state.loading.models.tree,
-    details: state.tree.details,
-    menus: state.tree.menus,
+    list: state.detailTree.list,
+    sysId: state.detailTree.sysId,
+    loading: state.loading.models.detailTree,
+    details: state.detailTree.details,
+    menus: state.detailTree.menus,
 });
 @connect(mapStateToProps)
 class RoleDetail extends React.PureComponent {
@@ -35,7 +35,7 @@ class RoleDetail extends React.PureComponent {
         const id = base64.decode(this.props.match.params.id);
         new Promise((resolve) => {
             this.props.dispatch({
-                type: 'tree/getDetails',
+                type: 'detailTree/getDetails',
                 payload: {
                     sysId: 'risk',
                     id,
@@ -63,7 +63,7 @@ class RoleDetail extends React.PureComponent {
             Object.assign(values, { id });
             new Promise((resolve) => {
                 this.props.dispatch({
-                    type: 'tree/update',
+                    type: 'detailTree/update',
                     payload: {
                         data: { ...values },
                         resolve,
@@ -104,8 +104,8 @@ class RoleDetail extends React.PureComponent {
       };
       const {
           form,
-          details,
           list,
+          details,
       } = this.props;
       const {
           getFieldDecorator,
@@ -116,14 +116,14 @@ class RoleDetail extends React.PureComponent {
                   <FormItem label="角色类型" {...formItemLayout}>
                       {
                           getFieldDecorator('type', {
-                              initialValue: details.type !== undefined ? details.type : '',
+                              initialValue: details && details.type,
                           })(<Select><Option value="风控策略部" >风控策略部</Option><Option value="风控执行部" >风控执行部</Option><Option value="技术研发部" >技术研发部</Option></Select>)
                       }
                   </FormItem>
                   <FormItem label="角色名称" {...formItemLayout}>
                       {
                           getFieldDecorator('roleName', {
-                              initialValue: details.name !== undefined ? details.name : '',
+                              initialValue: details && details.name,
                           })(<Input />)
                       }
                   </FormItem>
