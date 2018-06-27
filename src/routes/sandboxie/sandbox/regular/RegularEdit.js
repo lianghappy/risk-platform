@@ -70,7 +70,6 @@ export default class RegularEdit extends React.PureComponent {
             stageId,
             ...oldValue
         } = record;
-
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {

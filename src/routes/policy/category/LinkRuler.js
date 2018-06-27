@@ -319,7 +319,7 @@ class LinkRuler extends React.PureComponent {
                         <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                             <FormItem label="规则编号" >
                                 {
-                                    getFieldDecorator('id')(<Input placeholder="请输入规则编号" />)
+                                    getFieldDecorator('ruleId')(<Input placeholder="请输入规则编号" />)
                                 }
                             </FormItem>
                             <FormItem label="规则来源" >

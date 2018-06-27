@@ -56,7 +56,7 @@ export default class RegularModal extends React.PureComponent {
             this.state.selectedRows.forEach((item) => {
                 lists.push({
                     id: item.id,
-                    categoryId: item.categorieId,
+                    categoryId: item.categoryId,
                     categoryName: item.categoryName,
                     ruleId: item.ruleId,
                     ruleName: item.ruleName,
@@ -150,7 +150,7 @@ export default class RegularModal extends React.PureComponent {
         });
         this.props.categories.forEach((item) => {
             if (item.id === categoryId) {
-                this.setState({ categoryName: item.name });
+                this.setState({ categoryName: item.name, categoryId, });
             }
         });
     }

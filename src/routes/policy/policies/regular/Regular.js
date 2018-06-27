@@ -57,6 +57,20 @@ export default class Regular extends React.PureComponent {
         if (loading) return;
 
         form.validateFields((errors, values) => {
+            const {
+                categoryId,
+                ...payload
+            } = values;
+            if (categoryId && categoryId.length > 0) {
+                const categoryIds = categoryId[categoryId.length - 1];
+                this.props.categories.forEach(item => {
+                    if (item.id === categoryIds) {
+                        Object.assign(payload, {
+                            categoryName: item.name,
+                        });
+                    }
+                });
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -87,8 +101,13 @@ export default class Regular extends React.PureComponent {
                 ...payload
             } = values;
             if (categoryId && categoryId.length > 0) {
-                Object.assign(payload, {
-                    categoryId: categoryId[categoryId.length - 1],
+                const categoryIds = categoryId[categoryId.length - 1];
+                this.props.categories.forEach(item => {
+                    if (item.id === categoryIds) {
+                        Object.assign(payload, {
+                            categoryName: item.name,
+                        });
+                    }
                 });
             }
             this.query({
@@ -117,6 +136,20 @@ export default class Regular extends React.PureComponent {
         }).then(() => {
             message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -167,6 +200,20 @@ export default class Regular extends React.PureComponent {
             callback();
             message.success('操作成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -204,6 +251,20 @@ export default class Regular extends React.PureComponent {
             callback();
             message.success('规则新增成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -360,7 +421,7 @@ export default class Regular extends React.PureComponent {
                     </Form.Item>
                     <Form.Item label="规则类型">
                         {
-                            getFieldDecorator('categoryName')(<Cascader
+                            getFieldDecorator('categoryId')(<Cascader
                                 options={categoryList}
                                 placeholder=""
                                 changeOnSelect
