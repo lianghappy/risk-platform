@@ -136,7 +136,7 @@ export default class RegularModal extends React.PureComponent {
     };
     checkChannel = (code) => {
         let name = '';
-        this.props.channels.forEach(item => {
+        this.props.typeList.forEach(item => {
             if (item.code === code) {
                 name = item.name;
             }

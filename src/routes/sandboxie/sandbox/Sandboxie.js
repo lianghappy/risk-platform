@@ -219,6 +219,8 @@ class Sandboxie extends React.PureComponent {
             { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
             { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
             { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
+            { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
+            { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
             { title: '上架人', dataIndex: 'workName', key: 'workName', width: 100, },
             { title: '上架时间', dataIndex: 'workTime', key: 'workTime', width: 100, },
             { title: '状态',

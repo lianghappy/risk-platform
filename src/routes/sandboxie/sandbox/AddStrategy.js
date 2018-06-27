@@ -6,7 +6,6 @@ import {
     Button,
     Input,
     Select,
-    InputNumber,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -30,13 +29,7 @@ class AddStrategy extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
         title: this.props.title === 'add' ? '新增阶段' : '更新阶段',
-        type: Number(this.props.type),
     };
-    onSelect = (value) => {
-        this.setState({
-            type: Number(value),
-        });
-    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -197,35 +190,6 @@ class AddStrategy extends React.PureComponent {
                                             setFieldsValue: '1',
                                         })(<span>{this.checkType(record.type)}</span>)
                                     }
-                                </Form.Item>
-                        }
-                        {
-                            Number(this.state.type) === '2' &&
-                                <Form.Item
-                                    {...formItemLayout}
-                                    label="风险阈值"
-                                >
-                                    <div>
-                                        <span>-∝&lt;   拒绝 ≤ </span>
-                                        {
-                                            getFieldDecorator('refuseScore', {
-                                                initialValue: record.refuseScore,
-                                                rules: [
-                                                    { required: true, message: '请输入拒绝分数' },
-                                                ],
-                                            })(<InputNumber width={50} />)
-                                        }
-                                        <span> &lt;   需人审  ≤ </span>
-                                        {
-                                            getFieldDecorator('passScore', {
-                                                initialValue: record.passScore,
-                                                rules: [
-                                                    { required: true, message: '请输入通过分数' },
-                                                ],
-                                            })(<InputNumber width={50} />)
-                                        }
-                                        <span>&lt;   通过  ≤</span>
-                                    </div>
                                 </Form.Item>
                         }
                         <Form.Item

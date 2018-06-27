@@ -215,6 +215,8 @@ class Policy extends React.PureComponent {
             { title: '策略名称', dataIndex: 'name', key: 'name' },
             { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
             { title: '策略描述', dataIndex: 'describ', key: 'describ' },
+            { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
+            { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',

@@ -5,6 +5,7 @@ import {
     Modal,
     Button,
     Input,
+    InputNumber,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -89,6 +90,7 @@ class AddPolicy extends React.PureComponent {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
+                    width="60%"
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>取消</Button>,
                         <Button
@@ -114,6 +116,32 @@ class AddPolicy extends React.PureComponent {
                                     ],
                                 })(<Input type="acount" placeholder="请输入策略名称" />)
                             }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="风险阈值"
+                        >
+                            <div>
+                                <span>-∝&lt;   拒绝 ≤ </span>
+                                {
+                                    getFieldDecorator('refuseScore', {
+                                        initialValue: record.refuseScore,
+                                        rules: [
+                                            { required: true, message: '请输入拒绝分数' },
+                                        ],
+                                    })(<InputNumber width={50} />)
+                                }
+                                <span> &lt;   需人审  ≤ </span>
+                                {
+                                    getFieldDecorator('passScore', {
+                                        initialValue: record.passScore,
+                                        rules: [
+                                            { required: true, message: '请输入通过分数' },
+                                        ],
+                                    })(<InputNumber width={50} />)
+                                }
+                                <span>&lt;   通过  ≤</span>
+                            </div>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
