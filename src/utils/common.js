@@ -59,6 +59,14 @@ export const menuKeyPick = (location) => {
         if (path[2] === '0') key.push('sandboxie');
         else key.push('sandboxie');
         break;
+    case 'addRole':
+        if (path[2] === '0') key.push('role');
+        else key.push('role');
+        break;
+    case 'detailRole':
+        if (path[2] === '0') key.push('role');
+        else key.push('role');
+        break;
     default:
         key.push(router);
     }
