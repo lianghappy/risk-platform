@@ -46,12 +46,6 @@ class SandSamples extends React.PureComponent {
             });
         });
     };
-    onPage = (pageNum, pageSize, analysisSampleId) => {
-        this.props.dispatch({
-            type: 'sandSamples/querySelect',
-            payload: { analysisSampleId, pageNum, pageSize },
-        });
-    };
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -127,21 +121,6 @@ class SandSamples extends React.PureComponent {
             });
         });
     }
-    handlePage =(analysisSampleId) => {
-        new Promise((resolve) => {
-            this.props.dispatch({
-                type: 'sandSamples/queryDetail',
-                payload: {
-                    data: { analysisSampleId, pageSize: 10, pageNum: 1 },
-                    resolve,
-                },
-            });
-        }).then(() => {
-            this.setState({
-                show: true,
-            });
-        });
-    }
     create = () => {
         this.props.history.push(setPath('/sandSamples/create'));
     }
@@ -182,12 +161,11 @@ class SandSamples extends React.PureComponent {
                         {
                             roles('R_B_SB_sandsamples_detail') &&
                         <SampleDetail
-                            pageSize={pageSize}
-                            pageNum={pageNum}
                             visible={this.state.show}
-                            onPageChange={() => this.onPage(rest[1].id)}
+                            analysisSampleId={rest[1].id}
+                            type={rest[1].type}
                         >
-                            <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
+                            <span className="jm-del">样本明细</span>
                         </SampleDetail>
                         }
                         {

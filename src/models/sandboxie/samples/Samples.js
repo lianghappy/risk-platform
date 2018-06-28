@@ -13,6 +13,7 @@ export default {
         details: [],
         selects: {},
         category: [],
+        _pageNum: 1,
     },
     effects: {
         // 获取规则类别列表
@@ -37,25 +38,22 @@ export default {
         },
         // 明细
         * queryDetail({ payload }, { call, put }) {
-            const { data, resolve } = payload;
-            yield call(post, API.detailSandSamples, data);
-            const response = yield call(post, API.detailSandSamples, data);
+            const response = yield call(post, API.detailSandSamples, payload);
             yield put({
                 type: 'getSamplesListSuc',
                 payload: {
                     details: response,
-                    pageNum: payload.pageNum,
+                    _pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
                 },
             });
-            yield call(resolve);
         },
         // 样本筛选条件
         * querySelect({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.selectSandSamples, data);
             yield put({
-                type: 'querySelectSuc',
+                type: 'getSamplesListSuc',
                 payload: {
                     selects: response,
                     sysId: SYSID,

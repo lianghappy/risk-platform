@@ -41,7 +41,7 @@ class Samples extends React.PureComponent {
             }
             this.query({
                 ...values,
-                pageNum: 1,
+                pageNum,
                 pageSize,
             });
         });

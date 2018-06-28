@@ -70,20 +70,6 @@ class AddPolicy extends React.PureComponent {
             callback();
         }
     }
-    checkNums = (rule, value, callback) => {
-        const { getFieldValue } = this.props.form;
-        const refuse = getFieldValue('refuseScore');
-        if (value && value.length > 0 && !(/^[0-9]*$/.test(value))) {
-            callback('请输入数字');
-            if (!(Number(value) > Number(refuse))) {
-                callback(rule.message);
-            } else {
-                callback();
-            }
-        } else {
-            callback();
-        }
-    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
