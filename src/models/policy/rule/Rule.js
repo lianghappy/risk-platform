@@ -10,6 +10,7 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        typeList: [],
     },
     effects: {
         // 获取规则类别列表
