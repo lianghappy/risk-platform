@@ -5,6 +5,7 @@ import {
     Modal,
     Button,
     Input,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -38,16 +39,20 @@ class AddPolicy extends React.PureComponent {
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
-                new Promise(resolve => {
-                    if (type === 'edit' || type === 'clone') {
-                        Object.assign(values, { isEnable: record.isEnable });
-                        Object.assign(values, { id: record.id });
-                    }
-                    values.type = that.props.type;
-                    onOk(values, resolve);
-                }).then(() => {
-                    this.handleCancel();
-                });
+                if (Number(values.refuseScore) < Number(values.passScore)) {
+                    new Promise(resolve => {
+                        if (type === 'edit' || type === 'clone') {
+                            Object.assign(values, { isEnable: record.isEnable });
+                            Object.assign(values, { id: record.id });
+                        }
+                        values.type = that.props.type;
+                        onOk(values, resolve);
+                    }).then(() => {
+                        this.handleCancel();
+                    });
+                } else {
+                    message.error('通过分大于拒绝分');
+                }
             }
         });
     };
@@ -128,7 +133,7 @@ class AddPolicy extends React.PureComponent {
                             label="风险阈值"
                         >
                             <div>
-                                <span>-∝&lt;   拒绝 ≤ </span>
+                                <span>-∞&lt;   拒绝 ≤ </span>
                                 {
                                     getFieldDecorator('refuseScore', {
                                         initialValue: record.refuseScore,
@@ -144,11 +149,10 @@ class AddPolicy extends React.PureComponent {
                                         initialValue: record.passScore,
                                         rules: [
                                             { required: true, message: '请输入通过分数' },
-                                            { validator: this.checkNum, message: '请输入数字' }
                                         ],
                                     })(<Input style={{ width: '50px' }} />)
                                 }
-                                <span>&lt;   通过  ≤</span>
+                                <span>&lt;   通过  ≤ +∞</span>
                             </div>
                         </Form.Item>
                         <Form.Item
