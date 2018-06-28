@@ -186,6 +186,7 @@ export default class RegularModal extends React.PureComponent {
             onSubmiting,
             ruleName,
         } = this.props;
+
         const {
             visible,
             selectedRowKeys,
@@ -272,7 +273,7 @@ export default class RegularModal extends React.PureComponent {
                                     {getFieldDecorator('channel')(
                                         <Select allowClear>
                                             {typeList.map(item => (
-                                                <Select.Option value={item.id} key={item.id}>
+                                                <Select.Option value={item.code} key={item.code}>
                                                     {item.name}
                                                 </Select.Option>
                                             ))}

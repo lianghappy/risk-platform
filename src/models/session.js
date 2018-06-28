@@ -41,7 +41,6 @@ const authConvert = (menus) => {
             item.children.sort(compare('sort'));
         });
     }
-    console.log(auths);
     return auths.sort(compare('sort'));
 };
 
