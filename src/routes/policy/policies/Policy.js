@@ -211,10 +211,10 @@ class Policy extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '策略标识', dataIndex: 'id', key: 'id' },
-            { title: '策略名称', dataIndex: 'name', key: 'name' },
-            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '策略描述', dataIndex: 'describ', key: 'describ' },
+            { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
+            { title: '策略描述', dataIndex: 'describ', key: 'describ', width: 100, },
             { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
             { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
             { title: '状态',
@@ -238,7 +238,8 @@ class Policy extends React.PureComponent {
                     return (
                         <span>{type}</span>
                     );
-                } },
+                },
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -294,7 +295,8 @@ class Policy extends React.PureComponent {
                                     </a>
                                 </Dropdown>
                         }
-                    </div>) },
+                    </div>),
+                width: 100, },
         ];
         return (
             <Layout className={style.container}>

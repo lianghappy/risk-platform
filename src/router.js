@@ -158,25 +158,28 @@ function RouterConfig({ history, app }) {
     // 黑名单
     const Black = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Black.js'),
+        component: () => import('routes/blackAndWhite/Black'),
         models: () => [
-            import('models/blackAndWhite/Black.js'),
+            import('models/blackAndWhite/Black'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 白名单
     const White = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/White.js'),
+        component: () => import('routes/blackAndWhite/White'),
         models: () => [
-            import('models/blackAndWhite/White.js'),
+            import('models/blackAndWhite/White'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 灰名单
     const Gray = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Gray.js'),
+        component: () => import('routes/blackAndWhite/Gray'),
         models: () => [
             import('models/blackAndWhite/Gray.js'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 策略沙箱

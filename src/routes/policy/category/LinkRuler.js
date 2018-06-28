@@ -103,8 +103,6 @@ class LinkRuler extends React.PureComponent {
         });
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log(selectedRows);
-
         if (selectedRows.length > 0) {
             const idList = [];
             selectedRows.forEach((item) => {
@@ -340,7 +338,6 @@ class LinkRuler extends React.PureComponent {
                                 >
                                     <Button
                                         type="primary"
-                                        onClick={this.delList}
                                         className={style.addBtn}
                                         disabled={this.state.disabled}
                                     >批量删除

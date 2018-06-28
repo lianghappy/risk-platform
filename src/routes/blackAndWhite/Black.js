@@ -164,6 +164,7 @@ class Black extends React.PureComponent {
                             onOk={this.modalOk}
                             rosterChannel={this.props.rosterChannel}
                             rosterType={this.props.rosterType}
+                            system="black"
                         >
                             <span className="jm-operate">编辑</span>
                         </AddModal>
@@ -223,6 +224,7 @@ class Black extends React.PureComponent {
                     onOk={this.modalOk}
                     rosterChannel={this.props.rosterChannel}
                     rosterType={this.props.rosterType}
+                    system="black"
                 >
                     <Button type="primary" className={style.add}>新增</Button>
                 </AddModal>

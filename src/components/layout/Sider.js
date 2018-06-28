@@ -4,13 +4,12 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-import { authss } from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
 const mapStateToProps = state => ({
-    auths: state.session.menus
+    auths: state.session.auths
 });
 @connect(mapStateToProps)
 export default class Sider extends React.PureComponent {
@@ -33,17 +32,17 @@ export default class Sider extends React.PureComponent {
                     inlineIndent={10}
                     className="jm-menu"
                     selectedKeys={menuKey}
-                    style={{ userSelect: "none" }}
+                    style={{ userSelect: 'none' }}
                 >
-                    {authss(auths).map(m => (
+                    {auths.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={
                                 <span>
                                     <i
                                         className={cs(
-                                            "jm-icon",
-                                            "anticon",
+                                            'jm-icon',
+                                            'anticon',
                                             styles[m.key]
                                         )}
                                     />

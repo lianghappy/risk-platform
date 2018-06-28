@@ -46,23 +46,12 @@ export default {
         * getCategoryList({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.getCategoryList, payload, data);
-            const categoryLists = [];
-            response.forEach((item) => {
-                if (Number(item.level) === 1) {
-                    categoryLists.push({
-                        title: item.name,
-                        key: item.id,
-                        children: treeConvert({
-                            pId: 'pid',
-                            rootId: item.id,
-                            id: 'id',
-                            name: 'pname',
-                            tId: 'key',
-                            tName: 'title',
-                        }, response),
-                    });
-                }
-            });
+            let categoryLists = [];
+            categoryLists = treeConvert({
+                pId: 'pid',
+                tId: 'key',
+                tName: 'title',
+            }, response);
             yield put({
                 type: 'getCategoryListSuc',
                 payload: {

@@ -141,6 +141,8 @@ const api = {
     updateBlack: `${API}/api/risk/manager/blackAndWhite/update/v1`,
     // 来源
     getBlackType: `${API}/api/risk/manager/policy/channelBank/list/v1`,
+    // 获取黑白名单的具体数据
+    getBAW: `${API}/api/risk/manager/blackAndWhite/getOne/v1`,
 
     /* ---------- 策略沙箱-开始实验 ----------*/
     // 实验样本

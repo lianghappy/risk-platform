@@ -14,6 +14,12 @@ const Option = Select.Option;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
+const mapStateToProps = (state) => {
+    return {
+        getBAW: state.bAWCommon.getBAW
+    };
+};
+@connect(mapStateToProps)
 class AddModal extends React.PureComponent {
     static propTypes = {
         form: PropTypes.object.isRequired,
@@ -26,13 +32,14 @@ class AddModal extends React.PureComponent {
         type: PropTypes.string.isRequired,
         rosterType: PropTypes.array.isRequired,
         rosterChannel: PropTypes.array.isRequired,
+        bAWCommon: PropTypes.object.isRequired,
     };
     state = {
         visible: this.props.visible || false,
         title: this.props.type === 'add' ? '新增' : '更新',
         rosterType: this.props.rosterType,
         rosterChannel: this.props.rosterChannel,
-        // type: this.props.type,
+        bAWCommon: {},
     };
     componentWillReceiveProps(nextProps) {
         if (nextProps) {
@@ -66,10 +73,31 @@ class AddModal extends React.PureComponent {
         });
     };
     handleShow = () => {
-        // this.props.form.validateFields();
-        this.setState({
-            visible: true,
-        });
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        if (record.id) {
+            new Promise((resolve) => {
+                dispatch({
+                    type: 'bAWCommon/getBAW',
+                    payload: {
+                        id: record.id,
+                        resolve,
+                    }
+                });
+            }).then(() => {
+                this.setState({
+                    bAWCommon: this.props.getBAW,
+                    visible: true,
+                });
+            });
+        } else {
+            this.setState({
+                bAWCommon: {},
+                visible: true,
+            });
+        }
     };
 
     handleCancel = () => {
@@ -102,8 +130,8 @@ class AddModal extends React.PureComponent {
         const {
             form,
             children,
-            record,
         } = this.props;
+        const { bAWCommon } = this.state;
         const {
             getFieldDecorator,
             getFieldsError,
@@ -145,7 +173,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('phone', {
-                                    initialValue: record.phone,
+                                    initialValue: bAWCommon && bAWCommon.phone,
                                     rules: [
                                         { required: true, message: '请输入用户手机号' },
                                         { validator: this.phoneCheck, message: '请输入正确的手机号' }
@@ -159,7 +187,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('idCardName', {
-                                    initialValue: record.idCardName,
+                                    initialValue: bAWCommon && bAWCommon.idCardName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
                                     ],
@@ -172,7 +200,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('idCard', {
-                                    initialValue: record.idCard,
+                                    initialValue: bAWCommon && bAWCommon.idCard,
                                     rules: [
                                         { required: true, message: '请输入用户身份证' },
                                         { validator: this.identityCheck, message: '请输入正确的用户身份证' }
@@ -186,7 +214,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('categoryId', {
-                                    initialValue: record.categoryId,
+                                    initialValue: bAWCommon && bAWCommon.categoryId,
                                     rules: [
                                         { required: true, message: '请输入名单分类' },
                                     ],
@@ -199,7 +227,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('channelId', {
-                                    initialValue: record.channelId,
+                                    initialValue: bAWCommon && bAWCommon.channelId,
                                     rules: [
                                         { required: true, message: '请输入名单来源' },
                                     ],
@@ -212,7 +240,7 @@ class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('description', {
-                                    initialValue: record.description,
+                                    initialValue: bAWCommon && bAWCommon.description,
                                     rules: [{ required: true, message: '请描述该策略的内容及业务上的使用场景' },
                                         { max: 100, message: '描述内容最多100个字' }],
                                 })(<TextArea height={100} placeholder="请描述该策略的内容及业务上的使用场景" />)
@@ -224,4 +252,4 @@ class AddModal extends React.PureComponent {
         );
     }
 }
-export default connect()(Form.create()(AddModal));
+export default Form.create()(AddModal);
