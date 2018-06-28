@@ -56,16 +56,17 @@ class AddAccount extends React.PureComponent {
                                 Object.assign(values, { password: MD5(values.password) });
                                 Object.assign(values, { confirm: MD5(values.confirm) });
                             }
+                            Object.assign(values, { state: record.state });
                         } else {
                             Object.assign(values, { password: MD5(values.password) });
                             Object.assign(values, { confirm: MD5(values.confirm) });
+                            Object.assign(values, { state: false });
                         }
                         Object.assign(values, { userId });
                         Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
                         Object.assign(values, { userName: values.name, realName: values.name });
                         Object.assign(values, { sysId: SYSID });
                         Object.assign(values, { type });
-                        Object.assign(values, { state: false });
                         Object.assign(values, { roleIds: [values.roleIds] });
                         onOk(values, resolve);
                     }).then(() => {
