@@ -14,6 +14,10 @@
     display: flex;
     border-radius: 20px;
     background-color: #fff;
+    justify-content: space-between;
+    padding-right: 30px;
+    align-items: flex-start;
+    margin-top: -1px;
 }
 .imgs{
    height: 100%;

@@ -26,6 +26,7 @@ class LinkRuler extends React.PureComponent {
         treeDatas: PropTypes.array.isRequired,
     };
     state = {
+        selectedRowKeys: [],
         selectedRows: [],
         disabled: true,
         idList: [],
@@ -111,6 +112,8 @@ class LinkRuler extends React.PureComponent {
             this.setState({
                 disabled: false,
                 idList,
+                selectedRows,
+                selectedRowKeys,
             });
         } else {
             this.setState({
@@ -125,7 +128,7 @@ class LinkRuler extends React.PureComponent {
             form,
         } = this.props;
         const categoryId = keys[0].substring(keys[0].indexOf('$') + 1);
-        this.setState({ selectedKeys: categoryId });
+        this.setState({ selectedKeys: categoryId, selectedRowKeys: [] });
         form.validateFields((errors, values) => {
             this.query({
                 ...values,
@@ -266,11 +269,13 @@ class LinkRuler extends React.PureComponent {
                 options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
-        const { selectedRows } = this.state;
+        const { selectedRows, selectedRowKeys } = this.state;
         const rowSelection = {
+            selectedRowKeys,
             selectedRows,
             onChange: this.onSelectChange,
         };
+
         const { treeDatas } = this.props;
         return (
             <Layout className={style.container}>

@@ -57,8 +57,6 @@ class Login extends React.PureComponent {
                                       {getFieldDecorator('passWord', {
                                           rules: [
                                               { required: true, message: '密码不能为空' },
-                                              { min: 6, message: '密码最小长度为6位' },
-                                              { max: 15, message: '密码最大长度15位' },
                                           ],
                                       })(<Input
                                           prefix={<Icon type="lock" />}
