@@ -69,7 +69,7 @@ class Rules extends React.PureComponent {
     }
     query(payload) {
         this.props.dispatch({
-            type: 'rule/getRuleList',
+            type: 'rulePly/getRuleList',
             payload,
         });
     }
@@ -149,11 +149,11 @@ class Rules extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.rule.list,
-    sysId: state.rule.sysId,
-    loading: state.loading.models.rule,
-    pageNum: state.rule.pageNum,
-    pageSize: state.rule.pageSize,
-    typeList: state.rule.typeList,
+    list: state.rulePly.list,
+    sysId: state.rulePly.sysId,
+    loading: state.loading.models.rulePly,
+    pageNum: state.rulePly.pageNum,
+    pageSize: state.rulePly.pageSize,
+    typeList: state.rulePly.typeList,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Rules)));

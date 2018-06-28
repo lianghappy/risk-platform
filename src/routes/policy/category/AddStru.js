@@ -144,7 +144,7 @@ class AddStruc extends React.PureComponent {
                             {
                                 getFieldDecorator('pid', {
                                     initialValue: record.pid,
-                                })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}</Select>)
+                                })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}<Option value="">无</Option></Select>)
                             }
                         </Form.Item>
                         <Form.Item

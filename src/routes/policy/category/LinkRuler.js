@@ -28,7 +28,6 @@ class LinkRuler extends React.PureComponent {
     state = {
         selectedRowKeys: [],
         selectedRows: [],
-        disabled: true,
         idList: [],
         selectedKeys: '',
         ruleName: '',
@@ -111,14 +110,9 @@ class LinkRuler extends React.PureComponent {
                 idList.push(item.id);
             });
             this.setState({
-                disabled: false,
                 idList,
                 selectedRows,
                 selectedRowKeys,
-            });
-        } else {
-            this.setState({
-                disabled: true,
             });
         }
     }
@@ -207,13 +201,16 @@ class LinkRuler extends React.PureComponent {
             });
         }).then(() => {
             message.success('删除成功', DURATION);
+            const categoryId = this.state.selectedKeys;
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
                     pageNum,
                     pageSize,
+                    categoryId,
                 });
             });
+            this.setState({ selectedRowKeys: [] });
         });
     }
     messages = () => {
@@ -345,7 +342,7 @@ class LinkRuler extends React.PureComponent {
                                     <Button
                                         type="primary"
                                         className={style.addBtn}
-                                        disabled={this.state.disabled}
+                                        disabled={this.state.selectedRowKeys.length === 0}
                                     >批量删除
                                     </Button>
                                 </Popconfirm>

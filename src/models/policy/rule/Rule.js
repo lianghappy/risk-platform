@@ -4,7 +4,7 @@ import { PAGE_SIZE, SYSID } from 'utils/constants';
 import { filterPath } from 'utils/path';
 
 export default {
-    namespace: 'rule',
+    namespace: 'rulePly',
     state: {
         list: [],
         sysId: SYSID,
