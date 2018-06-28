@@ -5,7 +5,6 @@ import {
     Modal,
     Button,
     Input,
-    InputNumber,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -59,7 +58,13 @@ class AddPolicy extends React.PureComponent {
             visible: true,
         });
     };
-
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -113,6 +118,7 @@ class AddPolicy extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入策略名称' },
+                                        { max: 50, message: '策略名称最多20位' },
                                     ],
                                 })(<Input type="acount" placeholder="请输入策略名称" />)
                             }
@@ -128,8 +134,9 @@ class AddPolicy extends React.PureComponent {
                                         initialValue: record.refuseScore,
                                         rules: [
                                             { required: true, message: '请输入拒绝分数' },
+                                            { validator: this.checkNum, message: '请输入数字' }
                                         ],
-                                    })(<InputNumber width={50} />)
+                                    })(<Input style={{ width: '50px' }} />)
                                 }
                                 <span> &lt;   需人审  ≤ </span>
                                 {
@@ -137,8 +144,9 @@ class AddPolicy extends React.PureComponent {
                                         initialValue: record.passScore,
                                         rules: [
                                             { required: true, message: '请输入通过分数' },
+                                            { validator: this.checkNum, message: '请输入数字' }
                                         ],
-                                    })(<InputNumber width={50} />)
+                                    })(<Input style={{ width: '50px' }} />)
                                 }
                                 <span>&lt;   通过  ≤</span>
                             </div>
