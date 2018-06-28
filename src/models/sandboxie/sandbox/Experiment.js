@@ -14,6 +14,7 @@ export default {
         exprList: [],
         experSelect: {},
         success: {},
+        category: [],
     },
     effects: {
         // 选择样本
@@ -73,6 +74,17 @@ export default {
             yield call(post, API.oldStartExpers, data);
             yield call(resolve);
         },
+        // 获取来源
+        * getType({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getBlackType, payload, data);
+            yield put({
+                type: 'startSuc',
+                payload: {
+                    category: response,
+                },
+            });
+        },
 
     },
     reducers: {
@@ -88,6 +100,13 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略沙箱', link: setPath('/sandboxie') }, { name: '开始实验' }],
+                    });
+                    dispatch({
+                        type: 'getType',
+                        payload: {
+                            sysId: SYSID,
+                            type: 'sampleSource',
+                        },
                     });
                 }
             });

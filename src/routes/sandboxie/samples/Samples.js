@@ -9,6 +9,7 @@ import moment from 'moment';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import SamplesModal from './SampleModal';
+import RiskModal from './RiskModal';
 import SampleDetail from './SampleDetail';
 
 const FormItem = Form.Item;
@@ -152,11 +153,18 @@ class Samples extends React.PureComponent {
                     <div>
                         {
                             roles('R_B_SB_samples_select') &&
-                        <SamplesModal
-                            visible={this.state.visible}
-                        >
-                            <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
-                        </SamplesModal>
+                        Number(rest[1].type) !== 1 ?
+                                <RiskModal
+                                    visible={this.state.visible}
+                                >
+                                    <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
+                                </RiskModal>
+                                :
+                                <SamplesModal
+                                    visible={this.state.visible}
+                                >
+                                    <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
+                                </SamplesModal>
                         }
                         {
                             roles('R_B_SB_samples_detail') &&

@@ -2,14 +2,16 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table } from 'antd';
+import { Layout, Input, Form, Button, Table, Select } from 'antd';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
 import LookModal from './LookModal';
+import LookRisk from './LookRisk';
 import style from '../index.scss';
 import Pagination from '../../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class OldExpr extends React.PureComponent {
     static propTypes ={
@@ -18,6 +20,7 @@ class OldExpr extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
+        category: PropTypes.array.isRequired,
     };
     componentDidMount() {
         const {
@@ -106,24 +109,42 @@ class OldExpr extends React.PureComponent {
             pageNum,
             exprList: dataSource,
             loading,
+            category,
         } = this.props;
+        const options = [];
+        if (category) {
+            category.forEach((item) => {
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
+            });
+        }
         const columns = [
             { title: '样本ID', dataIndex: 'id', key: 'id' },
             { title: '样本名称', dataIndex: 'name', key: 'name' },
             { title: '样本总数量', dataIndex: 'num', key: 'num' },
             { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
-            { title: '数据源', dataIndex: 'type', key: 'type', render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '内部'}</span>) },
+            { title: '数据源', dataIndex: 'type', key: 'type', render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
                 render: (...rest) => (
                     <div>
-                        <LookModal
-                            analysisSampleId={rest[1].id}
-                            type={rest[1].type}
-                        >
-                            <a style={{ marginRight: 5 }}>样本筛选条件</a>
-                        </LookModal>
+                        {
+                            Number(rest[1].type) === 1 ?
+                                <LookModal
+                                    analysisSampleId={rest[1].id}
+                                    type={rest[1].type}
+                                >
+                                    <a style={{ marginRight: 5 }}>样本筛选条件</a>
+                                </LookModal>
+                                :
+                                <LookRisk
+                                    analysisSampleId={rest[1].id}
+                                    type={rest[1].type}
+                                >
+                                    <a style={{ marginRight: 5 }}>样本筛选条件</a>
+                                </LookRisk>
+                        }
+
                         <a role="button" tabIndex="-1" onClick={() => this.starts(rest[1])}>开始实验</a>
                     </div>
                 ) },
@@ -133,11 +154,13 @@ class OldExpr extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="样本ID" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入样本ID" />)
+                            getFieldDecorator('analysisSampleId')(<Input placeholder="请输入样本ID" />)
                         }
                     </FormItem>
                     <FormItem label="样本来源" >
-                        {getFieldDecorator('channel')(<Input placeholder="请输入样本来源" />)}
+                        {
+                            getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择样本来源">{options}</Select>)
+                        }
                     </FormItem>
                     <FormItem label="风险代码" >
                         {
@@ -173,5 +196,6 @@ const mapStateToProps = (state) => ({
     pageNum: state.experiment.pageNum,
     pageSize: state.experiment.pageSize,
     exprList: state.experiment.exprList,
+    category: state.experiment.exprList,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(OldExpr)));
