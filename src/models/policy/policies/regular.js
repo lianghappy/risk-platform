@@ -16,6 +16,7 @@ export default {
         regulars: [],
         _pageNum: 1,
         status: '',
+        compareSymbol: [],
     },
     effects: {
         * query({ payload }, { call, put }) {
@@ -85,6 +86,15 @@ export default {
                 },
             });
         },
+        * queryCompareSymbol({ payload }, { call, put }) {
+            const response = yield call(post, API.getBlackType, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    compareSymbol: response,
+                },
+            });
+        },
         * queryRegular({ payload }, { call, put }) {
             const response = yield call(post, API.getLinkRuler, payload);
             yield put({
@@ -127,6 +137,12 @@ export default {
                         type: 'queryChannel',
                         payload: {
                             type: 'rule',
+                        },
+                    });
+                    dispatch({
+                        type: 'queryCompareSymbol',
+                        payload: {
+                            type: 'compareSymbol',
                         },
                     });
                     dispatch({

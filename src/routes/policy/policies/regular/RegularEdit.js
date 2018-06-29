@@ -8,11 +8,12 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 
-const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
+// const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
     loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
     channels: state.regularPly.channels,
+    compareSymbol: state.regularPly.compareSymbol,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -93,6 +94,7 @@ export default class RegularEdit extends React.PureComponent {
             record,
             loading,
             stageType,
+            compareSymbol,
         } = this.props;
         const { getFieldDecorator } = form;
         const formItemLayout = {
@@ -171,10 +173,10 @@ export default class RegularEdit extends React.PureComponent {
                                     <Select>
                                         {compareSymbol.map(item => (
                                             <Select.Option
-                                                value={item}
-                                                key={item}
+                                                value={item.code}
+                                                key={item.code}
                                             >
-                                                {item}
+                                                {item.name}
                                             </Select.Option>
                                         ))}
                                     </Select>
