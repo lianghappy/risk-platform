@@ -42,7 +42,7 @@ class OldExpr extends React.PureComponent {
         const { loading, form } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times.length > 0) {
+            if (values && values.times && values.times.length > 0) {
                 Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
@@ -65,7 +65,7 @@ class OldExpr extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times.length > 0) {
+            if (values && values.times && values.times.length > 0) {
                 Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;

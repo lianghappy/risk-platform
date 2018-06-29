@@ -24,12 +24,12 @@ class RecordHistory extends React.PureComponent {
         const { loading, form } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.start.length > 0) {
+            if (values && values.start && values.start.length > 0) {
                 Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
                 Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
                 delete values.start;
             }
-            if (values && values.end.length > 0) {
+            if (values && values.end && values.end.length > 0) {
                 Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
                 Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
                 delete values.end;
@@ -52,12 +52,12 @@ class RecordHistory extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.start.length > 0) {
+            if (values && values.start && values.start.length > 0) {
                 Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
                 Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
                 delete values.start;
             }
-            if (values && values.end.length > 0) {
+            if (values && values.end && values.end.length > 0) {
                 Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
                 Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
                 delete values.end;

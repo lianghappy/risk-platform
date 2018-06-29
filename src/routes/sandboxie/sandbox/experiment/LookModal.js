@@ -3,6 +3,7 @@ import {
     Modal,
     Row,
     Col,
+    Button,
 } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
@@ -56,6 +57,15 @@ export default class LookModal extends React.PureComponent {
                     onOk={this.handleSubmit}
                     width="810px"
                     height="700px"
+                    footer={[
+                        <Button
+                            key="submit"
+                            type="primary"
+                            onClick={this.handleCancel}
+                        >
+                            确定
+                        </Button>,
+                    ]}
                 >
                     <div>
                         <Row>

@@ -78,21 +78,21 @@ class RiskModal extends React.PureComponent {
                 >
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
-                            <span>渠道类型：</span>
+                            <span>身份证前6位：</span>
                             <span className={style.result}>{content.idCardTop6}</span>
                         </Col>
                         <Col span="12">
-                            <span>逾期期数：</span>
+                            <span>手机号码前7位：</span>
                             <span className={style.result}>{content.phoneTop7}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
-                            <span>商品类型：</span>
+                            <span>年龄开始：</span>
                             <span className={style.result}>{content.ages}</span>
                         </Col>
                         <Col span="12">
-                            <span>已付期数：</span>
+                            <span>年龄结束：</span>
                             <span className={style.result}>{content.agee}</span>
                         </Col>
                     </Row>

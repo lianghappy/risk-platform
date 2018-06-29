@@ -34,7 +34,7 @@ class SandSamples extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             Object.assign(values, { type: 1 });
-            if (values && values.times.length > 0) {
+            if (values && values.times && values.times.length > 0) {
                 Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
@@ -56,7 +56,7 @@ class SandSamples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times.length > 0) {
+            if (values && values.times && values.times.length > 0) {
                 Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
@@ -89,7 +89,7 @@ class SandSamples extends React.PureComponent {
             form.validateFields((errors, values) => {
                 Object.assign(values, { sysId: this.props.sysId });
                 Object.assign(values, { type: 1 });
-                if (values && values.times.length > 0) {
+                if (values && values.times && values.times.length > 0) {
                     Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
                     Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                     delete values.times;
