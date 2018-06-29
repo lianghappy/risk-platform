@@ -37,8 +37,8 @@ class CreateSamples extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (!errors) {
-                Object.assign(values, { orderTimeStart: (values.times[0]._d).getTime() });
-                Object.assign(values, { orderTimeEnd: (values.times[1]._d).getTime() });
+                Object.assign(values, { orderTimeStart: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { orderTimeEnd: moment(values.times[1]._d).format('X') });
                 new Promise((resolve) => {
                     dispatch({
                         type: 'creates/add',
@@ -189,7 +189,7 @@ class CreateSamples extends React.PureComponent {
                                     })(<RangePicker
                                         showTime={{
                                             hideDisabledOptions: true,
-                                            defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                            defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                         }}
                                     />)
                                 }

@@ -145,12 +145,38 @@ class SandSamples extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id' },
-            { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
-            { title: '样本生成进度', dataIndex: 'sampleProgress', key: 'sampleProgress' },
-            { title: '操作',
+            {
+                title: '样本ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '样本名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '样本总数量',
+                dataIndex: 'num',
+                key: 'num',
+                width: 100,
+            },
+            {
+                title: '样本生成时间',
+                dataIndex: 'generateTime',
+                key: 'generateTime',
+                width: 100,
+            },
+            {
+                title: '样本生成进度',
+                dataIndex: 'sampleProgress',
+                key: 'sampleProgress',
+                width: 100,
+            },
+            {
+                title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
                 render: (...rest) => (
@@ -184,7 +210,9 @@ class SandSamples extends React.PureComponent {
                         </Popconfirm>
                         }
                     </div>
-                ) },
+                ),
+                width: 100,
+            },
         ];
         const options = [];
         if (this.props.typeList) {

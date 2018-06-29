@@ -105,7 +105,7 @@ export default class LookModal extends React.PureComponent {
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>下单时间：</Col>
-                                <Col span={16}>{moment(experSelects.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(experSelects.orderTimeEnd).format('YYYY-MM-DD')}
+                                <Col span={16}>{moment(experSelects.orderTimeStart * 1000).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(experSelects.orderTimeEnd * 1000).format('YYYY-MM-DD')}
                                 </Col>
                             </Col>
                         </Row>

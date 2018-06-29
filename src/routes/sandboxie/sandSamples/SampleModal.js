@@ -113,7 +113,7 @@ class SamplesModal extends React.PureComponent {
                         </Col>
                         <Col span="12">
                             <span>下单时间：</span>
-                            <span className={style.result}>{moment(content.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd).format('YYYY-MM-DD')}</span>
+                            <span className={style.result}>{moment(content.orderTimeStart * 1000).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd * 1000).format('YYYY-MM-DD')}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
