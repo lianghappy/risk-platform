@@ -143,14 +143,15 @@ class Samples extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id' },
-            { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'createTime', key: 'createTime' },
+            { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '样本名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '样本总数量', dataIndex: 'num', key: 'num', width: 100, },
+            { title: '样本生成时间', dataIndex: 'createTime', key: 'createTime', width: 100, },
             { title: '数据源',
                 dataIndex: 'valueType',
                 key: 'valueType',
-                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>),
+                width: 100, },
             { title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
@@ -194,7 +195,8 @@ class Samples extends React.PureComponent {
                         </Popconfirm>
                         }
                     </div>
-                ) },
+                ),
+                width: 100, },
         ];
         const options = [];
         if (category) {

@@ -30,8 +30,8 @@ class StartExper extends React.PureComponent {
             if (errors) { delete errors.name; }
             if (!errors) {
                 this.props.handleValue(values);
-                Object.assign(values, { orderTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { orderTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                Object.assign(values, { orderTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { orderTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
                 new Promise(() => {
                     dispatch({
@@ -77,7 +77,7 @@ class StartExper extends React.PureComponent {
                                 })(<RangePicker
                                     showTime={{
                                         hideDisabledOptions: true,
-                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                     }}
                                 />)
                             }

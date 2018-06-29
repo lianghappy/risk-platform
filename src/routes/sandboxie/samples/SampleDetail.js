@@ -30,11 +30,12 @@ export default class SampleDetail extends React.PureComponent {
     };
     onPage = (pageNum) => {
         const analysisSampleId = this.props.analysisSampleId;
+        const type = this.props.type;
         this.query({
             pageNum,
             pageSize: 5,
             analysisSampleId,
-            type: 0,
+            type,
         });
     }
     onCancel = () => {
@@ -49,11 +50,12 @@ export default class SampleDetail extends React.PureComponent {
     }
     handleShow = () => {
         const analysisSampleId = this.props.analysisSampleId;
+        const type = this.props.type;
         this.props.dispatch({
             type: 'samples/queryDetail',
             payload: {
                 analysisSampleId,
-                type: 0,
+                type,
                 pageSize: 5,
                 pageNum: 1,
             },
