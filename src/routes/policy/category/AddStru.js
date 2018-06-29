@@ -97,7 +97,7 @@ class AddStruc extends React.PureComponent {
         const childrens = [];
         if (this.props.parentlist) {
             this.props.parentlist.forEach((item) => {
-                childrens.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
+                childrens.push(<Option value={item.id} key={item.id}>[{item.level}]{item.name}</Option>);
             });
         }
         return (

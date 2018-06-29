@@ -2,8 +2,9 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, Select } from 'antd';
+import { Layout, Input, Form, Button, Table, Select, DatePicker } from 'antd';
 import base64 from 'utils/base64';
+import moment from 'moment';
 import { setPath } from 'utils/path';
 import LookModal from './LookModal';
 import LookRisk from './LookRisk';
@@ -12,6 +13,7 @@ import Pagination from '../../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 
 class OldExpr extends React.PureComponent {
     static propTypes ={
@@ -40,6 +42,11 @@ class OldExpr extends React.PureComponent {
         const { loading, form } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
+                delete values.times;
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -58,6 +65,11 @@ class OldExpr extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
+                delete values.times;
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -118,11 +130,15 @@ class OldExpr extends React.PureComponent {
             });
         }
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id' },
-            { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
-            { title: '数据源', dataIndex: 'type', key: 'type', render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
+            { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '样本名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '样本总数量', dataIndex: 'num', key: 'num', width: 100, },
+            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime', width: 100, },
+            { title: '数据源',
+                dataIndex: 'type',
+                key: 'type',
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>),
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -147,7 +163,8 @@ class OldExpr extends React.PureComponent {
 
                         <a role="button" tabIndex="-1" onClick={() => this.starts(rest[1])}>开始实验</a>
                     </div>
-                ) },
+                ),
+                width: 100, },
         ];
         return (
             <Layout className={style.container}>
@@ -162,10 +179,14 @@ class OldExpr extends React.PureComponent {
                             getFieldDecorator('type')(<Select style={{ width: 150 }} placeholder="请选择样本来源">{options}</Select>)
                         }
                     </FormItem>
-                    <FormItem label="风险代码" >
-                        {
-                            getFieldDecorator('code')(<Input placeholder="请输入风险代码" />)
-                        }
+                    <FormItem label="样本生成时间" >
+                        {getFieldDecorator('times')(<RangePicker
+                            showTime={{
+                                hideDisabledOptions: true,
+                                format: 'YYYY-MM-DD HH:mm:ss',
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                            }}
+                        />)}
                     </FormItem>
                     <FormItem>
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>

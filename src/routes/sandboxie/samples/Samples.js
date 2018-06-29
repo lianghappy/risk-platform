@@ -35,9 +35,9 @@ class Samples extends React.PureComponent {
         const { form, loading } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
@@ -57,9 +57,9 @@ class Samples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
@@ -96,6 +96,11 @@ class Samples extends React.PureComponent {
         }).then(() => {
             message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
+                if (values && values.times.length > 0) {
+                    Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                    Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
+                    delete values.times;
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -209,7 +214,8 @@ class Samples extends React.PureComponent {
                         {getFieldDecorator('times')(<RangePicker
                             showTime={{
                                 hideDisabledOptions: true,
-                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                format: 'YYYY-MM-DD HH:mm:ss',
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                             }}
                         />)}
                     </FormItem>

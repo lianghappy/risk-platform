@@ -4,7 +4,7 @@ import { PAGE_SIZE, SYSID } from 'utils/constants';
 import { filterPath } from 'utils/path';
 
 export default {
-    namespace: 'recordHistory',
+    namespace: 'recordSand',
     state: {
         list: [],
         sysId: SYSID,

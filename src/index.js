@@ -28,9 +28,10 @@ const app = dva({
             dispatch({
                 type: 'session/logout',
             });
+            message.error('登录超时，请重新登录', DURATION);
         }
         // if (e.message === 'Failed to fetch') e.message = ERR_MSG;
-        message.error(e.message, DURATION);
+        if (e.code !== '40101') message.error(e.message, DURATION);
     },
 });
 export default app;

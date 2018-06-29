@@ -28,15 +28,15 @@ class RecordHistory extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.start) {
-                Object.assign(values, { startTimes: moment(values.start[0]._d).startOf('day').format('X') });
-                Object.assign(values, { startTimee: moment(values.start[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.start.length > 0) {
+                Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
+                delete values.start;
             }
-            if (values && values.end) {
-                Object.assign(values, { endTimes: moment(values.end[0]._d).startOf('day').format('X') });
-                Object.assign(values, { endTimee: moment(values.end[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.end.length > 0) {
+                Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
+                Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
+                delete values.end;
             }
             this.query({
                 ...values,
@@ -56,15 +56,15 @@ class RecordHistory extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.start) {
-                Object.assign(values, { startTimes: moment(values.start[0]._d).startOf('day').format('X') });
-                Object.assign(values, { startTimee: moment(values.start[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.start.length > 0) {
+                Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
+                delete values.start;
             }
-            if (values && values.end) {
-                Object.assign(values, { endTimes: moment(values.end[0]._d).startOf('day').format('X') });
-                Object.assign(values, { endTimee: moment(values.end[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.end.length > 0) {
+                Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
+                Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
+                delete values.end;
             }
             this.query({
                 ...values,
@@ -89,7 +89,7 @@ class RecordHistory extends React.PureComponent {
         const operators = JSON.parse(sessionStorage.userInfo).user.realName;
         new Promise((resolve) => {
             dispatch({
-                type: 'recordHistory/download',
+                type: 'recordSand/download',
                 payload: {
                     data: {
                         analysisRecordId: rest.id,
@@ -106,7 +106,7 @@ class RecordHistory extends React.PureComponent {
     }
     query(payload) {
         this.props.dispatch({
-            type: 'recordHistory/recordHistoryList',
+            type: 'recordSand/recordHistoryList',
             payload,
         });
     }
@@ -184,7 +184,7 @@ class RecordHistory extends React.PureComponent {
                             getFieldDecorator('start')(<RangePicker
                                 showTime={{
                                     hideDisabledOptions: true,
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                 }}
                             />)
                         }
@@ -194,7 +194,7 @@ class RecordHistory extends React.PureComponent {
                             getFieldDecorator('end')(<RangePicker
                                 showTime={{
                                     hideDisabledOptions: true,
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                 }}
                             />)
                         }
@@ -249,11 +249,11 @@ class RecordHistory extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.recordHistory.list,
-    sysId: state.recordHistory.sysId,
-    loading: state.loading.models.recordHistory,
-    pageNum: state.recordHistory.pageNum,
-    pageSize: state.recordHistory.pageSize,
-    download: state.recordHistory.download,
+    list: state.recordSand.list,
+    sysId: state.recordSand.sysId,
+    loading: state.loading.models.recordSand,
+    pageNum: state.recordSand.pageNum,
+    pageSize: state.recordSand.pageSize,
+    download: state.recordSand.download,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(RecordHistory)));

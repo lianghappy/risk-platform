@@ -20,6 +20,8 @@ export default class Sider extends React.PureComponent {
     render() {
         const { auths, location } = this.props;
         const menuKey = menuKeyPick(location);
+        console.log(auths);
+
         return (
             <Layout.Sider breakpoint="lg" className="jm-sider">
                 <div className={styles.logo}>
@@ -34,7 +36,7 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
-                    {auths.map(m => (
+                    { auths && auths.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={
