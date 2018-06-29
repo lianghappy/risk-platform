@@ -14,7 +14,7 @@ export default {
         exprList: [],
         experSelect: {},
         success: {},
-        category: [],
+        categories: [],
     },
     effects: {
         // 选择样本
@@ -81,7 +81,7 @@ export default {
             yield put({
                 type: 'startSuc',
                 payload: {
-                    category: response,
+                    categories: response,
                 },
             });
         },

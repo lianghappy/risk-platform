@@ -126,7 +126,8 @@ class RecordHistory extends React.PureComponent {
             { title: '实验状态',
                 dataIndex: 'state',
                 key: 'state',
-                render: (...rest) => (<span>{Number(rest[1].state) === 1 ? '进行中' : '已完成'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].state) === 1 ? '进行中' : '已完成'}</span>),
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -139,7 +140,8 @@ class RecordHistory extends React.PureComponent {
                                 <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
                         }
                     </div>
-                ) },
+                ),
+                width: 100 },
         ];
         return (
             <Layout className={style.container}>

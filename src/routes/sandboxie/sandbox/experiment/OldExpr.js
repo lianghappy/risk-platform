@@ -22,7 +22,7 @@ class OldExpr extends React.PureComponent {
         loading: PropTypes.bool.isRequired,
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
-        category: PropTypes.array.isRequired,
+        categories: PropTypes.array.isRequired,
     };
     componentDidMount() {
         const {
@@ -121,14 +121,16 @@ class OldExpr extends React.PureComponent {
             pageNum,
             exprList: dataSource,
             loading,
-            category,
+            categories,
         } = this.props;
         const options = [];
-        if (category) {
-            category.forEach((item) => {
+        if (categories) {
+            categories.forEach((item) => {
                 options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
+        console.log(categories);
+
         const columns = [
             { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },
             { title: '样本名称', dataIndex: 'name', key: 'name', width: 100, },
@@ -217,6 +219,6 @@ const mapStateToProps = (state) => ({
     pageNum: state.experiment.pageNum,
     pageSize: state.experiment.pageSize,
     exprList: state.experiment.exprList,
-    category: state.experiment.exprList,
+    categories: state.experiment.categories,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(OldExpr)));
