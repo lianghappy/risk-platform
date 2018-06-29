@@ -44,8 +44,7 @@ export default {
         },
         // 获取规则类目的列表
         * getCategoryList({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getCategoryList, payload, data);
+            const response = yield call(post, API.getCategoryList, payload);
             let categoryLists = [];
             categoryLists = treeConvert({
                 pId: 'pid',

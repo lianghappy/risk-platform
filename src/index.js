@@ -30,8 +30,14 @@ const app = dva({
             });
             message.error('登录超时，请重新登录', DURATION);
         }
+        if (e.code === '41501') {
+            message.error('疑似sql注入攻击，本次请求已记录日志，请联系公司法务部门取证！', DURATION);
+        }
+        if (e.code === '41502') {
+            message.error('疑似XSS脚本攻击，本次请求已记录日志，请联系公司法务部门取证！', DURATION);
+        }
         // if (e.message === 'Failed to fetch') e.message = ERR_MSG;
-        if (e.code !== '40101') message.error(e.message, DURATION);
+        if (e.code !== '40101' && e.code !== '41501' && e.code !== '41502') message.error(e.message, DURATION);
     },
 });
 export default app;

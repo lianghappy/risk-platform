@@ -32,6 +32,11 @@ class LinkRuler extends React.PureComponent {
         selectedKeys: '',
         ruleName: '',
     };
+    componentWillMount() {
+        this.props.dispatch({
+            type: 'linkRuler/getCategoryList',
+        });
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         const { form, loading } = this.props;
         if (loading) return;
