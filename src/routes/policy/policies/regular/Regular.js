@@ -388,12 +388,12 @@ export default class Regular extends React.PureComponent {
 
         if (type === '2') {
             columns.splice(columns.length - 2, 0, {
-                title: '分值',
+                title: '权重',
                 dataIndex: 'weight',
                 key: 'weight',
                 width: 100,
             }, {
-                title: '权重',
+                title: '分值',
                 dataIndex: 'score',
                 key: 'score',
                 width: 100,
