@@ -46,6 +46,7 @@ export default class RegularModal extends React.PureComponent {
         selectedRowKeys: [],
         categorieId: '',
         categoryName: '',
+        selectedKeys: '',
     };
 
     onOk = (e) => {
@@ -134,8 +135,6 @@ export default class RegularModal extends React.PureComponent {
     };
     onSelects = (selectedKeys) => {
         const {
-            pageSize,
-            pageNum,
             form,
         } = this.props;
         this.setState({ categorieId: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
@@ -144,13 +143,13 @@ export default class RegularModal extends React.PureComponent {
             Object.assign(values, { categoryId });
             this.query({
                 ...values,
-                pageNum,
-                pageSize,
+                pageNum: 1,
+                pageSize: 5,
             });
         });
         this.props.categories.forEach((item) => {
             if (item.id === categoryId) {
-                this.setState({ categoryName: item.name });
+                this.setState({ categoryName: item.name, selectedKeys, });
             }
         });
     }
@@ -180,6 +179,8 @@ export default class RegularModal extends React.PureComponent {
             visible: false,
             selectedRows: [], // 选中货品
             selectedRowKeys: [],
+            selectedKeys: '',
+            categorieId: '',
         });
     };
 
@@ -196,6 +197,8 @@ export default class RegularModal extends React.PureComponent {
             visible: true,
             selectedRows: [],
             selectedRowKeys: [],
+            selectedKeys: '',
+            categorieId: '',
         });
     };
     checkChannel = (code) => {
@@ -320,6 +323,7 @@ export default class RegularModal extends React.PureComponent {
                     <div className={styles.layout}>
                         <div className={styles.left}>
                             <Tree
+                                selectedKeys={this.state.selectedKeys}
                                 onSelect={this.onSelects}
                             >
                                 {this.renderTreeNodes(treeDatas)}
