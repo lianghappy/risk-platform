@@ -11,6 +11,7 @@ export default {
         pageSize: PAGE_SIZE,
         sysId: SYSID,
         roleNameList: [],
+        getPassword: '',
     },
     effects: {
         // 查询角色名称列表
@@ -21,6 +22,16 @@ export default {
                 type: 'querySuc',
                 payload: {
                     roleNameList: response,
+                },
+            });
+        },
+        * getPassword({ payload }, { call, put }) {
+        // const { data } = payload;
+            const response = yield call(post, API.getPassword, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getPassword: response.password,
                 },
             });
         },

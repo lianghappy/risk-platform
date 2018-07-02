@@ -50,8 +50,8 @@ class AddAccount extends React.PureComponent {
                         if (type === 'edit') {
                             Object.assign(values, { id: record.id });
                             if (values.password === 'xxxxxx1') {
-                                Object.assign(values, { password: record.password });
-                                Object.assign(values, { confirm: record.password });
+                                Object.assign(values, { password: this.props.getPassword });
+                                Object.assign(values, { confirm: this.props.getPassword });
                             } else {
                                 Object.assign(values, { password: MD5(values.password) });
                                 Object.assign(values, { confirm: MD5(values.confirm) });
@@ -111,7 +111,17 @@ class AddAccount extends React.PureComponent {
         }
     }
     handleShow = () => {
-        // this.props.form.validateFields();
+        // this.props.form.validateFields();s
+        if (this.props.type === 'edit') {
+            const { record } = this.props;
+            this.props.dispatch({
+                type: 'account/getPassword',
+                payload: {
+                    userId: record.id,
+                    sysId: SYSID,
+                }
+            });
+        }
         this.setState({
             visible: true,
         });
@@ -145,7 +155,7 @@ class AddAccount extends React.PureComponent {
                     {children}
                 </span>
                 <Modal
-                    title="新增账号"
+                    title={this.props.type === 'add' ? '新增账号' : '更新账号'}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
@@ -210,7 +220,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
-                                    initialValue: record.password && 'xxxxxx1',
+                                    initialValue: this.props.getPassword && 'xxxxxx1',
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -226,7 +236,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
-                                    initialValue: record.password && 'xxxxxx1',
+                                    initialValue: this.props.getPassword && 'xxxxxx1',
                                     rules: [
                                         {
                                             required: true,
@@ -274,5 +284,6 @@ class AddAccount extends React.PureComponent {
 }
 const mapStateToProps = (state) => ({
     roleNameList: state.account.roleNameList,
+    getPassword: state.account.getPassword,
 });
 export default connect(mapStateToProps)(Form.create()(AddAccount));

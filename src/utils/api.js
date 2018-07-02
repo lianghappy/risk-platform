@@ -25,6 +25,8 @@ const api = {
     delAccount: `${API}/api/risk/manager/user/delete/v1`,
     // 更新用户
     updateAccount: `${API}/api/risk/manager/user/update/v1`,
+    // 获取账号信息
+    getPassword: `${API}/api/risk/manager/user/get/v1`,
 
     // 增加角色
     addRole: `${API_RBAC}/api/rbac/service/rolePlus/addMenuRole/v2`,
