@@ -88,6 +88,7 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/application/app/LookApp'),
         models: () => [
             import('models/application/LookApp'),
+            import('models/application/App'),
         ],
     });
     // 添加角色/编辑角色

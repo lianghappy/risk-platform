@@ -33,12 +33,6 @@ class AddApp extends React.PureComponent {
         appItem: this.props.appItem || [],
         modalData: this.props.modalData || {},
     };
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            appItem: nextProps.appItem,
-            modalData: nextProps.modalData,
-        });
-    }
     handleShow = () => {
         this.setState({
             visible: true,
@@ -55,8 +49,8 @@ class AddApp extends React.PureComponent {
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (values.partnerName) {
-                        this.state.appItem.some((item) => {
+                    if (values.partnerName && this.props.type === 'add') {
+                        this.props.appItem.some((item) => {
                             if (item.name === values.partnerName) {
                                 Object.assign(values, { partnerId: item.id });
                                 return true;
@@ -66,7 +60,13 @@ class AddApp extends React.PureComponent {
                     } else {
                         Object.assign(values, { partnerId: record.partnerId });
                     }
-                    Object.assign(values, { img: this.state.modalData.imgUrl });
+                    if (!this.state.modalData.imgUrl) {
+                        Object.assign(values, { img: record.img });
+                    } else {
+                        Object.assign(values, { img: this.state.modalData.imgUrl });
+                    }
+
+
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -83,6 +83,7 @@ class AddApp extends React.PureComponent {
         this.props.form.resetFields();
         this.setState({
             visible: false,
+            modalData: {},
         });
     };
     render() {
@@ -105,6 +106,7 @@ class AddApp extends React.PureComponent {
                 options.push(<Option value={item.name} key={item.name}>{item.name}</Option>);
             });
         }
+
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -166,7 +168,12 @@ class AddApp extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请上传应用图片' },
                                     ],
-                                })(<div><span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span><PicInput type="manual" value={this.state.modalData} onChange={(value) => this.imgChange(value)} /></div>) }
+                                })(
+                                    <div>
+                                        <span className={style.photo}>（请上传应用高清图片，支持.jpg .jpeg .png格式，建议320*320像素，小于3M）</span>
+                                        <PicInput type="manual" value={!this.state.modalData.imgUrl ? { imgUrl: record.img } : this.state.modalData} onChange={(value) => this.imgChange(value)} />
+                                    </div>
+                                ) }
                         </Form.Item>
                     </Form>
                 </Modal>
@@ -174,4 +181,10 @@ class AddApp extends React.PureComponent {
         );
     }
 }
-export default connect()(Form.create()(AddApp));
+const mapStateToProps = (state) => {
+    return {
+        appItem: state.app.appItem,
+        modalData: state.app.modalData,
+    };
+};
+export default connect(mapStateToProps)(Form.create()(AddApp));
