@@ -22,11 +22,36 @@ export default class RiskReport extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '规则编号', dataIndex: 'normId', key: 'normId' },
-            { title: '规则编号', dataIndex: 'normName', key: 'normName' },
-            { title: '返回值', dataIndex: 'riskValue', key: 'riskValue' },
-            { title: '所有来源', dataIndex: 'channel', key: 'channel' },
-            { title: '所有类别', dataIndex: 'categoryName', key: 'categoryName' },
+            {
+                title: '规则编号',
+                dataIndex: 'normId',
+                key: 'normId',
+                width: 100,
+            },
+            {
+                title: '规则编号',
+                dataIndex: 'normName',
+                key: 'normName',
+                width: 100,
+            },
+            {
+                title: '返回值',
+                dataIndex: 'riskValue',
+                key: 'riskValue',
+                width: 100,
+            },
+            {
+                title: '所有来源',
+                dataIndex: 'channel',
+                key: 'channel',
+                width: 100,
+            },
+            {
+                title: '所有类别',
+                dataIndex: 'categoryName',
+                key: 'categoryName',
+                width: 100,
+            },
         ];
         return (
             <Layout className={styles.riskReport}>
