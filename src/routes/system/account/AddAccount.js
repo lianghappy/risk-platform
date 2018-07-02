@@ -220,7 +220,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
-                                    initialValue: this.props.getPassword && 'xxxxxx1',
+                                    initialValue: this.props.type === 'edit' ? this.props.getPassword && 'xxxxxx1' : '',
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -236,7 +236,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
-                                    initialValue: this.props.getPassword && 'xxxxxx1',
+                                    initialValue: this.props.type === 'edit' ? this.props.getPassword && 'xxxxxx1' : '',
                                     rules: [
                                         {
                                             required: true,

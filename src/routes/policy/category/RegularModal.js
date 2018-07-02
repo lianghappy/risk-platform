@@ -186,6 +186,7 @@ export default class RegularModal extends React.PureComponent {
             onSubmiting,
             ruleName,
         } = this.props;
+        console.log(pageNum);
 
         const {
             visible,
@@ -282,7 +283,7 @@ export default class RegularModal extends React.PureComponent {
                                 </Form.Item>
                                 <Form.Item label="规则名称">
                                     {
-                                        getFieldDecorator('ruleName')(<Input />)
+                                        getFieldDecorator('name')(<Input />)
                                     }
                                 </Form.Item>
                                 <Form.Item>

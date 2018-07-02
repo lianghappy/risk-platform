@@ -75,9 +75,11 @@ class LinkRuler extends React.PureComponent {
         const { pageSize, form } = this.props;
         form.resetFields();
         this.setState({ selectedRowKeys: [] });
+        const categoryId = this.state.selectedKeys;
         this.query({
             pageNum: 1,
             pageSize,
+            categoryId,
         });
     };
     onDelete(ids) {
