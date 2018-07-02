@@ -30,7 +30,6 @@ class AddApp extends React.PureComponent {
     };
     state = {
         visible: this.props.visible || false,
-        appItem: this.props.appItem || [],
         modalData: this.props.modalData || {},
     };
     handleShow = () => {
@@ -101,8 +100,8 @@ class AddApp extends React.PureComponent {
             getFieldsError,
         } = form;
         const options = [];
-        if (this.state.appItem.length > 0) {
-            this.state.appItem.forEach((item) => {
+        if (this.props.appItem.length > 0) {
+            this.props.appItem.forEach((item) => {
                 options.push(<Option value={item.name} key={item.name}>{item.name}</Option>);
             });
         }
