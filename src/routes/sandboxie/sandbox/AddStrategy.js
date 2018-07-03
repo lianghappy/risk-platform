@@ -66,6 +66,13 @@ class AddStrategy extends React.PureComponent {
             callback();
         }
     }
+    checkRecord = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/).test(value)) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     checkType = (num) => {
         let name = '';
         switch (Number(num)) {
@@ -198,9 +205,10 @@ class AddStrategy extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('weight', {
-                                    initialValue: record.weight && record.weight / 100,
+                                    initialValue: record.weight,
                                     rules: [
                                         { required: true, message: '请输入阶段权重' },
+                                        { validator: this.checkRecord, message: '请输入数字' }
                                     ],
                                 })(<Input type="acount" placeholder="请输入阶段权重" />)
                             }
