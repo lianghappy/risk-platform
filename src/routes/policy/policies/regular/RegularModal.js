@@ -166,9 +166,12 @@ export default class RegularModal extends React.PureComponent {
                 });
             }
         });
+        this.setState({
+            selectedKeys,
+        });
         this.props.categories.forEach((item) => {
             if (item.id === categoryId) {
-                this.setState({ categoryName: item.name, selectedKeys, });
+                this.setState({ categoryName: item.name, });
             }
         });
     }

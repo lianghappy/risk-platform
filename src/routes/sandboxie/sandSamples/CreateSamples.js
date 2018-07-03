@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Row, Col, DatePicker } from 'antd';
+import { Layout, Input, Form, Select, Button, Row, Col, DatePicker, message } from 'antd';
 import moment from 'moment';
 // import { DURATION } from 'utils/constants';
 import { setPath } from 'utils/path';
@@ -36,7 +36,23 @@ class CreateSamples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.pldScoreUpper && !(/^[0-9]*$/).test(values.pldScoreUpper)) {
+                message.error('风控评分请输入数字');
+            }
+
+            if (values && values.zhiMaScoreUpper && !(/^[0-9]*$/).test(values.zhiMaScoreUpper)) {
+                message.error('芝麻分请输入数字');
+            }
+
             if (!errors) {
+                if (values && values.pldScoreUpper && Number(values.pldScoreUpper) < Number(values.pldScorelower)) {
+                    message.error('风控评分最高分比最低分高');
+                    return;
+                }
+                if (values && values.zhiMaScoreUpper && Number(values.zhiMaScoreUpper) < Number(values.zhiMaScorelower)) {
+                    message.error('风控评分最高分比最低分高');
+                    return;
+                }
                 Object.assign(values, { orderTimeStart: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { orderTimeEnd: moment(values.times[1]._d).format('X') });
                 new Promise((resolve) => {

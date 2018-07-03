@@ -25,7 +25,6 @@ class Sandboxie extends React.PureComponent {
     };
     state = {
         clone: {},
-        disabled: true,
         selectedRowKeys: [],
     };
     onPageChange = (pageNum, pageSize) => {
@@ -185,7 +184,7 @@ class Sandboxie extends React.PureComponent {
         });
     };
     exciese = () => {
-        if (this.state.disabled) {
+        if (this.state.selectedRowKeys.length <= 0) {
             message.error('请选择策略');
         } else {
             this.props.history.push(setPath(`/experiment/${base64.encode(this.state.clone.id)}`));

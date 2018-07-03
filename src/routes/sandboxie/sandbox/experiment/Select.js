@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import moment from 'moment';
 import { setPath } from 'utils/path';
-import { Input, Form, Button, Col, Row, DatePicker } from 'antd';
+import { Input, Form, Button, Col, Row, DatePicker, message } from 'antd';
 import style from '../index.scss';
 
 const FormItem = Form.Item;
@@ -28,8 +28,15 @@ class StartExper extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (errors) { delete errors.name; }
+            if (values && values.agee && !(/^[0-9]*$/.test(values.agee))) {
+                message.error('年龄请输入数字');
+            }
             if (!errors) {
                 this.props.handleValue(values);
+                if (values && Number(values.agee) < Number(values.ages)) {
+                    message.error('最小年龄小于最大年龄');
+                    return;
+                }
                 Object.assign(values, { orderTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { orderTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
@@ -39,7 +46,6 @@ class StartExper extends React.PureComponent {
                         payload: { ...values },
                     });
                 }).then(() => {
-                    console.log(this.props.match.params.id);
                     this.props.history.push(setPath(`/sandboxie/recordHistory/${this.props.match.params.id}`));
                 });
             }
@@ -146,6 +152,6 @@ class StartExper extends React.PureComponent {
 const mapStateToProps = (state) => ({
     list: state.experiment.list,
     sysId: state.experiment.sysId,
-    loading: state.loading.models.experiment,
+    loading: state.loading.effects['experiment/start'],
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(StartExper)));
