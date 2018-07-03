@@ -190,6 +190,7 @@ class AddModal extends React.PureComponent {
                                     initialValue: bAWCommon && bAWCommon.idCardName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
+                                        { max: 20, message: '最多20位' }
                                     ],
                                 })(<Input placeholder="请输入用户姓名" />)
                             }
