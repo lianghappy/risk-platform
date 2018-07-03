@@ -24,6 +24,7 @@ const TreeNode = Tree.TreeNode;
     categories: state.regularPly.categories,
     regulars: state.regularPly.regulars,
     pageNum: state.regularPly._pageNum,
+    getUnCategory: state.regularPly.getUnCategory,
     loading: state.loading.effects['regularPly/queryRegular'] || false,
     onSubmiting: state.loading.effects['regularPly/add'] || false,
 }))
@@ -127,12 +128,20 @@ export default class RegularModal extends React.PureComponent {
 
         form.validateFields((errors, values) => {
             const categoryId = this.state.categorieId;
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
-                categoryId,
-            });
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                    categoryId,
+                });
+            }
         });
     };
     onSelects = (selectedKeys) => {
@@ -142,12 +151,20 @@ export default class RegularModal extends React.PureComponent {
         this.setState({ categorieId: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
         const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
         form.validateFields((errors, values) => {
-            Object.assign(values, { categoryId });
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize: 5,
-            });
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            } else {
+                Object.assign(values, { categoryId });
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            }
         });
         this.props.categories.forEach((item) => {
             if (item.id === categoryId) {
@@ -157,21 +174,36 @@ export default class RegularModal extends React.PureComponent {
     }
     onReset = () => {
         this.props.form.resetFields();
-        this.query({
-            pageNum: 1,
-            pageSize: 5,
-        });
+        if (this.state.categorieId === '0') {
+            this.unQuery({
+                pageNum: 1,
+                pageSize: 5,
+            });
+        } else {
+            this.query({
+                pageNum: 1,
+                pageSize: 5,
+            });
+        }
     };
 
     onQuery = (e) => {
         e.preventDefault();
 
         this.props.form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize: 5,
-            });
+            if (this.state.categorieId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            }
         });
     };
     checkChannel = (code) => {
@@ -218,6 +250,12 @@ export default class RegularModal extends React.PureComponent {
             payload,
         });
     }
+    unQuery(payload) {
+        this.props.dispatch({
+            type: 'regularPly/getUnCategory',
+            payload,
+        });
+    }
     renderTreeNodes = (data) => {
         return data.map((item) => {
             if (item.children) {
@@ -241,6 +279,7 @@ export default class RegularModal extends React.PureComponent {
             categories,
             onSubmiting,
             ruleName,
+            getUnCategory,
         } = this.props;
         const {
             visible,
@@ -303,6 +342,10 @@ export default class RegularModal extends React.PureComponent {
             tId: 'key',
             tName: 'title',
         }, categories);
+        treeDatas.push({
+            key: '0',
+            title: '未分类'
+        });
         return (
             <span>
                 <span
@@ -376,7 +419,7 @@ export default class RegularModal extends React.PureComponent {
                                 columns={columns}
                                 rowSelection={rowSelection}
                                 size="small"
-                                dataSource={dataSource}
+                                dataSource={this.state.categorieId === '0' ? getUnCategory : dataSource}
                                 style={{ height: 430 }}
                                 scroll={{ y: 390 }}
                                 rowKey="id"
@@ -386,7 +429,7 @@ export default class RegularModal extends React.PureComponent {
                             <Pagination
                                 current={pageNum}
                                 pageSize={5}
-                                dataSize={dataSource.length}
+                                dataSize={this.state.categorieId === '0' ? getUnCategory.length : dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper
                             />

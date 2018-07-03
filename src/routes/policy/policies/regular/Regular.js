@@ -283,7 +283,6 @@ export default class Regular extends React.PureComponent {
             },
         });
     }
-
     render() {
         const {
             form,
