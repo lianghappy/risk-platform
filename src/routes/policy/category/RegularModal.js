@@ -119,7 +119,7 @@ export default class RegularModal extends React.PureComponent {
         this.props.form.resetFields();
         this.query({
             pageNum: 1,
-            pageSize: 5,
+            pageSize: 8,
         });
     };
 
@@ -130,7 +130,7 @@ export default class RegularModal extends React.PureComponent {
             this.query({
                 ...values,
                 pageNum: 1,
-                pageSize: 5,
+                pageSize: 8,
             });
         });
     };
@@ -157,7 +157,7 @@ export default class RegularModal extends React.PureComponent {
             type: 'linkRuler/queryRegular',
             payload: {
                 pageNum: 1,
-                pageSize: 5,
+                pageSize: 8,
             },
         });
 
@@ -186,7 +186,6 @@ export default class RegularModal extends React.PureComponent {
             onSubmiting,
             ruleName,
         } = this.props;
-        console.log(pageNum);
 
         const {
             visible,
@@ -319,7 +318,7 @@ export default class RegularModal extends React.PureComponent {
                             />
                             <Pagination
                                 current={pageNum}
-                                pageSize={5}
+                                pageSize={8}
                                 dataSize={dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper

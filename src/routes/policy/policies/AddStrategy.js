@@ -200,7 +200,7 @@ class AddStrategy extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('weight', {
-                                    initialValue: record.weight / 100,
+                                    initialValue: record.weight && record.weight / 100,
                                     rules: [
                                         { required: true, message: '请输入阶段权重' },
                                         { max: 20, message: '最多20位' },

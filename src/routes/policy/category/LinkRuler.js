@@ -36,19 +36,35 @@ class LinkRuler extends React.PureComponent {
         this.props.dispatch({
             type: 'linkRuler/getCategoryList',
         });
+        this.props.dispatch({
+            type: 'linkRuler/getLinkRulerList',
+            payload: {
+                pageNum: 1,
+                pageSize: 10,
+            },
+        });
     }
     onPageChange = (pageNum, pageSize, sysId) => {
         const { form, loading } = this.props;
         if (loading) return;
         const categoryId = this.state.selectedKeys;
+
         form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
-                sysId,
-                categoryId,
-            });
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                    sysId,
+                    categoryId,
+                });
+            }
         });
     };
     onQuery = (e) => {
@@ -62,13 +78,21 @@ class LinkRuler extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             const categoryId = this.state.selectedKeys;
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize,
-                sysId,
-                categoryId,
-            });
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize,
+                    sysId,
+                    categoryId,
+                });
+            }
         });
     }
     onReset = () => {
@@ -76,11 +100,18 @@ class LinkRuler extends React.PureComponent {
         form.resetFields();
         this.setState({ selectedRowKeys: [] });
         const categoryId = this.state.selectedKeys;
-        this.query({
-            pageNum: 1,
-            pageSize,
-            categoryId,
-        });
+        if (categoryId === '0') {
+            this.unQuery({
+                pageNum: 1,
+                pageSize,
+            });
+        } else {
+            this.query({
+                pageNum: 1,
+                pageSize,
+                categoryId,
+            });
+        }
     };
     onDelete(ids) {
         const {
@@ -101,12 +132,20 @@ class LinkRuler extends React.PureComponent {
             message.success('删除成功', DURATION);
             const categoryId = this.state.selectedKeys;
             form.validateFields((errors, values) => {
-                this.query({
-                    ...values,
-                    pageNum,
-                    pageSize,
-                    categoryId,
-                });
+                if (categoryId === '0') {
+                    this.unQuery({
+                        ...values,
+                        pageNum,
+                        pageSize,
+                    });
+                } else {
+                    this.query({
+                        ...values,
+                        pageNum,
+                        pageSize,
+                        categoryId,
+                    });
+                }
             });
         });
     }
@@ -126,24 +165,42 @@ class LinkRuler extends React.PureComponent {
     onCheck = (keys) => {
         const {
             pageSize,
-            pageNum,
             form,
+            dispatch,
         } = this.props;
         const categoryId = keys[0].substring(keys[0].indexOf('$') + 1);
         this.setState({ selectedKeys: categoryId, selectedRowKeys: [] });
-        form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                categoryId,
-                pageNum,
-                pageSize,
+        if (categoryId === '0') {
+            form.validateFields((errors, values) => {
+                dispatch({
+                    type: 'linkRuler/getUnCategory',
+                    payload: {
+                        ...values,
+                        pageNum: 1,
+                        pageSize,
+                    }
+                });
             });
-        });
-        this.props.categoryList.forEach((item) => {
-            if (categoryId === item.id) {
-                this.setState({ ruleName: item.name });
-            }
-        });
+        } else {
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    categoryId,
+                    pageNum: 1,
+                    pageSize,
+                });
+            });
+            this.props.categoryList.forEach((item) => {
+                if (categoryId === item.id) {
+                    this.setState({ ruleName: item.name });
+                }
+            });
+        }
+    }
+    onSelectAll = (selected) => {
+        if (!selected) {
+            this.setState({ selectedRowKeys: [] });
+        }
     }
     checkCode = (code) => {
         let name = '';
@@ -190,6 +247,12 @@ class LinkRuler extends React.PureComponent {
             payload,
         });
     }
+    unQuery(payload) {
+        this.props.dispatch({
+            type: 'linkRuler/getUnCategory',
+            payload,
+        });
+    }
     delList = () => {
         const {
             pageSize,
@@ -198,6 +261,10 @@ class LinkRuler extends React.PureComponent {
             dispatch,
         } = this.props;
         const { idList } = this.state;
+        if (this.state.selectedKeys === '0') {
+            message.error('未分类不能删除');
+            return;
+        }
         new Promise((resolve) => {
             dispatch({
                 type: 'linkRuler/delList',
@@ -242,7 +309,9 @@ class LinkRuler extends React.PureComponent {
             pageNum,
             list: dataSource,
             loading,
+            getUnCategory,
         } = this.props;
+        const { selectedKeys } = this.state;
         const columns = [
             { title: '规则编号', dataIndex: 'id', key: 'id', width: 100, },
             { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName', width: 100, },
@@ -261,7 +330,7 @@ class LinkRuler extends React.PureComponent {
                     >
                         {
                             roles('R_B_PLY_catg_linkrl_del') &&
-                        <Button icon="delete" />
+                        <Button disabled={selectedKeys === '0'} icon="delete" />
                         }
                     </Popconfirm>
                 ),
@@ -279,6 +348,7 @@ class LinkRuler extends React.PureComponent {
             selectedRowKeys,
             selectedRows,
             onChange: this.onSelectChange,
+            onSelectAll: this.onSelectAll,
         };
 
         const { treeDatas } = this.props;
@@ -330,7 +400,7 @@ class LinkRuler extends React.PureComponent {
                                         categoryId={this.state.selectedKeys}
                                         ruleName={this.state.ruleName}
                                     >
-                                        <Button type="primary" style={{ marginRight: 20 }}>
+                                        <Button disabled={this.state.selectedKeys === '0'} type="primary" style={{ marginRight: 20 }}>
                                         新增规则
                                         </Button>
                                     </RegularModal>
@@ -349,7 +419,7 @@ class LinkRuler extends React.PureComponent {
                                     <Button
                                         type="primary"
                                         className={style.addBtn}
-                                        disabled={this.state.selectedRowKeys.length === 0}
+                                        disabled={this.state.selectedRowKeys.length === 0 || selectedKeys === '0'}
                                     >批量删除
                                     </Button>
                                 </Popconfirm>
@@ -358,14 +428,14 @@ class LinkRuler extends React.PureComponent {
                         <Table
                             columns={columns}
                             loading={loading}
-                            dataSource={dataSource}
+                            dataSource={selectedKeys === '0' ? getUnCategory : dataSource}
                             pagination={false}
                             rowSelection={rowSelection}
                         />
                         <Pagination
                             current={pageNum}
                             pageSize={pageSize}
-                            dataSize={dataSource.length}
+                            dataSize={selectedKeys === '0' ? getUnCategory.length : dataSource.length}
                             onChange={this.onPageChange}
                             showQuickJumper
                         />
@@ -386,5 +456,6 @@ const mapStateToProps = (state) => ({
     typeList: state.linkRuler.typeList,
     categoryList: state.linkRuler.categoryList,
     treeDatas: state.linkRuler.treeDatas,
+    getUnCategory: state.linkRuler.getUnCategory,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(LinkRuler)));

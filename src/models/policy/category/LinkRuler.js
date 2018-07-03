@@ -15,6 +15,8 @@ export default {
         categoryList: [],
         regulars: [],
         treeDatas: [],
+        _pageNum: 1,
+        getUnCategory: [],
     },
     effects: {
         // 获取类别关联规则信息
@@ -51,12 +53,29 @@ export default {
                 tId: 'key',
                 tName: 'title',
             }, response);
+            categoryLists.push({
+                key: '0',
+                title: '未分类',
+            });
+            // categoryLists.push();
             yield put({
                 type: 'getCategoryListSuc',
                 payload: {
                     categoryList: response,
                     sysId: SYSID,
                     treeDatas: categoryLists,
+                },
+            });
+        },
+        // 对于未分类的规则重写
+        * getUnCategory({ payload }, { call, put }) {
+            const response = yield call(post, API.getUnCategory, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getUnCategory: response,
+                    pageNum: payload.pageNum,
+                    pageSize: PAGE_SIZE,
                 },
             });
         },
@@ -110,14 +129,6 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '类别管理' }],
-                    });
-                    dispatch({
-                        type: 'getLinkRulerList',
-                        payload: {
-                            sysId: SYSID,
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
                     });
                     dispatch({
                         type: 'getChannel',
