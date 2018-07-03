@@ -184,7 +184,7 @@ class AddAccount extends React.PureComponent {
                                         { max: 20, message: '*用户账号最多20个字符' },
                                         { validator: this.validateAccount, message: '*用户账号最好为姓名全拼，不能输入汉字' }
                                     ],
-                                })(<Input placeholder="请输入用户账号" />)
+                                })(<Input placeholder="请输入用户账号" disabled={record.account !== undefined} />)
                             }
                         </Form.Item>
                         <Form.Item
