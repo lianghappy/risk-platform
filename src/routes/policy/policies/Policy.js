@@ -25,7 +25,7 @@ class Policy extends React.PureComponent {
     };
     state = {
         clone: {},
-        disabled: true,
+        selectedRowKeys: [],
     };
     onPageChange = (pageNum, pageSize, sysId) => {
         const {
@@ -68,12 +68,17 @@ class Policy extends React.PureComponent {
             pageSize,
         });
     };
-    onSelectChange = (selectedRows) => {
+    onRowChange = (selectedRowKeys) => {
         this.setState({
-            clone: selectedRows,
-            disabled: false,
+            selectedRowKeys,
         });
-    }
+    };
+
+    onSelect = (record) => {
+        this.setState({
+            clone: record,
+        });
+    };
     onEdit = (id, isEnable) => {
         const {
             pageSize,
@@ -131,6 +136,15 @@ class Policy extends React.PureComponent {
                     pageSize,
                 });
             });
+            if (
+                this.state.selectedRowKeys.length !== 0 &&
+                ids === this.state.selectedRowKeys[0]
+            ) {
+                this.setState({
+                    clone: {},
+                    selectedRowKeys: [],
+                });
+            }
         });
     }
     modalOk = (data, callback) => {
@@ -199,9 +213,12 @@ class Policy extends React.PureComponent {
         });
     }
     render() {
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             type: 'radio',
-            onSelect: this.onSelectChange,
+            selectedRowKeys,
+            onChange: this.onRowChange,
+            onSelect: this.onSelect,
         };
         const { getFieldDecorator } = this.props.form;
         const {
@@ -351,7 +368,7 @@ class Policy extends React.PureComponent {
                         record={this.state.clone}
                         onOk={this.modalOk}
                     >
-                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                        <Button type="primary" disabled={this.state.selectedRowKeys.length === 0} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
                     }
                 </div>
@@ -360,6 +377,7 @@ class Policy extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    rowKey="id"
                     rowSelection={rowSelection}
                 />
                 <Pagination

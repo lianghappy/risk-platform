@@ -124,7 +124,12 @@ class AddRole extends React.PureComponent {
                   <FormItem label="角色名称" {...formItemLayout}>
                       {
                           getFieldDecorator('roleName',
-                              { rules: [{ required: true, message: '请输入角色名称' }] }
+                              {
+                                  rules: [
+                                      { required: true, message: '请输入角色名称' },
+                                      { max: 20, message: '最多20位' }
+                                  ]
+                              }
                           )(<Input placeholder="请输入角色名称" />)
                       }
                   </FormItem>

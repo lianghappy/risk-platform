@@ -137,7 +137,7 @@ class AddApp extends React.PureComponent {
                             {
                                 getFieldDecorator('partnerName', {
                                     rules: [
-                                        { required: true, message: '请输入公司名称' },
+                                        { required: true, message: '请选择公司名称' },
                                     ],
                                     initialValue: record.partnerName,
                                 })(<Select placeholder="请选择公司名称" onSelect={this.onSelect}>{options}</Select>)

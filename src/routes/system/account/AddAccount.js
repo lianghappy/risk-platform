@@ -196,6 +196,7 @@ class AddAccount extends React.PureComponent {
                                     initialValue: record.userName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
+                                        { max: 20, message: '最多20位' }
                                     ],
                                 })(<Input placeholder="请输入用户姓名" />)
                             }

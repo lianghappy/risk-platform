@@ -82,15 +82,49 @@ class Rules extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '规则编号', dataIndex: 'id', key: 'id' },
-            { title: '规则名称', dataIndex: 'name', key: 'name' },
-            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源',
+            {
+                title: '规则编号',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '规则名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '判定指定Key',
+                dataIndex: 'judgeKey',
+                key: 'judgeKey',
+                width: 100,
+            },
+            {
+                title: '风险代码',
+                dataIndex: 'code',
+                key: 'code',
+                width: 100,
+            },
+            {
+                title: '规则来源',
                 dataIndex: 'channel',
                 key: 'channel',
-                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>) },
-            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>),
+                width: 100,
+            },
+            {
+                title: '规则值类型',
+                dataIndex: 'valueType',
+                key: 'valueType',
+                width: 100,
+            },
+            {
+                title: '规则配置描述',
+                key: 'indexdescribe',
+                dataIndex: 'indexdescribe',
+                width: 100,
+            }
         ];
         const options = [];
         if (this.props.typeList) {

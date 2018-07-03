@@ -205,7 +205,7 @@ class AddStrategy extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('weight', {
-                                    initialValue: record.weight,
+                                    initialValue: record.weight !== undefined ? record.weight / 100 : '',
                                     rules: [
                                         { required: true, message: '请输入阶段权重' },
                                         { validator: this.checkRecord, message: '请输入数字' }

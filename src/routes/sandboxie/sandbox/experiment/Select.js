@@ -88,7 +88,8 @@ class StartExper extends React.PureComponent {
                             {
                                 getFieldDecorator('idCardTop6', {
                                     rules: [
-                                        { max: 6, message: '只能输入六位数字' }
+                                        { max: 6, message: '只能输入六位数字' },
+                                        { validator: this.checkNum, message: '只能输入数字' }
                                     ],
                                 })(<Input placeholder="请输入身份证号前6位" />)
                             }
@@ -101,7 +102,8 @@ class StartExper extends React.PureComponent {
                             {
                                 getFieldDecorator('phoneTop7', {
                                     rules: [
-                                        { max: 7, message: '只能输入七位数字' }
+                                        { max: 7, message: '只能输入七位数字' },
+                                        { validator: this.checkNum, message: '只能输入数字' }
                                     ],
                                 })(<Input placeholder="请输入手机号前7位" />)
                             }

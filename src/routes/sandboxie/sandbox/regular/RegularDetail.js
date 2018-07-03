@@ -82,6 +82,10 @@ export default class RegularDetail extends React.PureComponent {
                             <Col span={16}>{record.valueType}</Col>
                         </Row>
                         <Row className={styles.row}>
+                            <Col span={8} className={styles.title}>规则配置说明：</Col>
+                            <Col span={16}>{record.indexdescribe}</Col>
+                        </Row>
+                        <Row className={styles.row}>
                             <Col span={8} className={styles.title}>判定规则key：</Col>
                             <Col span={16}>{record.judgeKey}</Col>
                         </Row>

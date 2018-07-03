@@ -26,6 +26,7 @@ class Sandboxie extends React.PureComponent {
     state = {
         clone: {},
         disabled: true,
+        selectedRowKeys: [],
     };
     onPageChange = (pageNum, pageSize) => {
         const { form, loading } = this.props;
@@ -64,12 +65,17 @@ class Sandboxie extends React.PureComponent {
             pageSize,
         });
     };
-    onSelectChange = (selectedRows) => {
+    onRowChange = (selectedRowKeys) => {
         this.setState({
-            clone: selectedRows,
-            disabled: false,
+            selectedRowKeys,
         });
-    }
+    };
+
+    onSelect = (record) => {
+        this.setState({
+            clone: record,
+        });
+    };
     onEdit = (id, isEnable) => {
         const {
             pageSize,
@@ -125,6 +131,15 @@ class Sandboxie extends React.PureComponent {
                     pageSize,
                 });
             });
+            if (
+                this.state.selectedRowKeys.length !== 0 &&
+                ids === this.state.selectedRowKeys[0]
+            ) {
+                this.setState({
+                    clone: {},
+                    selectedRowKeys: [],
+                });
+            }
         });
     }
     modalOk = (data, callback) => {
@@ -204,9 +219,12 @@ class Sandboxie extends React.PureComponent {
         });
     }
     render() {
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             type: 'radio',
-            onSelect: this.onSelectChange,
+            selectedRowKeys,
+            onChange: this.onRowChange,
+            onSelect: this.onSelect,
         };
         const { getFieldDecorator } = this.props.form;
         const {
@@ -364,7 +382,7 @@ class Sandboxie extends React.PureComponent {
                         record={this.state.clone}
                         onOk={this.modalOk}
                     >
-                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                        <Button type="primary" disabled={selectedRowKeys.length <= 0} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
                     }
                 </div>
@@ -373,6 +391,7 @@ class Sandboxie extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    rowKey="id"
                     rowSelection={rowSelection}
                 />
                 <Pagination
