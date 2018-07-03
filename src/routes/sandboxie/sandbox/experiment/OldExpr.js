@@ -129,7 +129,6 @@ class OldExpr extends React.PureComponent {
                 options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
-        console.log(categories);
 
         const columns = [
             { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },

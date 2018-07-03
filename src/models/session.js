@@ -88,7 +88,6 @@ export const initSession = () => {
     if (userInfo) {
         userInfo = JSON.parse(userInfo);
         session = { ...userInfo, isLogin: true, auths: authConvert(userInfo.menus), };
-        console.log(authConvert(userInfo.menus));
 
         setToken(userInfo.token);
         setUserId(userInfo.user.id);

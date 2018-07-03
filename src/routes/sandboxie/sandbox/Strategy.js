@@ -185,7 +185,6 @@ class Policy extends React.PureComponent {
             loading,
             status,
         } = this.props;
-        console.log(status);
         const columns = [
             { title: '阶段排序', dataIndex: 'sort', key: 'sort' },
             { title: '阶段名称', dataIndex: 'name', key: 'name' },

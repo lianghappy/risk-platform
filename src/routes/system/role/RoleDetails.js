@@ -46,8 +46,6 @@ class RoleDetail extends React.PureComponent {
         }).then(() => {
             const { menus, datas } = this.props;
             datas.forEach(item => {
-                console.log(this.props.menus);
-
                 if (menus.includes(item.pid)) {
                     const index = menus.findIndex((value) => {
                         return value === item.pid;

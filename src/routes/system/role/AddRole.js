@@ -35,7 +35,6 @@ class AddRole extends React.PureComponent {
             loading,
             form,
         } = this.props;
-        console.log(this.props.list);
 
         if (loading) return;
         form.validateFields((errors, values) => {
@@ -77,7 +76,6 @@ class AddRole extends React.PureComponent {
         });
     }
   onCheck = (keys) => {
-      console.log(keys);
       this.setState({ checkedKeys: keys });
   }
   cancelS = () => {

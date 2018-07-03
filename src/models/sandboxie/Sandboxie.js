@@ -33,7 +33,6 @@ export default {
             yield call(resolve);
         },
         * del({ payload }, { call }) {
-            console.log('123');
             const { data, resolve } = payload;
             yield call(post, API.delPolicy, data);
             yield call(resolve);
