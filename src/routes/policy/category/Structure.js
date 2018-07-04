@@ -112,21 +112,38 @@ class Structure extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '类别名称', dataIndex: 'name', key: 'name' },
-            { title: '类别级别', dataIndex: 'level', key: 'level' },
-            { title: '父级别名称', dataIndex: 'pname', key: 'pname' },
-            { title: '类别描述',
+            {
+                title: '类别名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '类别级别',
+                dataIndex: 'level',
+                key: 'level',
+                width: 100,
+            },
+            {
+                title: '父级别名称',
+                dataIndex: 'pname',
+                key: 'pname',
+                width: 100,
+            },
+            {
+                title: '类别描述',
                 dataIndex: 'describ',
                 key: 'describ',
-                width: '300',
+                width: 100,
                 render: (...rest) => (
                     <Tooltip title={rest[1].describ}>
-                        <span className={style.describ}>
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
                             {rest[1].describ}
                         </span>
                     </Tooltip>
                 ) },
-            { title: '操作',
+            {
+                title: '操作',
                 dataIndex: 'operator',
                 key: 'operator',
                 render: (...rest) => (
@@ -143,7 +160,9 @@ class Structure extends React.PureComponent {
                     </AddStruc>
                         }
                     </div>
-                ) },
+                ),
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>
