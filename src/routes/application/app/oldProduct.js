@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Table, message } from 'antd';
+import { Layout, Form, Table, message, Button } from 'antd';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
@@ -53,6 +53,7 @@ class OldProduct extends React.PureComponent {
                 },
             });
         }).then(() => {
+            this.setState({ selectedRows: [] });
             message.success('删除成功', DURATION);
             this.query({
                 pageNum,
@@ -61,9 +62,17 @@ class OldProduct extends React.PureComponent {
             });
         });
     }
-    // onSelectChange = (selectedRowKeys, selectedRows) => {
-    //     this.setState({ selectedRows });
-    // }
+    onReset = () => {
+        const { pageSize, form } = this.props;
+        form.resetFields();
+        this.query({
+            pageNum: 1,
+            pageSize,
+        });
+    };
+    onSelectChange = (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRows });
+    }
     query(payload) {
         let url = '';
         if (this.state.type === '.$del') {
@@ -160,7 +169,7 @@ class OldProduct extends React.PureComponent {
         // };
         return (
             <Layout className={style.containers}>
-                {/* <Button className={style.btns} type="primary" onClick={this.all}>批量删除</Button> */}
+                <Button className={style.btns} type="primary" onClick={this.all} disabled={this.state.selectedRows.length === 0}>批量删除</Button>
                 <Table
                     columns={dels}
                     dataSource={this.state.dataSource}

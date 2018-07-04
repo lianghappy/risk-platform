@@ -5,6 +5,7 @@ import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { menuKeyPick } from 'utils/common';
+import { authFirst, authsSecond } from 'utils/auth';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
@@ -20,7 +21,7 @@ export default class Sider extends React.PureComponent {
     };
     render() {
         const { location } = this.props;
-        const auths = this.props.flag ? authFirst : authsSecond;
+        const auth = this.props.flag ? authFirst : authsSecond;
         const menuKey = menuKeyPick(location);
 
         return (
@@ -37,7 +38,7 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
-                    { auths && auths.map(m => (
+                    { auth && auth.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={
