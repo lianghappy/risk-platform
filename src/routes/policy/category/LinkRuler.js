@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Tree } from 'antd';
 import { DURATION } from 'utils/constants';
-import { roles } from 'utils/common';
+import { roles, rowSelect } from 'utils/common';
 import style from './index.scss';
 import RegularModal from './RegularModal';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -202,6 +202,15 @@ class LinkRuler extends React.PureComponent {
             this.setState({ selectedRowKeys: [] });
         }
     }
+    onSelect = (record, selected) => {
+        const {
+            selectedRowKeys,
+        } = rowSelect.onSelect(this.state, record, selected);
+
+        this.setState({
+            selectedRowKeys,
+        });
+    }
     checkCode = (code) => {
         let name = '';
         this.props.typeList.forEach(item => {
@@ -349,6 +358,7 @@ class LinkRuler extends React.PureComponent {
             selectedRows,
             onChange: this.onSelectChange,
             onSelectAll: this.onSelectAll,
+            onSelect: this.onSelect,
         };
 
         const { treeDatas } = this.props;
@@ -430,6 +440,7 @@ class LinkRuler extends React.PureComponent {
                             loading={loading}
                             dataSource={selectedKeys === '0' ? getUnCategory : dataSource}
                             pagination={false}
+                            rowKey="id"
                             rowSelection={rowSelection}
                         />
                         <Pagination
