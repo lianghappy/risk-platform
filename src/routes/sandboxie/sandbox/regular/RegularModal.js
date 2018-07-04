@@ -283,6 +283,7 @@ export default class RegularModal extends React.PureComponent {
             categories,
             onSubmiting,
             ruleName,
+            getUnCategory,
         } = this.props;
         const {
             visible,
@@ -422,7 +423,7 @@ export default class RegularModal extends React.PureComponent {
                                 columns={columns}
                                 rowSelection={rowSelection}
                                 size="small"
-                                dataSource={dataSource}
+                                dataSource={this.state.categorieId === '0' ? getUnCategory : dataSource}
                                 style={{ height: 430 }}
                                 scroll={{ y: 390 }}
                                 rowKey="id"
@@ -432,7 +433,7 @@ export default class RegularModal extends React.PureComponent {
                             <Pagination
                                 current={pageNum}
                                 pageSize={5}
-                                dataSize={dataSource.length}
+                                dataSize={this.state.categorieId === '0' ? getUnCategory.length : dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper
                             />
