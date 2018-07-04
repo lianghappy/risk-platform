@@ -1,3 +1,5 @@
+// import { filterPath } from 'utils/path';
+
 export const getHeight = (dom) => {
     return dom.offsetHeight;
 };
