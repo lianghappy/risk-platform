@@ -310,6 +310,14 @@ function RouterConfig({ history, app }) {
             import('models/system/OrderDetail.js')
         ],
     });
+    // 第三方产品
+    const ThirdParty = dynamic({
+        app,
+        component: () => import('routes/system/thirdPartyManage/ThirdPartyManage.js'),
+        models: () => [
+            import('models/system/ThirdPartyManage.js')
+        ]
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -359,6 +367,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
                     <PrivateRoute path={setPath('/order')} exact component={Orders} />
                     <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
+                    <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />
                 </Main>
             </Switch>
         </Router>

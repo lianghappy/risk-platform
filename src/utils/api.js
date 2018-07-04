@@ -223,6 +223,9 @@ const api = {
     addDiskTable: `${API}/api/risk/manager/monitor/boardAndSleuth/create/v1`,
     dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,
 
+    /* ---------------------------第三方产品------------------------------ */
+    getThirdPartyList: `${API}/api/risk/manager/collector/thirdpartyManage/list/v1`,
+
 };
 
 export default api;

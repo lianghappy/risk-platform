@@ -1,0 +1,313 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'dva';
+import { Layout, Form, Input, Button, Table, message } from 'antd';
+import { DURATION, SYSID } from 'utils/constants';
+// import { roles } from 'utils/common';
+import style from './index.scss';
+import AddModal from './AddModal';
+import Pagination from '../../../components/Pagination/Pagination';
+
+const FormItem = Form.Item;
+const mapStateToProps = (state) => {
+    return {
+        list: state.thirdParty.list,
+        pageNum: state.thirdParty.pageNum,
+        pageSize: state.thirdParty.pageSize,
+        loading: state.loading.models.thirdParty,
+    };
+};
+@connect(mapStateToProps)
+@Form.create()
+export default class ThirdPartyManage extends React.PureComponent {
+    static propTypes = {
+        loading: PropTypes.bool.isRequired,
+        dispatch: PropTypes.func.isRequired,
+        list: PropTypes.array.isRequired,
+        pageNum: PropTypes.number.isRequired,
+        pageSize: PropTypes.number.isRequired,
+    };
+    onPageChange = (pageNum, pageSize, sysId) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
+        });
+    };
+   onQuery = (e) => {
+       e.preventDefault();
+       const {
+           pageSize,
+           form,
+           loading,
+       } = this.props;
+       if (loading) return;
+       form.validateFields((errors, values) => {
+           this.query({
+               ...values,
+               pageNum: 1,
+               pageSize,
+               sysId: 'risk',
+           });
+       });
+   };
+   onReset = () => {
+       const { pageSize, form } = this.props;
+       form.resetFields();
+       this.query({
+           pageNum: 1,
+           pageSize,
+           sysId: SYSID,
+       });
+   }
+   onDelete = (id) => {
+       const {
+           pageSize,
+           pageNum,
+           form,
+           dispatch,
+       } = this.props;
+       const userId = JSON.parse(sessionStorage.userInfo).user.id;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'account/del',
+               payload: {
+                   data: { id, userId, sysId: SYSID },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           message.success('删除成功', DURATION);
+           form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: SYSID });
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
+   }
+   modalOk = (data, callback) => {
+       const {
+           dispatch,
+           pageSize,
+           pageNum,
+           form,
+       } = this.props;
+       const content = data.id !== undefined ? '更新成功' : '新增成功';
+       let url = '';
+       switch (data.type) {
+       case 'add':
+           url = 'account/add';
+           break;
+       case 'edit':
+           url = 'account/update';
+           break;
+       default:
+           break;
+       }
+       new Promise((resolve) => {
+           dispatch({
+               type: url,
+               payload: {
+                   data,
+                   resolve,
+               },
+           });
+       }).then(() => {
+           callback();
+           message.success(content, DURATION);
+           form.validateFields((errors, values) => {
+               Object.assign(values, { sysId: SYSID });
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
+   };
+   query(payload) {
+       Object.assign(payload, { sysId: 'risk' });
+       this.props.dispatch({
+           type: 'account/queryAccountList',
+           payload,
+       });
+   }
+   render() {
+       const { getFieldDecorator } = this.props.form;
+       const {
+           list: dataSource,
+           pageNum,
+           pageSize,
+           loading,
+       } = this.props;
+       const columns = [
+           {
+               title: '三方数据源',
+               dataIndex: 'thirdparty',
+               key: 'thirdparty',
+               width: 100,
+           },
+           {
+               title: '产品名称',
+               dataIndex: 'productName',
+               key: 'productName',
+               width: 100,
+           },
+           {
+               title: '调用次数',
+               dataIndex: 'phone',
+               key: 'phone',
+               width: 100,
+           },
+           {
+               title: '成功次数',
+               dataIndex: 'company',
+               key: 'company',
+               width: 100,
+           },
+           {
+               title: '失败次数',
+               dataIndex: 'roleType',
+               key: 'roleType',
+               width: 100,
+           },
+           {
+               title: '已使用金额',
+               dataIndex: 'roleName',
+               key: 'roleName',
+               width: 100,
+           },
+           {
+               title: '总金额',
+               dataIndex: 'rental',
+               key: 'rental',
+               width: 100,
+           },
+           {
+               title: '上线时间',
+               dataIndex: 'relaseDate',
+               key: 'relaseDate',
+               width: 100,
+           },
+           {
+               title: '签约日',
+               dataIndex: 'startDate',
+               key: 'startDate',
+               width: 100,
+           },
+           {
+               title: '到期日',
+               dataIndex: 'endDate',
+               key: 'endDate',
+               width: 100,
+           },
+           {
+               title: '是否免费',
+               dataIndex: 'isFree',
+               key: 'isFree',
+               width: 100,
+               render: (text, record) => (<span>{record.isFree === '1' ? '免费' : '付费'}</span>)
+           },
+           {
+               title: '价格',
+               dataIndex: 'price',
+               key: 'price',
+               width: 100,
+           },
+           {
+               title: '收费方式',
+               dataIndex: 'chargeType',
+               key: 'chargeType',
+               width: 100,
+               render: (text, record) => {
+                   let str = '';
+                   switch (record.chargeType) {
+                   case '1':
+                       str = '单位,元/次';
+                       break;
+                   case '2':
+                       str = '按月计费';
+                       break;
+                   case '3':
+                       str = '按年计费';
+                       break;
+                   default:
+                       break;
+                   }
+                   return (<span>{str}</span>);
+               },
+           },
+           {
+               title: '查得/查询',
+               dataIndex: 'operator',
+               key: 'operator',
+               render: (text, record) => (<span>{record.costType === '1' ? '查得' : '查询'}</span>),
+               width: 100,
+           },
+       ];
+       return (
+           <Layout className={style.container}>
+               <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
+                   <FormItem label="用户账号">
+                       {
+                           getFieldDecorator('account')(<Input placeholder="请输入用户账号" />)
+                       }
+                   </FormItem>
+                   <FormItem label="用户姓名">
+                       {
+                           getFieldDecorator('userName')(<Input placeholder="请输入用户姓名" />)
+                       }
+                   </FormItem>
+                   <FormItem>
+
+                       <Button type="primary" htmlType="submit" disabled={this.props.loading}>
+                     查询
+                       </Button>
+
+                   </FormItem>
+                   <FormItem>
+                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
+                  重置
+                       </Button>
+                   </FormItem>
+
+               </Form>
+               <AddModal
+                   visible={false}
+                   type="add"
+                   onOk={this.modalOk}
+                   record={{}}
+               >
+                   <Button
+                       type="primary"
+                       className={style.btns}
+                   >新增账号
+                   </Button>
+               </AddModal>
+
+               <Table
+                   columns={columns}
+                   loading={loading}
+                   pagination={false}
+                   dataSource={dataSource}
+               />
+               <Pagination
+                   current={pageNum}
+                   pageSize={pageSize}
+                   dataSize={dataSource.length}
+                   onChange={this.onPageChange}
+                   pageSizeOptions={['10']}
+                   showQuickJumper
+                   showSizeChanger={false}
+               />
+           </Layout>);
+   }
+}
