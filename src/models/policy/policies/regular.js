@@ -6,7 +6,7 @@ import base64 from 'utils/base64';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'regular',
+    namespace: 'regularPly',
     state: {
         list: {}, // 规则列表
         pageNum: 1,
@@ -16,6 +16,8 @@ export default {
         regulars: [],
         _pageNum: 1,
         status: '',
+        compareSymbol: [],
+        getUnCategory: [],
     },
     effects: {
         * query({ payload }, { call, put }) {
@@ -36,6 +38,18 @@ export default {
                 type: 'querySuc',
                 payload: {
                     status: response.isEnable,
+                },
+            });
+        },
+        // 对于未分类的规则重写
+        * getUnCategory({ payload }, { call, put }) {
+            const response = yield call(post, API.getUnCategory, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getUnCategory: response,
+                    _pageNum: payload.pageNum,
+                    pageSize: PAGE_SIZE,
                 },
             });
         },
@@ -85,6 +99,15 @@ export default {
                 },
             });
         },
+        * queryCompareSymbol({ payload }, { call, put }) {
+            const response = yield call(post, API.getBlackType, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    compareSymbol: response,
+                },
+            });
+        },
         * queryRegular({ payload }, { call, put }) {
             const response = yield call(post, API.getLinkRuler, payload);
             yield put({
@@ -127,6 +150,12 @@ export default {
                         type: 'queryChannel',
                         payload: {
                             type: 'rule',
+                        },
+                    });
+                    dispatch({
+                        type: 'queryCompareSymbol',
+                        payload: {
+                            type: 'compareSymbol',
                         },
                     });
                     dispatch({

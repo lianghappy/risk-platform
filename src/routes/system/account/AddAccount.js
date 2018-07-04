@@ -6,6 +6,7 @@ import {
     Button,
     Input,
     Select,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 import { SYSID } from 'utils/constants';
@@ -42,24 +43,36 @@ class AddAccount extends React.PureComponent {
         const userId = JSON.parse(sessionStorage.userInfo).user.id;
         form.validateFields((err, values) => {
             if (!err) {
-                new Promise(resolve => {
-                    if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
-                    }
-                    console.log(values.acount.replace(/(^\s*)|(\s*$)/g, ''));
-                    Object.assign(values, { userId });
-                    Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
-                    Object.assign(values, { userName: values.name });
-                    Object.assign(values, { sysId: SYSID });
-                    Object.assign(values, { type });
-                    Object.assign(values, { state: false });
-                    Object.assign(values, { password: MD5(values.password) });
-                    Object.assign(values, { confirm: MD5(values.confirm) });
-                    Object.assign(values, { roleIds: [values.roleIds] });
-                    onOk(values, resolve);
-                }).then(() => {
-                    this.handleCancel();
-                });
+                if (values.password !== values.confirm) {
+                    message.error('两次输入密码不一致');
+                } else {
+                    new Promise(resolve => {
+                        if (type === 'edit') {
+                            Object.assign(values, { id: record.id });
+                            if (values.password === 'xxxxxx1') {
+                                Object.assign(values, { password: this.props.getPassword });
+                                Object.assign(values, { confirm: this.props.getPassword });
+                            } else {
+                                Object.assign(values, { password: MD5(values.password) });
+                                Object.assign(values, { confirm: MD5(values.confirm) });
+                            }
+                            Object.assign(values, { state: record.state });
+                        } else {
+                            Object.assign(values, { password: MD5(values.password) });
+                            Object.assign(values, { confirm: MD5(values.confirm) });
+                            Object.assign(values, { state: false });
+                        }
+                        Object.assign(values, { userId });
+                        Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
+                        Object.assign(values, { userName: values.name, realName: values.name });
+                        Object.assign(values, { sysId: SYSID });
+                        Object.assign(values, { type });
+                        Object.assign(values, { roleIds: [values.roleIds] });
+                        onOk(values, resolve);
+                    }).then(() => {
+                        this.handleCancel();
+                    });
+                }
             }
         });
     };
@@ -77,28 +90,38 @@ class AddAccount extends React.PureComponent {
     };
 
     phoneCheck = (rule, value, callback) => {
-        if (value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
             callback(rule.message);
         } else {
             callback();
         }
     }
     validateAccount = (rule, value, callback) => {
-        if (value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
+        if (value && value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
         }
     }
     checkPwd = (rule, value, callback) => {
-        if (value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+        if (value && value.length > 5 && value.length < 15 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
         }
     }
     handleShow = () => {
-        // this.props.form.validateFields();
+        // this.props.form.validateFields();s
+        if (this.props.type === 'edit') {
+            const { record } = this.props;
+            this.props.dispatch({
+                type: 'account/getPassword',
+                payload: {
+                    userId: record.id,
+                    sysId: SYSID,
+                }
+            });
+        }
         this.setState({
             visible: true,
         });
@@ -122,13 +145,17 @@ class AddAccount extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = forms;
+        let rolesId = '';
+        if (record.roles) {
+            rolesId = record.roles[0].roleId;
+        }
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
                     {children}
                 </span>
                 <Modal
-                    title="新增账号"
+                    title={this.props.type === 'add' ? '新增账号' : '更新账号'}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
@@ -157,7 +184,7 @@ class AddAccount extends React.PureComponent {
                                         { max: 20, message: '*用户账号最多20个字符' },
                                         { validator: this.validateAccount, message: '*用户账号最好为姓名全拼，不能输入汉字' }
                                     ],
-                                })(<Input placeholder="请输入用户账号" />)
+                                })(<Input placeholder="请输入用户账号" disabled={record.account !== undefined} />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -169,6 +196,7 @@ class AddAccount extends React.PureComponent {
                                     initialValue: record.userName,
                                     rules: [
                                         { required: true, message: '请输入用户姓名' },
+                                        { max: 20, message: '最多20位' }
                                     ],
                                 })(<Input placeholder="请输入用户姓名" />)
                             }
@@ -193,7 +221,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('password', {
-                                    initialValue: record.password,
+                                    initialValue: this.props.type === 'edit' ? this.props.getPassword && 'xxxxxx1' : '',
                                     rules: [
                                         { required: true, message: '请输入密码' },
                                         { min: 6, message: '密码最小长度为6位' },
@@ -209,7 +237,7 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('confirm', {
-                                    initialValue: record.password,
+                                    initialValue: this.props.type === 'edit' ? this.props.getPassword && 'xxxxxx1' : '',
                                     rules: [
                                         {
                                             required: true,
@@ -229,22 +257,24 @@ class AddAccount extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('roleIds', {
-                                    initialValue: record.role,
+                                    initialValue: rolesId,
                                     rules: [
                                         {
                                             required: true,
                                             message: '请选择角色名称',
                                         },
                                     ],
-                                })(<Select>
-                                    {
-                                        this.props.roleNameList.map((item) => {
-                                            return (
-                                                <Option key={item.id} value={item.id}>{item.roleName}</Option>
-                                            );
-                                        })
-                                    }
-                                   </Select>)
+                                })(
+                                    <Select>
+                                        {
+                                            this.props.roleNameList.map((item) => {
+                                                return (
+                                                    <Option key={item.id} value={item.id}>{item.roleName}</Option>
+                                                );
+                                            })
+                                        }
+                                    </Select>
+                                )
                             }
                         </Form.Item>
                     </Form>
@@ -255,5 +285,6 @@ class AddAccount extends React.PureComponent {
 }
 const mapStateToProps = (state) => ({
     roleNameList: state.account.roleNameList,
+    getPassword: state.account.getPassword,
 });
 export default connect(mapStateToProps)(Form.create()(AddAccount));

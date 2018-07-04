@@ -9,6 +9,7 @@ import moment from 'moment';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 import SamplesModal from './SampleModal';
+import RiskModal from './RiskModal';
 import SampleDetail from './SampleDetail';
 
 const FormItem = Form.Item;
@@ -31,16 +32,17 @@ class Samples extends React.PureComponent {
         show: false,
     }
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
                 ...values,
-                pageNum: 1,
+                pageNum,
                 pageSize,
             });
         });
@@ -55,9 +57,9 @@ class Samples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
@@ -76,7 +78,7 @@ class Samples extends React.PureComponent {
             pageSize,
         });
     };
-    onDelete(ids) {
+    onDelete(ids, type) {
         const {
             pageSize,
             pageNum,
@@ -87,13 +89,18 @@ class Samples extends React.PureComponent {
             dispatch({
                 type: 'samples/del',
                 payload: {
-                    data: { id: ids },
+                    data: { analysisSampleId: ids, type },
                     resolve,
                 },
             });
         }).then(() => {
             message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
+                if (values && values.times && values.times.length > 0) {
+                    Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                    Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
+                    delete values.times;
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -136,14 +143,15 @@ class Samples extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id' },
-            { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'createTime', key: 'createTime' },
+            { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '样本名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '样本总数量', dataIndex: 'num', key: 'num', width: 100, },
+            { title: '样本生成时间', dataIndex: 'createTime', key: 'createTime', width: 100, },
             { title: '数据源',
                 dataIndex: 'valueType',
                 key: 'valueType',
-                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>),
+                width: 100, },
             { title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
@@ -151,11 +159,18 @@ class Samples extends React.PureComponent {
                     <div>
                         {
                             roles('R_B_SB_samples_select') &&
-                        <SamplesModal
-                            visible={this.state.visible}
-                        >
-                            <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
-                        </SamplesModal>
+                        Number(rest[1].type) !== 1 ?
+                                <RiskModal
+                                    visible={this.state.visible}
+                                >
+                                    <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
+                                </RiskModal>
+                                :
+                                <SamplesModal
+                                    visible={this.state.visible}
+                                >
+                                    <span role="button" tabIndex="-1" onClick={() => this.handleShow(rest[1].id)} className="jm-operate">样本筛选条件</span>
+                                </SamplesModal>
                         }
                         {
                             roles('R_B_SB_samples_detail') &&
@@ -174,13 +189,14 @@ class Samples extends React.PureComponent {
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
-                            onConfirm={() => this.onDelete(rest[1].id)}
+                            onConfirm={() => this.onDelete(rest[1].id, rest[1].type)}
                         >
                             <span className="jm-del">删除</span>
                         </Popconfirm>
                         }
                     </div>
-                ) },
+                ),
+                width: 100, },
         ];
         const options = [];
         if (category) {
@@ -200,7 +216,8 @@ class Samples extends React.PureComponent {
                         {getFieldDecorator('times')(<RangePicker
                             showTime={{
                                 hideDisabledOptions: true,
-                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                format: 'YYYY-MM-DD HH:mm:ss',
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                             }}
                         />)}
                     </FormItem>

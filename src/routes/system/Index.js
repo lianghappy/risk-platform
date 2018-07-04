@@ -6,13 +6,11 @@ class SystemManage extends React.PureComponent {
         current: this.props.current,
     }
     handleClick = (e) => {
-        console.log('click ', e);
         this.setState({
             current: e.key,
         });
     }
     render() {
-        console.log(this.state.current);
         return (
             <Layout>
                 <Menu

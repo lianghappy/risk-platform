@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal, Select } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -25,13 +25,21 @@ class Policy extends React.PureComponent {
     };
     state = {
         clone: {},
-        disabled: true,
+        selectedRowKeys: [],
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -60,12 +68,17 @@ class Policy extends React.PureComponent {
             pageSize,
         });
     };
-    onSelectChange = (selectedRows) => {
+    onRowChange = (selectedRowKeys) => {
         this.setState({
-            clone: selectedRows,
-            disabled: false,
+            selectedRowKeys,
         });
-    }
+    };
+
+    onSelect = (record) => {
+        this.setState({
+            clone: record,
+        });
+    };
     onEdit = (id, isEnable) => {
         const {
             pageSize,
@@ -123,6 +136,15 @@ class Policy extends React.PureComponent {
                     pageSize,
                 });
             });
+            if (
+                this.state.selectedRowKeys.length !== 0 &&
+                ids === this.state.selectedRowKeys[0]
+            ) {
+                this.setState({
+                    clone: {},
+                    selectedRowKeys: [],
+                });
+            }
         });
     }
     modalOk = (data, callback) => {
@@ -191,9 +213,12 @@ class Policy extends React.PureComponent {
         });
     }
     render() {
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             type: 'radio',
-            onSelect: this.onSelectChange,
+            selectedRowKeys,
+            onChange: this.onRowChange,
+            onSelect: this.onSelect,
         };
         const { getFieldDecorator } = this.props.form;
         const {
@@ -203,10 +228,12 @@ class Policy extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '策略标识', dataIndex: 'id', key: 'id' },
-            { title: '策略名称', dataIndex: 'name', key: 'name' },
-            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '策略描述', dataIndex: 'describ', key: 'describ' },
+            { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
+            { title: '策略描述', dataIndex: 'describ', key: 'describ', width: 100, },
+            { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
+            { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
@@ -228,7 +255,8 @@ class Policy extends React.PureComponent {
                     return (
                         <span>{type}</span>
                     );
-                } },
+                },
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -284,7 +312,8 @@ class Policy extends React.PureComponent {
                                     </a>
                                 </Dropdown>
                         }
-                    </div>) },
+                    </div>),
+                width: 100, },
         ];
         return (
             <Layout className={style.container}>
@@ -292,6 +321,22 @@ class Policy extends React.PureComponent {
                     <FormItem label="策略名称" >
                         {
                             getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
+                        }
+                    </FormItem>
+                    <FormItem label="策略标识" >
+                        {
+                            getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
+                        }
+                    </FormItem>
+                    <FormItem label="上架状态" >
+                        {
+                            getFieldDecorator('isEnable')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="1">已上架</Select.Option>
+                                    <Select.Option value="0">未上架</Select.Option>
+                                    <Select.Option value="2">已下架</Select.Option>
+                                </Select>
+                            )
                         }
                     </FormItem>
                     <FormItem>
@@ -323,7 +368,7 @@ class Policy extends React.PureComponent {
                         record={this.state.clone}
                         onOk={this.modalOk}
                     >
-                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                        <Button type="primary" disabled={this.state.selectedRowKeys.length === 0} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
                     }
                 </div>
@@ -332,6 +377,7 @@ class Policy extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    rowKey="id"
                     rowSelection={rowSelection}
                 />
                 <Pagination

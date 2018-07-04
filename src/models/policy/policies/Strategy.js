@@ -5,7 +5,7 @@ import base64 from 'utils/base64';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'strategy',
+    namespace: 'strategyPly',
     state: {
         list: [],
         sysId: SYSID,

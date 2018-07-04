@@ -68,6 +68,11 @@ export default {
             yield call(post, API.delBlack, data);
             yield call(resolve);
         },
+        * getBAW({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.getBAW, data);
+            yield call(resolve);
+        }
     },
     reducers: {
         getBlackListSuc(state, { payload }) {

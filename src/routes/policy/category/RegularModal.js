@@ -119,7 +119,7 @@ export default class RegularModal extends React.PureComponent {
         this.props.form.resetFields();
         this.query({
             pageNum: 1,
-            pageSize: 5,
+            pageSize: 8,
         });
     };
 
@@ -130,11 +130,19 @@ export default class RegularModal extends React.PureComponent {
             this.query({
                 ...values,
                 pageNum: 1,
-                pageSize: 5,
+                pageSize: 8,
             });
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -149,7 +157,7 @@ export default class RegularModal extends React.PureComponent {
             type: 'linkRuler/queryRegular',
             payload: {
                 pageNum: 1,
-                pageSize: 5,
+                pageSize: 8,
             },
         });
 
@@ -178,6 +186,7 @@ export default class RegularModal extends React.PureComponent {
             onSubmiting,
             ruleName,
         } = this.props;
+
         const {
             visible,
             selectedRowKeys,
@@ -206,6 +215,7 @@ export default class RegularModal extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '规则值类型',
             dataIndex: 'valueType',
@@ -263,7 +273,7 @@ export default class RegularModal extends React.PureComponent {
                                     {getFieldDecorator('channel')(
                                         <Select allowClear>
                                             {typeList.map(item => (
-                                                <Select.Option value={item.id} key={item.id}>
+                                                <Select.Option value={item.code} key={item.code}>
                                                     {item.name}
                                                 </Select.Option>
                                             ))}
@@ -272,7 +282,7 @@ export default class RegularModal extends React.PureComponent {
                                 </Form.Item>
                                 <Form.Item label="规则名称">
                                     {
-                                        getFieldDecorator('ruleName')(<Input />)
+                                        getFieldDecorator('name')(<Input />)
                                     }
                                 </Form.Item>
                                 <Form.Item>
@@ -308,7 +318,7 @@ export default class RegularModal extends React.PureComponent {
                             />
                             <Pagination
                                 current={pageNum}
-                                pageSize={5}
+                                pageSize={8}
                                 dataSize={dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper

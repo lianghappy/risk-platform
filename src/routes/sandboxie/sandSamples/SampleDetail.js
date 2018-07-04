@@ -5,10 +5,12 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from 'components/Pagination/Pagination';
 
 const mapStateToProps = (state) => ({
     details: state.sandSamples.details,
+    pageSize: state.sandSamples.pageSize,
+    pageNum: state.sandSamples._pageNum,
 });
 @connect(mapStateToProps)
 export default class SampleDetail extends React.PureComponent {
@@ -25,15 +27,13 @@ export default class SampleDetail extends React.PureComponent {
     };
     state = {
         visible: this.props.visible || false,
-        pageSize: this.props.pageSize,
-        pageNum: this.props.pageNum,
     };
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            pageNum: nextProps.pageNum,
-            pageSize: nextProps.pageSize,
-        });
-    }
+     onPage = (pageNum, pageSize) => {
+         this.query({
+             pageNum,
+             pageSize,
+         });
+     };
     onCancel = () => {
         this.setState({
             visible: false,
@@ -46,15 +46,29 @@ export default class SampleDetail extends React.PureComponent {
     }
     handleShow = () => {
         // this.props.form.validateFields();
+        this.query({
+            pageNum: 1,
+            pageSize: 5,
+        });
         this.setState({
             visible: true,
         });
     };
+    query(payload) {
+        const { analysisSampleId, type } = this.props;
+        Object.assign(payload, { analysisSampleId, type });
+        this.props.dispatch({
+            type: 'sandSamples/queryDetail',
+            payload,
+        });
+    }
     render() {
         const {
             loading,
             children,
             details,
+            pageNum,
+            pageSize,
         } = this.props;
         const columns = [{
             title: '样本ID',
@@ -119,10 +133,10 @@ export default class SampleDetail extends React.PureComponent {
                         pagination={false}
                     />
                     <Pagination
-                        current={this.state.pageNum}
-                        pageSize={this.state.pageSize}
+                        current={pageNum}
+                        pageSize={pageSize}
                         dataSize={details.length}
-                        onChange={this.onPageChange}
+                        onChange={this.onPage}
                         showQuickJumper
                     />
                 </Modal>

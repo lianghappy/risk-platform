@@ -25,6 +25,8 @@ const api = {
     delAccount: `${API}/api/risk/manager/user/delete/v1`,
     // 更新用户
     updateAccount: `${API}/api/risk/manager/user/update/v1`,
+    // 获取账号信息
+    getPassword: `${API}/api/risk/manager/user/get/v1`,
 
     // 增加角色
     addRole: `${API_RBAC}/api/rbac/service/rolePlus/addMenuRole/v2`,
@@ -103,6 +105,9 @@ const api = {
     getCategoryList: `${API}/api/risk/manager/policy/category/list/all/v1`,
     // 新增规则-类别数据
     categoryAndRule: `${API}/api/risk/manager/policy/categoryAndRule/create/v1`,
+    updateCategory: `${API}/api/risk/manager/policy/category/update/v1`,
+    // 未分类的关联规则数据
+    getUnCategory: `${API}/api/risk/manager/policy/ruleBank/list/unCategory/v1`,
 
     // 策略
     getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,
@@ -140,6 +145,8 @@ const api = {
     updateBlack: `${API}/api/risk/manager/blackAndWhite/update/v1`,
     // 来源
     getBlackType: `${API}/api/risk/manager/policy/channelBank/list/v1`,
+    // 获取黑白名单的具体数据
+    getBAW: `${API}/api/risk/manager/blackAndWhite/getOne/v1`,
 
     /* ---------- 策略沙箱-开始实验 ----------*/
     // 实验样本

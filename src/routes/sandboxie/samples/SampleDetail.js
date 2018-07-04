@@ -5,11 +5,11 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import Pagination from '../../../components/Pagination/Pagination';
+import Pagination from 'components/Pagination/Pagination';
 
 const mapStateToProps = (state) => ({
     details: state.samples.details,
-    pageNum: state.samples.pageNum,
+    pageNum: state.samples._pageNum,
     pageSize: state.samples.pageSize,
 });
 @connect(mapStateToProps)
@@ -28,13 +28,14 @@ export default class SampleDetail extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
     };
-    onPageChange = (pageNum) => {
+    onPage = (pageNum) => {
         const analysisSampleId = this.props.analysisSampleId;
+        const type = this.props.type;
         this.query({
             pageNum,
             pageSize: 5,
             analysisSampleId,
-            type: 0,
+            type,
         });
     }
     onCancel = () => {
@@ -49,31 +50,24 @@ export default class SampleDetail extends React.PureComponent {
     }
     handleShow = () => {
         const analysisSampleId = this.props.analysisSampleId;
-        new Promise((resolve) => {
-            this.props.dispatch({
-                type: 'samples/queryDetail',
-                payload: {
-                    data: { analysisSampleId, type: 0, pageSize: 5, pageNum: 1 },
-                    resolve,
-                },
-            });
-        }).then(() => {
-            this.setState({
-                visible: true,
-            });
+        const type = this.props.type;
+        this.props.dispatch({
+            type: 'samples/queryDetail',
+            payload: {
+                analysisSampleId,
+                type,
+                pageSize: 5,
+                pageNum: 1,
+            },
+        });
+        this.setState({
+            visible: true,
         });
     };
-    query = (data) => {
-        new Promise((resolve) => {
-            this.props.dispatch({
-                type: 'samples/queryDetail',
-                payload: {
-                    data,
-                },
-                resolve,
-            });
-        }).then(() => {
-            console.log('chenggong');
+    query(payload) {
+        this.props.dispatch({
+            type: 'samples/queryDetail',
+            payload,
         });
     }
     render() {
@@ -83,6 +77,7 @@ export default class SampleDetail extends React.PureComponent {
             details: dataSource,
             pageNum,
         } = this.props;
+
         const columns = [{
             title: '样本ID',
             dataIndex: 'sampleId',
@@ -149,7 +144,7 @@ export default class SampleDetail extends React.PureComponent {
                         current={pageNum}
                         pageSize={5}
                         dataSize={dataSource.length}
-                        onChange={this.onPageChange}
+                        onChange={this.onPage}
                         showQuickJumper
                     />
                 </Modal>

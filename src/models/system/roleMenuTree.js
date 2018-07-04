@@ -9,6 +9,7 @@ export default {
     state: {
         list: [],
         sysId: 'risk',
+        datas: [],
     },
     effects: {
         * getTreeList({ payload }, { call, put }) {
@@ -75,6 +76,7 @@ export default {
                 payload: {
                     list: treeDatas,
                     sysId: payload.sysId,
+                    datas: response,
                 },
             });
         },
@@ -93,7 +95,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (filterPath(pathname) === '/role/addRole') {
+                if (filterPath(pathname) === '/addRole') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '新增角色' }],

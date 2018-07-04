@@ -12,6 +12,7 @@ export default {
         pageSize: PAGE_SIZE,
         details: [],
         selects: {},
+        _pageNum: 1,
     },
     effects: {
         // 获取规则类别列表
@@ -36,14 +37,13 @@ export default {
         },
         // 明细
         * queryDetail({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.detailSandSamples, data);
+            const response = yield call(post, API.detailSandSamples, payload);
             yield put({
                 type: 'queryDetailSuc',
                 payload: {
                     details: response,
-                    pageNum: payload.pageNum,
-                    pageSize: PAGE_SIZE,
+                    _pageNum: payload.pageNum,
+                    pageSize: 5,
                 },
             });
         },

@@ -2,10 +2,9 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Menu, Tree } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Tree } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
-import treeConvert from 'utils/treeConvert';
 import style from './index.scss';
 import RegularModal from './RegularModal';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -24,20 +23,48 @@ class LinkRuler extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
         typeList: PropTypes.array.isRequired,
         categoryList: PropTypes.array.isRequired,
+        treeDatas: PropTypes.array.isRequired,
     };
     state = {
+        selectedRowKeys: [],
         selectedRows: [],
-        disabled: true,
-        current: '.$linkRuler',
         idList: [],
         selectedKeys: '',
         ruleName: '',
     };
+    componentWillMount() {
+        this.props.dispatch({
+            type: 'linkRuler/getCategoryList',
+        });
+        this.props.dispatch({
+            type: 'linkRuler/getLinkRulerList',
+            payload: {
+                pageNum: 1,
+                pageSize: 10,
+            },
+        });
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const { form, loading } = this.props;
+        if (loading) return;
+        const categoryId = this.state.selectedKeys;
+
+        form.validateFields((errors, values) => {
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                    sysId,
+                    categoryId,
+                });
+            }
         });
     };
     onQuery = (e) => {
@@ -50,21 +77,41 @@ class LinkRuler extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize,
-                sysId,
-            });
+            const categoryId = this.state.selectedKeys;
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize,
+                    sysId,
+                    categoryId,
+                });
+            }
         });
     }
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
-        this.query({
-            pageNum: 1,
-            pageSize,
-        });
+        this.setState({ selectedRowKeys: [] });
+        const categoryId = this.state.selectedKeys;
+        if (categoryId === '0') {
+            this.unQuery({
+                pageNum: 1,
+                pageSize,
+            });
+        } else {
+            this.query({
+                pageNum: 1,
+                pageSize,
+                categoryId,
+            });
+        }
     };
     onDelete(ids) {
         const {
@@ -83,12 +130,22 @@ class LinkRuler extends React.PureComponent {
             });
         }).then(() => {
             message.success('删除成功', DURATION);
+            const categoryId = this.state.selectedKeys;
             form.validateFields((errors, values) => {
-                this.query({
-                    ...values,
-                    pageNum,
-                    pageSize,
-                });
+                if (categoryId === '0') {
+                    this.unQuery({
+                        ...values,
+                        pageNum,
+                        pageSize,
+                    });
+                } else {
+                    this.query({
+                        ...values,
+                        pageNum,
+                        pageSize,
+                        categoryId,
+                    });
+                }
             });
         });
     }
@@ -96,39 +153,63 @@ class LinkRuler extends React.PureComponent {
         if (selectedRows.length > 0) {
             const idList = [];
             selectedRows.forEach((item) => {
-                idList.push(item.categoryId);
+                idList.push(item.id);
             });
             this.setState({
-                disabled: false,
                 idList,
-            });
-        } else {
-            this.setState({
-                disabled: true,
+                selectedRows,
+                selectedRowKeys,
             });
         }
     }
-    onSelect = (selectedKeys) => {
+    onCheck = (keys) => {
         const {
             pageSize,
-            pageNum,
             form,
+            dispatch,
         } = this.props;
-        this.setState({ selectedKeys: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
-        const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
-        form.validateFields((errors, values) => {
-            Object.assign(values, { categoryId });
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
+        const categoryId = keys[0].substring(keys[0].indexOf('$') + 1);
+        this.setState({ selectedKeys: categoryId, selectedRowKeys: [] });
+        if (categoryId === '0') {
+            form.validateFields((errors, values) => {
+                dispatch({
+                    type: 'linkRuler/getUnCategory',
+                    payload: {
+                        ...values,
+                        pageNum: 1,
+                        pageSize,
+                    }
+                });
             });
-        });
-        this.props.categoryList.forEach((item) => {
-            if (categoryId === item.id) {
-                this.setState({ ruleName: item.name });
+        } else {
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    categoryId,
+                    pageNum: 1,
+                    pageSize,
+                });
+            });
+            this.props.categoryList.forEach((item) => {
+                if (categoryId === item.id) {
+                    this.setState({ ruleName: item.name });
+                }
+            });
+        }
+    }
+    onSelectAll = (selected) => {
+        if (!selected) {
+            this.setState({ selectedRowKeys: [] });
+        }
+    }
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
             }
         });
+        return name;
     }
     modalOk = (data, callback) => {
         const {
@@ -166,6 +247,12 @@ class LinkRuler extends React.PureComponent {
             payload,
         });
     }
+    unQuery(payload) {
+        this.props.dispatch({
+            type: 'linkRuler/getUnCategory',
+            payload,
+        });
+    }
     delList = () => {
         const {
             pageSize,
@@ -174,6 +261,10 @@ class LinkRuler extends React.PureComponent {
             dispatch,
         } = this.props;
         const { idList } = this.state;
+        if (this.state.selectedKeys === '0') {
+            message.error('未分类不能删除');
+            return;
+        }
         new Promise((resolve) => {
             dispatch({
                 type: 'linkRuler/delList',
@@ -184,13 +275,16 @@ class LinkRuler extends React.PureComponent {
             });
         }).then(() => {
             message.success('删除成功', DURATION);
+            const categoryId = this.state.selectedKeys;
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
                     pageNum,
                     pageSize,
+                    categoryId,
                 });
             });
+            this.setState({ selectedRowKeys: [] });
         });
     }
     messages = () => {
@@ -215,14 +309,16 @@ class LinkRuler extends React.PureComponent {
             pageNum,
             list: dataSource,
             loading,
+            getUnCategory,
         } = this.props;
+        const { selectedKeys } = this.state;
         const columns = [
-            { title: '规则编号', dataIndex: 'id', key: 'id' },
-            { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName' },
-            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel' },
-            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
+            { title: '规则编号', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '规则名称', dataIndex: 'ruleName', key: 'ruleName', width: 100, },
+            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey', width: 100, },
+            { title: '风险代码', dataIndex: 'code', key: 'code', width: 100, },
+            { title: '规则来源', dataIndex: 'channel', key: 'channel', render: (text, record) => (<span>{this.checkCode(record.channel)}</span>), width: 100, },
+            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType', width: 100, },
             { title: '操作',
                 dataIndex: 'operation',
                 key: 'operation',
@@ -230,64 +326,38 @@ class LinkRuler extends React.PureComponent {
                     <Popconfirm
                         placement="topRight"
                         title="您确定要删除吗？"
-                        onConfirm={() => this.onDelete(rest[1].categoryId)}
+                        onConfirm={() => this.onDelete(rest[1].id)}
                     >
                         {
                             roles('R_B_PLY_catg_linkrl_del') &&
-                        <Button icon="delete" />
+                        <Button disabled={selectedKeys === '0'} icon="delete" />
                         }
                     </Popconfirm>
                 ),
+                width: 100,
             },
         ];
         const options = [];
         if (this.props.typeList) {
             this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
-        const { selectedRows } = this.state;
+        const { selectedRows, selectedRowKeys } = this.state;
         const rowSelection = {
+            selectedRowKeys,
             selectedRows,
             onChange: this.onSelectChange,
+            onSelectAll: this.onSelectAll,
         };
-        const treeDatas = [];
-        const { categoryList } = this.props;
-        // 树结构
-        this.props.categoryList.forEach((item) => {
-            if (Number(item.level) === 1) {
-                treeDatas.push({
-                    title: item.name,
-                    key: item.id,
-                    children: treeConvert({
-                        pId: 'pid',
-                        rootId: item.id,
-                        id: 'id',
-                        name: 'pname',
-                        tId: 'key',
-                        tName: 'title',
-                    }, categoryList),
-                });
-            }
-        });
+
+        const { treeDatas } = this.props;
         return (
             <Layout className={style.container}>
-                <Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[this.state.current]}
-                    mode="horizontal"
-                >
-                    <Menu.Item key="structure">
-                        <a href="/categoryStru">类别构建</a>
-                    </Menu.Item>
-                    <Menu.Item key="linkRuler">
-                        关联规则
-                    </Menu.Item>
-                </Menu>
                 <div className={style.layout}>
                     <div className={style.left}>
                         <Tree
-                            onSelect={this.onSelect}
+                            onSelect={(checkedKeys) => this.onCheck(checkedKeys)}
                         >{this.renderTreeNodes(treeDatas)}
                         </Tree>
                     </div>
@@ -330,7 +400,7 @@ class LinkRuler extends React.PureComponent {
                                         categoryId={this.state.selectedKeys}
                                         ruleName={this.state.ruleName}
                                     >
-                                        <Button type="primary" style={{ marginRight: 20 }}>
+                                        <Button disabled={this.state.selectedKeys === '0'} type="primary" style={{ marginRight: 20 }}>
                                         新增规则
                                         </Button>
                                     </RegularModal>
@@ -348,9 +418,8 @@ class LinkRuler extends React.PureComponent {
                                 >
                                     <Button
                                         type="primary"
-                                        onClick={this.delList}
                                         className={style.addBtn}
-                                        disabled={this.state.disabled}
+                                        disabled={this.state.selectedRowKeys.length === 0 || selectedKeys === '0'}
                                     >批量删除
                                     </Button>
                                 </Popconfirm>
@@ -359,14 +428,14 @@ class LinkRuler extends React.PureComponent {
                         <Table
                             columns={columns}
                             loading={loading}
-                            dataSource={dataSource}
+                            dataSource={selectedKeys === '0' ? getUnCategory : dataSource}
                             pagination={false}
                             rowSelection={rowSelection}
                         />
                         <Pagination
                             current={pageNum}
                             pageSize={pageSize}
-                            dataSize={dataSource.length}
+                            dataSize={selectedKeys === '0' ? getUnCategory.length : dataSource.length}
                             onChange={this.onPageChange}
                             showQuickJumper
                         />
@@ -386,5 +455,7 @@ const mapStateToProps = (state) => ({
     pageSize: state.linkRuler.pageSize,
     typeList: state.linkRuler.typeList,
     categoryList: state.linkRuler.categoryList,
+    treeDatas: state.linkRuler.treeDatas,
+    getUnCategory: state.linkRuler.getUnCategory,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(LinkRuler)));

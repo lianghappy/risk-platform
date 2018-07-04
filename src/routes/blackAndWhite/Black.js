@@ -23,11 +23,19 @@ class Black extends React.PureComponent {
         rosterChannel: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            type: 0,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+                type: 0,
+            });
         });
     };
     onQuery = (e) => {
@@ -156,6 +164,7 @@ class Black extends React.PureComponent {
                             onOk={this.modalOk}
                             rosterChannel={this.props.rosterChannel}
                             rosterType={this.props.rosterType}
+                            system="black"
                         >
                             <span className="jm-operate">编辑</span>
                         </AddModal>
@@ -183,17 +192,17 @@ class Black extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="用户手机号" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入用户手机号" />)
+                            getFieldDecorator('phone')(<Input placeholder="请输入用户手机号" />)
                         }
                     </FormItem>
                     <FormItem label="身份证号" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入身份证号" />)
+                            getFieldDecorator('idCard')(<Input placeholder="请输入身份证号" />)
                         }
                     </FormItem>
                     <FormItem label="用户姓名" >
                         {
-                            getFieldDecorator('code')(<Input placeholder="请输入用户姓名" />)
+                            getFieldDecorator('idCardName')(<Input placeholder="请输入用户姓名" />)
                         }
                     </FormItem>
                     <FormItem>
@@ -215,6 +224,7 @@ class Black extends React.PureComponent {
                     onOk={this.modalOk}
                     rosterChannel={this.props.rosterChannel}
                     rosterType={this.props.rosterType}
+                    system="black"
                 >
                     <Button type="primary" className={style.add}>新增</Button>
                 </AddModal>

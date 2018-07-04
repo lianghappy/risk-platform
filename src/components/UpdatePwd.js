@@ -39,6 +39,7 @@ class UpdatePwd extends React.PureComponent {
                             id: userInfo.id,
                             oldPwd: MD5(oldPwd),
                             newPwd: MD5(newPwd),
+                            userId: userInfo.id,
                         },
                         resolve,
                     });
@@ -66,7 +67,13 @@ class UpdatePwd extends React.PureComponent {
             callback(rule.message);
         }
     };
-
+    checkPwd = (rule, value, callback) => {
+        if (value && value.length > 5 && value.length < 15 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     handleShow = () => {
         this.props.form.validateFields();
         this.setState({
@@ -145,6 +152,8 @@ class UpdatePwd extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请输入新密码' },
                                         { min: 6, message: '密码最小长度为6位' },
+                                        { max: 15, message: '密码最大长度15位' },
+                                        { validator: this.checkPwd, message: '*您输入的密码不符合规则，密码需包含：大写字母、小写字母、数字中的两种' }
                                     ],
                                 })(<Input type="password" />)
                             }

@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { roles } from 'utils/common';
-import { Layout, Input, Form, Select, Button, Table, message, Tooltip, Menu } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, message, Tooltip } from 'antd';
 import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -22,14 +22,19 @@ class Structure extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
         parentlist: PropTypes.array.isRequired,
     };
-    state = {
-        current: '.$structure',
-    }
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -71,14 +76,16 @@ class Structure extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
+        let url = 'structure/add';
         let content = '类别新增';
         if (data.id !== undefined) {
             content = '类别更新成功';
+            url = 'structure/update';
         }
 
         new Promise((resolve) => {
             dispatch({
-                type: 'structure/add',
+                type: url,
                 payload: {
                     data,
                     resolve,
@@ -140,18 +147,6 @@ class Structure extends React.PureComponent {
         ];
         return (
             <Layout className={style.container}>
-                <Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[this.state.current]}
-                    mode="horizontal"
-                >
-                    <Menu.Item key="structure">
-                        类别构建
-                    </Menu.Item>
-                    <Menu.Item key="linkRuler">
-                        <a href="/linkRuler">关联规则</a>
-                    </Menu.Item>
-                </Menu>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="类别名称" >
                         {

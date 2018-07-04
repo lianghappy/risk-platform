@@ -2,7 +2,7 @@
 
 // 环境变量
 export const ENV = jimiEnv;
-console.log(ENV);
+console.log(jimiEnv);
 
 // 版本号
 export const VERSION = version;

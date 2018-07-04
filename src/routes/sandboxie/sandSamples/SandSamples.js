@@ -30,12 +30,13 @@ class SandSamples extends React.PureComponent {
         show: false,
     }
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             Object.assign(values, { type: 1 });
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
@@ -43,12 +44,6 @@ class SandSamples extends React.PureComponent {
                 pageNum,
                 pageSize,
             });
-        });
-    };
-    onPage = (pageNum, pageSize, analysisSampleId) => {
-        this.props.dispatch({
-            type: 'sandSamples/querySelect',
-            payload: { analysisSampleId, pageNum, pageSize },
         });
     };
     onQuery = (e) => {
@@ -61,9 +56,9 @@ class SandSamples extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.times) {
-                Object.assign(values, { generateTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { generateTimee: moment(values.times[1]._d).startOf('day').format('X') });
+            if (values && values.times && values.times.length > 0) {
+                Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             this.query({
@@ -94,6 +89,11 @@ class SandSamples extends React.PureComponent {
             form.validateFields((errors, values) => {
                 Object.assign(values, { sysId: this.props.sysId });
                 Object.assign(values, { type: 1 });
+                if (values && values.times && values.times.length > 0) {
+                    Object.assign(values, { generateTimes: moment(values.times[0]._d).format('X') });
+                    Object.assign(values, { generateTimee: moment(values.times[1]._d).format('X') });
+                    delete values.times;
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -126,21 +126,6 @@ class SandSamples extends React.PureComponent {
             });
         });
     }
-    handlePage =(analysisSampleId) => {
-        new Promise((resolve) => {
-            this.props.dispatch({
-                type: 'sandSamples/queryDetail',
-                payload: {
-                    data: { analysisSampleId, pageSize: 10, pageNum: 1 },
-                    resolve,
-                },
-            });
-        }).then(() => {
-            this.setState({
-                show: true,
-            });
-        });
-    }
     create = () => {
         this.props.history.push(setPath('/sandSamples/create'));
     }
@@ -160,12 +145,38 @@ class SandSamples extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id' },
-            { title: '样本名称', dataIndex: 'name', key: 'name' },
-            { title: '样本总数量', dataIndex: 'num', key: 'num' },
-            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime' },
-            { title: '样本生成进度', dataIndex: 'sampleProgress', key: 'sampleProgress' },
-            { title: '操作',
+            {
+                title: '样本ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '样本名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '样本总数量',
+                dataIndex: 'num',
+                key: 'num',
+                width: 100,
+            },
+            {
+                title: '样本生成时间',
+                dataIndex: 'generateTime',
+                key: 'generateTime',
+                width: 100,
+            },
+            {
+                title: '样本生成进度',
+                dataIndex: 'sampleProgress',
+                key: 'sampleProgress',
+                width: 100,
+            },
+            {
+                title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
                 render: (...rest) => (
@@ -181,12 +192,11 @@ class SandSamples extends React.PureComponent {
                         {
                             roles('R_B_SB_sandsamples_detail') &&
                         <SampleDetail
-                            pageSize={pageSize}
-                            pageNum={pageNum}
                             visible={this.state.show}
-                            onPageChange={() => this.onPage(rest[1].id)}
+                            analysisSampleId={rest[1].id}
+                            type={rest[1].type}
                         >
-                            <span role="button" tabIndex="-1" onClick={() => this.handlePage(rest[1].id)} className="jm-del">样本明细</span>
+                            <span className="jm-del">样本明细</span>
                         </SampleDetail>
                         }
                         {
@@ -200,7 +210,9 @@ class SandSamples extends React.PureComponent {
                         </Popconfirm>
                         }
                     </div>
-                ) },
+                ),
+                width: 100,
+            },
         ];
         const options = [];
         if (this.props.typeList) {
@@ -224,7 +236,7 @@ class SandSamples extends React.PureComponent {
                             getFieldDecorator('times')(<RangePicker
                                 showTime={{
                                     hideDisabledOptions: true,
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                 }}
                             />)
                         }

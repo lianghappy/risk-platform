@@ -8,10 +8,12 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 
-const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
+// const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
-    loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
+    loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
+    channels: state.regularPly.channels,
+    compareSymbol: state.regularPly.compareSymbol,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -46,6 +48,15 @@ export default class RegularEdit extends React.PureComponent {
             visible: false,
         });
     };
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -83,6 +94,7 @@ export default class RegularEdit extends React.PureComponent {
             record,
             loading,
             stageType,
+            compareSymbol,
         } = this.props;
         const { getFieldDecorator } = form;
         const formItemLayout = {
@@ -135,7 +147,7 @@ export default class RegularEdit extends React.PureComponent {
                             {...formItemLayout}
                             label="规则来源"
                         >
-                            <span>{record.channel}</span>
+                            <span>{this.checkChannel(record.channel)}</span>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
@@ -161,10 +173,10 @@ export default class RegularEdit extends React.PureComponent {
                                     <Select>
                                         {compareSymbol.map(item => (
                                             <Select.Option
-                                                value={item}
-                                                key={item}
+                                                value={item.code}
+                                                key={item.code}
                                             >
-                                                {item}
+                                                {item.name}
                                             </Select.Option>
                                         ))}
                                     </Select>

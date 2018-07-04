@@ -21,13 +21,13 @@ import RegularEdit from './RegularEdit';
 import RegularDetail from './RegularDetail';
 
 @connect((state) => ({
-    loading: state.loading.effects['regular/query'],
-    list: state.regular.list,
-    pageNum: state.regular.pageNum,
-    pageSize: state.regular.pageSize,
-    channels: state.regular.channels,
-    categories: state.regular.categories,
-    status: state.regular.status,
+    loading: state.loading.effects['regularPly/query'],
+    list: state.regularPly.list,
+    pageNum: state.regularPly.pageNum,
+    pageSize: state.regularPly.pageSize,
+    channels: state.regularPly.channels,
+    categories: state.regularPly.categories,
+    status: state.regularPly.status,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -57,6 +57,20 @@ export default class Regular extends React.PureComponent {
         if (loading) return;
 
         form.validateFields((errors, values) => {
+            const {
+                categoryId,
+                ...payload
+            } = values;
+            if (categoryId && categoryId.length > 0) {
+                const categoryIds = categoryId[categoryId.length - 1];
+                this.props.categories.forEach(item => {
+                    if (item.id === categoryIds) {
+                        Object.assign(payload, {
+                            categoryName: item.name,
+                        });
+                    }
+                });
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -87,8 +101,13 @@ export default class Regular extends React.PureComponent {
                 ...payload
             } = values;
             if (categoryId && categoryId.length > 0) {
-                Object.assign(payload, {
-                    categoryId: categoryId[categoryId.length - 1],
+                const categoryIds = categoryId[categoryId.length - 1];
+                this.props.categories.forEach(item => {
+                    if (item.id === categoryIds) {
+                        Object.assign(payload, {
+                            categoryName: item.name,
+                        });
+                    }
                 });
             }
             this.query({
@@ -108,7 +127,7 @@ export default class Regular extends React.PureComponent {
         } = this.props;
         new Promise((resolve) => {
             dispatch({
-                type: 'regular/del',
+                type: 'regularPly/del',
                 payload: {
                     data: { id },
                     resolve,
@@ -117,6 +136,20 @@ export default class Regular extends React.PureComponent {
         }).then(() => {
             message.success('删除成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -157,7 +190,7 @@ export default class Regular extends React.PureComponent {
 
         new Promise((resolve) => {
             dispatch({
-                type: `regular/${type}`,
+                type: `regularPly/${type}`,
                 payload: {
                     data,
                     resolve,
@@ -167,6 +200,20 @@ export default class Regular extends React.PureComponent {
             callback();
             message.success('操作成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -175,7 +222,15 @@ export default class Regular extends React.PureComponent {
             });
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -186,7 +241,7 @@ export default class Regular extends React.PureComponent {
 
         new Promise((resolve) => {
             dispatch({
-                type: 'regular/add',
+                type: 'regularPly/add',
                 payload: {
                     data,
                     resolve,
@@ -196,6 +251,20 @@ export default class Regular extends React.PureComponent {
             callback();
             message.success('规则新增成功', DURATION);
             form.validateFields((errors, values) => {
+                const {
+                    categoryId,
+                    ...payload
+                } = values;
+                if (categoryId && categoryId.length > 0) {
+                    const categoryIds = categoryId[categoryId.length - 1];
+                    this.props.categories.forEach(item => {
+                        if (item.id === categoryIds) {
+                            Object.assign(payload, {
+                                categoryName: item.name,
+                            });
+                        }
+                    });
+                }
                 this.query({
                     ...values,
                     pageNum,
@@ -207,14 +276,13 @@ export default class Regular extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'regular/query',
+            type: 'regularPly/query',
             payload: {
                 ...payload,
                 stageId: this.state.stageId,
             },
         });
     }
-
     render() {
         const {
             form,
@@ -265,6 +333,7 @@ export default class Regular extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '判断符号',
             dataIndex: 'compareSymbol',
@@ -306,7 +375,7 @@ export default class Regular extends React.PureComponent {
                     {
                         roles('R_B_PLY_policy_st_rule_del') && Number(status) === 0 &&
                     <Popconfirm
-                        title="你确定要删除改规则吗"
+                        title="你确定要删除该规则吗"
                         onConfirm={() => this.onDelete(record.id)}
                     >
                         <a style={{ marginRight: 5 }}>删除</a>
@@ -318,12 +387,12 @@ export default class Regular extends React.PureComponent {
 
         if (type === '2') {
             columns.splice(columns.length - 2, 0, {
-                title: '分值',
+                title: '权重',
                 dataIndex: 'weight',
                 key: 'weight',
                 width: 100,
             }, {
-                title: '权重',
+                title: '分值',
                 dataIndex: 'score',
                 key: 'score',
                 width: 100,
@@ -346,7 +415,7 @@ export default class Regular extends React.PureComponent {
                 >
                     <Form.Item label="规则编号">
                         {
-                            getFieldDecorator('id')(<Input />)
+                            getFieldDecorator('ruleId')(<Input />)
                         }
                     </Form.Item>
                     <Form.Item label="规则类型">
@@ -365,8 +434,8 @@ export default class Regular extends React.PureComponent {
                                 <Select allowClear>
                                     {channels.map(item => (
                                         <Select.Option
-                                            value={item.id}
-                                            key={item.id}
+                                            value={item.code}
+                                            key={item.code}
                                         >
                                             {item.name}
                                         </Select.Option>

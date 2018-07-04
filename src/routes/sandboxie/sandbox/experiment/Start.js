@@ -72,13 +72,18 @@ class Start extends React.PureComponent {
                     <Row>
                         <Col span={12}>
                             <FormItem label="已选训练样本数量" {...formItemLayout}>
-                                <SampleDetail
-                                    orderTimes={this.props.orderTimes}
-                                    orderTimee={this.props.orderTimee}
-                                    {...this.props}
-                                >
-                                    <a>{this.state.total}</a>
-                                </SampleDetail>
+                                {
+                                    Number(this.state.total) > 0 ?
+                                        <SampleDetail
+                                            orderTimes={this.props.orderTimes}
+                                            orderTimee={this.props.orderTimee}
+                                            {...this.props}
+                                        >
+                                            <a>{this.state.total}</a>
+                                        </SampleDetail>
+                                        :
+                                        <span>{this.state.total}</span>
+                                }
                                 <span style={{ fontSize: '12px' }}>（点击数量可查看已选训练样本明细）</span>
                             </FormItem>
                         </Col>

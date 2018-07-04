@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Layout, Form, Button, Table, DatePicker } from 'antd';
+import { Layout, Form, Button, Table, DatePicker, Select, Input } from 'antd';
 import { roles } from 'utils/common';
 import style from '../index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -22,10 +22,28 @@ class RecordHistory extends React.PureComponent {
         download: PropTypes.object.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const {
+            loading,
+            form,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            if (values && values.start && values.start.length > 0) {
+                Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
+                delete values.start;
+            }
+            if (values && values.end && values.end.length > 0) {
+                Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
+                Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
+                delete values.end;
+            }
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -38,15 +56,15 @@ class RecordHistory extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            if (values && values.start) {
-                Object.assign(values, { startTimes: moment(values.start[0]._d).startOf('day').format('X') });
-                Object.assign(values, { startTimee: moment(values.start[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.start && values.start.length > 0) {
+                Object.assign(values, { startTimes: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { startTimee: moment(values.start[1]._d).format('X') });
+                delete values.start;
             }
-            if (values && values.end) {
-                Object.assign(values, { endTimes: moment(values.end[0]._d).startOf('day').format('X') });
-                Object.assign(values, { endTimee: moment(values.end[1]._d).startOf('day').format('X') });
-                delete values.times;
+            if (values && values.end && values.end.length > 0) {
+                Object.assign(values, { endTimes: moment(values.end[0]._d).format('X') });
+                Object.assign(values, { endTimee: moment(values.end[1]._d).format('X') });
+                delete values.end;
             }
             this.query({
                 ...values,
@@ -71,7 +89,7 @@ class RecordHistory extends React.PureComponent {
         const operators = JSON.parse(sessionStorage.userInfo).user.realName;
         new Promise((resolve) => {
             dispatch({
-                type: 'recordHistory/download',
+                type: 'recordSand/download',
                 payload: {
                     data: {
                         analysisRecordId: rest.id,
@@ -88,7 +106,7 @@ class RecordHistory extends React.PureComponent {
     }
     query(payload) {
         this.props.dispatch({
-            type: 'recordHistory/recordHistoryList',
+            type: 'recordSand/recordHistoryList',
             payload,
         });
     }
@@ -101,17 +119,48 @@ class RecordHistory extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '实验记录ID', dataIndex: 'id', key: 'id' },
-            { title: '策略标识', dataIndex: 'strategyId', key: 'strategyId' },
-            { title: '策略名称', dataIndex: 'strategyName', key: 'strategyName' },
-            { title: '样本ID', dataIndex: 'sampleId', key: 'sampleId' },
-            { title: '实验开始时间', dataIndex: 'startTime', key: 'startTime' },
-            { title: '实验结束时间', dataIndex: 'endTime', key: 'endTime' },
-            { title: '实验用户姓名', dataIndex: 'username', key: 'username' },
+            { title: '实验记录ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100
+            },
+            { title: '策略标识',
+                dataIndex: 'strategyId',
+                key: 'strategyId',
+                width: 100
+            },
+            { title: '策略名称',
+                dataIndex: 'strategyName',
+                key: 'strategyName',
+                width: 100
+            },
+            { title: '样本ID',
+                dataIndex: 'sampleId',
+                key: 'sampleId',
+                width: 100
+            },
+            { title: '实验开始时间',
+                dataIndex: 'startTime',
+                key: 'startTime',
+                width: 100
+            },
+            { title: '实验结束时间',
+                dataIndex: 'endTime',
+                key: 'endTime',
+                width: 100
+            },
+            { title: '实验用户姓名',
+                dataIndex: 'username',
+                key: 'username',
+                width: 100
+            },
             { title: '实验状态',
                 dataIndex: 'state',
                 key: 'state',
-                render: (...rest) => (<span>{Number(rest[1].state) === 1 ? '进行中' : '已完成'}</span>) },
+                render: (...rest) => (<span>{Number(rest[1].state) === 1 ? '进行中' : '已完成'}</span>),
+                width: 100
+            },
+
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -124,7 +173,8 @@ class RecordHistory extends React.PureComponent {
                                 <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
                         }
                     </div>
-                ) },
+                ),
+                width: 100 },
         ];
         return (
             <Layout className={style.container}>
@@ -134,7 +184,7 @@ class RecordHistory extends React.PureComponent {
                             getFieldDecorator('start')(<RangePicker
                                 showTime={{
                                     hideDisabledOptions: true,
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                 }}
                             />)
                         }
@@ -144,9 +194,29 @@ class RecordHistory extends React.PureComponent {
                             getFieldDecorator('end')(<RangePicker
                                 showTime={{
                                     hideDisabledOptions: true,
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                 }}
                             />)
+                        }
+                    </FormItem>
+                    <FormItem label="策略标识" >
+                        {
+                            getFieldDecorator('strategyId')(<Input placeholder="请输入策略标识" />)
+                        }
+                    </FormItem>
+                    <FormItem label="实验状态" >
+                        {
+                            getFieldDecorator('state')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="1">进行中</Select.Option>
+                                    <Select.Option value="2">已完成</Select.Option>
+                                </Select>
+                            )
+                        }
+                    </FormItem>
+                    <FormItem label="策略名称" >
+                        {
+                            getFieldDecorator('strategyName')(<Input placeholder="请输入策略名称" />)
                         }
                     </FormItem>
                     <FormItem>
@@ -179,11 +249,11 @@ class RecordHistory extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.recordHistory.list,
-    sysId: state.recordHistory.sysId,
-    loading: state.loading.models.recordHistory,
-    pageNum: state.recordHistory.pageNum,
-    pageSize: state.recordHistory.pageSize,
-    download: state.recordHistory.download,
+    list: state.recordSand.list,
+    sysId: state.recordSand.sysId,
+    loading: state.loading.models.recordSand,
+    pageNum: state.recordSand.pageNum,
+    pageSize: state.recordSand.pageSize,
+    download: state.recordSand.download,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(RecordHistory)));
