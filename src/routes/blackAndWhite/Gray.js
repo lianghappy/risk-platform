@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Select, Button, Table, Popconfirm, message } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Popconfirm, message, Tooltip } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import style from './index.scss';
@@ -152,17 +152,66 @@ class Black extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '用户手机号', dataIndex: 'phone', key: 'phone' },
-            { title: '用户姓名', dataIndex: 'idCardName', key: 'idCardName' },
-            { title: '用户身份证号', dataIndex: 'idCard', key: 'idCard' },
-            { title: '用户描述', dataIndex: 'description', key: 'description' },
-            { title: '操作人员', dataIndex: 'operators', key: 'operators' },
-            { title: '创建时间', dataIndex: 'createTime', key: 'createTime' },
-            { title: '名单来源', dataIndex: 'channelName', key: 'channelName' },
-            { title: '名单分类', dataIndex: 'categoryName', key: 'categoryName' },
-            { title: '操作',
+            {
+                title: '用户手机号',
+                dataIndex: 'phone',
+                key: 'phone',
+                width: 100,
+            },
+            {
+                title: '用户姓名',
+                dataIndex: 'idCardName',
+                key: 'idCardName',
+                width: 100,
+            },
+            {
+                title: '用户身份证号',
+                dataIndex: 'idCard',
+                key: 'idCard',
+                width: 100,
+            },
+            {
+                title: '用户描述',
+                dataIndex: 'description',
+                key: 'description',
+                width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.description} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.description}
+                        </span>
+                    </Tooltip>
+                ),
+            },
+            {
+                title: '操作人员',
+                dataIndex: 'operators',
+                key: 'operators',
+                width: 100,
+            },
+            {
+                title: '创建时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+                width: 100,
+            },
+            {
+                title: '名单来源',
+                dataIndex: 'channelName',
+                key: 'channelName',
+                width: 100,
+            },
+            {
+                title: '名单分类',
+                dataIndex: 'categoryName',
+                key: 'categoryName',
+                width: 100,
+            },
+            {
+                title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
+                width: 100,
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
@@ -188,7 +237,8 @@ class Black extends React.PureComponent {
                             <span className="jm-del">删除</span>
                         </Popconfirm>
                         }
-                    </div>) },
+                    </div>)
+            },
         ];
         const options = [];
         if (this.props.typeList) {

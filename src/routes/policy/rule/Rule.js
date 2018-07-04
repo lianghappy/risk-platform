@@ -125,8 +125,8 @@ class Rules extends React.PureComponent {
                 dataIndex: 'indexdescribe',
                 width: 100,
                 render: (text, record) => (
-                    <Tooltip title={record.indexdescribe}>
-                        <span className={style.describ}>
+                    <Tooltip title={record.indexdescribe} className={style.indexdescribe}>
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className={style.indexdescribe}>
                             {record.indexdescribe}
                         </span>
                     </Tooltip>

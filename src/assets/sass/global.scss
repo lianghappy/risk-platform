@@ -58,3 +58,10 @@ table {
     color: #1F92FD;
     cursor: pointer;
 }
+:global(.description){
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical!important;
+}

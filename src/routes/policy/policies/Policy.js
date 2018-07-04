@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal, Select } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Dropdown, Menu, Icon, Modal, Select, Tooltip } from 'antd';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
@@ -228,13 +228,51 @@ class Policy extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
-            { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
-            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
-            { title: '策略描述', dataIndex: 'describ', key: 'describ', width: 100, },
-            { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
-            { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
-            { title: '状态',
+            {
+                title: '策略标识',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '策略名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '源策略名称',
+                dataIndex: 'sourceStrategyName',
+                key: 'sourceStrategyName',
+                width: 100,
+            },
+            {
+                title: '策略描述',
+                dataIndex: 'describ',
+                key: 'describ',
+                width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.describ} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.describ}
+                        </span>
+                    </Tooltip>
+                ),
+            },
+            {
+                title: '通过分',
+                dataIndex: 'passScore',
+                key: 'passScore',
+                width: 100,
+            },
+            {
+                title: '拒绝分',
+                dataIndex: 'refuseScore',
+                key: 'refuseScore',
+                width: 100,
+            },
+            {
+                title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
                 render: (...rest) => {

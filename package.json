@@ -3,7 +3,7 @@
   "scripts": {
     "start": "roadhog dev",
     "build": "NODE_ENV=production roadhog build",
-    "sandbox": "JIMI_ENV=sandbox PATHS=risk roadhog build",
+    "sandbox": "NODE_ENV=production JIMI_ENV=test PATHS=risk roadhog build",
     "deploy": "JIMI_ENV=prod roadhog build",
     "server": "node ./server.js",
     "lint": "eslint --ext .js src test",

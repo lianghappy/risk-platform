@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Tooltip } from 'antd';
 import base64 from 'utils/base64';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
@@ -193,26 +193,43 @@ class Policy extends React.PureComponent {
             {
                 title: '阶段排序',
                 dataIndex: 'sort',
-                key: 'sort'
+                key: 'sort',
+                width: 100,
             },
             {
                 title: '阶段名称',
                 dataIndex: 'name',
-                key: 'name'
+                key: 'name',
+                width: 100,
             },
             { title: '阶段模式',
                 dataIndex: 'type',
                 key: 'type',
                 render: (...rest) => (
                     <span>{this.checkType(rest[1].type)}</span>
-                ) },
+                ),
+                width: 100,
+            },
             {
                 title: '权重',
                 dataIndex: 'weight',
                 key: 'weight',
-                render: (text, record) => (<span>{(record.weight) / 100}</span>)
+                render: (text, record) => (<span>{(record.weight) / 100}</span>),
+                width: 100,
             },
-            { title: '阶段描述', dataIndex: 'describ', key: 'describ' },
+            {
+                title: '阶段描述',
+                dataIndex: 'describ',
+                key: 'describ',
+                render: (text, record) => (
+                    <Tooltip title={record.describ} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.describ}
+                        </span>
+                    </Tooltip>
+                ),
+                width: 100,
+            },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -240,7 +257,9 @@ class Policy extends React.PureComponent {
                             <span className={style.stage}>删除</span>
                         </Popconfirm>
                         }
-                    </div>) },
+                    </div>),
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>
