@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { roles } from 'utils/common';
-import { Layout, Input, Form, Select, Button, Table } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Tooltip } from 'antd';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -124,6 +124,13 @@ class Rules extends React.PureComponent {
                 key: 'indexdescribe',
                 dataIndex: 'indexdescribe',
                 width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.indexdescribe}>
+                        <span className={style.describ}>
+                            {record.indexdescribe}
+                        </span>
+                    </Tooltip>
+                )
             }
         ];
         const options = [];

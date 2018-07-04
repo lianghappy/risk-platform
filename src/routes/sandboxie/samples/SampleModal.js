@@ -102,51 +102,45 @@ class SamplesModal extends React.PureComponent {
                             <span className={style.result}>{content.orderStatus}</span>
                         </Col>
                         <Col span="12">
-                            <span>审核状态：</span>
-                            <span className={style.result}>{content.channelType}</span>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
-                        <Col span="12">
                             <span>业务流程：</span>
                             <span className={style.result}>{content.businessProcess}</span>
                         </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>下单时间：</span>
                             <span className={style.result}>{moment(content.orderTimeStart * 1000).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd * 1000).format('YYYY-MM-DD')}</span>
                         </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>历史最大逾期天数：</span>
                             <span className={style.result}>{content.historyMaxOverdueDays}</span>
                         </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>当前最大逾期天数：</span>
                             <span className={style.result}>{content.nowMaxOverdueDays}</span>
                         </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>PLD评分：</span>
                             <span className={style.result}>{content.pldScorelower}&nbsp;-&nbsp;{content.pldScoreUpper}</span>
                         </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>芝麻分：</span>
                             <span className={style.result}>{content.zhiMaScorelower}&nbsp;-&nbsp;{content.zhiMaScoreUpper}</span>
                         </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>机审结果：</span>
                             <span className={style.result}>{content.machineResult}</span>
                         </Col>
+                    </Row>
+                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>PLD结果：</span>
                             <span className={style.result}>{content.pldResult}</span>
                         </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>综合结果：</span>
                             <span className={style.result}>{content.synthesizeResult}</span>
