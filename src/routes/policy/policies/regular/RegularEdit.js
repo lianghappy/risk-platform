@@ -14,6 +14,7 @@ import { connect } from 'dva';
     loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
     channels: state.regularPly.channels,
     compareSymbol: state.regularPly.compareSymbol,
+    ruleView: state.regularPly.ruleView,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -37,6 +38,16 @@ export default class RegularEdit extends React.PureComponent {
 
     showModelHandler = () => {
         if (this.props.disabled) return;
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        dispatch({
+            type: 'regularPly/ruleView',
+            payload: {
+                id: record.id,
+            }
+        });
         this.setState({
             visible: true,
         });
@@ -91,7 +102,7 @@ export default class RegularEdit extends React.PureComponent {
         const {
             children,
             form,
-            record,
+            ruleView: record,
             loading,
             stageType,
             compareSymbol,

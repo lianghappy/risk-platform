@@ -14,6 +14,7 @@ import { connect } from 'dva';
     loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
     channels: state.regular.channels,
     compareSymbol: state.regular.compareSymbol,
+    ruleView: state.regular.ruleView,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -37,6 +38,16 @@ export default class RegularEdit extends React.PureComponent {
 
     showModelHandler = () => {
         if (this.props.disabled) return;
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        dispatch({
+            type: 'regular/ruleView',
+            payload: {
+                id: record.id,
+            }
+        });
         this.setState({
             visible: true,
         });
@@ -89,7 +100,7 @@ export default class RegularEdit extends React.PureComponent {
         const {
             children,
             form,
-            record,
+            ruleView: record,
             loading,
             stageType,
             compareSymbol,
@@ -201,7 +212,9 @@ export default class RegularEdit extends React.PureComponent {
                                 {
                                     getFieldDecorator('score', {
                                         initialValue: record.score,
-                                        rules: [{ required: true, message: '请输入分值' }],
+                                        rules: [
+                                            { required: true, message: '请输入分值' }
+                                        ],
                                     })(<Input type="number" />)
                                 }
                             </Form.Item>
@@ -215,7 +228,9 @@ export default class RegularEdit extends React.PureComponent {
                                 {
                                     getFieldDecorator('weight', {
                                         initialValue: record.weight,
-                                        rules: [{ required: true, message: '请输入权重' }],
+                                        rules: [
+                                            { required: true, message: '请输入权重' }
+                                        ],
                                     })(<Input type="number" />)
                                 }
                             </Form.Item>
