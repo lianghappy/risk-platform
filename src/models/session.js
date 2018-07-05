@@ -29,6 +29,7 @@ const authConvert = (menus) => {
             authed.forEach(it => {
                 if (it.id === item.id) {
                     it.sort = item.sort;
+                    it.router = setPath(it.router);
                     auth.push(it);
                 }
             });

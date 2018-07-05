@@ -1,4 +1,4 @@
-// import { filterPath } from 'utils/path';
+import { filterPath } from 'utils/path';
 
 export const getHeight = (dom) => {
     return dom.offsetHeight;
@@ -33,7 +33,7 @@ export const textPick = (_key, source, attributes = {}) => {
 
 // 导航选中
 export const menuKeyPick = (location) => {
-    const path = location.pathname.split('/');
+    const path = filterPath(location.pathname).split('/');
     const router = path[1];
     const key = [];
     switch (router) {
