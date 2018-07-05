@@ -225,6 +225,7 @@ const api = {
 
     /* ---------------------------第三方产品------------------------------ */
     getThirdPartyList: `${API}/api/risk/manager/collector/thirdpartyManage/list/v1`,
+    addThirdParty: `${API}/api/risk/manager/collector/thirdpartyManage/create/v1`,
 
 };
 

@@ -6,18 +6,20 @@ import {
     Button,
     Input,
     Select,
+    DatePicker,
 } from 'antd';
-// import { connect } from 'dva';
+import moment from 'moment';
+import { connect } from 'dva';
 
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 const Option = Select.Option;
-// const mapStateToProps = (state) => ({
-//     // roleNameList: state.account.roleNameList,
-// });
-// @connect(mapStateToProps)
+const mapStateToProps = (state) => ({
+    typeList: state.thirdParty.typeList,
+});
+@connect(mapStateToProps)
 @Form.create()
 export default class AddModal extends React.PureComponent {
     static propTypes = {
@@ -38,15 +40,19 @@ export default class AddModal extends React.PureComponent {
         e.preventDefault();
         const {
             form,
-            record,
-            type,
             onOk,
         } = this.props;
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
-                    if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
+                    if (values && values.releaseDate) {
+                        Object.assign(values, { releaseDate: moment(values.releaseDate._d).format('X') });
+                    }
+                    if (values && values.startDate) {
+                        Object.assign(values, { startDate: moment(values.startDate._d).format('X') });
+                    }
+                    if (values && values.endDate) {
+                        Object.assign(values, { endDate: moment(values.endDate._d).format('X') });
                     }
                     onOk(values, resolve);
                 }).then(() => {
@@ -56,39 +62,6 @@ export default class AddModal extends React.PureComponent {
         });
     };
 
-    handleConfirmPassword = (rule, value, callback) => {
-        const { getFieldValue } = this.props.form;
-        const newPwd = getFieldValue('password');
-        if (!newPwd || !value) {
-            callback();
-        } else if (!Object.is(newPwd, value)) {
-            callback(rule.message);
-        } else {
-            callback();
-        }
-    };
-
-    phoneCheck = (rule, value, callback) => {
-        if (value.length > 0 && !(/\d{11}/.test(value))) {
-            callback(rule.message);
-        } else {
-            callback();
-        }
-    }
-    validateAccount = (rule, value, callback) => {
-        if (value.length > 0 && value.length < 21 && (/[\u4e00-\u9fa5]$/.test(value))) {
-            callback(rule.message);
-        } else {
-            callback();
-        }
-    }
-    checkPwd = (rule, value, callback) => {
-        if (value.length > 5 && value.length < 16 && !(/^(?![A-Z]+$)(?![a-z]+$)(?!\d+$)(?![\W_]+$)\S+$/.test(value))) {
-            callback(rule.message);
-        } else {
-            callback();
-        }
-    }
     handleShow = () => {
         // this.props.form.validateFields();
         this.setState({
@@ -109,7 +82,11 @@ export default class AddModal extends React.PureComponent {
             wrapperCol: { span: 14 },
         };
         const forms = this.props.form;
-        const { children, record } = this.props;
+        const {
+            children,
+            record,
+            typeList,
+        } = this.props;
         const {
             getFieldDecorator,
             getFieldsError,
@@ -147,7 +124,15 @@ export default class AddModal extends React.PureComponent {
                                     rules: [
                                         { required: true, message: '请选择三方数据源' },
                                     ],
-                                })(<Input placeholder="请选择三方数据源" />)
+                                })(
+                                    <Select>
+                                        {
+                                            typeList.map((item) => {
+                                                return (<Option value={item.code} key={item.code}>{item.name}</Option>);
+                                            })
+                                        }
+                                    </Select>
+                                )
                             }
                         </Form.Item>
                         <Form.Item
@@ -231,12 +216,8 @@ export default class AddModal extends React.PureComponent {
                                             required: true,
                                             message: '请输入价格',
                                         },
-                                        {
-                                            validator: this.handleConfirmPassword,
-                                            message: '两次输入密码不一致',
-                                        },
                                     ],
-                                })(<Input type="password" placeholder="请输入价格" />)
+                                })(<Input placeholder="请输入价格" />)
                             }
                         </Form.Item>
                         <Form.Item
@@ -271,7 +252,7 @@ export default class AddModal extends React.PureComponent {
                                         },
                                     ],
                                 })(
-                                    <Input />
+                                    <DatePicker />
                                 )
                             }
                         </Form.Item>
@@ -289,7 +270,7 @@ export default class AddModal extends React.PureComponent {
                                         },
                                     ],
                                 })(
-                                    <Input />
+                                    <DatePicker />
                                 )
                             }
                         </Form.Item>
@@ -307,7 +288,7 @@ export default class AddModal extends React.PureComponent {
                                         },
                                     ],
                                 })(
-                                    <Input />
+                                    <DatePicker />
                                 )
                             }
                         </Form.Item>

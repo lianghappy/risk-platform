@@ -1,20 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Button, Table, message } from 'antd';
+import { Layout, Form, Input, Button, Table, message, Select, DatePicker } from 'antd';
 import { DURATION, SYSID } from 'utils/constants';
+import moment from 'moment';
 // import { roles } from 'utils/common';
 import style from './index.scss';
 import AddModal from './AddModal';
 import Pagination from '../../../components/Pagination/Pagination';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
+const { RangePicker } = DatePicker;
 const mapStateToProps = (state) => {
     return {
         list: state.thirdParty.list,
         pageNum: state.thirdParty.pageNum,
         pageSize: state.thirdParty.pageSize,
         loading: state.loading.models.thirdParty,
+        typeList: state.thirdParty.typeList,
     };
 };
 @connect(mapStateToProps)
@@ -65,34 +69,6 @@ export default class ThirdPartyManage extends React.PureComponent {
            sysId: SYSID,
        });
    }
-   onDelete = (id) => {
-       const {
-           pageSize,
-           pageNum,
-           form,
-           dispatch,
-       } = this.props;
-       const userId = JSON.parse(sessionStorage.userInfo).user.id;
-       new Promise((resolve) => {
-           dispatch({
-               type: 'account/del',
-               payload: {
-                   data: { id, userId, sysId: SYSID },
-                   resolve,
-               },
-           });
-       }).then(() => {
-           message.success('删除成功', DURATION);
-           form.validateFields((errors, values) => {
-               Object.assign(values, { sysId: SYSID });
-               this.query({
-                   ...values,
-                   pageNum,
-                   pageSize,
-               });
-           });
-       });
-   }
    modalOk = (data, callback) => {
        const {
            dispatch,
@@ -100,21 +76,10 @@ export default class ThirdPartyManage extends React.PureComponent {
            pageNum,
            form,
        } = this.props;
-       const content = data.id !== undefined ? '更新成功' : '新增成功';
-       let url = '';
-       switch (data.type) {
-       case 'add':
-           url = 'account/add';
-           break;
-       case 'edit':
-           url = 'account/update';
-           break;
-       default:
-           break;
-       }
+       const content = '新增成功';
        new Promise((resolve) => {
            dispatch({
-               type: url,
+               type: 'thirdParty/add',
                payload: {
                    data,
                    resolve,
@@ -124,7 +89,6 @@ export default class ThirdPartyManage extends React.PureComponent {
            callback();
            message.success(content, DURATION);
            form.validateFields((errors, values) => {
-               Object.assign(values, { sysId: SYSID });
                this.query({
                    ...values,
                    pageNum,
@@ -136,7 +100,7 @@ export default class ThirdPartyManage extends React.PureComponent {
    query(payload) {
        Object.assign(payload, { sysId: 'risk' });
        this.props.dispatch({
-           type: 'account/queryAccountList',
+           type: 'thirdParty/getThirdParty',
            payload,
        });
    }
@@ -147,6 +111,7 @@ export default class ThirdPartyManage extends React.PureComponent {
            pageNum,
            pageSize,
            loading,
+           typeList,
        } = this.props;
        const columns = [
            {
@@ -256,14 +221,52 @@ export default class ThirdPartyManage extends React.PureComponent {
        return (
            <Layout className={style.container}>
                <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
-                   <FormItem label="用户账号">
+                   <FormItem label="三方数据源">
                        {
-                           getFieldDecorator('account')(<Input placeholder="请输入用户账号" />)
+                           getFieldDecorator('thirdparty')(
+                               <Select style={{ width: '157px' }}>
+                                   {
+                                       typeList.map((item, index) => {
+                                           return (<Option value={item.code} key={index}>{item.name}</Option>);
+                                       })
+                                   }
+                               </Select>
+                           )
                        }
                    </FormItem>
-                   <FormItem label="用户姓名">
+                   <FormItem label="统计时间">
                        {
-                           getFieldDecorator('userName')(<Input placeholder="请输入用户姓名" />)
+                           getFieldDecorator('statisticsDate')(<Input placeholder="请输入用户姓名" />)
+                       }
+                   </FormItem>
+                   <FormItem label="签约日" >
+                       {
+                           getFieldDecorator('times')(<RangePicker
+                               showTime={{
+                                   hideDisabledOptions: true,
+                                   defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                               }}
+                           />)
+                       }
+                   </FormItem>
+                   <FormItem label="到期日" >
+                       {
+                           getFieldDecorator('times')(<RangePicker
+                               showTime={{
+                                   hideDisabledOptions: true,
+                                   defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                               }}
+                           />)
+                       }
+                   </FormItem>
+                   <FormItem label="是否免费">
+                       {
+                           getFieldDecorator('isFree')(
+                               <Select style={{ width: '157px' }}>
+                                   <Option value="1">免费</Option>
+                                   <Option value="0">付费</Option>
+                               </Select>
+                           )
                        }
                    </FormItem>
                    <FormItem>
