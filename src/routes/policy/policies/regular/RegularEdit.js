@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import FormItem from 'antd/lib/form/FormItem';
 
 // const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
@@ -166,6 +167,12 @@ export default class RegularEdit extends React.PureComponent {
                         >
                             <span>{record.valueType}</span>
                         </Form.Item>
+                        <FormItem
+                            {...formItemLayout}
+                            label="规则配置说明"
+                        >
+                            <span>{record.indexdescribe}</span>
+                        </FormItem>
                         <Form.Item
                             {...formItemLayout}
                             label="判定规则key"

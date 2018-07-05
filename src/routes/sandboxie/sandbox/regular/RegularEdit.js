@@ -166,6 +166,12 @@ export default class RegularEdit extends React.PureComponent {
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
+                            label="规则配置说明"
+                        >
+                            <span>{record.indexdescribe}</span>
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
                             label="判定规则key"
                         >
                             <span>{record.judgeKey}</span>

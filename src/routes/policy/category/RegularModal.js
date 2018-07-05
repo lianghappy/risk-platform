@@ -52,6 +52,7 @@ export default class RegularModal extends React.PureComponent {
                 judgeKey: item.judgeKey,
                 channel: item.channel,
                 valueType: item.valueType,
+                indexdescribe: item.indexdescribe,
             });
         });
         new Promise(resolve => {
