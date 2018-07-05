@@ -156,7 +156,7 @@ class Samples extends React.PureComponent {
                 dataIndex: 'operate',
                 key: 'operate',
                 render: (...rest) => (
-                    <div>
+                    <div style={{ width: '192px' }}>
                         {
                             roles('R_B_SB_samples_select') &&
                         Number(rest[1].type) !== 1 ?

@@ -180,7 +180,7 @@ class SandSamples extends React.PureComponent {
                 dataIndex: 'operate',
                 key: 'operate',
                 render: (...rest) => (
-                    <div>
+                    <div style={{ width: '193px' }}>
                         {
                             roles('R_B_SB_sandsamples_select') &&
                         <SamplesModal
