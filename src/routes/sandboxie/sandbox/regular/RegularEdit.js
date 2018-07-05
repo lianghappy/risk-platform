@@ -4,6 +4,7 @@ import {
     Form,
     Input,
     Select,
+    Tooltip,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
@@ -168,7 +169,9 @@ export default class RegularEdit extends React.PureComponent {
                             {...formItemLayout}
                             label="规则配置说明"
                         >
-                            <span>{record.indexdescribe}</span>
+                            <Tooltip title={record.indexdescribe}>
+                                <span className="description" style={{ '-webkit-box-orient': 'vertical' }}>{record.indexdescribe}</span>
+                            </Tooltip>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
