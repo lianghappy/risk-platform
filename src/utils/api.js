@@ -227,6 +227,12 @@ const api = {
     getThirdPartyList: `${API}/api/risk/manager/collector/thirdpartyManage/list/v1`,
     addThirdParty: `${API}/api/risk/manager/collector/thirdpartyManage/create/v1`,
 
+    /* -------------------------------灰度策略----------------------------------- */
+    getGrayPolicyList: `${API}/api/risk/manager/strategy/grayStrategy/list/v1`,
+    grayPolicyAdd: `${API}/api/risk/manager/strategy/grayStrategy/create/v1`,
+    grayPolicyUpdate: `${API}/api/risk/manager/strategy/grayStrategy/update/v1`,
+    grayPolicyDel: `${API}/api/risk/manager/strategy/grayStrategy/delete/v1`,
+
 };
 
 export default api;
