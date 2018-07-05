@@ -83,7 +83,7 @@ class SamplesModal extends React.PureComponent {
                         </Col>
                         <Col span="12">
                             <span>逾期期数：</span>
-                            <span className={style.result}>{content.overduePeriods}</span>
+                            <span className={style.result}>{content.overduePeriodsStart}&nbsp;-&nbsp;{content.overduePeriodsEnd}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
@@ -93,7 +93,7 @@ class SamplesModal extends React.PureComponent {
                         </Col>
                         <Col span="12">
                             <span>已付期数：</span>
-                            <span className={style.result}>{content.paidPeriods}</span>
+                            <span className={style.result}>{content.paidPeriodsStart}&nbsp;-&nbsp;{content.paidPeriodsEnd}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
@@ -109,7 +109,7 @@ class SamplesModal extends React.PureComponent {
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>历史最大逾期天数：</span>
-                            <span className={style.result}>{content.historyMaxOverdueDays}</span>
+                            <span className={style.result}>{content.historyMaxOverdueDaysStart}&nbsp;-&nbsp;{content.historyMaxOverdueDaysEnd}</span>
                         </Col>
                         <Col span="12">
                             <span>下单时间：</span>
@@ -119,7 +119,7 @@ class SamplesModal extends React.PureComponent {
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>当前最大逾期天数：</span>
-                            <span className={style.result}>{content.nowMaxOverdueDays}</span>
+                            <span className={style.result}>{content.nowMaxOverdueDaysStart}&nbsp;-&nbsp;{content.nowMaxOverdueDaysEnd}</span>
                         </Col>
                         <Col span="12">
                             <span>PLD评分：</span>
