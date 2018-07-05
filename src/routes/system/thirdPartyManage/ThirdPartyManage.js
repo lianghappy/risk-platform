@@ -158,8 +158,8 @@ export default class ThirdPartyManage extends React.PureComponent {
            },
            {
                title: '上线时间',
-               dataIndex: 'relaseDate',
-               key: 'relaseDate',
+               dataIndex: 'releaseDate',
+               key: 'releaseDate',
                width: 100,
            },
            {

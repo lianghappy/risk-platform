@@ -313,9 +313,17 @@ function RouterConfig({ history, app }) {
     // 第三方产品
     const ThirdParty = dynamic({
         app,
-        component: () => import('routes/system/thirdPartyManage/ThirdPartyManage.js'),
+        component: () => import('routes/system/thirdPartyManage/ThirdPartyManage'),
         models: () => [
-            import('models/system/ThirdPartyManage.js')
+            import('models/system/ThirdPartyManage')
+        ]
+    });
+    // 灰度策略
+    const grayPolicy = dynamic({
+        app,
+        component: () => import('routes/policy/grayPolicy/GrayPolicy'),
+        models: () => [
+            import('models/policy/grayPolicy/GrayPolicy')
         ]
     });
     return (
@@ -368,6 +376,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/order')} exact component={Orders} />
                     <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
                     <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />
+                    <PrivateRoute path={setPath('/grayPolicy')} exact component={grayPolicy} />
                 </Main>
             </Switch>
         </Router>
