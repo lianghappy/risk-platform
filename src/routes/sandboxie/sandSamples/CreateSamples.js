@@ -43,10 +43,37 @@ class CreateSamples extends React.PureComponent {
             if (values && values.zhiMaScoreUpper && !(/^[0-9]*$/).test(values.zhiMaScoreUpper)) {
                 message.error('芝麻分请输入数字');
             }
-
+            if (values && values.historyMaxOverdueDaysEnd && !(/^[0-9]*$/).test(values.historyMaxOverdueDaysEnd)) {
+                message.error('历史最大逾期天数请输入数字');
+            }
+            if (values && values.overduePeriodsEnd && !(/^[0-9]*$/).test(values.overduePeriodsEnd)) {
+                message.error('逾期期数请输入数字');
+            }
+            if (values && values.nowMaxOverdueDaysEnd && !(/^[0-9]*$/).test(values.nowMaxOverdueDaysEnd)) {
+                message.error('当前最大逾期期数请输入数字');
+            }
+            if (values && values.paidPeriodsEnd && !(/^[0-9]*$/).test(values.paidPeriodsEnd)) {
+                message.error('已付期数请输入数字');
+            }
             if (!errors) {
                 if (values && values.pldScoreUpper && Number(values.pldScoreUpper) < Number(values.pldScorelower)) {
                     message.error('风控评分最高分比最低分高');
+                    return;
+                }
+                if (values && values.zhiMaScoreUpper && Number(values.historyMaxOverdueDaysEnd) < Number(values.historyMaxOverdueDaysStart)) {
+                    message.error('历史最大逾期天数结束不能比起始低');
+                    return;
+                }
+                if (values && values.zhiMaScoreUpper && Number(values.zhiMaScoreUpper) < Number(values.zhiMaScorelower)) {
+                    message.error('风控评分最高分比最低分高');
+                    return;
+                }
+                if (values && values.zhiMaScoreUpper && Number(values.overduePeriodsEnd) < Number(values.overduePeriodsStart)) {
+                    message.error('预期期数结束不能比起始低');
+                    return;
+                }
+                if (values && values.zhiMaScoreUpper && Number(values.paidPeriodsEnd) < Number(values.paidPeriodsStart)) {
+                    message.error('已付期数结束不能比起始低');
                     return;
                 }
                 if (values && values.zhiMaScoreUpper && Number(values.zhiMaScoreUpper) < Number(values.zhiMaScorelower)) {
@@ -215,48 +242,96 @@ class CreateSamples extends React.PureComponent {
                     <Row>
                         <Col span={12}>
                             <FormItem label="历史最大逾期天数" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('historyMaxOverdueDays', {
-                                        rules: [
-                                            { validator: this.checkNum, message: '请输入数字' }
-                                        ]
-                                    })(<Input />)
-                                }
+                                <InputGroup compact>
+                                    {
+                                        getFieldDecorator('historyMaxOverdueDaysStart', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(<Input style={{ width: 100, textAlign: 'center' }} />)
+                                    }
+                                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                                    {
+                                        getFieldDecorator('historyMaxOverdueDaysEnd', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} />
+                                        )
+                                    }
+                                </InputGroup>
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="逾期期数" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('overduePeriods', {
-                                        rules: [
-                                            { validator: this.checkNum, message: '请输入数字' }
-                                        ]
-                                    })(<Input />)
-                                }
+                                <InputGroup compact>
+                                    {
+                                        getFieldDecorator('overduePeriodsStart', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(<Input style={{ width: 100, textAlign: 'center' }} />)
+                                    }
+                                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                                    {
+                                        getFieldDecorator('overduePeriodsEnd', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} />
+                                        )
+                                    }
+                                </InputGroup>
                             </FormItem>
                         </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
                             <FormItem label="当前最大逾期天数" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('nowMaxOverdueDays', {
-                                        rules: [
-                                            { validator: this.checkNum, message: '请输入数字' }
-                                        ]
-                                    })(<Input />)
-                                }
+                                <InputGroup compact>
+                                    {
+                                        getFieldDecorator('nowMaxOverdueDaysStart', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(<Input style={{ width: 100, textAlign: 'center' }} />)
+                                    }
+                                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                                    {
+                                        getFieldDecorator('nowMaxOverdueDaysEnd', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} />
+                                        )
+                                    }
+                                </InputGroup>
                             </FormItem>
                         </Col>
                         <Col span={12}>
                             <FormItem label="已付期数" {...formItemLayout}>
-                                {
-                                    getFieldDecorator('paidPeriods', {
-                                        rules: [
-                                            { validator: this.checkNum, message: '请输入数字' }
-                                        ]
-                                    })(<Input />)
-                                }
+                                <InputGroup compact>
+                                    {
+                                        getFieldDecorator('paidPeriodsStart', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(<Input style={{ width: 100, textAlign: 'center' }} />)
+                                    }
+                                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                                    {
+                                        getFieldDecorator('paidPeriodsEnd', {
+                                            rules: [
+                                                { validator: this.checkNum, message: '请输入数字' }
+                                            ]
+                                        })(
+                                            <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} />
+                                        )
+                                    }
+                                </InputGroup>
                             </FormItem>
                         </Col>
                     </Row>

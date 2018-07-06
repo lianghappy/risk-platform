@@ -108,6 +108,8 @@ const api = {
     updateCategory: `${API}/api/risk/manager/policy/category/update/v1`,
     // 未分类的关联规则数据
     getUnCategory: `${API}/api/risk/manager/policy/ruleBank/list/unCategory/v1`,
+    // 规则查询
+    ruleView: `${API}/api/risk/manager/policy/norm/get/v1`,
 
     // 策略
     getPolicyList: `${API}/api/risk/manager/policy/strategy/list/v1`,

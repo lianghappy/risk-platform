@@ -107,7 +107,7 @@ class AddModal extends React.PureComponent {
         });
     };
     phoneCheck = (rule, value, callback) => {
-        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/^1[0-9]{10}$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -176,6 +176,7 @@ class AddModal extends React.PureComponent {
                                     initialValue: bAWCommon && bAWCommon.phone,
                                     rules: [
                                         { required: true, message: '请输入用户手机号' },
+                                        { max: 11, message: '最多11位' },
                                         { validator: this.phoneCheck, message: '请输入正确的手机号' }
                                     ],
                                 })(<Input placeholder="请输入用户手机号" />)

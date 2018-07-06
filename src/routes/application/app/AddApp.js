@@ -152,7 +152,7 @@ class AddApp extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入应用名称' },
-                                        { max: '30', message: '* 应用名称不超过30个字' },
+                                        { max: 30, message: '* 应用名称不超过30个字' },
                                     ],
                                 })(<Input type="acount" placeholder="请输入应用名称" />)
                             }

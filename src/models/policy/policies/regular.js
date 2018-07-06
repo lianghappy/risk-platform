@@ -18,6 +18,8 @@ export default {
         status: '',
         compareSymbol: [],
         getUnCategory: [],
+        typeStages: '',
+        ruleView: {},
     },
     effects: {
         * query({ payload }, { call, put }) {
@@ -28,6 +30,16 @@ export default {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
+                    typeStages: response.stage.type,
+                },
+            });
+        },
+        * ruleView({ payload }, { call, put }) {
+            const response = yield call(post, API.ruleView, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    ruleView: response,
                 },
             });
         },

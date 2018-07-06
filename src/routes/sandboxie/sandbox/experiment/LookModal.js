@@ -71,37 +71,37 @@ export default class LookModal extends React.PureComponent {
                         <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>渠道类型：</Col>
-                                <Col span={16}>{experSelects.categoryName}</Col>
+                                <Col span={16}>{experSelects.channelType}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>逾期期数：</Col>
-                                <Col span={16}>{experSelects.name}</Col>
+                                <Col span={16}>{experSelects.overduePeriodsStart}&nbsp;-&nbsp;{experSelects.overduePeriodsEnd}</Col>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>商品类型：</Col>
-                                <Col span={16}>{experSelects.code}</Col>
+                                <Col span={16}>{experSelects.productType}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>已付期数：</Col>
-                                <Col span={16}>{experSelects.channel}</Col>
+                                <Col span={16}>{experSelects.paidPeriodsStart}&nbsp;-&nbsp;{experSelects.paidPeriodsEnd}</Col>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>订单状态：</Col>
-                                <Col span={16}>{experSelects.valueType}</Col>
+                                <Col span={16}>{experSelects.orderStatus}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>审核状态：</Col>
-                                <Col span={16}>{experSelects.judgeKey}</Col>
+                                <Col span={8} className={styles.title}>业务流程：</Col>
+                                <Col span={16}>{experSelects.businessProcess}</Col>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>业务流程：</Col>
-                                <Col span={16}>{experSelects.compareSymbol}</Col>
+                                <Col span={8} className={styles.title}>历史最大逾期天数：</Col>
+                                <Col span={16}>{experSelects.historyMaxOverdueDaysStart}&nbsp;-&nbsp;{experSelects.historyMaxOverdueDaysEnd}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>下单时间：</Col>
@@ -111,22 +111,12 @@ export default class LookModal extends React.PureComponent {
                         </Row>
                         <Row>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>历史最大逾期天数：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
+                                <Col span={8} className={styles.title}>PLD评分：</Col>
+                                <Col span={16}>{experSelects.pldScorelower}&nbsp;-&nbsp;{experSelects.pldScoreUpper}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>当前最大逾期天数：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>PLD评分：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
-                            </Col>
-                            <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>芝麻分：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
+                                <Col span={16}>{experSelects.nowMaxOverdueDaysStart}&nbsp;-&nbsp;{experSelects.nowMaxOverdueDaysEnd}</Col>
                             </Col>
                         </Row>
                         <Row>
@@ -135,14 +125,18 @@ export default class LookModal extends React.PureComponent {
                                 <Col span={16}>{experSelects.weight}</Col>
                             </Col>
                             <Col span={12} className={styles.row}>
-                                <Col span={8} className={styles.title}>PLD结果：</Col>
-                                <Col span={16}>{experSelects.score}</Col>
+                                <Col span={8} className={styles.title}>芝麻分：</Col>
+                                <Col span={16}>{experSelects.zhiMaScorelower}&nbsp;-&nbsp;{experSelects.zhiMaScoreUpper}</Col>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12} className={styles.row}>
+                                <Col span={8} className={styles.title}>PLD结果：</Col>
+                                <Col span={16}>{experSelects.machineResult}</Col>
+                            </Col>
+                            <Col span={12} className={styles.row}>
                                 <Col span={8} className={styles.title}>综合结果：</Col>
-                                <Col span={16}>{experSelects.weight}</Col>
+                                <Col span={16}>{experSelects.synthesizeResult}</Col>
                             </Col>
                         </Row>
                     </div>

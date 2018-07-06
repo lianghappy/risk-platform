@@ -28,6 +28,7 @@ import RegularDetail from './RegularDetail';
     channels: state.regular.channels,
     categories: state.regular.categories,
     status: state.regular.status,
+    typeStages: state.regular.typeStages,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -295,6 +296,7 @@ export default class Regular extends React.PureComponent {
             categories,
             channels,
             status,
+            typeStages,
         } = this.props;
         const categoryList = treeConvert({
             pId: 'pid',
@@ -309,7 +311,7 @@ export default class Regular extends React.PureComponent {
             stageId,
             ruleName,
         } = this.state;
-        const type = list.stage !== undefined ? list.stage.type : '2';
+        // const type = list.stage !== undefined ? list.stage.type : '1';
         const columns = [{
             title: '规则编号',
             dataIndex: 'id',
@@ -356,7 +358,7 @@ export default class Regular extends React.PureComponent {
                         roles('R_B_PLY_policy_st_rule_edit') && Number(status) === 0 &&
                     <RegularEdit
                         type="update"
-                        stageType={type}
+                        stageType={typeStages}
                         record={record}
                         disabled={false}
                         onOk={this.editOk}
@@ -368,7 +370,7 @@ export default class Regular extends React.PureComponent {
                         roles('R_B_PLY_policy_st_rule_dtl') &&
                     <RegularDetail
                         record={record}
-                        type={type}
+                        type={typeStages}
                         onOk={this.modalOk}
                     >
                         <a style={{ marginRight: 5 }}>详情</a>
@@ -387,7 +389,7 @@ export default class Regular extends React.PureComponent {
             ),
         }];
 
-        if (type === '2') {
+        if (typeStages === '2') {
             columns.splice(columns.length - 2, 0, {
                 title: '权重',
                 dataIndex: 'weight',
@@ -497,7 +499,7 @@ export default class Regular extends React.PureComponent {
                         roles('R_B_PLY_policy_st_rule_cle') && Number(status) === 0 &&
                     <RegularEdit
                         type="clone"
-                        stageType={type}
+                        stageType={typeStages}
                         record={selectedRow}
                         disabled={selectedRowKeys.length === 0}
                         onOk={this.editOk}

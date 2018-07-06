@@ -52,6 +52,7 @@ export default class RegularModal extends React.PureComponent {
                 judgeKey: item.judgeKey,
                 channel: item.channel,
                 valueType: item.valueType,
+                indexdescribe: item.indexdescribe,
             });
         });
         new Promise(resolve => {
@@ -119,7 +120,7 @@ export default class RegularModal extends React.PureComponent {
         this.props.form.resetFields();
         this.query({
             pageNum: 1,
-            pageSize: 8,
+            pageSize: 5,
         });
     };
 
@@ -130,7 +131,7 @@ export default class RegularModal extends React.PureComponent {
             this.query({
                 ...values,
                 pageNum: 1,
-                pageSize: 8,
+                pageSize: 5,
             });
         });
     };
@@ -157,7 +158,7 @@ export default class RegularModal extends React.PureComponent {
             type: 'linkRuler/queryRegular',
             payload: {
                 pageNum: 1,
-                pageSize: 8,
+                pageSize: 5,
             },
         });
 
@@ -318,7 +319,7 @@ export default class RegularModal extends React.PureComponent {
                             />
                             <Pagination
                                 current={pageNum}
-                                pageSize={8}
+                                pageSize={5}
                                 dataSize={dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper

@@ -4,9 +4,11 @@ import {
     Form,
     Input,
     Select,
+    Tooltip,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import FormItem from 'antd/lib/form/FormItem';
 
 // const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
@@ -14,6 +16,7 @@ import { connect } from 'dva';
     loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
     channels: state.regularPly.channels,
     compareSymbol: state.regularPly.compareSymbol,
+    ruleView: state.regularPly.ruleView,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -37,6 +40,16 @@ export default class RegularEdit extends React.PureComponent {
 
     showModelHandler = () => {
         if (this.props.disabled) return;
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        dispatch({
+            type: 'regularPly/ruleView',
+            payload: {
+                id: record.id,
+            }
+        });
         this.setState({
             visible: true,
         });
@@ -91,7 +104,7 @@ export default class RegularEdit extends React.PureComponent {
         const {
             children,
             form,
-            record,
+            ruleView: record,
             loading,
             stageType,
             compareSymbol,
@@ -155,6 +168,14 @@ export default class RegularEdit extends React.PureComponent {
                         >
                             <span>{record.valueType}</span>
                         </Form.Item>
+                        <FormItem
+                            {...formItemLayout}
+                            label="规则配置说明"
+                        >
+                            <Tooltip title={record.indexdescribe}>
+                                <span className="description" style={{ '-webkit-box-orient': 'vertical' }}>{record.indexdescribe}</span>
+                            </Tooltip>
+                        </FormItem>
                         <Form.Item
                             {...formItemLayout}
                             label="判定规则key"
