@@ -277,11 +277,8 @@ export const authFirst = [
                 name: '应用管理',
                 key: 'app',
                 router: '/app',
-            }, {
-                name: '报警规则',
-                key: 'black',
-                router: '/warningRule',
-            }],
+            }
+        ],
     },
 ];
 export const authsSecond = [

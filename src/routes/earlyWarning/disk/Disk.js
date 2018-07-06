@@ -1,9 +1,9 @@
 import React from 'react';
 import { Layout, Form, Select, Button, message } from 'antd';
 import { connect } from 'dva';
+import Line from 'components/Disk/Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
-// import echarts from 'echarts-for-react';
 import styles from './index.scss';
 
 const mapStateToProps = (state) => {
@@ -173,7 +173,7 @@ export default class Disk extends React.PureComponent {
                     </div>
                     <div className={styles.disk}>
                         <div className={styles.bigDisk}>
-
+                            <Line />
                         </div>
                     </div>
                 </div>

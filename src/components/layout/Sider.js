@@ -10,7 +10,8 @@ import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
 const mapStateToProps = state => ({
-    auths: state.session.auths
+    auths: state.session.auths,
+    flag: state.common.flag,
 });
 @connect(mapStateToProps)
 export default class Sider extends React.PureComponent {
