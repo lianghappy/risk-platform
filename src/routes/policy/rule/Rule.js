@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { roles } from 'utils/common';
-import { Layout, Input, Form, Select, Button, Table } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, Tooltip } from 'antd';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -21,10 +21,15 @@ class Rules extends React.PureComponent {
         typeList: PropTypes.array.isRequired,
     };
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -53,9 +58,18 @@ class Rules extends React.PureComponent {
             pageSize,
         });
     };
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     query(payload) {
         this.props.dispatch({
-            type: 'rule/getRuleList',
+            type: 'rulePly/getRuleList',
             payload,
         });
     }
@@ -68,17 +82,61 @@ class Rules extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '规则编号', dataIndex: 'id', key: 'id' },
-            { title: '规则名称', dataIndex: 'name', key: 'name' },
-            { title: '判定指定Key', dataIndex: 'judgeKey', key: 'judgeKey' },
-            { title: '风险代码', dataIndex: 'code', key: 'code' },
-            { title: '规则来源', dataIndex: 'channel', key: 'channel' },
-            { title: '规则值类型', dataIndex: 'valueType', key: 'valueType' },
+            {
+                title: '规则编号',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '规则名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '判定指定Key',
+                dataIndex: 'judgeKey',
+                key: 'judgeKey',
+                width: 100,
+            },
+            {
+                title: '风险代码',
+                dataIndex: 'code',
+                key: 'code',
+                width: 100,
+            },
+            {
+                title: '规则来源',
+                dataIndex: 'channel',
+                key: 'channel',
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>),
+                width: 100,
+            },
+            {
+                title: '规则值类型',
+                dataIndex: 'valueType',
+                key: 'valueType',
+                width: 100,
+            },
+            {
+                title: '规则配置描述',
+                key: 'indexdescribe',
+                dataIndex: 'indexdescribe',
+                width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.indexdescribe} className={style.indexdescribe}>
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className={style.indexdescribe}>
+                            {record.indexdescribe}
+                        </span>
+                    </Tooltip>
+                )
+            }
         ];
         const options = [];
         if (this.props.typeList) {
             this.props.typeList.forEach((item) => {
-                options.push(<Option key={item.name} value={item.name}>{item.name}</Option>);
+                options.push(<Option key={item.code} value={item.code}>{item.name}</Option>);
             });
         }
         return (
@@ -132,11 +190,11 @@ class Rules extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    list: state.rule.list,
-    sysId: state.rule.sysId,
-    loading: state.loading.models.rule,
-    pageNum: state.rule.pageNum,
-    pageSize: state.rule.pageSize,
-    typeList: state.rule.typeList,
+    list: state.rulePly.list,
+    sysId: state.rulePly.sysId,
+    loading: state.loading.models.rulePly,
+    pageNum: state.rulePly.pageNum,
+    pageSize: state.rulePly.pageSize,
+    typeList: state.rulePly.typeList,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Rules)));

@@ -12,6 +12,7 @@ export default {
         pageSize: PAGE_SIZE,
         rosterType: [],
         rosterChannel: [],
+        getBAW: {},
     },
     effects: {
         // 获取规则类别列表
@@ -68,6 +69,17 @@ export default {
             yield call(post, API.delBlack, data);
             yield call(resolve);
         },
+        * getBAW({ payload }, { call, put }) {
+            const { resolve } = payload;
+            const response = yield call(post, API.getBAW, payload);
+            yield put({
+                type: 'getTypeSuc',
+                payload: {
+                    getBAW: response,
+                }
+            });
+            yield call(resolve);
+        }
     },
     reducers: {
         getBlackListSuc(state, { payload }) {

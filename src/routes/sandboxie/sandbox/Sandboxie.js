@@ -25,10 +25,11 @@ class Sandboxie extends React.PureComponent {
     };
     state = {
         clone: {},
-        disabled: true,
+        selectedRowKeys: [],
     };
     onPageChange = (pageNum, pageSize) => {
-        const { form } = this.props;
+        const { form, loading } = this.props;
+        if (loading) return;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,
@@ -63,12 +64,17 @@ class Sandboxie extends React.PureComponent {
             pageSize,
         });
     };
-    onSelectChange = (selectedRows) => {
+    onRowChange = (selectedRowKeys) => {
         this.setState({
-            clone: selectedRows,
-            disabled: false,
+            selectedRowKeys,
         });
-    }
+    };
+
+    onSelect = (record) => {
+        this.setState({
+            clone: record,
+        });
+    };
     onEdit = (id, isEnable) => {
         const {
             pageSize,
@@ -124,6 +130,15 @@ class Sandboxie extends React.PureComponent {
                     pageSize,
                 });
             });
+            if (
+                this.state.selectedRowKeys.length !== 0 &&
+                ids === this.state.selectedRowKeys[0]
+            ) {
+                this.setState({
+                    clone: {},
+                    selectedRowKeys: [],
+                });
+            }
         });
     }
     modalOk = (data, callback) => {
@@ -169,7 +184,7 @@ class Sandboxie extends React.PureComponent {
         });
     };
     exciese = () => {
-        if (this.state.disabled) {
+        if (this.state.selectedRowKeys.length <= 0) {
             message.error('请选择策略');
         } else {
             this.props.history.push(setPath(`/experiment/${base64.encode(this.state.clone.id)}`));
@@ -203,9 +218,12 @@ class Sandboxie extends React.PureComponent {
         });
     }
     render() {
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
             type: 'radio',
-            onSelect: this.onSelectChange,
+            selectedRowKeys,
+            onChange: this.onRowChange,
+            onSelect: this.onSelect,
         };
         const { getFieldDecorator } = this.props.form;
         const {
@@ -215,11 +233,13 @@ class Sandboxie extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '策略标识', dataIndex: 'id', key: 'id' },
-            { title: '策略名称', dataIndex: 'name', key: 'name' },
-            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName' },
-            { title: '上架人', dataIndex: 'workName', key: 'workName' },
-            { title: '上架时间', dataIndex: 'workTime', key: 'workTime' },
+            { title: '策略标识', dataIndex: 'id', key: 'id', width: 100, },
+            { title: '策略名称', dataIndex: 'name', key: 'name', width: 100, },
+            { title: '源策略名称', dataIndex: 'sourceStrategyName', key: 'sourceStrategyName', width: 100, },
+            { title: '通过分', dataIndex: 'passScore', key: 'passScore', width: 100, },
+            { title: '拒绝分', dataIndex: 'refuseScore', key: 'refuseScore', width: 100, },
+            { title: '上架人', dataIndex: 'workName', key: 'workName', width: 100, },
+            { title: '上架时间', dataIndex: 'workTime', key: 'workTime', width: 100, },
             { title: '状态',
                 dataIndex: 'isEnable',
                 key: 'isEnable',
@@ -241,7 +261,8 @@ class Sandboxie extends React.PureComponent {
                     return (
                         <span>{type}</span>
                     );
-                } },
+                },
+                width: 100, },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -310,7 +331,8 @@ class Sandboxie extends React.PureComponent {
                                     </a>
                                 </Dropdown>
                         }
-                    </div>) },
+                    </div>),
+                width: 100, },
         ];
         return (
             <Layout className={style.container}>
@@ -359,7 +381,7 @@ class Sandboxie extends React.PureComponent {
                         record={this.state.clone}
                         onOk={this.modalOk}
                     >
-                        <Button type="primary" disabled={this.state.disabled} className={style.addBtn}>克隆策略</Button>
+                        <Button type="primary" disabled={selectedRowKeys.length <= 0} className={style.addBtn}>克隆策略</Button>
                     </AddPolicy>
                     }
                 </div>
@@ -368,6 +390,7 @@ class Sandboxie extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    rowKey="id"
                     rowSelection={rowSelection}
                 />
                 <Pagination

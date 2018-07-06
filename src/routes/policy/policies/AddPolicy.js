@@ -5,6 +5,7 @@ import {
     Modal,
     Button,
     Input,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -38,16 +39,20 @@ class AddPolicy extends React.PureComponent {
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
-                new Promise(resolve => {
-                    if (type === 'edit' || type === 'clone') {
-                        Object.assign(values, { isEnable: record.isEnable });
-                        Object.assign(values, { id: record.id });
-                    }
-                    values.type = that.props.type;
-                    onOk(values, resolve);
-                }).then(() => {
-                    this.handleCancel();
-                });
+                if (Number(values.refuseScore) < Number(values.passScore)) {
+                    new Promise(resolve => {
+                        if (type === 'edit' || type === 'clone') {
+                            Object.assign(values, { isEnable: record.isEnable });
+                            Object.assign(values, { id: record.id });
+                        }
+                        values.type = that.props.type;
+                        onOk(values, resolve);
+                    }).then(() => {
+                        this.handleCancel();
+                    });
+                } else {
+                    message.error('通过分大于拒绝分');
+                }
             }
         });
     };
@@ -58,7 +63,13 @@ class AddPolicy extends React.PureComponent {
             visible: true,
         });
     };
-
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -89,6 +100,7 @@ class AddPolicy extends React.PureComponent {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}
+                    width="60%"
                     footer={[
                         <Button key="back" onClick={this.handleCancel}>取消</Button>,
                         <Button
@@ -111,10 +123,37 @@ class AddPolicy extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入策略名称' },
-                                        { max: 50, message: '策略名称最多50位' },
+                                        { max: 20, message: '策略名称最多20位' },
                                     ],
                                 })(<Input placeholder="请输入策略名称" />)
                             }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="风险阈值"
+                        >
+                            <div>
+                                <span>-∞&lt;   拒绝 ≤ </span>
+                                {
+                                    getFieldDecorator('refuseScore', {
+                                        initialValue: record.refuseScore,
+                                        rules: [
+                                            { required: true, message: '请输入拒绝分数' },
+                                            { validator: this.checkNum, message: '请输入数字' }
+                                        ],
+                                    })(<Input style={{ width: '50px' }} />)
+                                }
+                                <span> &lt;   需人审  ≤ </span>
+                                {
+                                    getFieldDecorator('passScore', {
+                                        initialValue: record.passScore,
+                                        rules: [
+                                            { required: true, message: '请输入通过分数' },
+                                        ],
+                                    })(<Input style={{ width: '50px' }} />)
+                                }
+                                <span>&lt;   通过  ≤ +∞</span>
+                            </div>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}

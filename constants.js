@@ -13,8 +13,8 @@ const PASSWORD = {
 const API_RBAC = {
     dev: 'http://rbac-api.dev.jimistore.com',
     test: 'http://rbac-api.test.jimistore.com',
-    prod: 'http://rbac-api.jimistore.com',
-    sandbox: 'https://user-api.jimistore.com',
+    prod: 'https://rbac-api.jimistore.com',
+    sandbox: 'https://114.55.95.151:23061',
 }[JIMI_ENV];
 // 平台接口
 const API = {

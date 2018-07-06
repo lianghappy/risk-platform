@@ -24,6 +24,7 @@ const TreeNode = Tree.TreeNode;
     categories: state.regular.categories,
     regulars: state.regular.regulars,
     pageNum: state.regular._pageNum,
+    getUnCategory: state.regular.getUnCategory,
     loading: state.loading.effects['regular/queryRegular'] || false,
     onSubmiting: state.loading.effects['regular/add'] || false,
 }))
@@ -46,6 +47,7 @@ export default class RegularModal extends React.PureComponent {
         selectedRowKeys: [],
         categorieId: '',
         categoryName: '',
+        selectedKeys: '',
     };
 
     onOk = (e) => {
@@ -56,7 +58,7 @@ export default class RegularModal extends React.PureComponent {
             this.state.selectedRows.forEach((item) => {
                 lists.push({
                     id: item.id,
-                    categoryId: item.categorieId,
+                    categoryId: item.categoryId,
                     categoryName: item.categoryName,
                     ruleId: item.ruleId,
                     ruleName: item.ruleName,
@@ -64,6 +66,7 @@ export default class RegularModal extends React.PureComponent {
                     judgeKey: item.judgeKey,
                     channel: item.channel,
                     valueType: item.valueType,
+                    indexdescribe: item.indexdescribe,
                 });
             });
             this.props.onOk({
@@ -125,52 +128,86 @@ export default class RegularModal extends React.PureComponent {
         if (loading) return;
 
         form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
-            });
+            const categoryId = this.state.categorieId;
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                    categoryId,
+                });
+            }
         });
     };
     onSelects = (selectedKeys) => {
         const {
-            pageSize,
-            pageNum,
             form,
         } = this.props;
         this.setState({ categorieId: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
         const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
         form.validateFields((errors, values) => {
-            Object.assign(values, { categoryId });
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
-            });
+            if (categoryId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            } else {
+                Object.assign(values, { categoryId });
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            }
+        });
+        this.setState({
+            selectedKeys,
         });
         this.props.categories.forEach((item) => {
             if (item.id === categoryId) {
-                this.setState({ categoryName: item.name });
+                this.setState({ categoryName: item.name, });
             }
         });
     }
     onReset = () => {
         this.props.form.resetFields();
-        this.query({
-            pageNum: 1,
-            pageSize: 5,
-        });
+        if (this.state.categorieId === '0') {
+            this.unQuery({
+                pageNum: 1,
+                pageSize: 5,
+            });
+        } else {
+            this.query({
+                pageNum: 1,
+                pageSize: 5,
+            });
+        }
     };
 
     onQuery = (e) => {
         e.preventDefault();
 
         this.props.form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                pageNum: 1,
-                pageSize: 5,
-            });
+            if (this.state.categorieId === '0') {
+                this.unQuery({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            } else {
+                this.query({
+                    ...values,
+                    pageNum: 1,
+                    pageSize: 5,
+                });
+            }
         });
     };
 
@@ -180,6 +217,8 @@ export default class RegularModal extends React.PureComponent {
             visible: false,
             selectedRows: [], // 选中货品
             selectedRowKeys: [],
+            selectedKeys: '',
+            categorieId: '',
         });
     };
 
@@ -196,12 +235,29 @@ export default class RegularModal extends React.PureComponent {
             visible: true,
             selectedRows: [],
             selectedRowKeys: [],
+            selectedKeys: '',
+            categorieId: '',
         });
     };
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
 
     query(payload) {
         this.props.dispatch({
             type: 'regular/queryRegular',
+            payload,
+        });
+    }
+    unQuery(payload) {
+        this.props.dispatch({
+            type: 'regular/getUnCategory',
             payload,
         });
     }
@@ -228,6 +284,7 @@ export default class RegularModal extends React.PureComponent {
             categories,
             onSubmiting,
             ruleName,
+            getUnCategory,
         } = this.props;
         const {
             visible,
@@ -257,6 +314,7 @@ export default class RegularModal extends React.PureComponent {
             dataIndex: 'channel',
             key: 'channel',
             width: 100,
+            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
         }, {
             title: '规则值类型',
             dataIndex: 'valueType',
@@ -289,6 +347,10 @@ export default class RegularModal extends React.PureComponent {
             tId: 'key',
             tName: 'title',
         }, categories);
+        treeDatas.push({
+            key: '0',
+            title: '未分类'
+        });
         return (
             <span>
                 <span
@@ -310,6 +372,7 @@ export default class RegularModal extends React.PureComponent {
                     <div className={styles.layout}>
                         <div className={styles.left}>
                             <Tree
+                                selectedKeys={this.state.selectedKeys}
                                 onSelect={this.onSelects}
                             >
                                 {this.renderTreeNodes(treeDatas)}
@@ -325,7 +388,7 @@ export default class RegularModal extends React.PureComponent {
                                     {getFieldDecorator('channel')(
                                         <Select allowClear>
                                             {channels.map(item => (
-                                                <Select.Option value={item.id} key={item.id}>
+                                                <Select.Option value={item.code} key={item.code}>
                                                     {item.name}
                                                 </Select.Option>
                                             ))}
@@ -361,7 +424,7 @@ export default class RegularModal extends React.PureComponent {
                                 columns={columns}
                                 rowSelection={rowSelection}
                                 size="small"
-                                dataSource={dataSource}
+                                dataSource={this.state.categorieId === '0' ? getUnCategory : dataSource}
                                 style={{ height: 430 }}
                                 scroll={{ y: 390 }}
                                 rowKey="id"
@@ -371,7 +434,7 @@ export default class RegularModal extends React.PureComponent {
                             <Pagination
                                 current={pageNum}
                                 pageSize={5}
-                                dataSize={dataSource.length}
+                                dataSize={this.state.categorieId === '0' ? getUnCategory.length : dataSource.length}
                                 onChange={this.onPageChange}
                                 showQuickJumper
                             />

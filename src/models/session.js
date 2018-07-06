@@ -2,8 +2,16 @@ import { routerRedux } from 'dva/router';
 import { setToken, post, setUserId, setDeviceId, signature } from 'utils/request';
 import treeConvert from 'utils/treeConvert';
 import API from 'utils/api';
+import authed from 'utils/auths';
 import { setPath, filterPath } from 'utils/path';
 
+const compare = (property) => {
+    return function (obj1, obj2) {
+        const value1 = obj1[property];
+        const value2 = obj2[property];
+        return value1 - value2; // 升序
+    };
+};
 // 权限解析
 const authConvert = (menus) => {
     // let rootId = '';
@@ -15,18 +23,26 @@ const authConvert = (menus) => {
         return false;
     }); */
     let auths = [];
+    const auth = []; // 新权限数组
     if (menus.length > 0) {
-        menus.forEach((el) => {
-            el.key = el.id;
-            el.router = `/${el.id}`;
+        menus.forEach(item => {
+            authed.forEach(it => {
+                if (it.id === item.id) {
+                    it.sort = item.sort;
+                    it.router = setPath(it.router);
+                    auth.push(it);
+                }
+            });
         });
         auths = treeConvert({
-            pId: 'parentId',
-            otherKeys: ['key', 'router'],
-        }, menus);
+            pId: 'pid',
+            otherKeys: ['key', 'router', 'sort'],
+        }, auth);
+        auths.forEach(item => {
+            item.children.sort(compare('sort'));
+        });
     }
-    console.log(auths);
-    return auths;
+    return auths.sort(compare('sort'));
 };
 
 /* eslint-disable consistent-return */
@@ -54,7 +70,7 @@ const pickAuth = (menus) => {
 export const getUserInfo = (state) => state.session.user;
 export const getUserName = (state) => {
     if (state.session.user) {
-        return state.session.user.userName;
+        return state.session.user.account;
     }
     return '';
 };
@@ -73,9 +89,10 @@ export const initSession = () => {
     if (userInfo) {
         userInfo = JSON.parse(userInfo);
         session = { ...userInfo, isLogin: true, auths: authConvert(userInfo.menus), };
+
         setToken(userInfo.token);
         setUserId(userInfo.user.id);
-        setDeviceId(userInfo.user.type);
+        setDeviceId(userInfo.user.sysId);
     } else {
         setToken(null);
     }
@@ -103,7 +120,7 @@ export default {
             yield sessionStorage.setItem('userInfo', JSON.stringify(response));
             yield call(setToken, response.token);
             yield call(setUserId, response.user.id);
-            yield call(setDeviceId, response.user.type);
+            yield call(setDeviceId, response.user.sysId);
             yield call(signature);
             yield put({
                 type: 'loginSuc',

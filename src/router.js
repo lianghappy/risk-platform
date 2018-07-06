@@ -88,6 +88,7 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/application/app/LookApp'),
         models: () => [
             import('models/application/LookApp'),
+            import('models/application/App'),
         ],
     });
     // 添加角色/编辑角色
@@ -109,16 +110,9 @@ function RouterConfig({ history, app }) {
     // 类别构建
     const construct = dynamic({
         app,
-        component: () => import('routes/policy/category/Structure'),
+        component: () => import('routes/policy/category/Index'),
         models: () => [
             import('models/policy/category/Structure'),
-        ],
-    });
-    // 关联规则
-    const LinkRuler = dynamic({
-        app,
-        component: () => import('routes/policy/category/LinkRuler'),
-        models: () => [
             import('models/policy/category/LinkRuler'),
         ],
     });
@@ -165,25 +159,28 @@ function RouterConfig({ history, app }) {
     // 黑名单
     const Black = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Black.js'),
+        component: () => import('routes/blackAndWhite/Black'),
         models: () => [
-            import('models/blackAndWhite/Black.js'),
+            import('models/blackAndWhite/Black'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 白名单
     const White = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/White.js'),
+        component: () => import('routes/blackAndWhite/White'),
         models: () => [
-            import('models/blackAndWhite/White.js'),
+            import('models/blackAndWhite/White'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 灰名单
     const Gray = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Gray.js'),
+        component: () => import('routes/blackAndWhite/Gray'),
         models: () => [
             import('models/blackAndWhite/Gray.js'),
+            import('models/blackAndWhite/common'),
         ],
     });
     // 策略沙箱
@@ -341,15 +338,14 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/IndexPage')} exact component={IndexPage} />
                     <PrivateRoute path={setPath('/account')} exact component={Account} />
                     <PrivateRoute path={setPath('/role')} exact component={Role} />
-                    <PrivateRoute path={setPath('/role/addRole')} exact component={AddRole} />
-                    <PrivateRoute path={setPath('/role/detailRole/:id')} exact component={RoleDetail} />
+                    <PrivateRoute path={setPath('/addRole')} exact component={AddRole} />
+                    <PrivateRoute path={setPath('/detailRole/:id')} exact component={RoleDetail} />
                     <PrivateRoute path={setPath('/user')} exact component={User} />
                     <PrivateRoute path={setPath('/app')} exact component={appManage} />
                     <PrivateRoute path={setPath('/apps/:id')} exact component={LookApp} />
                     <PrivateRoute path={setPath('/company')} exact component={Application} />
                     <PrivateRoute path={setPath('/applicationManage')} exact component={appManage} />
                     <PrivateRoute path={setPath('/categoryStru')} exact component={construct} />
-                    <PrivateRoute path={setPath('/linkRuler')} exact component={LinkRuler} />
                     <PrivateRoute path={setPath('/rule')} exact component={Rules} />
                     <PrivateRoute path={setPath('/policy')} exact component={Policy} />
                     <PrivateRoute path={setPath('/strategy/:id')} component={Strategy} />

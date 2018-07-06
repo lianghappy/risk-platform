@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import moment from 'moment';
 import { setPath } from 'utils/path';
-import { Input, Form, Button, Col, Row, DatePicker } from 'antd';
+import { Input, Form, Button, Col, Row, DatePicker, message } from 'antd';
 import style from '../index.scss';
 
 const FormItem = Form.Item;
@@ -28,10 +28,17 @@ class StartExper extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (errors) { delete errors.name; }
+            if (values && values.agee && !(/^[0-9]*$/.test(values.agee))) {
+                message.error('年龄请输入数字');
+            }
             if (!errors) {
                 this.props.handleValue(values);
-                Object.assign(values, { orderTimes: moment(values.times[0]._d).startOf('day').format('X') });
-                Object.assign(values, { orderTimee: moment(values.times[1]._d).startOf('day').format('X') });
+                if (values && Number(values.agee) < Number(values.ages)) {
+                    message.error('最小年龄小于最大年龄');
+                    return;
+                }
+                Object.assign(values, { orderTimes: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { orderTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
                 new Promise(() => {
                     dispatch({
@@ -39,11 +46,17 @@ class StartExper extends React.PureComponent {
                         payload: { ...values },
                     });
                 }).then(() => {
-                    console.log(this.props.match.params.id);
                     this.props.history.push(setPath(`/sandboxie/recordHistory/${this.props.match.params.id}`));
                 });
             }
         });
+    }
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
     }
     query(payload) {
         this.props.dispatch({
@@ -70,7 +83,7 @@ class StartExper extends React.PureComponent {
                                 })(<RangePicker
                                     showTime={{
                                         hideDisabledOptions: true,
-                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
                                     }}
                                 />)
                             }
@@ -79,7 +92,12 @@ class StartExper extends React.PureComponent {
                     <Col span={12}>
                         <FormItem label="身份证号前6位" {...formItemLayout}>
                             {
-                                getFieldDecorator('idCardTop6')(<Input placeholder="请输入身份证号前6位" />)
+                                getFieldDecorator('idCardTop6', {
+                                    rules: [
+                                        { max: 6, message: '只能输入六位数字' },
+                                        { validator: this.checkNum, message: '只能输入数字' }
+                                    ],
+                                })(<Input placeholder="请输入身份证号前6位" />)
                             }
                         </FormItem>
                     </Col>
@@ -88,7 +106,12 @@ class StartExper extends React.PureComponent {
                     <Col span={12}>
                         <FormItem label="手机号前7位" {...formItemLayout}>
                             {
-                                getFieldDecorator('phoneTop7')(<Input placeholder="请输入手机号前7位" />)
+                                getFieldDecorator('phoneTop7', {
+                                    rules: [
+                                        { max: 7, message: '只能输入七位数字' },
+                                        { validator: this.checkNum, message: '只能输入数字' }
+                                    ],
+                                })(<Input placeholder="请输入手机号前7位" />)
                             }
                         </FormItem>
                     </Col>
@@ -97,11 +120,19 @@ class StartExper extends React.PureComponent {
 
                             <InputGroup compact>
                                 {
-                                    getFieldDecorator('age')(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最小年龄" />)
+                                    getFieldDecorator('ages', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '只能输入数字' }
+                                        ]
+                                    })(<Input style={{ width: 100, textAlign: 'center' }} placeholder="最小年龄" />)
                                 }
                                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                                 {
-                                    getFieldDecorator('age')(
+                                    getFieldDecorator('agee', {
+                                        rules: [
+                                            { validator: this.checkNum, message: '只能输入数字' }
+                                        ]
+                                    })(
                                         <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大年龄" />
                                     )
                                 }
@@ -121,6 +152,6 @@ class StartExper extends React.PureComponent {
 const mapStateToProps = (state) => ({
     list: state.experiment.list,
     sysId: state.experiment.sysId,
-    loading: state.loading.models.experiment,
+    loading: state.loading.effects['experiment/start'],
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(StartExper)));

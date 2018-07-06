@@ -71,6 +71,7 @@ class Product extends React.PureComponent {
                 },
             });
         }).then(() => {
+            this.setState({ selectedRows: [] });
             message.success('添加成功');
             this.query({
                 pageNum,
@@ -140,7 +141,7 @@ class Product extends React.PureComponent {
         };
         return (
             <Layout className={style.containers}>
-                <Button className={style.btns} type="primary" onClick={this.all}>批量增加</Button>
+                <Button className={style.btns} type="primary" onClick={this.all} disabled={this.state.selectedRows.length === 0}>批量增加</Button>
                 <Table
                     rowSelection={rowSelection}
                     columns={adds}

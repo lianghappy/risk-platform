@@ -25,6 +25,7 @@ export default class Sider extends React.PureComponent {
         const { location } = this.props;
         const auths = this.props.flag ? authFirst : authsSecond;
         const menuKey = menuKeyPick(location);
+
         return (
             <Layout.Sider breakpoint="lg" className="jm-sider">
                 <div className={styles.logo}>

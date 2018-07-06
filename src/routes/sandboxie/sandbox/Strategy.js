@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { roles } from 'utils/common';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Tooltip } from 'antd';
 import { DURATION } from 'utils/constants';
 import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
@@ -22,16 +22,18 @@ class Policy extends React.PureComponent {
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
     };
-    state = {
-        clone: {},
-    };
     onPageChange = (pageNum, pageSize, sysId) => {
-        const strategyId = this.props.list[0].strategyId;
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
-            strategyId,
+        const strategyId = base64.decode(this.props.match.params.id);
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+                strategyId,
+            });
         });
     };
     onQuery = (e) => {
@@ -44,7 +46,7 @@ class Policy extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
-            const strategyId = this.props.list[0].strategyId;
+            const strategyId = base64.decode(this.props.match.params.id);
             this.query({
                 ...values,
                 pageNum: 1,
@@ -57,7 +59,7 @@ class Policy extends React.PureComponent {
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
-        const strategyId = this.props.list[0].strategyId;
+        const strategyId = base64.decode(this.props.match.params.id);
         this.query({
             pageNum: 1,
             pageSize,
@@ -91,12 +93,26 @@ class Policy extends React.PureComponent {
             });
         });
     }
-    onSelectChange = (selectedRows) => {
-        this.setState({
-            clone: selectedRows,
-        });
-        console.log(this.state.clone);
-    }
+     checkType = (num) => {
+         let name = '';
+         switch (Number(num)) {
+         case 1:
+             name = '最坏匹配';
+             break;
+         case 2:
+             name = '权重匹配';
+             break;
+         case 3:
+             name = '最好匹配';
+             break;
+         case 4:
+             name = '预阶段';
+             break;
+         default:
+             break;
+         }
+         return name;
+     }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -116,7 +132,7 @@ class Policy extends React.PureComponent {
         default:
             break;
         }
-        const strategyId = this.props.list[0].strategyId;
+        const strategyId = base64.decode(this.props.match.params.id);
         data.strategyId = strategyId;
         new Promise((resolve) => {
             dispatch({
@@ -169,18 +185,47 @@ class Policy extends React.PureComponent {
             loading,
             status,
         } = this.props;
-        console.log(status);
         const columns = [
-            { title: '阶段排序', dataIndex: 'sort', key: 'sort' },
-            { title: '阶段名称', dataIndex: 'name', key: 'name' },
+            {
+                title: '阶段排序',
+                dataIndex: 'sort',
+                key: 'sort',
+                width: 100,
+            },
+            {
+                title: '阶段名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
             { title: '阶段模式',
                 dataIndex: 'type',
                 key: 'type',
                 render: (...rest) => (
-                    <span>{Number(rest[1].type) === 1 ? '最坏匹配' : '权重匹配'}</span>
-                ) },
-            { title: '权重', dataIndex: 'weight', key: 'weight' },
-            { title: '阶段描述', dataIndex: 'describ', key: 'describ' },
+                    <span>{this.checkType(rest[1].type)}</span>
+                ),
+                width: 100,
+            },
+            {
+                title: '权重',
+                dataIndex: 'weight',
+                key: 'weight',
+                render: (text, record) => (<span>{(record.weight / 100)}</span>),
+                width: 100,
+            },
+            {
+                title: '阶段描述',
+                dataIndex: 'describ',
+                key: 'describ',
+                render: (text, record) => (
+                    <Tooltip title={record.describ} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.describ}
+                        </span>
+                    </Tooltip>
+                ),
+                width: 100,
+            },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
@@ -208,7 +253,9 @@ class Policy extends React.PureComponent {
                             <span className={style.stage}>删除</span>
                         </Popconfirm>
                         }
-                    </div>) },
+                    </div>),
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>

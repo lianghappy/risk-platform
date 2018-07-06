@@ -4,14 +4,19 @@ import {
     Form,
     Input,
     Select,
+    Tooltip,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import FormItem from 'antd/lib/form/FormItem';
 
-const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
+// const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
-    loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
+    loading: state.loading.effects['regularPly/update'] || state.loading.effects['regularPly/clone'] || false,
+    channels: state.regularPly.channels,
+    compareSymbol: state.regularPly.compareSymbol,
+    ruleView: state.regularPly.ruleView,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -35,6 +40,16 @@ export default class RegularEdit extends React.PureComponent {
 
     showModelHandler = () => {
         if (this.props.disabled) return;
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        dispatch({
+            type: 'regularPly/ruleView',
+            payload: {
+                id: record.id,
+            }
+        });
         this.setState({
             visible: true,
         });
@@ -46,6 +61,15 @@ export default class RegularEdit extends React.PureComponent {
             visible: false,
         });
     };
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
@@ -80,9 +104,10 @@ export default class RegularEdit extends React.PureComponent {
         const {
             children,
             form,
-            record,
+            ruleView: record,
             loading,
             stageType,
+            compareSymbol,
         } = this.props;
         const { getFieldDecorator } = form;
         const formItemLayout = {
@@ -135,7 +160,7 @@ export default class RegularEdit extends React.PureComponent {
                             {...formItemLayout}
                             label="规则来源"
                         >
-                            <span>{record.channel}</span>
+                            <span>{this.checkChannel(record.channel)}</span>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
@@ -143,6 +168,14 @@ export default class RegularEdit extends React.PureComponent {
                         >
                             <span>{record.valueType}</span>
                         </Form.Item>
+                        <FormItem
+                            {...formItemLayout}
+                            label="规则配置说明"
+                        >
+                            <Tooltip title={record.indexdescribe}>
+                                <span className="description" style={{ '-webkit-box-orient': 'vertical' }}>{record.indexdescribe}</span>
+                            </Tooltip>
+                        </FormItem>
                         <Form.Item
                             {...formItemLayout}
                             label="判定规则key"
@@ -161,10 +194,10 @@ export default class RegularEdit extends React.PureComponent {
                                     <Select>
                                         {compareSymbol.map(item => (
                                             <Select.Option
-                                                value={item}
-                                                key={item}
+                                                value={item.code}
+                                                key={item.code}
                                             >
-                                                {item}
+                                                {item.name}
                                             </Select.Option>
                                         ))}
                                     </Select>

@@ -3,9 +3,14 @@ import {
     Modal,
     Row,
     Col,
+    Button,
 } from 'antd';
+import { connect } from 'dva';
 import styles from './RegularDetail.scss';
 
+@connect((state) => ({
+    channels: state.regular.channels,
+}))
 export default class RegularDetail extends React.PureComponent {
     state = {
         visible: false,
@@ -22,7 +27,15 @@ export default class RegularDetail extends React.PureComponent {
             visible: true,
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     render() {
         const {
             record,
@@ -43,7 +56,9 @@ export default class RegularDetail extends React.PureComponent {
                     title="详情"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
-                    onOk={this.handleSubmit}
+                    footer={[
+                        <Button key="back" onClick={this.handleCancel}>返回</Button>
+                    ]}
                 >
                     <div>
                         <Row className={styles.row}>
@@ -60,11 +75,15 @@ export default class RegularDetail extends React.PureComponent {
                         </Row>
                         <Row className={styles.row}>
                             <Col span={8} className={styles.title}>规则来源：</Col>
-                            <Col span={16}>{record.channel}</Col>
+                            <Col span={16}>{this.checkChannel(record.channel)}</Col>
                         </Row>
                         <Row className={styles.row}>
                             <Col span={8} className={styles.title}>规则值类型：</Col>
                             <Col span={16}>{record.valueType}</Col>
+                        </Row>
+                        <Row className={styles.row}>
+                            <Col span={8} className={styles.title}>规则配置说明：</Col>
+                            <Col span={16}>{record.indexdescribe}</Col>
                         </Row>
                         <Row className={styles.row}>
                             <Col span={8} className={styles.title}>判定规则key：</Col>

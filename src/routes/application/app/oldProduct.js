@@ -53,6 +53,7 @@ class OldProduct extends React.PureComponent {
                 },
             });
         }).then(() => {
+            // this.setState({ selectedRows: [] });
             message.success('删除成功', DURATION);
             this.query({
                 pageNum,

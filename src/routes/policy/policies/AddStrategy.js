@@ -6,7 +6,6 @@ import {
     Button,
     Input,
     Select,
-    InputNumber,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -30,13 +29,7 @@ class AddStrategy extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
         title: this.props.title === 'add' ? '新增阶段' : '更新阶段',
-        type: Number(this.props.type),
     };
-    onSelect = (value) => {
-        this.setState({
-            type: Number(value),
-        });
-    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -73,6 +66,40 @@ class AddStrategy extends React.PureComponent {
             visible: false,
         });
     };
+    checkNum = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/).test(value)) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+    checkRecord = (rule, value, callback) => {
+        if (value && value.length > 0 && !(/^[0-9]*$/).test(value)) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+    checkType = (num) => {
+        let name = '';
+        switch (Number(num)) {
+        case 1:
+            name = '最坏匹配';
+            break;
+        case 2:
+            name = '权重匹配';
+            break;
+        case 3:
+            name = '最好匹配';
+            break;
+        case 4:
+            name = '预阶段';
+            break;
+        default:
+            break;
+        }
+        return name;
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 6 },
@@ -87,7 +114,6 @@ class AddStrategy extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = form;
-        console.log(this.state.title);
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -121,6 +147,8 @@ class AddStrategy extends React.PureComponent {
                                     initialValue: record.sort,
                                     rules: [
                                         { required: true, message: '请输入阶段排序的序号' },
+                                        { max: 20, message: '最多20位' },
+                                        { validator: this.checkNum, message: '请输入数字' }
                                     ],
                                 })(<Input type="acount" placeholder="请输入阶段排序的序号" />)
                             }
@@ -147,9 +175,17 @@ class AddStrategy extends React.PureComponent {
                                 >
                                     {
                                         getFieldDecorator('type', {
-                                            initialValue: record.type,
+                                            initialValue: record.type !== undefined
+                                                ? record.type : '1',
                                             setFieldsValue: '1',
-                                        })(<Select onSelect={this.onSelect}><Option value="1">最坏匹配</Option><Option value="2">权重匹配</Option></Select>)
+                                        })(
+                                            <Select onSelect={this.onSelect} defaultValue="1">
+                                                <Option value="1">最坏匹配</Option>
+                                                <Option value="2">权重匹配</Option>
+                                                <Option value="3">最好匹配</Option>
+                                                <Option value="4">预阶段</Option>
+                                            </Select>
+                                        )
                                     }
                                 </Form.Item>
                                 :
@@ -161,40 +197,9 @@ class AddStrategy extends React.PureComponent {
                                         getFieldDecorator('type', {
                                             initialValue: record.type,
                                             setFieldsValue: '1',
-                                        })(<span>{Number(record.type) === 1 ? '最坏匹配' : '权重匹配'}</span>)
+                                        })(<span>{this.checkType(record.type)}</span>)
                                     }
                                 </Form.Item>
-                        }
-                        {
-                            Number(this.state.type) === 2 ?
-                                <Form.Item
-                                    {...formItemLayout}
-                                    label="风险阈值"
-                                >
-                                    <div>
-                                        <span>-∝&lt;   拒绝 ≤ </span>
-                                        {
-                                            getFieldDecorator('refuseScore', {
-                                                initialValue: record.refuseScore,
-                                                rules: [
-                                                    { required: true, message: '请输入拒绝分数' },
-                                                ],
-                                            })(<InputNumber width={50} />)
-                                        }
-                                        <span> &lt;   需人审  ≤ </span>
-                                        {
-                                            getFieldDecorator('passScore', {
-                                                initialValue: record.passScore,
-                                                rules: [
-                                                    { required: true, message: '请输入通过分数' },
-                                                ],
-                                            })(<InputNumber width={50} />)
-                                        }
-                                        <span>&lt;   通过  ≤</span>
-                                    </div>
-                                </Form.Item>
-                                :
-                                null
                         }
                         <Form.Item
                             {...formItemLayout}
@@ -202,9 +207,10 @@ class AddStrategy extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('weight', {
-                                    initialValue: record.weight,
+                                    initialValue: record.weight !== undefined ? record.weight / 100 : '',
                                     rules: [
                                         { required: true, message: '请输入阶段权重' },
+                                        { validator: this.checkRecord, message: '请输入数字' }
                                     ],
                                 })(<Input type="acount" placeholder="请输入阶段权重" />)
                             }

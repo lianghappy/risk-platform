@@ -83,7 +83,7 @@ class SamplesModal extends React.PureComponent {
                         </Col>
                         <Col span="12">
                             <span>逾期期数：</span>
-                            <span className={style.result}>{content.overduePeriods}</span>
+                            <span className={style.result}>{content.overduePeriodsStart}&nbsp;-&nbsp;{content.overduePeriodsEnd}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
@@ -93,7 +93,7 @@ class SamplesModal extends React.PureComponent {
                         </Col>
                         <Col span="12">
                             <span>已付期数：</span>
-                            <span className={style.result}>{content.paidPeriods}</span>
+                            <span className={style.result}>{content.paidPeriodsStart}&nbsp;-&nbsp;{content.paidPeriodsEnd}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
@@ -102,58 +102,28 @@ class SamplesModal extends React.PureComponent {
                             <span className={style.result}>{content.orderStatus}</span>
                         </Col>
                         <Col span="12">
-                            <span>审核状态：</span>
-                            <span className={style.result}>{content.channelType}</span>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
-                        <Col span="12">
                             <span>业务流程：</span>
                             <span className={style.result}>{content.businessProcess}</span>
-                        </Col>
-                        <Col span="12">
-                            <span>第一阶段结果：</span>
-                            <span className={style.result}>{content.firstStageResult}</span>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
-                        <Col span="12">
-                            <span>下单时间：</span>
-                            <span className={style.result}>{moment(content.orderTimeStart).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd).format('YYYY-MM-DD')}</span>
-                        </Col>
-                        <Col span="12">
-                            <span>第二阶段结果：</span>
-                            <span className={style.result}>{content.secondStageResult}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>历史最大逾期天数：</span>
-                            <span className={style.result}>{content.historyMaxOverdueDays}</span>
+                            <span className={style.result}>{content.historyMaxOverdueDaysStart}&nbsp;-&nbsp;{content.historyMaxOverdueDaysEnd}</span>
                         </Col>
                         <Col span="12">
-                            <span>第三阶段结果：</span>
-                            <span className={style.result}>{content.thirdStageResult}</span>
+                            <span>下单时间：</span>
+                            <span className={style.result}>{moment(content.orderTimeStart * 1000).format('YYYY-MM-DD')}&nbsp;-&nbsp;{moment(content.orderTimeEnd * 1000).format('YYYY-MM-DD')}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>当前最大逾期天数：</span>
-                            <span className={style.result}>{content.nowMaxOverdueDays}</span>
+                            <span className={style.result}>{content.nowMaxOverdueDaysStart}&nbsp;-&nbsp;{content.nowMaxOverdueDaysEnd}</span>
                         </Col>
-                        <Col span="12">
-                            <span>第四阶段结果：</span>
-                            <span className={style.result}>{content.fourthStageResult}</span>
-                        </Col>
-                    </Row>
-                    <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
                             <span>PLD评分：</span>
                             <span className={style.result}>{content.pldScorelower}&nbsp;-&nbsp;{content.pldScoreUpper}</span>
-                        </Col>
-                        <Col span="12">
-                            <span>第五阶段结果：</span>
-                            <span className={style.result}>{content.fifthStageResult}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
@@ -162,14 +132,14 @@ class SamplesModal extends React.PureComponent {
                             <span className={style.result}>{content.zhiMaScorelower}&nbsp;-&nbsp;{content.zhiMaScoreUpper}</span>
                         </Col>
                         <Col span="12">
-                            <span>机审结果：</span>
-                            <span className={style.result}>{content.machineResult}</span>
+                            <span>PLD结果：</span>
+                            <span className={style.result}>{content.pldResult}</span>
                         </Col>
                     </Row>
                     <Row style={{ marginBottom: '16px' }}>
                         <Col span="12">
-                            <span>PLD结果：</span>
-                            <span className={style.result}>{content.pldResult}</span>
+                            <span>机审结果：</span>
+                            <span className={style.result}>{content.machineResult}</span>
                         </Col>
                         <Col span="12">
                             <span>综合结果：</span>

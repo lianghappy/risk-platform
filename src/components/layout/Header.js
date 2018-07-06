@@ -23,7 +23,6 @@ function Header({ userName, logout, breadcrumbItems }) {
             </Menu.Item>
         </Menu>
     );
-    console.log(breadcrumbItems);
 
     return (
         <section>

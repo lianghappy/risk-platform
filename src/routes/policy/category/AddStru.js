@@ -48,6 +48,7 @@ class AddStruc extends React.PureComponent {
                 new Promise(resolve => {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
+                        // Object.assign(values, { pid: record.pid });
                     }
                     onOk(values, resolve);
                 }).then(() => {
@@ -59,8 +60,17 @@ class AddStruc extends React.PureComponent {
 
     handleShow = () => {
         // this.props.form.validateFields();
-        this.setState({
-            visible: true,
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'structure/getParentCategory',
+                payload: {
+                    resolve,
+                }
+            });
+        }).then(() => {
+            this.setState({
+                visible: true,
+            });
         });
     };
 
@@ -87,7 +97,7 @@ class AddStruc extends React.PureComponent {
         const childrens = [];
         if (this.props.parentlist) {
             this.props.parentlist.forEach((item) => {
-                childrens.push(<Option value={item.id} key={item.id}>{item.name}</Option>);
+                childrens.push(<Option value={item.id} key={item.id}>[{item.level}]{item.name}</Option>);
             });
         }
         return (
@@ -122,6 +132,7 @@ class AddStruc extends React.PureComponent {
                                     initialValue: record.name,
                                     rules: [
                                         { required: true, message: '请输入类别名称' },
+                                        { max: 20, message: '最多输入20位' }
                                     ],
                                 })(<Input type="acount" placeholder="请输入类别名称" />)
                             }
@@ -132,8 +143,8 @@ class AddStruc extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('pid', {
-                                    initialValue: record.pname,
-                                })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}</Select>)
+                                    initialValue: record.pid,
+                                })(<Select style={{ width: 150 }} placeholder="请选择">{childrens}<Option value="">无</Option></Select>)
                             }
                         </Form.Item>
                         <Form.Item

@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { roles } from 'utils/common';
-import { Layout, Input, Form, Select, Button, Table, message, Tooltip, Menu } from 'antd';
+import { Layout, Input, Form, Select, Button, Table, message, Tooltip } from 'antd';
 import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -22,14 +22,19 @@ class Structure extends React.PureComponent {
         pageSize: PropTypes.number.isRequired,
         parentlist: PropTypes.array.isRequired,
     };
-    state = {
-        current: '.$structure',
-    }
     onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+        const {
+            form,
+            loading,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+                sysId,
+            });
         });
     };
     onQuery = (e) => {
@@ -71,14 +76,16 @@ class Structure extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
+        let url = 'structure/add';
         let content = '类别新增';
         if (data.id !== undefined) {
             content = '类别更新成功';
+            url = 'structure/update';
         }
 
         new Promise((resolve) => {
             dispatch({
-                type: 'structure/add',
+                type: url,
                 payload: {
                     data,
                     resolve,
@@ -105,21 +112,38 @@ class Structure extends React.PureComponent {
             loading,
         } = this.props;
         const columns = [
-            { title: '类别名称', dataIndex: 'name', key: 'name' },
-            { title: '类别级别', dataIndex: 'level', key: 'level' },
-            { title: '父级别名称', dataIndex: 'pname', key: 'pname' },
-            { title: '类别描述',
+            {
+                title: '类别名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '类别级别',
+                dataIndex: 'level',
+                key: 'level',
+                width: 100,
+            },
+            {
+                title: '父级别名称',
+                dataIndex: 'pname',
+                key: 'pname',
+                width: 100,
+            },
+            {
+                title: '类别描述',
                 dataIndex: 'describ',
                 key: 'describ',
-                width: '300',
+                width: 100,
                 render: (...rest) => (
                     <Tooltip title={rest[1].describ}>
-                        <span className={style.describ}>
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
                             {rest[1].describ}
                         </span>
                     </Tooltip>
                 ) },
-            { title: '操作',
+            {
+                title: '操作',
                 dataIndex: 'operator',
                 key: 'operator',
                 render: (...rest) => (
@@ -136,22 +160,12 @@ class Structure extends React.PureComponent {
                     </AddStruc>
                         }
                     </div>
-                ) },
+                ),
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>
-                <Menu
-                    onClick={this.handleClick}
-                    selectedKeys={[this.state.current]}
-                    mode="horizontal"
-                >
-                    <Menu.Item key="structure">
-                        类别构建
-                    </Menu.Item>
-                    <Menu.Item key="linkRuler">
-                        <a href="/linkRuler">关联规则</a>
-                    </Menu.Item>
-                </Menu>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="类别名称" >
                         {

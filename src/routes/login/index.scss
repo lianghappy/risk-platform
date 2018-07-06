@@ -14,10 +14,14 @@
     display: flex;
     border-radius: 20px;
     background-color: #fff;
+    justify-content: space-between;
+    padding-right: 30px;
+    align-items: flex-start;
 }
 .imgs{
    height: 100%;
    border-top-left-radius:20px;
+   margin-top: -1px;
 }
 .login {
     width: 230px;

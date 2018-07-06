@@ -4,14 +4,18 @@ import {
     Form,
     Input,
     Select,
+    Tooltip,
 } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 
-const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
+// const compareSymbol = ['<', '>', '=', '<=', '>=', '<>'];
 
 @connect((state) => ({
     loading: state.loading.effects['regular/update'] || state.loading.effects['regular/clone'] || false,
+    channels: state.regular.channels,
+    compareSymbol: state.regular.compareSymbol,
+    ruleView: state.regular.ruleView,
 }))
 @Form.create()
 export default class RegularEdit extends React.PureComponent {
@@ -35,6 +39,16 @@ export default class RegularEdit extends React.PureComponent {
 
     showModelHandler = () => {
         if (this.props.disabled) return;
+        const {
+            dispatch,
+            record,
+        } = this.props;
+        dispatch({
+            type: 'regular/ruleView',
+            payload: {
+                id: record.id,
+            }
+        });
         this.setState({
             visible: true,
         });
@@ -46,7 +60,15 @@ export default class RegularEdit extends React.PureComponent {
             visible: false,
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -61,7 +83,6 @@ export default class RegularEdit extends React.PureComponent {
             stageId,
             ...oldValue
         } = record;
-
         form.validateFields((err, values) => {
             if (!err) {
                 new Promise(resolve => {
@@ -80,9 +101,10 @@ export default class RegularEdit extends React.PureComponent {
         const {
             children,
             form,
-            record,
+            ruleView: record,
             loading,
             stageType,
+            compareSymbol,
         } = this.props;
         const { getFieldDecorator } = form;
         const formItemLayout = {
@@ -135,13 +157,21 @@ export default class RegularEdit extends React.PureComponent {
                             {...formItemLayout}
                             label="规则来源"
                         >
-                            <span>{record.channel}</span>
+                            <span>{this.checkChannel(record.channel)}</span>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
                             label="规则值类型"
                         >
                             <span>{record.valueType}</span>
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="规则配置说明"
+                        >
+                            <Tooltip title={record.indexdescribe}>
+                                <span className="description" style={{ '-webkit-box-orient': 'vertical' }}>{record.indexdescribe}</span>
+                            </Tooltip>
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
@@ -161,10 +191,10 @@ export default class RegularEdit extends React.PureComponent {
                                     <Select>
                                         {compareSymbol.map(item => (
                                             <Select.Option
-                                                value={item}
-                                                key={item}
+                                                value={item.code}
+                                                key={item.code}
                                             >
-                                                {item}
+                                                {item.name}
                                             </Select.Option>
                                         ))}
                                     </Select>
@@ -191,7 +221,9 @@ export default class RegularEdit extends React.PureComponent {
                                 {
                                     getFieldDecorator('score', {
                                         initialValue: record.score,
-                                        rules: [{ required: true, message: '请输入分值' }],
+                                        rules: [
+                                            { required: true, message: '请输入分值' }
+                                        ],
                                     })(<Input type="number" />)
                                 }
                             </Form.Item>
@@ -205,7 +237,9 @@ export default class RegularEdit extends React.PureComponent {
                                 {
                                     getFieldDecorator('weight', {
                                         initialValue: record.weight,
-                                        rules: [{ required: true, message: '请输入权重' }],
+                                        rules: [
+                                            { required: true, message: '请输入权重' }
+                                        ],
                                     })(<Input type="number" />)
                                 }
                             </Form.Item>

@@ -1,3 +1,5 @@
+import { filterPath } from 'utils/path';
+
 export const getHeight = (dom) => {
     return dom.offsetHeight;
 };
@@ -31,7 +33,7 @@ export const textPick = (_key, source, attributes = {}) => {
 
 // 导航选中
 export const menuKeyPick = (location) => {
-    const path = location.pathname.split('/');
+    const path = filterPath(location.pathname).split('/');
     const router = path[1];
     const key = [];
     switch (router) {
@@ -62,6 +64,14 @@ export const menuKeyPick = (location) => {
     case 'orderDetail':
         if (path[2] === '0') key.push('order');
         else key.push('order');
+        break;
+    case 'addRole':
+        if (path[2] === '0') key.push('role');
+        else key.push('role');
+        break;
+    case 'detailRole':
+        if (path[2] === '0') key.push('role');
+        else key.push('role');
         break;
     default:
         key.push(router);
