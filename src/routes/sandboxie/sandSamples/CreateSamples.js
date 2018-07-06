@@ -241,7 +241,7 @@ class CreateSamples extends React.PureComponent {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <FormItem label="历史最大逾期天数" {...formItemLayout}>
+                            <FormItem label="历史最大逾期天数(天)" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
                                         getFieldDecorator('historyMaxOverdueDaysStart', {
@@ -264,7 +264,7 @@ class CreateSamples extends React.PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem label="逾期期数" {...formItemLayout}>
+                            <FormItem label="逾期期数(期)" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
                                         getFieldDecorator('overduePeriodsStart', {
@@ -289,7 +289,7 @@ class CreateSamples extends React.PureComponent {
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <FormItem label="当前最大逾期天数" {...formItemLayout}>
+                            <FormItem label="当前最大逾期天数(天)" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
                                         getFieldDecorator('nowMaxOverdueDaysStart', {
@@ -312,7 +312,7 @@ class CreateSamples extends React.PureComponent {
                             </FormItem>
                         </Col>
                         <Col span={12}>
-                            <FormItem label="已付期数" {...formItemLayout}>
+                            <FormItem label="已付期数(期)" {...formItemLayout}>
                                 <InputGroup compact>
                                     {
                                         getFieldDecorator('paidPeriodsStart', {
