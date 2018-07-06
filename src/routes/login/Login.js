@@ -16,7 +16,7 @@ class Login extends React.PureComponent {
 
       form.validateFields((err, { userName, passWord }) => {
           if (!err) {
-              login({ account: userName.replace(/(^\s*)|(\s*$)/g, ''), password: MD5(passWord), sysId: 'risk' });
+              login({ account: userName.trim(), password: MD5(passWord), sysId: 'risk' });
           }
       });
   };
