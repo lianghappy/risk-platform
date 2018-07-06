@@ -70,7 +70,7 @@ const pickAuth = (menus) => {
 export const getUserInfo = (state) => state.session.user;
 export const getUserName = (state) => {
     if (state.session.user) {
-        return state.session.user.account;
+        return state.session.user.userName;
     }
     return '';
 };
