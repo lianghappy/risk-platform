@@ -9,10 +9,31 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
 
 export default class Line extends React.PureComponent {
+    state={
+        datas: this.props.datas || [],
+    }
     componentDidMount() {
         const container = this.line;
+        const myChart = echarts.init(container);
+        const Xdata = this.state.datas.length > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
+        const Ydata = this.state.datas.length > 0 ? this.state.datas.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
-        echarts.init(container).setOption({
+        this.setOption(myChart, Xdata, Ydata);
+        window.onresize = myChart.resize;
+    }
+    componentWillReceiveProps(nextProps) {
+        const container = this.line;
+        this.setState({
+            datas: nextProps.datas,
+        });
+        const myChart = echarts.init(container);
+        const Xdata = nextProps.datas.length > 0 ? nextProps.datas[0].dataByOneHour.map(item => item.sleuthTime) : [];
+        const Ydata = nextProps.datas.length > 0 ? nextProps.datas[0].dataByOneHour.map(item => item.value) : [];
+        // 基于准备好的dom，初始化 echarts 实例并绘制图表。
+        this.setOption(myChart, Xdata, Ydata);
+    }
+    setOption(myChart, Xdata, Ydata) {
+        myChart.setOption({
             title: {
                 text: '单位：人/次',
                 textStyle: {
@@ -36,7 +57,7 @@ export default class Line extends React.PureComponent {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                data: Xdata,
             },
             yAxis: {
                 type: 'value',
@@ -45,7 +66,7 @@ export default class Line extends React.PureComponent {
                 name: '邮件营销',
                 type: 'line',
                 smooth: true,
-                data: [2, 3, 4, 5, 6, 7, 8]
+                data: Ydata
             }]
         });
     }

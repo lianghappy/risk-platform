@@ -14,6 +14,7 @@ export default {
         sleuthTarget: [],
         app: [],
         product: [],
+        getDiskData: {},
     },
     effects: {
         * getSelect({ payload }, { call, put }) {

@@ -11,12 +11,15 @@ const mapStateToProps = (state) => {
         dashBoard: state.disk.dashBoard,
         loading: state.loading.models.disk,
         app: state.disk.app,
+        getDiskData: state.disk.getDiskData,
     };
 };
 @connect(mapStateToProps)
 export default class Disk extends React.PureComponent {
     state = {
         dashBoardId: '',
+        index: 0,
+        getDiskData: this.props.getDiskData || [],
     }
     selectChange = (value) => {
         this.props.dispatch({
@@ -28,6 +31,7 @@ export default class Disk extends React.PureComponent {
         });
         this.setState({
             dashBoardId: value,
+            getDiskData: this.props.getDiskData,
         });
     }
     modalOk = (data, callback) => {
@@ -79,6 +83,11 @@ export default class Disk extends React.PureComponent {
             this.query({});
         });
     }
+    changeTime = (i) => {
+        this.setState({
+            index: i,
+        });
+    }
     query(payload) {
         const userId = JSON.parse(sessionStorage.userInfo).user.id;
         Object.assign(payload, { userId });
@@ -91,16 +100,16 @@ export default class Disk extends React.PureComponent {
         const times = [
             {
                 time: '1小时',
-                key: '1h'
+                key: '1m'
             }, {
                 time: '3小时',
-                key: '1h',
+                key: '1m',
             }, {
                 time: '6小时',
-                key: '1h',
+                key: '1m',
             }, {
                 time: '12小时',
-                key: '1h',
+                key: '1m',
             }, {
                 time: '1天',
                 key: '1h',
@@ -109,15 +118,18 @@ export default class Disk extends React.PureComponent {
                 key: '1h',
             }, {
                 time: '7天',
-                key: '1h',
+                key: '6h',
             }, {
                 time: '14天',
-                key: '1h',
+                key: '6h',
             }
         ];
         const {
             dashBoard,
+            getDiskData,
         } = this.props;
+        console.log(getDiskData);
+
         return (
             <Layout className="layoutMar">
                 <div className={styles.containers}>
@@ -157,7 +169,7 @@ export default class Disk extends React.PureComponent {
                             {
                                 times.map((item, index) => {
                                     return (
-                                        <Button type="default" size="small" className={styles.addTimed} key={index}>{item.time}</Button>
+                                        <Button onClick={() => this.changeTime(index)} type={index === this.state.index ? 'primary' : 'default'} size="small" className={styles.addTimed} key={index}>{item.time}</Button>
                                     );
                                 })
                             }
@@ -173,7 +185,7 @@ export default class Disk extends React.PureComponent {
                     </div>
                     <div className={styles.disk}>
                         <div className={styles.bigDisk}>
-                            <Line />
+                            <Line datas={this.state.getDiskData} />
                         </div>
                     </div>
                 </div>
