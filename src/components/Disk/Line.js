@@ -13,23 +13,39 @@ export default class Line extends React.PureComponent {
         const container = this.line;
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         echarts.init(container).setOption({
-            title: { text: 'Line Chart' },
-            tooltip: {},
-            toolbox: {
-                feature: {
-                    dataView: {},
-                    saveAsImage: {
-                        pixelRatio: 2
-                    },
-                    restore: {}
-                }
+            title: {
+                text: '单位：人/次',
+                textStyle: {
+                    fontSize: '13px',
+                    color: 'rgba(0, 0, 0, 0.65)',
+                    lineHeight: '28px',
+                },
             },
-            xAxis: {},
-            yAxis: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true,
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['邮件营销'],
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+            },
+            yAxis: {
+                type: 'value',
+            },
             series: [{
+                name: '邮件营销',
                 type: 'line',
                 smooth: true,
-                data: [[12, 5], [24, 20], [36, 36], [48, 10], [60, 10], [72, 20]]
+                data: [2, 3, 4, 5, 6, 7, 8]
             }]
         });
     }
