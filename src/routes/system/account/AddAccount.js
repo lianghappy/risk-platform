@@ -63,7 +63,6 @@ class AddAccount extends React.PureComponent {
                             Object.assign(values, { state: false });
                         }
                         Object.assign(values, { userId });
-                        Object.assign(values, { account: values.acount.replace(/(^s*)|(s*$)/g, '') });
                         Object.assign(values, { userName: values.name, realName: values.name });
                         Object.assign(values, { sysId: SYSID });
                         Object.assign(values, { type });
@@ -177,7 +176,7 @@ class AddAccount extends React.PureComponent {
                             label="用户账号"
                         >
                             {
-                                getFieldDecorator('acount', {
+                                getFieldDecorator('account', {
                                     initialValue: record.account,
                                     rules: [
                                         { required: true, message: '请输入用户账号' },
