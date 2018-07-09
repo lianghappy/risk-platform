@@ -98,7 +98,7 @@ export default class GrayPolicy extends React.PureComponent {
    query(payload) {
        Object.assign(payload, { sysId: 'risk' });
        this.props.dispatch({
-           type: 'thirdParty/getThirdParty',
+           type: 'grayPolicy/getGrayPolicyList',
            payload,
        });
    }

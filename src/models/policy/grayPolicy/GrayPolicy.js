@@ -63,7 +63,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (filterPath(pathname) === '/thirdPartyManage') {
+                if (filterPath(pathname) === '/grayPolicy') {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '灰度策略' }],
@@ -74,6 +74,10 @@ export default {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                         },
+                    });
+                    dispatch({
+                        type: 'common/setSide',
+                        flag: false,
                     });
                     dispatch({
                         type: 'getChannel',
