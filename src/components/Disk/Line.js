@@ -34,6 +34,18 @@ export default class Line extends React.PureComponent {
     }
     setOption(myChart, Xdata, Ydata) {
         myChart.setOption({
+            noDataLoadingOption:
+            {
+                text: '暂无数据',
+                effect: 'bubble',
+                effectOption:
+                {
+                    effect:
+                    {
+                        n: 0
+                    }
+                }
+            },
             title: {
                 text: '单位：人/次',
                 textStyle: {
