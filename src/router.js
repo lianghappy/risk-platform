@@ -323,6 +323,11 @@ function RouterConfig({ history, app }) {
             import('models/policy/grayPolicy/GrayPolicy')
         ]
     });
+    // 数据统计
+    const Statistical = dynamic({
+        app,
+        component: () => import('routes/policy/report/Statistical')
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -373,6 +378,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
                     <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />
                     <PrivateRoute path={setPath('/grayPolicy')} exact component={grayPolicy} />
+                    <PrivateRoute path={setPath('/statistical')} exact component={Statistical} />
                 </Main>
             </Switch>
         </Router>
