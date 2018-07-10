@@ -4,7 +4,7 @@
     "start": "roadhog dev",
     "build": "NODE_ENV=production roadhog build",
     "sandbox": "NODE_ENV=production JIMI_ENV=sandbox PATHS=risk roadhog build",
-    "deploy": "JIMI_ENV=prod roadhog build",
+    "deploy": "NODE_ENV=production JIMI_ENV=prod roadhog build",
     "server": "node ./server.js",
     "lint": "eslint --ext .js src test",
     "fix": "eslint src --fix",
