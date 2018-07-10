@@ -7,6 +7,7 @@ const PASSWORD = {
     prod: 'XwxQ7i4T65BVaPqeX2Bc0XxSMHYGWuP6',
     sandbox: 'ZDqKURwRpSj070WjujeSaZfJsnh0ETk7',
     test: 'sY0KVp5jLtYDtpFquh29Nuc0lAJOQOsF',
+    test2: 'sY0KVp5jLtYDtpFquh29Nuc0lAJOQOsF',
     dev: 'YpVlYlPHOzDWSBKoEoDPoQirHvBc4rnr',
 }[JIMI_ENV];
 // rbac接口
