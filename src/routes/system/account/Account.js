@@ -192,7 +192,7 @@ class DecisionIndex extends React.PureComponent {
                render: (text, record) => (
                    <div>
                        {
-                           roles('R_B_system_user_state') ?
+                           roles('R_system_acc_state') ?
                                <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} checked={record.state === 'true'} />
                                :
                                <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled checked={record.state === 'true'} />
@@ -204,16 +204,19 @@ class DecisionIndex extends React.PureComponent {
                key: 'operator',
                render: (...rest) => (
                    <div>
-                       <AddAccount
-                           visible={false}
-                           type="edit"
-                           onOk={this.modalOk}
-                           record={rest[1]}
-                       >
-                           <span className="jm-operate">修改</span>
-                       </AddAccount>
                        {
-                           roles('R_B_system_user_del') &&
+                           roles('R_system_acc_up') &&
+                           <AddAccount
+                               visible={false}
+                               type="edit"
+                               onOk={this.modalOk}
+                               record={rest[1]}
+                           >
+                               <span className="jm-operate">修改</span>
+                           </AddAccount>
+                       }
+                       {
+                           roles('R_system_acc_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="您确定要删除该账号吗？"

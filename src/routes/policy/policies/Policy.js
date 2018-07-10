@@ -325,7 +325,7 @@ class Policy extends React.PureComponent {
                                             roles('R_B_SB_sandbox_edit') &&
                                         <Menu.Item>
                                             {
-                                                roles('R_B_PLY_policies_edit') && Number(rest[1].isEnable) === 0 &&
+                                                roles('R_policy_ply_edit') && Number(rest[1].isEnable) === 0 &&
                                     <AddPolicy
                                         type="edit"
                                         record={rest[1]}
@@ -381,18 +381,18 @@ class Policy extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_PLY_policies_view') &&
+                            roles('R_policy_ply_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_PLY_policies_reset') &&
+                            roles('R_policy_ply_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('R_B_PLY_policies_add') &&
+                        roles('R_policy_ply_add') &&
                     <AddPolicy
                         type="add"
                         record={{}}
@@ -402,7 +402,7 @@ class Policy extends React.PureComponent {
                     </AddPolicy>
                     }
                     {
-                        roles('R_B_PLY_policies_clone') &&
+                        roles('R_policy_ply_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}

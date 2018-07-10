@@ -348,7 +348,7 @@ class LinkRuler extends React.PureComponent {
                         onConfirm={() => this.onDelete(rest[1].id)}
                     >
                         {
-                            roles('R_B_PLY_catg_linkrl_del') &&
+                            roles('R_policy_rule_link_del') &&
                         <Button disabled={categoryId === '0'} icon="delete" />
                         }
                     </Popconfirm>
@@ -404,18 +404,18 @@ class LinkRuler extends React.PureComponent {
                             </FormItem>
                             <FormItem>
                                 {
-                                    roles('R_B_PLY_catg_linkrl_view') &&
+                                    roles('R_policy_rule_link_qry') &&
                                 <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                                 }
                                 {
-                                    roles('R_B_PLY_catg_linkrl_reset') &&
+                                    roles('R_policy_rule_link_rst') &&
                                 <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                                 }
                             </FormItem>
                         </Form>
                         <div>
                             {
-                                this.state.categoryId && roles('R_B_PLY_catg_linkrl_add') ?
+                                this.state.categoryId && roles('R_policy_rule_link_add') ?
                                     <RegularModal
                                         onOk={this.modalOk}
                                         categoryId={this.state.selectedKeys}
@@ -431,7 +431,7 @@ class LinkRuler extends React.PureComponent {
                                     </Button>
                             }
                             {
-                                roles('R_B_PLY_catg_linkrl_listdel') &&
+                                roles('R_policy_rule_link_dels') &&
                                 <Popconfirm
                                     placement="topRight"
                                     title="您确定要批量删除吗？"

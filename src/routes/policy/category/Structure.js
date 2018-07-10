@@ -149,7 +149,7 @@ class Structure extends React.PureComponent {
                 render: (...rest) => (
                     <div>
                         {
-                            roles('R_B_PLY_catg_str_edit') &&
+                            roles('R_policy_rule_stru_edit') &&
                     <AddStruc
                         type="edit"
                         record={rest[1]}
@@ -177,17 +177,17 @@ class Structure extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_PLY_catg_str_view') &&
+                            roles('R_policy_rule_stru_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_PLY_catg_str_reset') &&
+                            roles('R_policy_rule_stru_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 {
-                    roles('R_B_PLY_catg_str_add') &&
+                    roles('R_policy_rule_stru_add') &&
                 <AddStruc
                     visible={false}
                     type="add"

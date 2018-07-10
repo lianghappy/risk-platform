@@ -234,7 +234,7 @@ class Policy extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            roles('R_B_SB_sand_st_edit') && Number(status) === 0 &&
+                            roles('R_exp_sanb_stg_edit') && Number(status) === 0 &&
                         <AddStrategy
                             title="edit"
                             record={rest[1]}
@@ -246,7 +246,7 @@ class Policy extends React.PureComponent {
                         }
                         <span role="button" tabIndex="-1" onClick={() => this.stage(rest[1].id, rest[1])} className={style.stage}>规则管理</span>
                         {
-                            roles('R_B_SB_sand_st_del') && Number(status) === 0 &&
+                            roles('R_exp_sanb_stg_del') && Number(status) === 0 &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -269,18 +269,18 @@ class Policy extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_SB_sand_st_view') &&
+                            roles('R_exp_sanb_stg_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_SB_sand_st_reset') &&
+                            roles('R_exp_sanb_stg_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('R_B_SB_sand_st_add') && Number(status) === 0 &&
+                        roles('R_exp_sanb_stg_add') && Number(status) === 0 &&
                     <AddStrategy
                         title="add"
                         record={{}}
