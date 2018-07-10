@@ -150,6 +150,10 @@ export default {
                             { name: '规则管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'query',
                         payload: {
                             stageId: id,

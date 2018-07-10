@@ -57,6 +57,10 @@ export default {
                         payload: [{ name: '规则库管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getRuleList',
                         payload: {
                             sysId: SYSID,
