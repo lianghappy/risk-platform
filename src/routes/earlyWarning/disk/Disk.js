@@ -184,9 +184,22 @@ export default class Disk extends React.PureComponent {
                         </div>
                     </div>
                     <div className={styles.disk}>
-                        <div className={styles.bigDisk}>
-                            <Line datas={this.state.getDiskData} />
-                        </div>
+                        {
+                            this.state.getDiskData && this.state.getDiskData.map((item, index) => {
+                                if (index === 0) {
+                                    return (
+                                        <div className={styles.bigDisk}>
+                                            <Line datas={item} />
+                                        </div>
+                                    );
+                                }
+                                return (
+                                    <div className={styles.smallDisk} key={index}>
+                                        <Line datas={item} />
+                                    </div>
+                                );
+                            })
+                        }
                     </div>
                 </div>
             </Layout>
