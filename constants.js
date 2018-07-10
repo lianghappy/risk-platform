@@ -1,5 +1,5 @@
 const PORT = process.env.PORT || 8000;
-const JIMI_ENV = process.env.JIMI_ENV || 'dev';
+const JIMI_ENV = process.env.JIMI_ENV || 'test2';
 const VERSION = '1.0';
 const PATHS = process.env.PATHS || '';
 // 秘钥
@@ -13,6 +13,7 @@ const PASSWORD = {
 const API_RBAC = {
     dev: 'http://rbac-api.dev.jimistore.com',
     test: 'http://rbac-api.test.jimistore.com',
+    test2: 'http://rbac-api.test2.jimistore.com',
     prod: 'https://rbac-api.jimistore.com',
     sandbox: 'https://114.55.95.151:23061',
 }[JIMI_ENV];
@@ -20,6 +21,7 @@ const API_RBAC = {
 const API = {
     dev: 'http://platform-risk.dev.jimistore.com',
     test: 'http://platform-risk.test.jimistore.com',
+    test2: 'http://platform-risk.test2.jimistore.com',
     sandbox: 'https://platform-risk-sandbox.jimistore.com',
     prod: 'https://platform-risk.jimistore.com',
 }[JIMI_ENV];
@@ -27,6 +29,7 @@ const API = {
 const API_COMMON = {
     dev: 'http://api.test.jimistore.com:4999',
     test: 'http://api.test.jimistore.com:4999',
+    test2: 'http://api.test2.jimistore.com:4999',
     sandbox: 'https://testcommon.jimistore.com',
     prod: 'https://common.jimistore.com',
 }[JIMI_ENV];
@@ -34,6 +37,7 @@ const API_COMMON = {
 const API_USER = {
     dev: 'http://user.dev.jimistore.com',
     test: 'http://user.test.jimistore.com',
+    test2: 'http://user.test2.jimistore.com',
     sandbox: 'https://testcommon.jimistore.com',
     prod: 'https://user-api.jimistore.com',
 }[JIMI_ENV];
