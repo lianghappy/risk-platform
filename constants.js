@@ -20,8 +20,8 @@ const API_RBAC = {
 const API = {
     dev: 'http://platform-risk.dev.jimistore.com',
     test: 'http://platform-risk.test.jimistore.com',
-    sandbox: 'https://testmsp-api.jimistore.com',
-    prod: 'https://msp-api.jimistore.com',
+    sandbox: 'https://platform-risk-sandbox.jimistore.com',
+    prod: 'https://platform-risk.jimistore.com',
 }[JIMI_ENV];
 // 公用
 const API_COMMON = {
