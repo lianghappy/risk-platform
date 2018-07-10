@@ -130,6 +130,8 @@ class SandSamples extends React.PureComponent {
         this.props.history.push(setPath('/sandSamples/create'));
     }
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.companyId;
+        Object.assign(payload, { companyId });
         Object.assign(payload, { type: 1 });
         this.props.dispatch({
             type: 'sandSamples/getSandSamplesList',

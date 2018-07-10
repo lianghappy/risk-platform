@@ -84,6 +84,8 @@ class HistoryRecord extends React.PureComponent {
         });
     };
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.companyId;
+        Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'rule/getRuleList',
             payload,

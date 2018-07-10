@@ -187,6 +187,20 @@ export default class AddRule extends React.PureComponent {
                         <span className={styles.headers}>2、设置报警规则</span>
                     </Form.Item>
                     <Form.Item
+                        label="规则名称"
+                        {...formItemLayout}
+                    >
+                        {
+                            getFieldDecorator('sleuthConfigName', {
+                                rules: [
+                                    { required: true, message: '请输入报警规则名称' }
+                                ]
+                            })(
+                                <Input placeholder="请输入报警规则名称" />
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item
                         label="规则描述"
                         {...formItemLayout}
                     >
