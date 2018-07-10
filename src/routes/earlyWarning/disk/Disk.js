@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Select, Button, message } from 'antd';
+import { Layout, Form, Select, Button, message, DatePicker } from 'antd';
 import { connect } from 'dva';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
@@ -8,6 +8,7 @@ import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
 import styles from './index.scss';
 
+const { RangePicker } = DatePicker;
 const times = [
     {
         time: '1小时',
@@ -187,6 +188,13 @@ export default class Disk extends React.PureComponent {
                                     );
                                 })
                             }
+                            <RangePicker
+                                showTime={{ format: 'HH:mm' }}
+                                format="YYYY-MM-DD HH:mm"
+                                placeholder={['开始时间', '结束时间']}
+                                onChange={this.onChange}
+                                onOk={this.onOk}
+                            />
                         </div>
                         <div className={styles.addCharts}>
                             <AddTable

@@ -7,6 +7,7 @@ const appId = {
     prod: 'risk-manager',
     sandbox: 'risk-manager',
     test: 'risk-manager',
+    test2: 'risk-manager',
     dev: 'risk-manager',
 }[ENV];
 
