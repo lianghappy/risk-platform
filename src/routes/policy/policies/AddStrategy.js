@@ -217,7 +217,7 @@ class AddStrategy extends React.PureComponent {
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
-                            label="策略描述"
+                            label="阶段描述"
                         >
                             {
                                 getFieldDecorator('describ', {
