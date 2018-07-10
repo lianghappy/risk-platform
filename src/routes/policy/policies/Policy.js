@@ -198,7 +198,7 @@ class Policy extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(setPath(`strategy/${base64.encode(value.id)}`));
+        this.props.history.push(setPath(`/strategy/${base64.encode(value.id)}`));
     }
     showDeleteConfirm = (ids) => {
         confirm({
