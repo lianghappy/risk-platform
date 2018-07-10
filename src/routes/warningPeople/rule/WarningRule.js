@@ -22,11 +22,13 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class WarningRule extends React.PureComponent {
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        this.props.form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onDelete = (sleuthConfigId) => {
@@ -195,18 +197,30 @@ export default class WarningRule extends React.PureComponent {
             sleuthTargets,
         } = this.props;
         const columns = [
-            { title: '策略名称', dataIndex: 'strategyName', key: 'strategyName' },
-            { title: '状态',
+            {
+                title: '策略名称',
+                dataIndex: 'strategyName',
+                key: 'strategyName',
+                width: 100,
+            },
+            {
+                title: '状态',
                 dataIndex: 'state',
                 filters: [
                     { text: '禁用', value: '0' },
                     { text: '启用', value: '1' },
                 ],
-                render: (text, record) => (<span>{Number(record.state) === 0 && '禁用'}{Number(record.state) === 1 && '启用'}</span>) },
-            { title: '监控指标名称',
+                render: (text, record) => (<span>{Number(record.state) === 0 && '禁用'}{Number(record.state) === 1 && '启用'}</span>),
+                width: 100,
+            },
+            {
+                title: '监控指标名称',
                 dataIndex: 'sleuthTargetName',
-                key: 'sleuthTargetName' },
-            { title: '规则描述',
+                key: 'sleuthTargetName',
+                width: 100,
+            },
+            {
+                title: '规则描述',
                 dataIndex: 'code',
                 key: 'code',
                 render: (text, record) => (
@@ -218,11 +232,29 @@ export default class WarningRule extends React.PureComponent {
                         {record.judgeValue}&nbsp;<br />
                     连续{record.alarmCount}次 则报警
                     </span>
-                ) },
-            { title: '通知对象', dataIndex: 'sleuthTeamNames', key: 'sleuthTeamNames' },
-            { title: '添加人', dataIndex: 'addName', key: 'addName' },
-            { title: '添加时间', dataIndex: 'addTime', key: 'addTime' },
-            { title: '操作',
+                ),
+                width: 100,
+            },
+            {
+                title: '通知对象',
+                dataIndex: 'sleuthTeamNames',
+                key: 'sleuthTeamNames',
+                width: 100,
+            },
+            {
+                title: '添加人',
+                dataIndex: 'addName',
+                key: 'addName',
+                width: 100,
+            },
+            {
+                title: '添加时间',
+                dataIndex: 'addTime',
+                key: 'addTime',
+                width: 100,
+            },
+            {
+                title: '操作',
                 key: 'operator',
                 render: (text, record) => (
                     <div>
@@ -242,7 +274,9 @@ export default class WarningRule extends React.PureComponent {
                             <a role="button" tabIndex="-1" className="jm-del">删除</a>
                         </Popconfirm>
                     </div>
-                ) }
+                ),
+                width: 100,
+            }
         ];
         return (
             <Layout className={style.container}>
@@ -272,6 +306,17 @@ export default class WarningRule extends React.PureComponent {
                             </Select>
                         )}
                     </FormItem>
+                    <Form.Item label="状态">
+                        {
+                            getFieldDecorator('state')(
+                                <Select style={{ width: '157px' }}>
+                                    <Select.Option value="0">禁用</Select.Option>
+                                    <Select.Option value="1">启用</Select.Option>
+                                    <Select.Option value="">所有</Select.Option>
+                                </Select>
+                            )
+                        }
+                    </Form.Item>
                     <FormItem>
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>

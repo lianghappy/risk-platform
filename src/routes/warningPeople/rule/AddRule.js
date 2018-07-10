@@ -196,7 +196,7 @@ export default class AddRule extends React.PureComponent {
                                     { required: true, message: '请输入报警规则名称' }
                                 ]
                             })(
-                                <Input placeholder="请输入报警规则名称" />
+                                <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />
                             )
                         }
                     </Form.Item>
