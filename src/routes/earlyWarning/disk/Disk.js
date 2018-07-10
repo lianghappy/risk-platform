@@ -1,7 +1,9 @@
 import React from 'react';
 import { Layout, Form, Select, Button, message } from 'antd';
 import { connect } from 'dva';
+import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
+import Lines from './Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
 import styles from './index.scss';
@@ -189,16 +191,23 @@ export default class Disk extends React.PureComponent {
                                 if (index === 0) {
                                     return (
                                         <div className={styles.bigDisk}>
-                                            <Line datas={item} />
+                                            <Line datas={item.dataByOneHour} />
                                         </div>
                                     );
                                 }
                                 return (
                                     <div className={styles.smallDisk} key={index}>
-                                        <Line datas={item} />
+                                        <Lines datas={item.dataByOneHour} />
                                     </div>
                                 );
                             })
+                        }
+                        {
+                            this.props.getDiskData.length <= 0 &&
+                            <div className={styles.noMessage}>
+                                <img src={noMessage} alt="暂无数据" />
+                                <h1>暂无数据</h1>
+                            </div>
                         }
                     </div>
                 </div>

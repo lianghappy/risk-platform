@@ -85,11 +85,7 @@ export default {
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
-                if (filterPath(pathname) === '/gray') {
-                    dispatch({
-                        type: 'common/setBreadcrumb',
-                        payload: [{ name: '黑名单' }],
-                    });
+                if (filterPath(pathname) === '/black') {
                     dispatch({
                         type: 'getBlackList',
                         payload: {

@@ -23,6 +23,14 @@
     justify-content: space-between;
 
 }
+.noMessage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 95px;
+    width: 100%;
+    flex-direction: column;
+}
 .bigDisk{
     height: 426px;
     width: 100%;

@@ -156,17 +156,19 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/sandbox/regular'),
         ],
     });
-    // 黑名单
+    // 黑白名单
     const Black = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Black'),
+        component: () => import('routes/blackAndWhite/Index'),
         models: () => [
             import('models/blackAndWhite/Black'),
             import('models/blackAndWhite/common'),
+            import('models/blackAndWhite/White'),
+            import('models/blackAndWhite/Gray.js'),
         ],
     });
     // 白名单
-    const White = dynamic({
+    /*  const White = dynamic({
         app,
         component: () => import('routes/blackAndWhite/White'),
         models: () => [
@@ -182,7 +184,7 @@ function RouterConfig({ history, app }) {
             import('models/blackAndWhite/Gray.js'),
             import('models/blackAndWhite/common'),
         ],
-    });
+    }); */
     // 策略沙箱
     const sandboxie = dynamic({
         app,
@@ -337,8 +339,6 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/regulars/:id/:strageId')} component={Regulars} />
                     <PrivateRoute path={setPath('/permission')} exact component={Permission} />
                     <PrivateRoute path={setPath('/black')} exact component={Black} />
-                    <PrivateRoute path={setPath('/white')} exact component={White} />
-                    <PrivateRoute path={setPath('/gray')} exact component={Gray} />
                     <PrivateRoute path={setPath('/sandboxie')} exact component={sandboxie} />
                     <PrivateRoute path={setPath('/experiment/:id')} exact component={Experiment} />
                     <PrivateRoute path={setPath('/strategies/:id')} exact component={Strategies} />

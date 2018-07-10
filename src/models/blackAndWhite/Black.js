@@ -88,7 +88,7 @@ export default {
                 if (filterPath(pathname) === '/black') {
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: [{ name: '黑名单' }],
+                        payload: [{ name: '黑白名单' }],
                     });
                     dispatch({
                         type: 'getBlackList',

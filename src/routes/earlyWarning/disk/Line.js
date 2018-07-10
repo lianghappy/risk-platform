@@ -7,18 +7,27 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
+import { connect } from 'dva';
 
-export default class Line extends React.PureComponent {
+const mapStateToProps = (state) => {
+    return {
+        getDiskData: state.disk.getDiskData,
+    };
+};
+@connect(mapStateToProps)
+export default class Lines extends React.PureComponent {
     state={
         datas: this.props.datas || [],
     }
     componentDidMount() {
+        console.log(this.props.getDiskData);
+
         console.log(this.props.datas);
 
         const container = this.line;
         const myChart = echarts.init(container);
-        const Xdata = this.state.datas.lenght > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
-        const Ydata = this.state.datas.length > 0 ? this.state.datas.map(item => item.value) : [];
+        const Xdata = this.state.datas.length > 0 ? this.state.datas.dataByOneHour.map(item => item.sleuthTime) : [];
+        const Ydata = this.state.datas.length > 0 ? this.state.datas.dataByOneHour.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         this.setOption(myChart, Xdata, Ydata);
         window.onresize = myChart.resize;
@@ -31,8 +40,8 @@ export default class Line extends React.PureComponent {
         console.log(nextProps.datas);
 
         const myChart = echarts.init(container);
-        const Xdata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.sleuthTime) : [];
-        const Ydata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.value) : [];
+        const Xdata = nextProps.datas.length > 0 ? nextProps.datas.dataByOneHour.map(item => item.sleuthTime) : [];
+        const Ydata = nextProps.datas.length > 0 ? nextProps.datas.dataByOneHour.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         this.setOption(myChart, Xdata, Ydata);
     }

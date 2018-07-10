@@ -257,17 +257,9 @@ export const authFirst = [
             key: 'permission',
             router: '/permission',
         }, {
-            name: '黑名单',
+            name: '黑白名单',
             key: 'black',
             router: '/black',
-        }, {
-            name: '白名单',
-            key: 'white',
-            router: '/white',
-        }, {
-            name: '灰名单',
-            key: 'gray',
-            router: '/gray',
         }],
     }, {
         name: '应用中心',
