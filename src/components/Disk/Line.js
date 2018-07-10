@@ -31,25 +31,14 @@ export default class Line extends React.PureComponent {
         console.log(nextProps.datas);
 
         const myChart = echarts.init(container);
-        const Xdata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.sleuthTime) : [];
-        const Ydata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.value) : [];
+        const Xdata = nextProps.datas && nextProps.datas.length > 0 ? nextProps.datas.map(item => item.sleuthTime) : [];
+        const Ydata = nextProps.datas && nextProps.datas.length > 0 ? nextProps.datas.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         this.setOption(myChart, Xdata, Ydata);
+        window.onresize = myChart.resize;
     }
     setOption(myChart, Xdata, Ydata) {
         myChart.setOption({
-            noDataLoadingOption:
-            {
-                text: '暂无数据',
-                effect: 'bubble',
-                effectOption:
-                {
-                    effect:
-                    {
-                        n: 0
-                    }
-                }
-            },
             title: {
                 text: '单位：人/次',
                 textStyle: {
@@ -88,7 +77,12 @@ export default class Line extends React.PureComponent {
     }
     render() {
         return (
-            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}></div>
+            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}>
+                {/*               {
+                    this.state.datas.length === 0 &&
+                    <span>暂无数据</span>
+                } */}
+            </div>
         );
     }
 }

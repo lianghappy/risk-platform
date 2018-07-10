@@ -188,16 +188,33 @@ export default class Disk extends React.PureComponent {
                     <div className={styles.disk}>
                         {
                             this.state.getDiskData && this.state.getDiskData.map((item, index) => {
+                                let hourData = [];
+                                switch ('1h') {
+                                case '1m':
+                                    hourData = item.dataByMinute;
+                                    break;
+                                case '1h':
+                                    hourData = item.dataByOneHour;
+                                    break;
+                                case '6h':
+                                    hourData = item.dataBySixHour;
+                                    break;
+                                case '1d':
+                                    hourData = item.dataByDay;
+                                    break;
+                                default:
+                                    break;
+                                }
                                 if (index === 0) {
                                     return (
                                         <div className={styles.bigDisk}>
-                                            <Line datas={item.dataByOneHour} />
+                                            <Line datas={hourData} />
                                         </div>
                                     );
                                 }
                                 return (
                                     <div className={styles.smallDisk} key={index}>
-                                        <Lines datas={item.dataByOneHour} />
+                                        <Lines datas={hourData} />
                                     </div>
                                 );
                             })
