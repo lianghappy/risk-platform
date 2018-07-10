@@ -50,7 +50,8 @@ export default function upload(params) {
     // 回收商品：recycleProduct
     // 每日签到，图文配置：leaseProduct
     // 其他上传图片：manual
-    const url = `http://api.test.jimistore.com:4999/api/fileUpload/accessKey/${params.type}`;
+    /* eslint-disable no-undef */
+    const url = `${API_COMMON}/api/fileUpload/accessKey/${params.type}`;
     post(url, null, {
         standard: false,
     }).then((res) => {
