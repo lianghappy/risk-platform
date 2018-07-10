@@ -11,6 +11,7 @@ export default {
         pageSize: PAGE_SIZE,
         typeList: [],
         grayPolicyList: [],
+        getPolicyList: [],
     },
     effects: {
         // 查询
@@ -37,6 +38,17 @@ export default {
                     sysId: SYSID,
                 },
             });
+        },
+        * getPolicySelect({ payload }, { call, put }) {
+            const { resolve } = payload;
+            const response = yield call(post, API.getPolicyList, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getPolicyList: response,
+                },
+            });
+            yield call(resolve);
         },
         // 增加策略
         * add({ payload }, { call }) {

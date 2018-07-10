@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Button, Table, message, Select } from 'antd';
-import { DURATION, SYSID } from 'utils/constants';
+import { Layout, Form, Input, Button, Table, message, Select, Switch, Popconfirm } from 'antd';
+import { DURATION } from 'utils/constants';
 // import { roles } from 'utils/common';
 import style from './index.scss';
 import AddModal from './AddModal';
@@ -29,7 +29,7 @@ export default class GrayPolicy extends React.PureComponent {
         pageNum: PropTypes.number.isRequired,
         pageSize: PropTypes.number.isRequired,
     };
-    onPageChange = (pageNum, pageSize, sysId) => {
+    onPageChange = (pageNum, pageSize) => {
         const { loading, form } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
@@ -37,7 +37,6 @@ export default class GrayPolicy extends React.PureComponent {
                 ...values,
                 pageNum,
                 pageSize,
-                sysId,
             });
         });
     };
@@ -54,7 +53,6 @@ export default class GrayPolicy extends React.PureComponent {
                ...values,
                pageNum: 1,
                pageSize,
-               sysId: 'risk',
            });
        });
    };
@@ -64,7 +62,32 @@ export default class GrayPolicy extends React.PureComponent {
        this.query({
            pageNum: 1,
            pageSize,
-           sysId: SYSID,
+       });
+   }
+   onDelete = (id) => {
+       const {
+           pageSize,
+           pageNum,
+           form,
+           dispatch,
+       } = this.props;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'grayPolicy/del',
+               payload: {
+                   data: { id },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           message.success('删除成功', DURATION);
+           form.validateFields((errors, values) => {
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
        });
    }
    modalOk = (data, callback) => {
@@ -96,7 +119,6 @@ export default class GrayPolicy extends React.PureComponent {
        });
    };
    query(payload) {
-       Object.assign(payload, { sysId: 'risk' });
        this.props.dispatch({
            type: 'grayPolicy/getGrayPolicyList',
            payload,
@@ -113,38 +135,39 @@ export default class GrayPolicy extends React.PureComponent {
        const columns = [
            {
                title: '灰度策略标识',
-               dataIndex: 'thirdparty',
-               key: 'thirdparty',
+               dataIndex: 'grayStrategyId',
+               key: 'grayStrategyId',
                width: 100,
            },
            {
                title: '灰度策略名称',
-               dataIndex: 'productName',
-               key: 'productName',
+               dataIndex: 'grayStrategyName',
+               key: 'grayStrategyName',
                width: 100,
            },
            {
                title: '更新人姓名',
-               dataIndex: 'phone',
-               key: 'phone',
+               dataIndex: 'updateAuthor',
+               key: 'updateAuthor',
                width: 100,
            },
            {
                title: '更新时间',
-               dataIndex: 'company',
-               key: 'company',
+               dataIndex: 'updateTime',
+               key: 'updateTime',
                width: 100,
            },
            {
                title: '状态',
-               dataIndex: 'roleType',
-               key: 'roleType',
+               dataIndex: 'status',
+               key: 'status',
                width: 100,
+               render: (text, record) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} checked={record.status === 'true'} />)
            },
            {
                title: '备注',
-               dataIndex: 'roleName',
-               key: 'roleName',
+               dataIndex: 'remark',
+               key: 'remark',
                width: 100,
            },
            {
@@ -152,23 +175,19 @@ export default class GrayPolicy extends React.PureComponent {
                dataIndex: 'operate',
                key: 'operate',
                width: 100,
-               render: (text, record) => {
-                   let str = '';
-                   switch (record.chargeType) {
-                   case '1':
-                       str = '单位,元/次';
-                       break;
-                   case '2':
-                       str = '按月计费';
-                       break;
-                   case '3':
-                       str = '按年计费';
-                       break;
-                   default:
-                       break;
-                   }
-                   return (<span>{str}</span>);
-               },
+               render: (text, record) => (
+                   <span>
+                       <a>详情</a>
+                       <a className="jm-del" >编辑</a>
+                       <Popconfirm
+                           placement="topRight"
+                           title="您确定要删除吗？"
+                           onConfirm={() => this.onDelete(record.id)}
+                       >
+                           <a className="jm-del">删除</a>
+                       </Popconfirm>
+                   </span>
+               ),
            }
        ];
        return (
@@ -176,22 +195,22 @@ export default class GrayPolicy extends React.PureComponent {
                <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                    <FormItem label="灰度策略名称">
                        {
-                           getFieldDecorator('thirdparty')(<Input />)
+                           getFieldDecorator('grayStrategyName')(<Input />)
                        }
                    </FormItem>
                    <FormItem label="策略名称">
                        {
-                           getFieldDecorator('statisticsDate')(<Input placeholder="请输入策略名称" />)
+                           getFieldDecorator('strategyName')(<Input placeholder="请输入策略名称" />)
                        }
                    </FormItem>
                    <FormItem label="灰度策略标识" >
                        {
-                           getFieldDecorator('times')(<Input />)
+                           getFieldDecorator('grayStrategyId')(<Input />)
                        }
                    </FormItem>
                    <FormItem label="状态">
                        {
-                           getFieldDecorator('isFree')(
+                           getFieldDecorator('status')(
                                <Select style={{ width: '157px' }}>
                                    <Option value="1">禁用</Option>
                                    <Option value="0">启用</Option>

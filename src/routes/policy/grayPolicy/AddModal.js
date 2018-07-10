@@ -7,7 +7,7 @@ import {
     Input,
     Select,
 } from 'antd';
-// import { connect } from 'dva';
+import { connect } from 'dva';
 
 
 function hasErrors(fieldsError) {
@@ -15,10 +15,12 @@ function hasErrors(fieldsError) {
 }
 const Option = Select.Option;
 const { TextArea } = Input;
-// const mapStateToProps = (state) => ({
-//     // roleNameList: state.account.roleNameList,
-// });
-// @connect(mapStateToProps)
+let timeout;
+let currentValue;
+const mapStateToProps = (state) => ({
+    getPolicyList: state.grayPolicy.getPolicyList,
+});
+@connect(mapStateToProps)
 @Form.create()
 export default class PolicyModal extends React.PureComponent {
     static propTypes = {
@@ -34,6 +36,8 @@ export default class PolicyModal extends React.PureComponent {
 
     state = {
         visible: this.props.visible || false,
+        // data: [],
+        value: '',
     };
     handleSubmit = (e) => {
         e.preventDefault();
@@ -71,7 +75,51 @@ export default class PolicyModal extends React.PureComponent {
             visible: false,
         });
     };
-
+    handleChange = (val) => {
+        this.setState({
+            value: val,
+        });
+        if (timeout) {
+            clearTimeout(timeout);
+            timeout = null;
+        }
+        currentValue = val;
+        const {
+            dispatch,
+            getPolicyList,
+        } = this.props;
+        const _this = this;
+        function querys() {
+            if (currentValue === val) {
+                new Promise((resolve) => {
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                    dispatch({
+                        type: 'grayPolicy/getPolicySelect',
+                        payload: {
+                            companyId,
+                            pageNum: 1,
+                            pageSize: 100,
+                            name: val,
+                            resolve,
+                        },
+                    });
+                }).then(() => {
+                    _this.setState({
+                        data: getPolicyList,
+                    });
+                });
+            }
+        }
+        timeout = setTimeout(querys, 300);
+    }
+    query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId, pageNum: 1, pageSize: 100 });
+        this.props.dispatch({
+            type: 'grayPolicy/getPolicySelect',
+            payload,
+        });
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 6 },
@@ -83,6 +131,7 @@ export default class PolicyModal extends React.PureComponent {
             getFieldDecorator,
             getFieldsError,
         } = forms;
+        const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -142,8 +191,12 @@ export default class PolicyModal extends React.PureComponent {
                                         { required: true, message: '请输入策略名称' },
                                     ],
                                 })(
-                                    <Select>
-                                        <Option value="">策略</Option>
+                                    <Select
+                                        mode="combobox"
+                                        value={this.state.value}
+                                        onChange={this.handleChange}
+                                    >
+                                        {options}
                                     </Select>
                                 )
                             }
