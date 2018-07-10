@@ -129,6 +129,10 @@ export default {
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getTreeList',
                         payload: {
                             sysId: SYSID,

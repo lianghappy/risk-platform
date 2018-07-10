@@ -41,6 +41,10 @@ export default {
                         payload: [{ name: '订单管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getOrderList',
                         payload: {
                             pageNum: 1,

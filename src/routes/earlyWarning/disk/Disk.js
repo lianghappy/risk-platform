@@ -3,11 +3,38 @@ import { Layout, Form, Select, Button, message } from 'antd';
 import { connect } from 'dva';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
-import Lines from './Line';
+// import Lines from './Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
 import styles from './index.scss';
 
+const times = [
+    {
+        time: '1小时',
+        key: '1m'
+    }, {
+        time: '3小时',
+        key: '1m',
+    }, {
+        time: '6小时',
+        key: '1m',
+    }, {
+        time: '12小时',
+        key: '1m',
+    }, {
+        time: '1天',
+        key: '1h',
+    }, {
+        time: '3天',
+        key: '1h',
+    }, {
+        time: '7天',
+        key: '6h',
+    }, {
+        time: '14天',
+        key: '6h',
+    }
+];
 const mapStateToProps = (state) => {
     return {
         dashBoard: state.disk.dashBoard,
@@ -24,11 +51,12 @@ export default class Disk extends React.PureComponent {
         getDiskData: this.props.getDiskData || [],
     }
     selectChange = (value) => {
+        const indexs = this.state.index;
         this.props.dispatch({
             type: 'disk/getData',
             payload: {
                 dashBoardId: value,
-                dateType: '1h',
+                dateType: times[indexs].key,
             }
         });
         this.setState({
@@ -89,6 +117,17 @@ export default class Disk extends React.PureComponent {
         this.setState({
             index: i,
         });
+        const value = this.state.dashBoardId;
+        this.props.dispatch({
+            type: 'disk/getData',
+            payload: {
+                dashBoardId: value,
+                dateType: times[i].key,
+            }
+        });
+        this.setState({
+            getDiskData: this.props.getDiskData,
+        });
     }
     query(payload) {
         const userId = JSON.parse(sessionStorage.userInfo).user.id;
@@ -99,33 +138,6 @@ export default class Disk extends React.PureComponent {
         });
     }
     render() {
-        const times = [
-            {
-                time: '1小时',
-                key: '1m'
-            }, {
-                time: '3小时',
-                key: '1m',
-            }, {
-                time: '6小时',
-                key: '1m',
-            }, {
-                time: '12小时',
-                key: '1m',
-            }, {
-                time: '1天',
-                key: '1h',
-            }, {
-                time: '3天',
-                key: '1h',
-            }, {
-                time: '7天',
-                key: '6h',
-            }, {
-                time: '14天',
-                key: '6h',
-            }
-        ];
         const {
             dashBoard,
             getDiskData,
@@ -189,7 +201,7 @@ export default class Disk extends React.PureComponent {
                         {
                             this.state.getDiskData && this.state.getDiskData.map((item, index) => {
                                 let hourData = [];
-                                switch ('1h') {
+                                switch (times[this.state.index].key) {
                                 case '1m':
                                     hourData = item.dataByMinute;
                                     break;
@@ -214,7 +226,7 @@ export default class Disk extends React.PureComponent {
                                 }
                                 return (
                                     <div className={styles.smallDisk} key={index}>
-                                        <Lines datas={hourData} />
+                                        <Line datas={hourData} />
                                     </div>
                                 );
                             })

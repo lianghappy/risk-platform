@@ -26,8 +26,8 @@ export default class Lines extends React.PureComponent {
 
         const container = this.line;
         const myChart = echarts.init(container);
-        const Xdata = this.state.datas.length > 0 ? this.state.datas.dataByOneHour.map(item => item.sleuthTime) : [];
-        const Ydata = this.state.datas.length > 0 ? this.state.datas.dataByOneHour.map(item => item.value) : [];
+        const Xdata = this.state.datas.length > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
+        const Ydata = this.state.datas.length > 0 ? this.state.datas.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         this.setOption(myChart, Xdata, Ydata);
         window.onresize = myChart.resize;
@@ -40,8 +40,8 @@ export default class Lines extends React.PureComponent {
         console.log(nextProps.datas);
 
         const myChart = echarts.init(container);
-        const Xdata = nextProps.datas.length > 0 ? nextProps.datas.dataByOneHour.map(item => item.sleuthTime) : [];
-        const Ydata = nextProps.datas.length > 0 ? nextProps.datas.dataByOneHour.map(item => item.value) : [];
+        const Xdata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.sleuthTime) : [];
+        const Ydata = nextProps.datas.length > 0 ? nextProps.datas.map(item => item.value) : [];
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
         this.setOption(myChart, Xdata, Ydata);
     }

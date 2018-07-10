@@ -101,6 +101,10 @@ export default {
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '新增角色' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getTreeList',
                         payload: {
                             sysId: SYSID,

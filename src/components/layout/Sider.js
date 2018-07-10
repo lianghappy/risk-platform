@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { menuKeyPick } from 'utils/common';
 import { authFirst, authsSecond } from 'utils/auth';
+import { setPath } from 'utils/path';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
@@ -39,6 +40,14 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
+                    {
+                        !this.props.flag &&
+                    <Menu.Item>
+                        <Link to={setPath('/account')} >
+                            <span>首页</span>
+                        </Link>
+                    </Menu.Item>
+                    }
                     { auth && auth.map(m => (
                         <Menu.SubMenu
                             key={m.key}

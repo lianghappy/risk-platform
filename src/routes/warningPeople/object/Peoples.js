@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Button, Form, Table, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import noMessage from 'assets/images/noMessage.svg';
 import cs from 'classnames';
 import TeamModal from './TeamModal';
 import styles from './index.scss';
@@ -124,9 +125,15 @@ export default class Peoples extends React.PureComponent {
                 title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
-                render: () => (
+                render: (text, record) => (
                     <div>
-                        <span>删除</span>
+                        <Popconfirm
+                            placement="topRight"
+                            title="您确定删除吗？"
+                            onConfirm={() => this.onDeletes(record.sleuthTeamId)}
+                        >
+                            <span>删除</span>
+                        </Popconfirm>
                     </div>
                 )
             }
@@ -176,6 +183,13 @@ export default class Peoples extends React.PureComponent {
                             </div>
                         );
                     })
+                }
+                {
+                    warningTeam.length === 0 &&
+                    <div className={styles.noMessage}>
+                        <img src={noMessage} alt="暂无内容" />
+                        <p>暂无内容</p>
+                    </div>
                 }
             </Layout>
         );

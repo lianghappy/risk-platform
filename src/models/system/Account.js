@@ -82,6 +82,10 @@ export default {
                         payload: [{ name: '账号管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'queryAccountList',
                         payload: {
                             pageNum: 1,
