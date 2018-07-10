@@ -379,7 +379,7 @@ export default class Regular extends React.PureComponent {
                     {
                         roles('R_B_PLY_policy_st_rule_del') && Number(status) === 0 &&
                     <Popconfirm
-                        title="你确定要删除改规则吗"
+                        title="你确定要删除该规则吗"
                         onConfirm={() => this.onDelete(record.id)}
                     >
                         <a style={{ marginRight: 5 }}>删除</a>
