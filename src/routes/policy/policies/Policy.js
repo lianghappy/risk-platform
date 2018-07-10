@@ -191,7 +191,7 @@ class Policy extends React.PureComponent {
         });
     };
     query(payload) {
-        const companyId = JSON.parse(sessionStorage.userInfo).user.companyId;
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'policy/getPolicyList',

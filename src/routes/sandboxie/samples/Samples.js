@@ -128,7 +128,7 @@ class Samples extends React.PureComponent {
         this.setState({ show: true });
     }
     query(payload) {
-        const companyId = JSON.parse(sessionStorage.userInfo).user.companyId;
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'samples/getSamplesList',

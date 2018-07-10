@@ -260,7 +260,7 @@ class DecisionIndex extends React.PureComponent {
                        }
                    </FormItem>
                    {
-                       roles('R_B_system_user_reset') &&
+                       roles('R_system_acc_rst') &&
                    <FormItem>
                        <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
@@ -269,7 +269,7 @@ class DecisionIndex extends React.PureComponent {
                    }
                </Form>
                {
-                   roles('R_B_system_user_add') &&
+                   roles('R_system_acc_add') &&
                <AddAccount
                    visible={false}
                    type="add"
