@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Select, Button, message, DatePicker } from 'antd';
+import { Layout, Form, Select, Button, message, DatePicker, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
@@ -181,7 +181,14 @@ export default class Disk extends React.PureComponent {
                         }
                         {
                             roles('R_warn_disk_del') &&
-                            <Button type="default" size="small">删除当前表盘</Button>
+                            <Popconfirm
+                                placement="topRight"
+                                title="您确定要删除吗？"
+                                onConfirm={() => this.onDelete()}
+                            >
+                                <Button type="default" size="small">删除当前表盘</Button>
+                            </Popconfirm>
+
                         }
                     </div>
                 </div>

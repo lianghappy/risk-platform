@@ -256,7 +256,7 @@ class DecisionIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem>
                        {
-                           roles('R_B_system_user_view') &&
+                           roles('R_system_acc_qry') &&
                           <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                      查询
                           </Button>

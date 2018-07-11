@@ -220,7 +220,7 @@ export default class History extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">搜索</Button>
+                        <Button type="primary" htmlType="submit">查询</Button>
                     </Form.Item>
                 </Form>
                 <Table

@@ -286,7 +286,7 @@ export const authsSecond = [
             key: 'rule',
             router: '/rule',
         }, {
-            name: '策略管理',
+            name: '决策引擎',
             key: 'policy',
             router: '/policy',
         }],
@@ -318,7 +318,7 @@ export const authsSecond = [
             key: 'warningRule',
             router: '/warningRule',
         }, {
-            name: '报警收件人',
+            name: '报警对象',
             key: 'warningPeople',
             router: '/warningPeople',
         }],

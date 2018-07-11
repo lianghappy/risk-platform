@@ -53,6 +53,34 @@ export default class Peoples extends React.PureComponent {
             });
         });
     }
+    onDeletes = (personId) => {
+        const {
+            dispatch,
+            form,
+            pageNum,
+            pageSize,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'warningPeople/delP',
+                payload: {
+                    data: {
+                        personId,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            message.success('删除成功');
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -133,7 +161,7 @@ export default class Peoples extends React.PureComponent {
                             <Popconfirm
                                 placement="topRight"
                                 title="您确定删除吗？"
-                                onConfirm={() => this.onDeletes(record.sleuthTeamId)}
+                                onConfirm={() => this.onDeletes(record.sleuthPersonId)}
                             >
                                 <span>删除</span>
                             </Popconfirm>

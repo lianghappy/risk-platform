@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
 import style from './LookApp.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -158,7 +159,10 @@ class OldProduct extends React.PureComponent {
                         >
                             <Button icon="delete" />
                         </Popconfirm> */}
-                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
+                        {
+                            roles('R_apps_app_manage') &&
+                            <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
+                        }
                     </div>),
             },
         ];
