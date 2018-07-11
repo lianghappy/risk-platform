@@ -269,15 +269,15 @@ class Sandboxie extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            rest[1].isEnable < 2 ?
+                            rest[1].isEnable === 0 ?
                                 <Popconfirm
                                     placement="topRight"
-                                    title={Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '是否下架？' : '是否上架？'}
+                                    title="是否上架？"
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
                                     {
                                         roles('R_B_SB_sandbox_up') &&
-                                    <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
+                                    <span className={style.isEnable}>{Number(rest[1].isEnable) === 0 && '上架'}</span>
                                     }
                                 </Popconfirm>
                                 :
