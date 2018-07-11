@@ -43,7 +43,7 @@ export default class OrderDetail extends React.PureComponent {
                   }
                   {
                       this.state.current === 'order' &&
-                      <LinkOrder />
+                      <LinkOrder {...this.props} />
                   }
               </Layout>
           );

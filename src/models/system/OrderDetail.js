@@ -81,7 +81,7 @@ export default {
                         },
                     });
                     dispatch({
-                        type: 'getOrderBasic',
+                        type: 'getOrderList',
                         payload: {
                             sampleId,
                             companyId,
@@ -92,7 +92,7 @@ export default {
                     dispatch({
                         type: 'getReport',
                         payload: {
-                            sampleId: 'c291992406ab462f9bdd8b7f8c7fceed',
+                            sampleId,
                         },
                     });
                 }

@@ -201,17 +201,14 @@ export default class Disk extends React.PureComponent {
                         {
                             roles('R_warn_disk_create') &&
                             <span>
-                                {
-                                    this.state.dashBoardId ?
-                                        <CreateDisk
-                                            onOk={this.modalOk}
-                                            type="add"
-                                        >
-                                            <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
-                                        </CreateDisk>
-                                        :
-                                        <Button type="primary" size="small" className={styles.create} onClick={() => this.creates()}>创建监控大盘</Button>
-                                }
+
+                                <CreateDisk
+                                    onOk={this.modalOk}
+                                    type="add"
+                                >
+                                    <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
+                                </CreateDisk>
+
                             </span>
                         }
                         {
@@ -246,18 +243,22 @@ export default class Disk extends React.PureComponent {
                                 onOk={this.onOk}
                             />
                         </div>
-                        <div className={styles.addCharts}>
-                            {
-                                roles('R_warn_disk_add') &&
-                                <AddTable
-                                    type="add"
-                                    onOk={this.addModal}
-                                >
-                                    <Button type="default" size="small">添加图表</Button>
-                                </AddTable>
-                            }
-
-                        </div>
+                        {
+                            roles('R_warn_disk_add') &&
+                                <div className={styles.addCharts}>
+                                    {
+                                        this.state.dashBoardId ?
+                                            <AddTable
+                                                type="add"
+                                                onOk={this.addModal}
+                                            >
+                                                <Button type="default" size="small">添加图表</Button>
+                                            </AddTable>
+                                            :
+                                            <Button type="default" size="small" onClick={() => this.creates()}>添加图表</Button>
+                                    }
+                                </div>
+                        }
                     </div>
                     <div className={styles.disk}>
                         {
