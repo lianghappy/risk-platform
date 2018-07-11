@@ -65,6 +65,12 @@ export default {
             yield call(post, API.addDiskTable, data);
             yield call(resolve);
         },
+        // 添加
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delDisk, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         querySrc(state, { payload }) {

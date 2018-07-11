@@ -77,6 +77,11 @@ export default {
             yield call(post, API.delTeam, data);
             yield call(resolve);
         },
+        * delTeamPeople({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delTeamPeople, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         querySuc(state, { payload }) {

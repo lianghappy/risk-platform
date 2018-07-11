@@ -21,11 +21,15 @@ export default class People extends React.PureComponent {
     state={
         selectedRows: [],
     }
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onDelete = (personId) => {

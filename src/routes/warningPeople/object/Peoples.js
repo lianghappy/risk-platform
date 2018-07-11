@@ -18,11 +18,15 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class Peoples extends React.PureComponent {
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onDelete = (teamId) => {
@@ -53,7 +57,7 @@ export default class Peoples extends React.PureComponent {
             });
         });
     }
-    onDeletes = (personId) => {
+    onDeletes = (personId, teamId) => {
         const {
             dispatch,
             form,
@@ -62,10 +66,11 @@ export default class Peoples extends React.PureComponent {
         } = this.props;
         new Promise((resolve) => {
             dispatch({
-                type: 'warningPeople/delP',
+                type: 'warningPeople/delTeamPeople',
                 payload: {
                     data: {
                         personId,
+                        teamId,
                     },
                     resolve,
                 }
@@ -135,21 +140,37 @@ export default class Peoples extends React.PureComponent {
             loading,
             warningTeam,
         } = this.props;
-        console.log(warningTeam);
         const columns = [
             {
                 title: '收件人姓名',
                 dataIndex: 'sleuthPersonName',
-                key: 'sleuthPersonName'
+                key: 'sleuthPersonName',
+                width: 100,
             },
             {
                 title: '收件人手机号',
                 dataIndex: 'sleuthPersonPhone',
-                key: 'sleuthPersonPhone'
+                key: 'sleuthPersonPhone',
+                width: 100,
             },
-            { title: '钉钉机器人', dataIndex: 'dingRebot', key: 'dingRebot' },
-            { title: '添加人', dataIndex: 'operators', key: 'operators' },
-            { title: '添加时间', dataIndex: 'createTime', key: 'createTime' },
+            {
+                title: '钉钉机器人',
+                dataIndex: 'dingRebot',
+                key: 'dingRebot',
+                width: 100,
+            },
+            {
+                title: '添加人',
+                dataIndex: 'operators',
+                key: 'operators',
+                width: 100,
+            },
+            {
+                title: '添加时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+                width: 100,
+            },
             {
                 title: '操作',
                 dataIndex: 'operate',
@@ -161,13 +182,14 @@ export default class Peoples extends React.PureComponent {
                             <Popconfirm
                                 placement="topRight"
                                 title="您确定删除吗？"
-                                onConfirm={() => this.onDeletes(record.sleuthPersonId)}
+                                onConfirm={() => this.onDeletes(record.sleuthPersonId, record.sleuthTeamId)}
                             >
                                 <span>删除</span>
                             </Popconfirm>
                         }
                     </div>
-                )
+                ),
+                width: 100,
             }
         ];
         return (

@@ -241,13 +241,13 @@ export const authFirst = [
         name: '管理中心',
         key: 'system',
         children: [{
-            name: '账号管理',
-            key: 'account',
-            router: '/account',
-        }, {
             name: '订单管理',
             key: 'order',
             router: '/order',
+        }, {
+            name: '账号管理',
+            key: 'account',
+            router: '/account',
         }, {
             name: '角色管理',
             key: 'role',

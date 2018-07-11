@@ -200,6 +200,8 @@ const api = {
     addTeam: `${API}/api/risk/manager/monitor/createByRequest/v1`,
     updataTeam: `${API}/api/risk/manager/monitor/updateByRequest/v1`,
     delTeam: `${API}/api/risk/manager/monitor/deleteSleuthTeamByRequest/v1`,
+    // 删除报警收件组里面的收件人
+    delTeamPeople: `${API}/api/risk/manager/monitor/deletePersonInTeam/v1`,
 
     warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
 
@@ -232,6 +234,7 @@ const api = {
     addDisks: `${API}/api/risk/manager/monitor/dashBoard/create/v1`,
     addDiskTable: `${API}/api/risk/manager/monitor/boardAndSleuth/create/v1`,
     dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,
+    delDisk: `${API}/api/risk/manager/monitor/dashBoard/delete/v1`,
 
 };
 

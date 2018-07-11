@@ -1,9 +1,11 @@
 import React from 'react';
 import { Layout, Form, Select, Button, message, DatePicker, Popconfirm } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
 import { roles } from 'utils/common';
+import { DURATION } from 'utils/constants';
 // import Lines from './Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
@@ -13,28 +15,36 @@ const { RangePicker } = DatePicker;
 const times = [
     {
         time: '1小时',
-        key: '1m'
+        key: '1m',
+        hour: [1, 'h'],
     }, {
         time: '3小时',
         key: '1m',
+        hour: [3, 'h'],
     }, {
         time: '6小时',
         key: '1m',
+        hour: [6, 'h'],
     }, {
         time: '12小时',
         key: '1m',
+        hour: [12, 'h'],
     }, {
         time: '1天',
         key: '1h',
+        hour: [1, 'd'],
     }, {
         time: '3天',
         key: '1h',
+        hour: [3, 'd'],
     }, {
         time: '7天',
         key: '6h',
+        hour: [7, 'd'],
     }, {
         time: '14天',
         key: '6h',
+        hour: [14, 'd'],
     }
 ];
 const mapStateToProps = (state) => {
@@ -51,6 +61,18 @@ export default class Disk extends React.PureComponent {
         dashBoardId: '',
         index: 0,
         getDiskData: this.props.getDiskData || [],
+    }
+    onDelete = () => {
+        const { dashBoardId } = this.state;
+        this.props.dispatch({
+            type: 'disk/del',
+            payload: {
+                dashBoardId,
+            }
+        });
+    }
+    creates = () => {
+        message.error('请先选择监控大盘名称', DURATION);
     }
     selectChange = (value) => {
         const indexs = this.state.index;
@@ -116,6 +138,10 @@ export default class Disk extends React.PureComponent {
         });
     }
     changeTime = (i) => {
+        if (!this.state.dashBoardId) {
+            message.error('请先选择监控大盘名称', DURATION);
+            return;
+        }
         this.setState({
             index: i,
         });
@@ -146,6 +172,8 @@ export default class Disk extends React.PureComponent {
         } = this.props;
         console.log(getDiskData);
 
+        // const timeDay = times[this.state.index].hour;
+
         return (
             <Layout className="layoutMar">
                 <div className={styles.containers}>
@@ -172,12 +200,19 @@ export default class Disk extends React.PureComponent {
                     <div className={styles.right}>
                         {
                             roles('R_warn_disk_create') &&
-                            <CreateDisk
-                                onOk={this.modalOk}
-                                type="add"
-                            >
-                                <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
-                            </CreateDisk>
+                            <span>
+                                {
+                                    this.state.dashBoardId ?
+                                        <CreateDisk
+                                            onOk={this.modalOk}
+                                            type="add"
+                                        >
+                                            <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
+                                        </CreateDisk>
+                                        :
+                                        <Button type="primary" size="small" className={styles.create} onClick={() => this.creates()}>创建监控大盘</Button>
+                                }
+                            </span>
                         }
                         {
                             roles('R_warn_disk_del') &&
@@ -205,6 +240,7 @@ export default class Disk extends React.PureComponent {
                             <RangePicker
                                 showTime={{ format: 'HH:mm' }}
                                 format="YYYY-MM-DD HH:mm"
+                                value={[moment().subtract(times[this.state.index].hour[0], times[this.state.index].hour[1]), moment()]}
                                 placeholder={['开始时间', '结束时间']}
                                 onChange={this.onChange}
                                 onOk={this.onOk}
