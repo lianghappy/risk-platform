@@ -98,6 +98,10 @@ export default {
                         flag: false,
                     });
                     dispatch({
+                        type: 'common/setBreadcrumb',
+                        payload: [{ name: '报警对象' }],
+                    });
+                    dispatch({
                         type: 'getWarningList',
                         payload: {
                             pageNum: 1,

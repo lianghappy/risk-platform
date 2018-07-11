@@ -31,7 +31,7 @@ export default class PeopleModal extends React.PureComponent {
                     }
                 });
             }).then(() => {
-                message.info('验证码发送成功');
+                message.success('验证码发送成功');
             });
         }
     }
