@@ -269,7 +269,7 @@ class Sandboxie extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            rest[1].isEnable === 0 ?
+                            Number(rest[1].isEnable) === 0 ?
                                 <Popconfirm
                                     placement="topRight"
                                     title="是否上架？"
