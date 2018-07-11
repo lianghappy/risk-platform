@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Button, Input, Table, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import Pagination from 'components/Pagination/Pagination';
 import PeopleModal from './peopleModal';
 import styles from './index.scss';
@@ -196,6 +197,8 @@ export default class People extends React.PureComponent {
                 key: 'operate',
                 render: (text, record) => (
                     <div>
+                        {
+                            roles('R_police_obj_pp_edit') &&
                         <PeopleModal
                             dispatch={this.props.dispatch}
                             type="edit"
@@ -204,6 +207,9 @@ export default class People extends React.PureComponent {
                         >
                             <a>编辑</a>
                         </PeopleModal>
+                        }
+                        {
+                            roles('R_police_obj_pp_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="确定删除报警收件人?"
@@ -211,6 +217,7 @@ export default class People extends React.PureComponent {
                         >
                             <a className="jm-del">删除</a>
                         </Popconfirm>
+                        }
                     </div>
                 )
             }
@@ -237,13 +244,18 @@ export default class People extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        {
+                            roles('R_police_obj_pp_qry') &&
+                            <Button type="primary" htmlType="submit">
                             查询
-                        </Button>
+                            </Button>
+                        }
                     </Form.Item>
                 </Form>
                 <Form layout="inline" className={styles.add}>
                     <Form.Item>
+                        {
+                            roles('R_police_obj_pp_add') &&
                         <PeopleModal
                             dispatch={this.props.dispatch}
                             type="add"
@@ -252,9 +264,13 @@ export default class People extends React.PureComponent {
                         >
                             <Button type="primary">新增收件人</Button>
                         </PeopleModal>
+                        }
                     </Form.Item>
                     <Form.Item>
+                        {
+                            roles('R_police_obj_pp_dels') &&
                         <Button type="default" disabled={!hasSelected} onClick={() => this.onDels()}>批量删除联系人</Button>
+                        }
                     </Form.Item>
                 </Form>
                 <Table

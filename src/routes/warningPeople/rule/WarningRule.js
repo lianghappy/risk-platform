@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Form, Button, Table, Popconfirm, message, Select } from 'antd';
 import moment from 'moment';
 import { setPath } from 'utils/path';
+import { roles } from 'utils/common';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
 
@@ -258,6 +259,8 @@ export default class WarningRule extends React.PureComponent {
                 key: 'operator',
                 render: (text, record) => (
                     <div>
+                        {
+                            roles('R_police_rl_state') &&
                         <Popconfirm
                             placement="topRight"
                             title={Number(record.state) === 1 ? '确定禁用?' : '确定启用?'}
@@ -265,7 +268,13 @@ export default class WarningRule extends React.PureComponent {
                         >
                             <a role="button" tabIndex="-1">{Number(record.state) === 1 ? '禁用' : '启用'}</a>
                         </Popconfirm>
+                        }
+                        {
+                            roles('R_police_rl_edit') &&
                         <a role="button" tabIndex="-1" className="jm-del">编辑</a>
+                        }
+                        {
+                            roles('R_police_rl_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="确定删除?"
@@ -273,6 +282,7 @@ export default class WarningRule extends React.PureComponent {
                         >
                             <a role="button" tabIndex="-1" className="jm-del">删除</a>
                         </Popconfirm>
+                        }
                     </div>
                 ),
                 width: 100,
@@ -318,12 +328,21 @@ export default class WarningRule extends React.PureComponent {
                         }
                     </Form.Item>
                     <FormItem>
+                        {
+                            roles('R_police_rl_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('R_police_rl_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div>
-                    <Button type="primary" onClick={() => this.add()} style={{ marginLeft: '20px', marginBottom: '20px' }}>新增</Button>
+                    {
+                        roles('R_police_rl_add') &&
+                        <Button type="primary" onClick={() => this.add()} style={{ marginLeft: '20px', marginBottom: '20px' }}>新增</Button>
+                    }
                 </div>
                 <Table
                     columns={columns}

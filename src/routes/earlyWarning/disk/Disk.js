@@ -3,6 +3,7 @@ import { Layout, Form, Select, Button, message, DatePicker } from 'antd';
 import { connect } from 'dva';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
+import { roles } from 'utils/common';
 // import Lines from './Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
@@ -169,13 +170,19 @@ export default class Disk extends React.PureComponent {
                         </Form>
                     </div>
                     <div className={styles.right}>
-                        <CreateDisk
-                            onOk={this.modalOk}
-                            type="add"
-                        >
-                            <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
-                        </CreateDisk>
-                        <Button type="default" size="small">删除当前表盘</Button>
+                        {
+                            roles('R_warn_disk_create') &&
+                            <CreateDisk
+                                onOk={this.modalOk}
+                                type="add"
+                            >
+                                <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
+                            </CreateDisk>
+                        }
+                        {
+                            roles('R_warn_disk_del') &&
+                            <Button type="default" size="small">删除当前表盘</Button>
+                        }
                     </div>
                 </div>
                 <div className={styles.charts}>
@@ -197,12 +204,16 @@ export default class Disk extends React.PureComponent {
                             />
                         </div>
                         <div className={styles.addCharts}>
-                            <AddTable
-                                type="add"
-                                onOk={this.addModal}
-                            >
-                                <Button type="default" size="small">添加图表</Button>
-                            </AddTable>
+                            {
+                                roles('R_warn_disk_add') &&
+                                <AddTable
+                                    type="add"
+                                    onOk={this.addModal}
+                                >
+                                    <Button type="default" size="small">添加图表</Button>
+                                </AddTable>
+                            }
+
                         </div>
                     </div>
                     <div className={styles.disk}>

@@ -3,6 +3,7 @@ import { Layout, Button, Form, Table, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
 import noMessage from 'assets/images/noMessage.svg';
+import { roles } from 'utils/common';
 import cs from 'classnames';
 import TeamModal from './TeamModal';
 import styles from './index.scss';
@@ -127,13 +128,16 @@ export default class Peoples extends React.PureComponent {
                 key: 'operate',
                 render: (text, record) => (
                     <div>
-                        <Popconfirm
-                            placement="topRight"
-                            title="您确定删除吗？"
-                            onConfirm={() => this.onDeletes(record.sleuthTeamId)}
-                        >
-                            <span>删除</span>
-                        </Popconfirm>
+                        {
+                            roles('R_police_obj_ps_del') &&
+                            <Popconfirm
+                                placement="topRight"
+                                title="您确定删除吗？"
+                                onConfirm={() => this.onDeletes(record.sleuthTeamId)}
+                            >
+                                <span>删除</span>
+                            </Popconfirm>
+                        }
                     </div>
                 )
             }
@@ -141,6 +145,8 @@ export default class Peoples extends React.PureComponent {
         return (
             <Layout>
                 <div className={cs(styles.look, styles.peoples)}>
+                    {
+                        roles('R_police_obj_ps_add') &&
                     <TeamModal
                         type="add"
                         record={{}}
@@ -149,6 +155,7 @@ export default class Peoples extends React.PureComponent {
                     >
                         <Button type="primary" className={styles.adds}>新增收件组</Button>
                     </TeamModal>
+                    }
                 </div>
                 {
                     warningTeam.map((item, index) => {
@@ -157,6 +164,8 @@ export default class Peoples extends React.PureComponent {
                                 <div className={styles.header}>
                                     <span className={styles.name}>{item.sleuthTeamName}</span>
                                     <div>
+                                        {
+                                            roles('R_police_obj_ps_edit') &&
                                         <TeamModal
                                             type="edit"
                                             record={item}
@@ -165,6 +174,9 @@ export default class Peoples extends React.PureComponent {
                                         >
                                             <Button type="primary" className={styles.edits}>编辑</Button>
                                         </TeamModal>
+                                        }
+                                        {
+                                            roles('R_police_obj_ps_dels') &&
                                         <Popconfirm
                                             placement="topRight"
                                             title={`确定删除${item.sleuthTeamName}组嘛?`}
@@ -172,6 +184,7 @@ export default class Peoples extends React.PureComponent {
                                         >
                                             <Button type="default">删除</Button>
                                         </Popconfirm>
+                                        }
                                     </div>
                                 </div>
                                 <Table

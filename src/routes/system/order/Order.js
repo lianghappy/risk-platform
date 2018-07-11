@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Form, Input, Table, Button, Icon, DatePicker, Select } from 'antd';
 import { setPath } from 'utils/path';
 import base64 from 'utils/base64';
+import { roles } from 'utils/common';
 import Pagination from 'components/Pagination/Pagination';
 import styles from './index.scss';
 
@@ -87,10 +88,20 @@ export default class Order extends React.PureComponent {
             key: 2,
         }];
         const columns = [
-            { title: '风控订单ID',
+            {
+                title: '风控订单ID',
                 dataIndex: 'sampleId',
                 key: 'sampleId',
-                render: (text, record) => (<a role="button" tabIndex="-1" onClick={() => this.detail(record.sampleId)}>{record.sampleId}</a>),
+                render: (text, record) => (
+                    <span>
+                        {
+                            roles('R_system_order_look') ?
+                                <a role="button" tabIndex="-1" onClick={() => this.detail(record.sampleId)}>{record.sampleId}</a>
+                                :
+                                <span>{record.sampleId}</span>
+                        }
+                    </span>
+                ),
                 width: 100,
             },
             {
@@ -260,8 +271,14 @@ export default class Order extends React.PureComponent {
                     <Form.Item
                         className={this.state.better && styles.leves}
                     >
+                        {
+                            roles('R_system_order_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading}>查询</Button>
+                        }
+                        {
+                            roles('R_system_order_rst') &&
                         <Button type="default" className="jm-del" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                         {
                             !this.state.better ?
                                 <Button onClick={() => this.changes()} className="jm-del" type="default">高级搜索<Icon type="caret-down" /></Button>
