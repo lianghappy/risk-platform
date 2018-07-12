@@ -14,7 +14,7 @@ export default {
         orderList: [],
         getReport: [],
         getReportList: [],
-
+        typeList: [],
     },
     effects: {
         // 订单基本信息
@@ -50,6 +50,17 @@ export default {
                 payload: {
                     getReport: response,
                     getReportList: response ? response.normList : [],
+                },
+            });
+        },
+        // 获取来源的数据
+        * getChannel({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getChannel, payload, data);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    typeList: response,
                 },
             });
         },
@@ -93,6 +104,12 @@ export default {
                         type: 'getReport',
                         payload: {
                             sampleId,
+                        },
+                    });
+                    dispatch({
+                        type: 'getChannel',
+                        payload: {
+                            type: 'rule',
                         },
                     });
                 }

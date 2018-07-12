@@ -9,12 +9,22 @@ const mapStateToProps = (state) => {
         getReport: state.orderDetail.getReport,
         getReportList: state.orderDetail.getReportList,
         loading: state.loading.models.orderDetail,
+        typeList: state.orderDetail.typeList,
     };
 };
 @connect(mapStateToProps)
 export default class RiskReport extends React.PureComponent {
     static propTypes ={
         getReport: PropTypes.array.isRequired,
+    }
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
     }
     changeColumn = (ids) => {
         const columns = [
@@ -41,6 +51,7 @@ export default class RiskReport extends React.PureComponent {
                 dataIndex: 'channel',
                 key: 'channel',
                 width: 100,
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>)
             },
             {
                 title: '所有类别',
