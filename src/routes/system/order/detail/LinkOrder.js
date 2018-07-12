@@ -43,21 +43,66 @@ export default class LinkOrder extends React.PureComponent {
             pageNum,
         } = this.props;
         const columns = [
-            { title: '风控订单ID',
+            {
+                title: '风控订单ID',
                 dataIndex: 'sampleId',
                 key: 'sampleId',
                 render: (text, record) => (<a role="button" tabIndex="-1" onClick={() => this.detail(record.sampleId)}>{record.sampleId}</a>) },
-            { title: '调用方唯一标识', dataIndex: 'clientId', key: 'clientId' },
-            { title: '风控产品ID', dataIndex: 'productId', key: 'productId' },
-            { title: '风控审核状态', dataIndex: 'result', key: 'result' },
-            { title: '风控下单时间', dataIndex: 'sampleCreatime', key: 'sampleCreatime' },
-            { title: '风控审核结束时间', dataIndex: 'detailCreatime', key: 'detailCreatime' },
-            { title: '公司名称', dataIndex: 'orderCompanyName', key: 'orderCompanyName' },
-            { title: '策略标识', dataIndex: 'strategyId', key: 'strategyId' },
-            { title: '策略名称', dataIndex: 'strategyName', key: 'strategyName' },
-            { title: '用户手机号', dataIndex: 'phone', key: 'phone' },
-            { title: '用户身份证姓名', dataIndex: 'idcardName', key: 'idcardName' },
-            { title: '用户身份证号码', dataIndex: 'idcardNum', key: 'idcardNum' },
+            {
+                title: '调用方唯一标识',
+                dataIndex: 'clientId',
+                key: 'clientId'
+            },
+            {
+                title: '风控产品ID',
+                dataIndex: 'productId',
+                key: 'productId'
+            },
+            {
+                title: '风控审核状态',
+                dataIndex: 'result',
+                key: 'result'
+            },
+            {
+                title: '风控下单时间',
+                dataIndex: 'sampleCreatime',
+                key: 'sampleCreatime'
+            },
+            {
+                title: '风控审核结束时间',
+                dataIndex: 'detailCreatime',
+                key: 'detailCreatime'
+            },
+            {
+                title: '公司名称',
+                dataIndex: 'orderCompanyName',
+                key: 'orderCompanyName'
+            },
+            {
+                title: '策略标识',
+                dataIndex: 'strategyId',
+                key: 'strategyId'
+            },
+            {
+                title: '策略名称',
+                dataIndex: 'strategyName',
+                key: 'strategyName'
+            },
+            {
+                title: '用户手机号',
+                dataIndex: 'phone',
+                key: 'phone'
+            },
+            {
+                title: '用户身份证姓名',
+                dataIndex: 'idcardName',
+                key: 'idcardName'
+            },
+            {
+                title: '用户身份证号码',
+                dataIndex: 'idcardNum',
+                key: 'idcardNum'
+            },
         ];
         return (
             <Layout className={styles.linkOrder}>

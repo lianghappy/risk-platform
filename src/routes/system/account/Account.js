@@ -192,7 +192,7 @@ class DecisionIndex extends React.PureComponent {
                render: (text, record) => (
                    <div>
                        {
-                           roles('R_B_system_user_state') ?
+                           roles('R_system_acc_state') ?
                                <Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} checked={record.state === 'true'} />
                                :
                                <Switch checkedChildren="开启" unCheckedChildren="关闭" disabled checked={record.state === 'true'} />
@@ -204,16 +204,19 @@ class DecisionIndex extends React.PureComponent {
                key: 'operator',
                render: (...rest) => (
                    <div>
-                       <AddAccount
-                           visible={false}
-                           type="edit"
-                           onOk={this.modalOk}
-                           record={rest[1]}
-                       >
-                           <span className="jm-operate">修改</span>
-                       </AddAccount>
                        {
-                           roles('R_B_system_user_del') &&
+                           roles('R_system_acc_up') &&
+                           <AddAccount
+                               visible={false}
+                               type="edit"
+                               onOk={this.modalOk}
+                               record={rest[1]}
+                           >
+                               <span className="jm-operate">修改</span>
+                           </AddAccount>
+                       }
+                       {
+                           roles('R_system_acc_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="您确定要删除该账号吗？"
@@ -253,14 +256,14 @@ class DecisionIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem>
                        {
-                           roles('R_B_system_user_view') &&
+                           roles('R_system_acc_qry') &&
                           <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                      查询
                           </Button>
                        }
                    </FormItem>
                    {
-                       roles('R_B_system_user_reset') &&
+                       roles('R_system_acc_rst') &&
                    <FormItem>
                        <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
@@ -269,7 +272,7 @@ class DecisionIndex extends React.PureComponent {
                    }
                </Form>
                {
-                   roles('R_B_system_user_add') &&
+                   roles('R_system_acc_add') &&
                <AddAccount
                    visible={false}
                    type="add"

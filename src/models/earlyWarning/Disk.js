@@ -14,6 +14,7 @@ export default {
         sleuthTarget: [],
         app: [],
         product: [],
+        getDiskData: [],
     },
     effects: {
         * getSelect({ payload }, { call, put }) {
@@ -62,6 +63,12 @@ export default {
         * add({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.addDiskTable, data);
+            yield call(resolve);
+        },
+        // 添加
+        * del({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delDisk, data);
             yield call(resolve);
         },
     },

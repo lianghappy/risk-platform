@@ -105,6 +105,8 @@ class RecordHistory extends React.PureComponent {
         });
     }
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'recordSand/recordHistoryList',
             payload,
@@ -170,7 +172,9 @@ class RecordHistory extends React.PureComponent {
                             Number(rest[1].state) === 1 ?
                                 <span>实验还未完成，请耐心等待</span>
                                 :
-                                <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
+                                roles('R_exp_record_result') &&
+                                    <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
+
                         }
                     </div>
                 ),
@@ -221,11 +225,11 @@ class RecordHistory extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_SB_record_view') &&
+                            roles('R_exp_record_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_SB_record_reset') &&
+                            roles('R_exp_record_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>

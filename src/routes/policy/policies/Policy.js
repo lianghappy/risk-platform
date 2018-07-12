@@ -169,7 +169,8 @@ class Policy extends React.PureComponent {
         default:
             break;
         }
-
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(data, { companyId });
         new Promise((resolve) => {
             dispatch({
                 type: url,
@@ -191,6 +192,8 @@ class Policy extends React.PureComponent {
         });
     };
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'policy/getPolicyList',
             payload,
@@ -198,7 +201,7 @@ class Policy extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
-        this.props.history.push(setPath(`strategy/${base64.encode(value.id)}`));
+        this.props.history.push(setPath(`/strategy/${base64.encode(value.id)}`));
     }
     showDeleteConfirm = (ids) => {
         confirm({
@@ -301,13 +304,13 @@ class Policy extends React.PureComponent {
                 render: (...rest) => (
                     <div className={style.edits}>
                         {
-                            rest[1].isEnable < 2 &&
+                            Number(rest[1].isEnable) === 0 &&
                                 <Popconfirm
                                     placement="topRight"
-                                    title={Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '是否下架？' : '是否上架？'}
+                                    title="是否上架？"
                                     onConfirm={() => this.onEdit(rest[1].id, rest[1].isEnable)}
                                 >
-                                    <span className={style.isEnable}>{Number(rest[1].isEnable) === 1 && Number(rest[1].isEnable) < 2 ? '下架' : '上架'}</span>
+                                    <span className={style.isEnable}>{Number(rest[1].isEnable) === 0 && '上架'}</span>
                                 </Popconfirm>
                         }
                         {
@@ -323,7 +326,7 @@ class Policy extends React.PureComponent {
                                             roles('R_B_SB_sandbox_edit') &&
                                         <Menu.Item>
                                             {
-                                                roles('R_B_PLY_policies_edit') && Number(rest[1].isEnable) === 0 &&
+                                                roles('R_policy_ply_edit') && Number(rest[1].isEnable) === 0 &&
                                     <AddPolicy
                                         type="edit"
                                         record={rest[1]}
@@ -379,18 +382,18 @@ class Policy extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_PLY_policies_view') &&
+                            roles('R_policy_ply_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_PLY_policies_reset') &&
+                            roles('R_policy_ply_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div className={style.btns}>
                     {
-                        roles('R_B_PLY_policies_add') &&
+                        roles('R_policy_ply_add') &&
                     <AddPolicy
                         type="add"
                         record={{}}
@@ -400,7 +403,7 @@ class Policy extends React.PureComponent {
                     </AddPolicy>
                     }
                     {
-                        roles('R_B_PLY_policies_clone') &&
+                        roles('R_policy_ply_clone') &&
                     <AddPolicy
                         type="clone"
                         record={this.state.clone}

@@ -129,6 +129,7 @@ export default class RegularModal extends React.PureComponent {
 
         form.validateFields((errors, values) => {
             const categoryId = this.state.categorieId;
+
             if (categoryId === '0') {
                 this.unQuery({
                     ...values,
@@ -149,6 +150,15 @@ export default class RegularModal extends React.PureComponent {
         const {
             form,
         } = this.props;
+        if (selectedKeys.length === 0) {
+            this.setState({ selectedKeys: [], categorieId: '' });
+            this.props.form.resetFields();
+            this.query({
+                pageNum: 1,
+                pageSize: 5,
+            });
+            return;
+        }
         this.setState({ categorieId: selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1) });
         const categoryId = selectedKeys[0].substring(selectedKeys[0].indexOf('$') + 1);
         form.validateFields((errors, values) => {
@@ -184,9 +194,11 @@ export default class RegularModal extends React.PureComponent {
                 pageSize: 5,
             });
         } else {
+            const categoryId = this.state.categorieId;
             this.query({
                 pageNum: 1,
                 pageSize: 5,
+                categoryId,
             });
         }
     };
@@ -202,10 +214,13 @@ export default class RegularModal extends React.PureComponent {
                     pageSize: 5,
                 });
             } else {
+                const categoryId = this.state.categorieId;
+
                 this.query({
                     ...values,
                     pageNum: 1,
                     pageSize: 5,
+                    categoryId,
                 });
             }
         });
@@ -371,6 +386,7 @@ export default class RegularModal extends React.PureComponent {
                     <div className={styles.layout}>
                         <div className={styles.left}>
                             <Tree
+                                draggable
                                 selectedKeys={this.state.selectedKeys}
                                 onSelect={this.onSelects}
                             >

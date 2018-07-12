@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import { setPath } from 'utils/path';
 import style from './LookApp.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -62,9 +63,17 @@ class OldProduct extends React.PureComponent {
             });
         });
     }
-    // onSelectChange = (selectedRowKeys, selectedRows) => {
-    //     this.setState({ selectedRows });
-    // }
+    onReset = () => {
+        const { pageSize, form } = this.props;
+        form.resetFields();
+        this.query({
+            pageNum: 1,
+            pageSize,
+        });
+    };
+    /* onSelectChange = (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRows });
+    } */
     query(payload) {
         let url = '';
         if (this.state.type === '.$del') {
@@ -150,7 +159,10 @@ class OldProduct extends React.PureComponent {
                         >
                             <Button icon="delete" />
                         </Popconfirm> */}
-                        <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
+                        {
+                            roles('R_apps_app_manage') &&
+                            <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
+                        }
                     </div>),
             },
         ];
@@ -161,7 +173,7 @@ class OldProduct extends React.PureComponent {
         // };
         return (
             <Layout className={style.containers}>
-                {/* <Button className={style.btns} type="primary" onClick={this.all}>批量删除</Button> */}
+                {/* <Button className={style.btns} type="primary" onClick={this.all} disabled={this.state.selectedRows.length === 0}>批量删除</Button> */}
                 <Table
                     columns={dels}
                     dataSource={this.state.dataSource}

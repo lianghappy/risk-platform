@@ -156,17 +156,19 @@ function RouterConfig({ history, app }) {
             import('models/sandboxie/sandbox/regular'),
         ],
     });
-    // 黑名单
+    // 黑白名单
     const Black = dynamic({
         app,
-        component: () => import('routes/blackAndWhite/Black'),
+        component: () => import('routes/blackAndWhite/Index'),
         models: () => [
             import('models/blackAndWhite/Black'),
             import('models/blackAndWhite/common'),
+            import('models/blackAndWhite/White'),
+            import('models/blackAndWhite/Gray.js'),
         ],
     });
     // 白名单
-    const White = dynamic({
+    /*  const White = dynamic({
         app,
         component: () => import('routes/blackAndWhite/White'),
         models: () => [
@@ -182,7 +184,7 @@ function RouterConfig({ history, app }) {
             import('models/blackAndWhite/Gray.js'),
             import('models/blackAndWhite/common'),
         ],
-    });
+    }); */
     // 策略沙箱
     const sandboxie = dynamic({
         app,
@@ -275,6 +277,14 @@ function RouterConfig({ history, app }) {
             import('models/warning/AddWarning'),
         ],
     });
+    // 编辑报警规则
+    const editWarningRule = dynamic({
+        app,
+        component: () => import('routes/warningPeople/rule/EditRule'),
+        models: () => [
+            import('models/warning/EditWarning'),
+        ],
+    });
     // 监控大盘
     const Disk = dynamic({
         app,
@@ -358,8 +368,6 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/regulars/:id/:strageId')} component={Regulars} />
                     <PrivateRoute path={setPath('/permission')} exact component={Permission} />
                     <PrivateRoute path={setPath('/black')} exact component={Black} />
-                    <PrivateRoute path={setPath('/white')} exact component={White} />
-                    <PrivateRoute path={setPath('/gray')} exact component={Gray} />
                     <PrivateRoute path={setPath('/sandboxie')} exact component={sandboxie} />
                     <PrivateRoute path={setPath('/experiment/:id')} exact component={Experiment} />
                     <PrivateRoute path={setPath('/strategies/:id')} exact component={Strategies} />
@@ -374,6 +382,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/disk')} exact component={Disk} />
                     <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
                     <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
+                    <PrivateRoute path={setPath('/editWarningRule/:id')} exact component={editWarningRule} />
                     <PrivateRoute path={setPath('/order')} exact component={Orders} />
                     <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
                     <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />

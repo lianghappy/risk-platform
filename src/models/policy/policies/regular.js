@@ -171,6 +171,10 @@ export default {
                         },
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getPolicyDetail',
                         payload: {
                             id: ids,

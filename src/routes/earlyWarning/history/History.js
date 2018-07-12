@@ -19,17 +19,66 @@ const mapStateToProps = (state) => {
         pageSize: state.history.pageSize,
     };
 };
+const times = [
+    {
+        time: '1小时',
+        type: 'hours',
+        num: '1',
+        keys: [1, 'h'],
+    }, {
+        time: '3小时',
+        type: 'hours',
+        num: '3',
+    }, {
+        time: '6小时',
+        type: 'hours',
+        num: '6',
+    }, {
+        time: '12小时',
+        type: 'hours',
+        num: '12',
+    }, {
+        time: '1天',
+        type: 'days',
+        num: '1',
+    }, {
+        time: '3天',
+        type: 'days',
+        num: '3',
+    }, {
+        time: '7天',
+        type: 'days',
+        num: '7',
+    }, {
+        time: '14天',
+        type: 'days',
+        num: '14',
+    }
+];
 @connect(mapStateToProps)
 @Form.create()
 export default class History extends React.PureComponent {
     state = {
         btn: -1,
     }
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const {
+            loading,
+            form,
+        } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            if (this.state.btn >= 0) {
+                Object.assign(values, {
+                    happenedTimee: moment().format('X'),
+                    happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
+                });
+            }
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onChange(value, dateString) {
@@ -45,6 +94,12 @@ export default class History extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (this.state.btn >= 0) {
+                Object.assign(values, {
+                    happenedTimee: moment().format('X'),
+                    happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
+                });
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -101,41 +156,6 @@ export default class History extends React.PureComponent {
 
 
         const { getFieldDecorator } = form;
-        const times = [
-            {
-                time: '1小时',
-                type: 'hours',
-                num: '1',
-            }, {
-                time: '3小时',
-                type: 'hours',
-                num: '3',
-            }, {
-                time: '6小时',
-                type: 'hours',
-                num: '6',
-            }, {
-                time: '12小时',
-                type: 'hours',
-                num: '12',
-            }, {
-                time: '1天',
-                type: 'days',
-                num: '1',
-            }, {
-                time: '3天',
-                type: 'days',
-                num: '3',
-            }, {
-                time: '7天',
-                type: 'days',
-                num: '7',
-            }, {
-                time: '14天',
-                type: 'days',
-                num: '14',
-            }
-        ];
         const columns = [
             { title: '报警规则名称',
                 dataIndex: 'name',
@@ -220,7 +240,7 @@ export default class History extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">搜索</Button>
+                        <Button type="primary" htmlType="submit">查询</Button>
                     </Form.Item>
                 </Form>
                 <Table

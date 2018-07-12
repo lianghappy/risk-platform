@@ -37,13 +37,13 @@ export default [
         key: 'policy',
         id: 'R_M_policy',
     }, {
-        name: '类别管理',
+        name: '指标分类',
         key: 'categoryStru',
         router: '/categoryStru',
         pid: 'R_M_policy',
         id: 'R_F_PLY_catg',
     }, {
-        name: '规则库管理',
+        name: '指标库',
         key: 'rule',
         router: '/rule',
         pid: 'R_M_policy',

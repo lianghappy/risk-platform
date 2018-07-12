@@ -79,6 +79,10 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '沙箱样本' }],
                     });
+                    dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
                     const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'getSandSamplesList',

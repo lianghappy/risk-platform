@@ -162,11 +162,11 @@ class Rules extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_PLY_rule_view') &&
+                            roles('R_policy_rules_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_PLY_rule_reset') &&
+                            roles('R_policy_rules_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>

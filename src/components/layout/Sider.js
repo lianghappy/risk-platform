@@ -4,14 +4,14 @@ import { Layout, Menu } from 'antd';
 import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
-// import { authFirst, authsSecond } from 'utils/auth';
-import { authFirst, authsSecond } from 'utils/auth';
 import { menuKeyPick } from 'utils/common';
+import { authFirst, authsSecond } from 'utils/auth';
+import { setPath } from 'utils/path';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
 
 const mapStateToProps = state => ({
-    // auths: state.session.menus
+    auths: state.session.auths,
     flag: state.common.flag,
 });
 @connect(mapStateToProps)
@@ -23,7 +23,7 @@ export default class Sider extends React.PureComponent {
     };
     render() {
         const { location } = this.props;
-        const auths = this.props.flag ? authFirst : authsSecond;
+        const auth = this.props.flag ? authFirst : authsSecond;
         const menuKey = menuKeyPick(location);
 
         return (
@@ -40,7 +40,15 @@ export default class Sider extends React.PureComponent {
                     selectedKeys={menuKey}
                     style={{ userSelect: 'none' }}
                 >
-                    {auths.map(m => (
+                    {
+                        !this.props.flag &&
+                    <Menu.Item>
+                        <Link to={setPath('/account')} >
+                            <span>首页</span>
+                        </Link>
+                    </Menu.Item>
+                    }
+                    { auth && auth.map(m => (
                         <Menu.SubMenu
                             key={m.key}
                             title={

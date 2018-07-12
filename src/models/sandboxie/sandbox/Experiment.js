@@ -102,6 +102,10 @@ export default {
                         payload: [{ name: '策略沙箱', link: setPath('/sandboxie') }, { name: '开始实验' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getType',
                         payload: {
                             sysId: SYSID,

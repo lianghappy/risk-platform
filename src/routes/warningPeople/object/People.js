@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Button, Input, Table, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import { roles } from 'utils/common';
 import Pagination from 'components/Pagination/Pagination';
 import PeopleModal from './peopleModal';
 import styles from './index.scss';
@@ -20,11 +21,15 @@ export default class People extends React.PureComponent {
     state={
         selectedRows: [],
     }
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    onPageChange = (pageNum, pageSize) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onDelete = (personId) => {
@@ -114,7 +119,7 @@ export default class People extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
-        const content = data.id !== undefined ? '更新成功' : '新增成功';
+        const content = data.personId !== undefined ? '更新成功' : '新增成功';
         let url = '';
         switch (data.type) {
         case 'add':
@@ -175,27 +180,47 @@ export default class People extends React.PureComponent {
             {
                 title: '收件人姓名',
                 dataIndex: 'sleuthPersonName',
-                key: 'sleuthPersonName'
+                key: 'sleuthPersonName',
+                width: 100,
             },
             {
                 title: '收件人手机号',
                 dataIndex: 'sleuthPersonPhone',
-                key: 'sleuthPersonPhone'
+                key: 'sleuthPersonPhone',
+                width: 100,
             },
-            { title: '钉钉机器人', dataIndex: 'dingRebot', key: 'dingRebot' },
+            {
+                title: '钉钉机器人',
+                dataIndex: 'dingRebot',
+                key: 'dingRebot',
+                width: 100,
+            },
             {
                 title: '所属报警组',
                 dataIndex: 'sleuthTeamName',
-                key: 'sleuthTeamName'
+                key: 'sleuthTeamName',
+                width: 100,
             },
-            { title: '添加人', dataIndex: 'operators', key: 'operators' },
-            { title: '添加时间', dataIndex: 'createTime', key: 'createTime' },
+            {
+                title: '添加人',
+                dataIndex: 'operators',
+                key: 'operators',
+                width: 100,
+            },
+            {
+                title: '添加时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+                width: 100,
+            },
             {
                 title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
                 render: (text, record) => (
                     <div>
+                        {
+                            roles('R_police_obj_pp_edit') &&
                         <PeopleModal
                             dispatch={this.props.dispatch}
                             type="edit"
@@ -204,6 +229,9 @@ export default class People extends React.PureComponent {
                         >
                             <a>编辑</a>
                         </PeopleModal>
+                        }
+                        {
+                            roles('R_police_obj_pp_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="确定删除报警收件人?"
@@ -211,8 +239,10 @@ export default class People extends React.PureComponent {
                         >
                             <a className="jm-del">删除</a>
                         </Popconfirm>
+                        }
                     </div>
-                )
+                ),
+                width: 100,
             }
         ];
         return (
@@ -237,13 +267,18 @@ export default class People extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">
+                        {
+                            roles('R_police_obj_pp_qry') &&
+                            <Button type="primary" htmlType="submit">
                             查询
-                        </Button>
+                            </Button>
+                        }
                     </Form.Item>
                 </Form>
                 <Form layout="inline" className={styles.add}>
                     <Form.Item>
+                        {
+                            roles('R_police_obj_pp_add') &&
                         <PeopleModal
                             dispatch={this.props.dispatch}
                             type="add"
@@ -252,9 +287,13 @@ export default class People extends React.PureComponent {
                         >
                             <Button type="primary">新增收件人</Button>
                         </PeopleModal>
+                        }
                     </Form.Item>
                     <Form.Item>
+                        {
+                            roles('R_police_obj_pp_dels') &&
                         <Button type="default" disabled={!hasSelected} onClick={() => this.onDels()}>批量删除联系人</Button>
+                        }
                     </Form.Item>
                 </Form>
                 <Table

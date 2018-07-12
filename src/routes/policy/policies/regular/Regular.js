@@ -353,7 +353,7 @@ export default class Regular extends React.PureComponent {
             render: (text, record) => (
                 <div>
                     {
-                        roles('R_B_PLY_policy_st_rule_edit') && Number(status) === 0 &&
+                        roles('R_policy_ply_stg_rl_edit') && Number(status) === 0 &&
                     <RegularEdit
                         type="update"
                         stageType={typeStages}
@@ -365,7 +365,7 @@ export default class Regular extends React.PureComponent {
                     </RegularEdit>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_dtl') &&
+                        roles('R_policy_ply_stg_rl_dtl') &&
                     <RegularDetail
                         record={record}
                         type={typeStages}
@@ -375,7 +375,7 @@ export default class Regular extends React.PureComponent {
                     </RegularDetail>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_del') && Number(status) === 0 &&
+                        roles('R_policy_ply_stg_rl_del') && Number(status) === 0 &&
                     <Popconfirm
                         title="你确定要删除该规则吗"
                         onConfirm={() => this.onDelete(record.id)}
@@ -457,7 +457,7 @@ export default class Regular extends React.PureComponent {
                         }
                     </Form.Item>
                     {
-                        roles('R_B_PLY_policy_st_rule_view') &&
+                        roles('R_policy_ply_stg_rl_qry') &&
                     <Form.Item>
                         <Button
                             type="primary"
@@ -469,7 +469,7 @@ export default class Regular extends React.PureComponent {
                     </Form.Item>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_rst') &&
+                        roles('R_policy_ply_stg_rl_rst') &&
                     <Form.Item>
                         <Button
                             onClick={this.onReset}
@@ -482,7 +482,7 @@ export default class Regular extends React.PureComponent {
                 </Form>
                 <div className="jm-toolBar">
                     {
-                        roles('R_B_PLY_policy_st_rule_add') && Number(status) === 0 &&
+                        roles('R_policy_ply_stg_rl_add') && Number(status) === 0 &&
                     <RegularModal
                         stageId={stageId}
                         ruleName={ruleName}
@@ -494,7 +494,7 @@ export default class Regular extends React.PureComponent {
                     </RegularModal>
                     }
                     {
-                        roles('R_B_PLY_policy_st_rule_cle') && Number(status) === 0 &&
+                        roles('R_policy_ply_stg_rl_clone') && Number(status) === 0 &&
                     <RegularEdit
                         type="clone"
                         stageType={typeStages}

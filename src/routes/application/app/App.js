@@ -183,25 +183,19 @@ class AppIndex extends React.PureComponent {
                             getFieldDecorator('partnerName')(<Input placeholder="请输入公司名称" />)
                         }
                     </FormItem> */}
-                    {
-                        roles('R_B_app_app_view') &&
                     <FormItem>
                         <Button type="primary" htmlType="submit">
                   查询
                         </Button>
                     </FormItem>
-                    }
-                    {
-                        roles('R_B_app_app_reset') &&
                     <FormItem>
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                         </Button>
                     </FormItem>
-                    }
                 </Form>
                 {
-                    roles('R_B_app_app_add') &&
+                    roles('R_apps_app_add') &&
                 <AddApp
                     type="add"
                     record={{}}

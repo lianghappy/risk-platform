@@ -241,13 +241,13 @@ export const authFirst = [
         name: '管理中心',
         key: 'system',
         children: [{
-            name: '账号管理',
-            key: 'account',
-            router: '/account',
-        }, {
             name: '订单管理',
             key: 'order',
             router: '/order',
+        }, {
+            name: '账号管理',
+            key: 'account',
+            router: '/account',
         }, {
             name: '角色管理',
             key: 'role',
@@ -257,21 +257,9 @@ export const authFirst = [
             key: 'permission',
             router: '/permission',
         }, {
-            name: '黑名单',
+            name: '黑白名单',
             key: 'black',
             router: '/black',
-        }, {
-            name: '白名单',
-            key: 'white',
-            router: '/white',
-        }, {
-            name: '灰名单',
-            key: 'gray',
-            router: '/gray',
-        }, {
-            name: '第三方产品',
-            key: 'thirdPartyManage',
-            router: '/thirdPartyManage'
         }],
     }, {
         name: '应用中心',
@@ -281,11 +269,8 @@ export const authFirst = [
                 name: '应用管理',
                 key: 'app',
                 router: '/app',
-            }, {
-                name: '报警规则',
-                key: 'black',
-                router: '/warningRule',
-            }],
+            }
+        ],
     },
 ];
 export const authsSecond = [
@@ -301,7 +286,7 @@ export const authsSecond = [
             key: 'rule',
             router: '/rule',
         }, {
-            name: '策略管理',
+            name: '决策引擎',
             key: 'policy',
             router: '/policy',
         }, {
@@ -337,7 +322,7 @@ export const authsSecond = [
             key: 'warningRule',
             router: '/warningRule',
         }, {
-            name: '报警收件人',
+            name: '报警对象',
             key: 'warningPeople',
             router: '/warningPeople',
         }],

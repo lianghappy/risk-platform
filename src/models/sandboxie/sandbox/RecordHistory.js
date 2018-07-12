@@ -52,6 +52,10 @@ export default {
                             { name: '实验历史记录' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'recordHistoryList',
                         payload: {
                             sysId: SYSID,

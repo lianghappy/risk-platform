@@ -73,6 +73,10 @@ export default {
                         payload: [{ name: '策略管理', link: setPath('/policy') }, { name: '阶段管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getStrategyList',
                         payload: {
                             strategyId: ids,

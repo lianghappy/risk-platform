@@ -9,6 +9,7 @@ const mapStateToProps = (state) => {
         getReport: state.orderDetail.getReport,
         getReportList: state.orderDetail.getReportList,
         loading: state.loading.models.orderDetail,
+        typeList: state.orderDetail.typeList,
     };
 };
 @connect(mapStateToProps)
@@ -16,11 +17,16 @@ export default class RiskReport extends React.PureComponent {
     static propTypes ={
         getReport: PropTypes.array.isRequired,
     }
-    render() {
-        const {
-            getReport,
-            loading,
-        } = this.props;
+    checkCode = (code) => {
+        let name = '';
+        this.props.typeList.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
+    changeColumn = (ids) => {
         const columns = [
             {
                 title: '规则编号',
@@ -29,7 +35,7 @@ export default class RiskReport extends React.PureComponent {
                 width: 100,
             },
             {
-                title: '规则编号',
+                title: '规则名称',
                 dataIndex: 'normName',
                 key: 'normName',
                 width: 100,
@@ -45,6 +51,7 @@ export default class RiskReport extends React.PureComponent {
                 dataIndex: 'channel',
                 key: 'channel',
                 width: 100,
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>)
             },
             {
                 title: '所有类别',
@@ -53,6 +60,43 @@ export default class RiskReport extends React.PureComponent {
                 width: 100,
             },
         ];
+        if (ids === '2') {
+            columns.splice(columns.length - 2, 0,
+                {
+                    title: '判定规则key',
+                    dataIndex: 'judgeKey',
+                    key: 'judgeKey',
+                    width: 100,
+                }, {
+                    title: '判定符号',
+                    dataIndex: 'compareSymbol',
+                    key: 'compareSymbol',
+                    width: 100,
+                }, {
+                    title: '判定阈值',
+                    dataIndex: 'judgeValue',
+                    key: 'judgeValue',
+                    width: 100,
+                }, {
+                    title: '分值',
+                    dataIndex: 'score',
+                    key: 'score',
+                    width: 100,
+                }, {
+                    title: '权重',
+                    dataIndex: 'weight',
+                    key: 'weight',
+                    width: 100,
+                }
+            );
+        }
+        return columns;
+    }
+    render() {
+        const {
+            getReport,
+            loading,
+        } = this.props;
         return (
             <Layout className={styles.riskReport}>
                 {
@@ -67,7 +111,10 @@ export default class RiskReport extends React.PureComponent {
                                     <span>阶段审核结果：{item.stageVerifyResult}</span>
                                 </div>
                                 <Table
-                                    columns={columns}
+                                    className={styles.tables}
+                                    rowClassName={styles.tableTr}
+                                    indentSize={10}
+                                    columns={this.changeColumn(item.stageType)}
                                     dataSource={item.normList}
                                     pagination={false}
                                     loading={loading}

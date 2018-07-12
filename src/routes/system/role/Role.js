@@ -119,11 +119,11 @@ class RoleIndex extends React.PureComponent {
                render: (...rest) => (
                    <div>
                        {
-                           roles('R_B_system_role_detail') &&
+                           roles('R_system_role_detail') &&
                        <span role="button" tabIndex="-1" className="jm-operate" onClick={() => this.onDetail(rest[1].id)}>详情</span>
                        }
                        {
-                           roles('R_B_system_role_del') &&
+                           roles('R_system_role_del') &&
                        <Popconfirm
                            placement="topRight"
                            title="是否确定删除？"
@@ -150,7 +150,7 @@ class RoleIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem>
                        {
-                           roles('R_B_system_role_view') &&
+                           roles('R_system_role_qry') &&
                        <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                   查询
                        </Button>
@@ -158,7 +158,7 @@ class RoleIndex extends React.PureComponent {
                    </FormItem>
                    <FormItem>
                        {
-                           roles('R_B_system_role_reset') &&
+                           roles('R_system_role_rst') &&
                        <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
                        </Button>
@@ -166,7 +166,7 @@ class RoleIndex extends React.PureComponent {
                    </FormItem>
                </Form>
                {
-                   roles('R_B_system_role_add') &&
+                   roles('R_system_role_add') &&
                <Form layout="inline">
                    <FormItem>
                        <Button

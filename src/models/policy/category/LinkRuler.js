@@ -137,6 +137,10 @@ export default {
                         },
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getCategoryList',
                         payload: {
                             sysId: SYSID,

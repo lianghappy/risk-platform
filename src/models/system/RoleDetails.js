@@ -17,62 +17,89 @@ export default {
         * getTreeList({ payload }, { call, put }) {
             const { data } = payload;
             const response = yield call(post, API.getMenuTreeList, payload, data);
-            const treeDatas = [{
-                title: '系统管理',
-                key: 'R_M_system',
+            const treeDatas = treeConvert({
+                pId: 'pid',
+                tId: 'key',
+                tName: 'title',
+            }, response);
+            /* [{
+                title: '监控中心',
+                key: 'R_warn',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'R_M_system',
+                    rootId: 'R_warn',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
                     tName: 'title',
                 }, response),
             }, {
-                title: '应用管理',
-                key: 'R_M_application',
+                title: '管理中心',
+                key: 'R_system',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'R_M_application',
+                    rootId: 'R_system',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
                     tName: 'title',
                 }, response),
             }, {
-                title: '决策引擎',
-                key: 'R_M_policy',
+                title: '管理中心',
+                key: 'R_system',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'R_M_policy',
+                    rootId: 'R_system',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
                     tName: 'title',
                 }, response),
             }, {
-                title: '策略沙箱',
-                key: 'R_M_sandboxie',
+                title: '应用中心',
+                key: 'R_apps',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'R_M_sandboxie',
+                    rootId: 'R_apps',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
                     tName: 'title',
                 }, response),
             }, {
-                title: '黑白名单',
-                key: 'R_M_blackAndWhite',
+                title: '策略中心',
+                key: 'R_policy',
                 children: treeConvert({
                     pId: 'pid',
-                    rootId: 'R_M_blackAndWhite',
+                    rootId: 'R_policy',
                     id: 'id', // 原始数据Id
                     name: 'name',
                     tId: 'key',
                     tName: 'title',
                 }, response),
-            }];
+            }, {
+                title: '实验中心',
+                key: 'R_policy',
+                children: treeConvert({
+                    pId: 'pid',
+                    rootId: 'R_policy',
+                    id: 'id', // 原始数据Id
+                    name: 'name',
+                    tId: 'key',
+                    tName: 'title',
+                }, response),
+            }, {
+                title: '策略中心',
+                key: 'R_policy',
+                children: treeConvert({
+                    pId: 'pid',
+                    rootId: 'R_policy',
+                    id: 'id', // 原始数据Id
+                    name: 'name',
+                    tId: 'key',
+                    tName: 'title',
+                }, response),
+            }]; */
             yield put({
                 type: 'getTreeListSuc',
                 payload: {
@@ -127,6 +154,10 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '角色管理', link: setPath('/role') }, { name: '角色详情' }],
+                    });
+                    dispatch({
+                        type: 'common/setSide',
+                        payload: true,
                     });
                     dispatch({
                         type: 'getTreeList',

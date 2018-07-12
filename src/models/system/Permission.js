@@ -41,6 +41,10 @@ export default {
                         payload: [{ name: '权限管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getPermissionList',
                         payload: {
                             sysId: SYSID,

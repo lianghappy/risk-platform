@@ -14,7 +14,7 @@ export default {
         orderList: [],
         getReport: [],
         getReportList: [],
-
+        typeList: [],
     },
     effects: {
         // 订单基本信息
@@ -53,6 +53,17 @@ export default {
                 },
             });
         },
+        // 获取来源的数据
+        * getChannel({ payload }, { call, put }) {
+            const { data } = payload;
+            const response = yield call(post, API.getChannel, payload, data);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    typeList: response,
+                },
+            });
+        },
     },
     reducers: {
         querySuc(state, { payload }) {
@@ -71,13 +82,17 @@ export default {
                         payload: [{ name: '订单管理', link: setPath('/order') }, { name: '订单详情' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getOrderBasic',
                         payload: {
                             sampleId,
                         },
                     });
                     dispatch({
-                        type: 'getOrderBasic',
+                        type: 'getOrderList',
                         payload: {
                             sampleId,
                             companyId,
@@ -88,7 +103,13 @@ export default {
                     dispatch({
                         type: 'getReport',
                         payload: {
-                            sampleId: 'c291992406ab462f9bdd8b7f8c7fceed',
+                            sampleId,
+                        },
+                    });
+                    dispatch({
+                        type: 'getChannel',
+                        payload: {
+                            type: 'rule',
                         },
                     });
                 }

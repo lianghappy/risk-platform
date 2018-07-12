@@ -46,6 +46,10 @@ export default {
                         payload: [{ name: '角色管理' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        payload: true,
+                    });
+                    dispatch({
                         type: 'getRoleList',
                         payload: {
                             pageNum: 1,

@@ -2,6 +2,8 @@ import React from 'react';
 import { Layout, Button, Form, Table, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
+import noMessage from 'assets/images/noMessage.svg';
+import { roles } from 'utils/common';
 import cs from 'classnames';
 import TeamModal from './TeamModal';
 import styles from './index.scss';
@@ -16,11 +18,26 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class Peoples extends React.PureComponent {
-    onPageChange = (pageNum, pageSize, sysId) => {
-        this.query({
-            pageNum,
-            pageSize,
-            sysId,
+    componentWillMount() {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        this.props.dispatch({
+            type: 'warningPeople/getTeam',
+            payload: {
+                pageNum: 1,
+                pageSize: 10,
+                companyId,
+            }
+        });
+    }
+    onPageChange = (pageNum, pageSize) => {
+        const { loading, form } = this.props;
+        if (loading) return;
+        form.validateFields((errors, values) => {
+            this.query({
+                ...values,
+                pageNum,
+                pageSize,
+            });
         });
     };
     onDelete = (teamId) => {
@@ -35,6 +52,35 @@ export default class Peoples extends React.PureComponent {
                 type: 'warningPeople/delTeam',
                 payload: {
                     data: {
+                        teamId,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            message.success('删除成功');
+            form.validateFields((errors, values) => {
+                this.query({
+                    ...values,
+                    pageNum,
+                    pageSize,
+                });
+            });
+        });
+    }
+    onDeletes = (personId, teamId) => {
+        const {
+            dispatch,
+            form,
+            pageNum,
+            pageSize,
+        } = this.props;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'warningPeople/delTeamPeople',
+                payload: {
+                    data: {
+                        personId,
                         teamId,
                     },
                     resolve,
@@ -105,35 +151,64 @@ export default class Peoples extends React.PureComponent {
             loading,
             warningTeam,
         } = this.props;
-        console.log(warningTeam);
+
         const columns = [
             {
                 title: '收件人姓名',
                 dataIndex: 'sleuthPersonName',
-                key: 'sleuthPersonName'
+                key: 'sleuthPersonName',
+                width: 100,
             },
             {
                 title: '收件人手机号',
                 dataIndex: 'sleuthPersonPhone',
-                key: 'sleuthPersonPhone'
+                key: 'sleuthPersonPhone',
+                width: 100,
             },
-            { title: '钉钉机器人', dataIndex: 'dingRebot', key: 'dingRebot' },
-            { title: '添加人', dataIndex: 'operators', key: 'operators' },
-            { title: '添加时间', dataIndex: 'createTime', key: 'createTime' },
+            {
+                title: '钉钉机器人',
+                dataIndex: 'dingRebot',
+                key: 'dingRebot',
+                width: 100,
+            },
+            {
+                title: '添加人',
+                dataIndex: 'operators',
+                key: 'operators',
+                width: 100,
+            },
+            {
+                title: '添加时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+                width: 100,
+            },
             {
                 title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',
-                render: () => (
+                render: (text, record) => (
                     <div>
-                        <span>删除</span>
+                        {
+                            roles('R_police_obj_ps_del') &&
+                            <Popconfirm
+                                placement="topRight"
+                                title="您确定删除吗？"
+                                onConfirm={() => this.onDeletes(record.sleuthPersonId, record.sleuthTeamId)}
+                            >
+                                <a>删除</a>
+                            </Popconfirm>
+                        }
                     </div>
-                )
+                ),
+                width: 100,
             }
         ];
         return (
             <Layout>
                 <div className={cs(styles.look, styles.peoples)}>
+                    {
+                        roles('R_police_obj_ps_add') &&
                     <TeamModal
                         type="add"
                         record={{}}
@@ -142,6 +217,7 @@ export default class Peoples extends React.PureComponent {
                     >
                         <Button type="primary" className={styles.adds}>新增收件组</Button>
                     </TeamModal>
+                    }
                 </div>
                 {
                     warningTeam.map((item, index) => {
@@ -150,6 +226,8 @@ export default class Peoples extends React.PureComponent {
                                 <div className={styles.header}>
                                     <span className={styles.name}>{item.sleuthTeamName}</span>
                                     <div>
+                                        {
+                                            roles('R_police_obj_ps_edit') &&
                                         <TeamModal
                                             type="edit"
                                             record={item}
@@ -158,6 +236,9 @@ export default class Peoples extends React.PureComponent {
                                         >
                                             <Button type="primary" className={styles.edits}>编辑</Button>
                                         </TeamModal>
+                                        }
+                                        {
+                                            roles('R_police_obj_ps_dels') &&
                                         <Popconfirm
                                             placement="topRight"
                                             title={`确定删除${item.sleuthTeamName}组嘛?`}
@@ -165,6 +246,7 @@ export default class Peoples extends React.PureComponent {
                                         >
                                             <Button type="default">删除</Button>
                                         </Popconfirm>
+                                        }
                                     </div>
                                 </div>
                                 <Table
@@ -176,6 +258,13 @@ export default class Peoples extends React.PureComponent {
                             </div>
                         );
                     })
+                }
+                {
+                    warningTeam.length === 0 &&
+                    <div className={styles.noMessage}>
+                        <img src={noMessage} alt="暂无内容" />
+                        <p>暂无内容</p>
+                    </div>
                 }
             </Layout>
         );

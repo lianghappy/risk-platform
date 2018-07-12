@@ -18,11 +18,27 @@
 }
 .disk{
     margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+}
+.noMessage{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 95px;
+    width: 100%;
+    flex-direction: column;
 }
 .bigDisk{
     height: 426px;
     width: 100%;
     border: 1px solid #eaeaea;
+}
+.smallDisk{
+    height: 426px;
+    width: 48%;
 }
 .addTimed{
     margin-right: 8px;

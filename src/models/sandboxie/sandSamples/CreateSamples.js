@@ -46,6 +46,10 @@ export default {
                     dispatch({
                         type: 'getSelect',
                     });
+                    dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
                 }
             });
         },

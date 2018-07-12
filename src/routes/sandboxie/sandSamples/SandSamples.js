@@ -130,6 +130,8 @@ class SandSamples extends React.PureComponent {
         this.props.history.push(setPath('/sandSamples/create'));
     }
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId });
         Object.assign(payload, { type: 1 });
         this.props.dispatch({
             type: 'sandSamples/getSandSamplesList',
@@ -182,7 +184,7 @@ class SandSamples extends React.PureComponent {
                 render: (...rest) => (
                     <div style={{ width: '193px' }}>
                         {
-                            roles('R_B_SB_sandsamples_select') &&
+                            roles('R_exp_sabp_slct') &&
                         <SamplesModal
                             visible={this.state.visible}
                         >
@@ -190,7 +192,7 @@ class SandSamples extends React.PureComponent {
                         </SamplesModal>
                         }
                         {
-                            roles('R_B_SB_sandsamples_detail') &&
+                            roles('R_exp_sabp_det') &&
                         <SampleDetail
                             visible={this.state.show}
                             analysisSampleId={rest[1].id}
@@ -200,7 +202,7 @@ class SandSamples extends React.PureComponent {
                         </SampleDetail>
                         }
                         {
-                            roles('R_B_SB_sandsamples_del') &&
+                            roles('R_exp_sabp_del') &&
                         <Popconfirm
                             placement="topRight"
                             title="是否确定删除？"
@@ -243,18 +245,18 @@ class SandSamples extends React.PureComponent {
                     </FormItem>
                     <FormItem>
                         {
-                            roles('R_B_SB_sandsamples_view') &&
+                            roles('R_exp_sabp_qry') &&
                         <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
                         }
                         {
-                            roles('R_B_SB_sandsamples_reset') &&
+                            roles('R_exp_sabp_rst') &&
                         <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                         }
                     </FormItem>
                 </Form>
                 <div>
                     {
-                        roles('R_B_SB_sandsamples_gener') &&
+                        roles('R_exp_sabp_create') &&
                     <Button type="primary" onClick={this.create} style={{ marginLeft: '12px', marginBottom: '20px' }}>创建样本</Button>
                     }
                 </div>

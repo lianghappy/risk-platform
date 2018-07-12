@@ -67,14 +67,22 @@ export default {
             yield call(post, API.addTeam, data);
             yield call(resolve);
         },
+        // 更新收件组
         * updataTeam({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.updataTeam, data);
             yield call(resolve);
         },
+        // 删除收件组
         * delTeam({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.delTeam, data);
+            yield call(resolve);
+        },
+        // 删除收件组中的人
+        * delTeamPeople({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delTeamPeople, data);
             yield call(resolve);
         },
     },
@@ -93,15 +101,11 @@ export default {
                         flag: false,
                     });
                     dispatch({
-                        type: 'getWarningList',
-                        payload: {
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                            companyId,
-                        }
+                        type: 'common/setBreadcrumb',
+                        payload: [{ name: '报警对象' }],
                     });
                     dispatch({
-                        type: 'getTeam',
+                        type: 'getWarningList',
                         payload: {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,

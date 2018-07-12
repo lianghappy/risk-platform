@@ -3,22 +3,26 @@ import PropTypes from 'prop-types';
 import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
+import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
 import styles from './index.scss';
 
 const Option = Select.Option;
 const mapStateToProps = (state) => {
     return {
-        getPeopleList: state.addWarningRule.getPeopleList,
-        sleuthTargets: state.addWarningRule.sleuthTargets,
-        strategys: state.addWarningRule.strategys,
+        getPeopleList: state.EditWarningRule.getPeopleList,
+        sleuthTargets: state.EditWarningRule.sleuthTargets,
+        strategys: state.EditWarningRule.strategys,
+        record: state.EditWarningRule.record,
     };
 };
 @Form.create()
 @connect(mapStateToProps)
-export default class AddRule extends React.PureComponent {
+export default class EditRule extends React.PureComponent {
     static propTypes = {
         getPeopleList: PropTypes.array.isRequired,
+        record: PropTypes.object.isRequired,
+
     }
     state = {
         targetKeys: [],
@@ -59,6 +63,7 @@ export default class AddRule extends React.PureComponent {
                 const app = JSON.parse(sessionStorage.app);
                 const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                 const addName = JSON.parse(sessionStorage.userInfo).user.realName;
+                const sleuthConfigId = base64.decode(this.props.match.params.id);
                 Object.assign(values, {
                     productId: product.id,
                     productName: product.name,
@@ -67,10 +72,11 @@ export default class AddRule extends React.PureComponent {
                     companyId,
                     sleuthTeams: team,
                     addName,
+                    sleuthConfigId,
                 });
                 new Promise((resolve) => {
                     dispatch({
-                        type: 'addWarningRule/add',
+                        type: 'EditWarningRule/update',
                         payload: {
                             data: {
                                 ...values,
@@ -98,6 +104,7 @@ export default class AddRule extends React.PureComponent {
         const {
             strategys,
             sleuthTargets,
+            record,
         } = this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -168,6 +175,7 @@ export default class AddRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('strategyId', {
+                                initialValue: record && record.strategyId,
                                 rules: [
                                     { required: true, message: '请选择策略名称' }
                                 ]
@@ -192,6 +200,7 @@ export default class AddRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('sleuthConfigName', {
+                                initialValue: record && record.sleuthConfigName,
                                 rules: [
                                     { required: true, message: '请输入报警规则名称' }
                                 ]
@@ -207,7 +216,9 @@ export default class AddRule extends React.PureComponent {
 
                         <div>
                             {
-                                getFieldDecorator('sleuthTargeId')(
+                                getFieldDecorator('sleuthTargeId', {
+                                    initialValue: record && record.sleuthTargeId,
+                                })(
                                     <Select style={{ width: '154px' }}>
                                         {
                                             sleuthTargets && sleuthTargets.map((item, index) => {
@@ -218,7 +229,9 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('threshold')(
+                                getFieldDecorator('threshold', {
+                                    initialValue: record && record.threshold,
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             times.map((item, index) => {
@@ -229,7 +242,9 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeKey')(
+                                getFieldDecorator('judgeKey', {
+                                    initialValue: record && record.judgeKey,
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             value.map((item, index) => {
@@ -240,7 +255,9 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeSymbol')(
+                                getFieldDecorator('judgeSymbol', {
+                                    initialValue: record && record.judgeSymbol,
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             judgeKey.map((item, index) => {
@@ -251,7 +268,9 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeValue')(
+                                getFieldDecorator('judgeValue', {
+                                    initialValue: record && record.judgeValue,
+                                })(
                                     <Input style={{ width: '154px', marginLeft: '16px' }} />
                                 )
                             }
@@ -265,6 +284,7 @@ export default class AddRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('silenceTime', {
+                                initialValue: record && record.silenceTime,
                                 rules: [
                                     { required: true, message: '请选择通道沉默时间' }
                                 ]
@@ -285,6 +305,7 @@ export default class AddRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('alarmCount', {
+                                initialValue: record && record.alarmCount,
                                 rules: [
                                     { required: true, message: '请选择连续几次超过阈值后报警' }
                                 ]
@@ -308,6 +329,7 @@ export default class AddRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('sleuthTeams', {
+                                initialValue: record && record.threshold,
                                 rules: [
                                     { required: true, message: '请选择通知对象' }
                                 ]
@@ -324,7 +346,7 @@ export default class AddRule extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item className={styles.addBtn}>
-                        <Button type="primary" style={{ marginRight: '20px' }} htmlType="submit" disabled={this.props.loading}>新增</Button>
+                        <Button type="primary" style={{ marginRight: '20px' }} htmlType="submit" disabled={this.props.loading}>保存</Button>
                         <Button type="default" onClick={() => this.cancel()}>取消</Button>
                     </Form.Item>
                 </Form>

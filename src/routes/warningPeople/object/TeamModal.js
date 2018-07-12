@@ -23,7 +23,7 @@ export default class TeamModal extends React.PureComponent {
             if (!err) {
                 new Promise(resolve => {
                     if (type === 'edit') {
-                        Object.assign(values, { personIds: record.personIds });
+                        Object.assign(values, { teamId: record.sleuthTeamId });
                     }
                     values.type = that.props.type;
                     onOk(values, resolve);
@@ -43,8 +43,8 @@ export default class TeamModal extends React.PureComponent {
             let flag = true;
             const data = {
                 key: item.sleuthPersonId,
-                title: item.sleuthPersonName,
-                description: item.sleuthPersonName,
+                title: `${item.sleuthPersonName}[${item.sleuthPersonPhone}]`,
+                description: `${item.sleuthPersonName}[${item.sleuthPersonPhone}]`,
             };
             if (this.props.record.sleuthPersonResponses) {
                 this.props.record.sleuthPersonResponses.forEach(items => {
@@ -82,7 +82,7 @@ export default class TeamModal extends React.PureComponent {
             labelCol: { span: 5 },
             wrapperCol: { span: 18 },
         };
-        console.log(this.state.targetKeys);
+
         return (
             <span>
                 <span
@@ -148,6 +148,7 @@ export default class TeamModal extends React.PureComponent {
                                         targetKeys={this.state.targetKeys}
                                         onChange={this.handleChange}
                                         render={item => item.title}
+                                        listStyle={{ width: '200px' }}
                                     />
                                 )
                             }
