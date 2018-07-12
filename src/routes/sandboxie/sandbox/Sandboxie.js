@@ -163,6 +163,8 @@ class Sandboxie extends React.PureComponent {
         default:
             break;
         }
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(data, { companyId });
         new Promise((resolve) => {
             dispatch({
                 type: url,

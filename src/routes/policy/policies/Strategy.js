@@ -161,7 +161,7 @@ class Policy extends React.PureComponent {
     };
     query(payload) {
         this.props.dispatch({
-            type: '/strategyPly/getStrategyList',
+            type: 'strategyPly/getStrategyList',
             payload,
         });
     }
