@@ -16,7 +16,7 @@ const API_RBAC = {
     test: 'http://rbac-api.test.jimistore.com',
     test2: 'http://rbac-api.test2.jimistore.com',
     prod: 'https://rbac-api.jimistore.com',
-    sandbox: 'https://114.55.95.151:23061',
+    sandbox: 'https://rbac-api-sandbox.jimistore.com',
 }[JIMI_ENV];
 // 平台接口
 const API = {

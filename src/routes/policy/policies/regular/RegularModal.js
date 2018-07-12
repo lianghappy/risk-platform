@@ -215,7 +215,6 @@ export default class RegularModal extends React.PureComponent {
                 });
             } else {
                 const categoryId = this.state.categorieId;
-                console.log(categoryId);
 
                 this.query({
                     ...values,
