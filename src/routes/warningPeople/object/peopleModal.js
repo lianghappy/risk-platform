@@ -55,7 +55,7 @@ export default class PeopleModal extends React.PureComponent {
             if (!err) {
                 new Promise(resolve => {
                     if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
+                        Object.assign(values, { personId: record.sleuthPersonId });
                     }
                     values.type = that.props.type;
                     onOk(values, resolve);
@@ -88,7 +88,6 @@ export default class PeopleModal extends React.PureComponent {
             form,
             record,
         } = this.props;
-        console.log(record);
         const { getFieldDecorator } = form;
         const formItemLayout = {
             labelCol: { span: 7 },

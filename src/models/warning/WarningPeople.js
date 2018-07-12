@@ -109,14 +109,6 @@ export default {
                             companyId,
                         }
                     });
-                    dispatch({
-                        type: 'getTeam',
-                        payload: {
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                            companyId,
-                        }
-                    });
                 }
             });
         },

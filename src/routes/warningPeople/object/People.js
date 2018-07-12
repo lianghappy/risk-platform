@@ -119,7 +119,7 @@ export default class People extends React.PureComponent {
             pageNum,
             form,
         } = this.props;
-        const content = data.id !== undefined ? '更新成功' : '新增成功';
+        const content = data.personId !== undefined ? '更新成功' : '新增成功';
         let url = '';
         switch (data.type) {
         case 'add':
@@ -180,21 +180,39 @@ export default class People extends React.PureComponent {
             {
                 title: '收件人姓名',
                 dataIndex: 'sleuthPersonName',
-                key: 'sleuthPersonName'
+                key: 'sleuthPersonName',
+                width: 100,
             },
             {
                 title: '收件人手机号',
                 dataIndex: 'sleuthPersonPhone',
-                key: 'sleuthPersonPhone'
+                key: 'sleuthPersonPhone',
+                width: 100,
             },
-            { title: '钉钉机器人', dataIndex: 'dingRebot', key: 'dingRebot' },
+            {
+                title: '钉钉机器人',
+                dataIndex: 'dingRebot',
+                key: 'dingRebot',
+                width: 100,
+            },
             {
                 title: '所属报警组',
                 dataIndex: 'sleuthTeamName',
-                key: 'sleuthTeamName'
+                key: 'sleuthTeamName',
+                width: 100,
             },
-            { title: '添加人', dataIndex: 'operators', key: 'operators' },
-            { title: '添加时间', dataIndex: 'createTime', key: 'createTime' },
+            {
+                title: '添加人',
+                dataIndex: 'operators',
+                key: 'operators',
+                width: 100,
+            },
+            {
+                title: '添加时间',
+                dataIndex: 'createTime',
+                key: 'createTime',
+                width: 100,
+            },
             {
                 title: '操作',
                 dataIndex: 'operate',
@@ -223,7 +241,8 @@ export default class People extends React.PureComponent {
                         </Popconfirm>
                         }
                     </div>
-                )
+                ),
+                width: 100,
             }
         ];
         return (

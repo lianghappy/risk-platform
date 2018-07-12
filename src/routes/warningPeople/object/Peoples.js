@@ -18,6 +18,17 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class Peoples extends React.PureComponent {
+    componentWillMount() {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        this.props.dispatch({
+            type: 'warningPeople/getTeam',
+            payload: {
+                pageNum: 1,
+                pageSize: 10,
+                companyId,
+            }
+        });
+    }
     onPageChange = (pageNum, pageSize) => {
         const { loading, form } = this.props;
         if (loading) return;
@@ -140,6 +151,7 @@ export default class Peoples extends React.PureComponent {
             loading,
             warningTeam,
         } = this.props;
+
         const columns = [
             {
                 title: '收件人姓名',
