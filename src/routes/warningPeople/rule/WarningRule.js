@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Form, Button, Table, Popconfirm, message, Select } from 'antd';
 import moment from 'moment';
 import { setPath } from 'utils/path';
+import base64 from 'utils/base64';
 import { roles } from 'utils/common';
 import style from './index.scss';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -114,6 +115,9 @@ export default class WarningRule extends React.PureComponent {
             sysId: 'risk',
         });
     };
+      onEdit = (id) => {
+          this.props.history.push(setPath(`/editWarningRule/${base64.encode(id)}`));
+      }
     changeTime = (time) => {
         const times = [
             { name: '1分钟', key: '1', type: 'minutes' },
@@ -148,27 +152,6 @@ export default class WarningRule extends React.PureComponent {
             }
         });
         return counts;
-    }
-    handleTableChange = (pagination, filters, sorter) => {
-        console.log(pagination, filters, sorter);
-
-        const {
-            pageNum,
-            pageSize,
-            form,
-        } = this.props;
-        let state = '';
-        if (filters.state.length !== 0 && filters.state.length !== 2) {
-            state = filters.state[0];
-        }
-        form.validateFields((errors, values) => {
-            this.query({
-                ...values,
-                state,
-                pageNum,
-                pageSize,
-            });
-        });
     }
     add = () => {
         this.props.history.push(setPath('/addWarningRule'));
@@ -207,10 +190,6 @@ export default class WarningRule extends React.PureComponent {
             {
                 title: '状态',
                 dataIndex: 'state',
-                filters: [
-                    { text: '禁用', value: '0' },
-                    { text: '启用', value: '1' },
-                ],
                 render: (text, record) => (<span>{Number(record.state) === 0 && '禁用'}{Number(record.state) === 1 && '启用'}</span>),
                 width: 100,
             },
@@ -271,7 +250,7 @@ export default class WarningRule extends React.PureComponent {
                         }
                         {
                             roles('R_police_rl_edit') &&
-                        <a role="button" tabIndex="-1" className="jm-del">编辑</a>
+                        <a role="button" tabIndex="-1" onClick={() => this.onEdit(record.id)} className="jm-del">编辑</a>
                         }
                         {
                             roles('R_police_rl_del') &&
@@ -349,7 +328,6 @@ export default class WarningRule extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
-                    onChange={this.handleTableChange}
                 />
                 <Pagination
                     current={pageNum}

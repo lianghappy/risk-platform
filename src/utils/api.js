@@ -203,8 +203,6 @@ const api = {
     // 删除报警收件组里面的收件人
     delTeamPeople: `${API}/api/risk/manager/monitor/deletePersonInTeam/v1`,
 
-    warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
-
     /* ---------- 监控-报警历史 ----------*/
     historyPolice: `${API}/api/risk/manager/monitor/sleuthHistory/list/v1`,
 
@@ -219,6 +217,8 @@ const api = {
     delWarnRule: `${API}/api/risk/manager/monitor/sleuthConfig/delete/v1`,
     // 更改状态
     updateStatus: `${API}/api/risk/manager/monitor/sleuthConfig/change/v1`,
+    getSingleRule: `${API}/api/risk/manager/monitor/sleuthConfig/get/v1`,
+    warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
 
     /* --------------------订单管理--------------------- */
     // 订单管理列表

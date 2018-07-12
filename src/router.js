@@ -277,6 +277,14 @@ function RouterConfig({ history, app }) {
             import('models/warning/AddWarning'),
         ],
     });
+    // 编辑报警规则
+    const editWarningRule = dynamic({
+        app,
+        component: () => import('routes/warningPeople/rule/EditRule'),
+        models: () => [
+            import('models/warning/EditWarning'),
+        ],
+    });
     // 监控大盘
     const Disk = dynamic({
         app,
@@ -353,6 +361,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/disk')} exact component={Disk} />
                     <PrivateRoute path={setPath('/historyPolice')} exact component={historyPolice} />
                     <PrivateRoute path={setPath('/addWarningRule')} exact component={addWarningRule} />
+                    <PrivateRoute path={setPath('/editWarningRule/:id')} exact component={editWarningRule} />
                     <PrivateRoute path={setPath('/order')} exact component={Orders} />
                     <PrivateRoute path={setPath('/orderDetail/:id')} exact component={OrderDetail} />
                 </Main>

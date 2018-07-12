@@ -184,7 +184,7 @@ export default class Peoples extends React.PureComponent {
                                 title="您确定删除吗？"
                                 onConfirm={() => this.onDeletes(record.sleuthPersonId, record.sleuthTeamId)}
                             >
-                                <span>删除</span>
+                                <a>删除</a>
                             </Popconfirm>
                         }
                     </div>
