@@ -15,3 +15,10 @@
     margin-bottom: 20px;
     margin-left: 13px;
 }
+.forms{
+    background-color: #D9D9D9;
+    border:1px solid rgba(217,217,217,1);
+    :global(.ant-form-item){
+        margin-bottom: 10px;
+    }
+}

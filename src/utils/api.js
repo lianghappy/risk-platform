@@ -246,6 +246,9 @@ const api = {
     grayPolicyUpdate: `${API}/api/risk/manager/strategy/grayStrategy/update/v1`,
     grayPolicyDel: `${API}/api/risk/manager/strategy/grayStrategy/delete/v1`,
 
+    /* ------------------------------------数据报表---------------------------------------- */
+    getReportList: `${API}/api/risk/manager/policy/normHit/normHitStatistic/v1`,
+
 };
 
 export default api;

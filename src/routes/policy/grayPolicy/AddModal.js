@@ -6,8 +6,10 @@ import {
     Button,
     Input,
     Select,
+    Icon,
 } from 'antd';
 import { connect } from 'dva';
+import styles from './index.scss';
 
 
 function hasErrors(fieldsError) {
@@ -180,8 +182,13 @@ export default class PolicyModal extends React.PureComponent {
                             }
                         </Form.Item>
                         <Form.Item>
-                            <span>添加策略</span>
+                            <span>添加策略<Icon type="plus-circle-o" /></span>
                         </Form.Item>
+                    </Form>
+                    <Form
+                        className={styles.forms}
+                        style={{ width: '400px' }}
+                    >
                         <Form.Item
                             {...formItemLayout}
                             label="策略名称"

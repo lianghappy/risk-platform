@@ -290,6 +290,10 @@ export const authsSecond = [
             key: 'policy',
             router: '/policy',
         }, {
+            name: '统计报表',
+            key: 'statistical',
+            router: '/statistical',
+        }, {
             name: '灰度策略',
             key: 'grayPolicy',
             router: '/grayPolicy',
