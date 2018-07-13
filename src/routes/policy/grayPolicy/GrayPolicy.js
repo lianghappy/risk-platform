@@ -242,7 +242,7 @@ export default class GrayPolicy extends React.PureComponent {
                    <Button
                        type="primary"
                        className={style.btns}
-                   >新增账号
+                   >新增
                    </Button>
                </AddModal>
 

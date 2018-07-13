@@ -39,6 +39,9 @@ export default class PolicyModal extends React.PureComponent {
         // data: [],
         value: '',
     };
+    onSearch = (value) => {
+        console.log(value);
+    }
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -75,7 +78,7 @@ export default class PolicyModal extends React.PureComponent {
             visible: false,
         });
     };
-    handleChange = (val) => {
+    dataChange = (val) => {
         this.setState({
             value: val,
         });
@@ -192,9 +195,12 @@ export default class PolicyModal extends React.PureComponent {
                                     ],
                                 })(
                                     <Select
-                                        mode="combobox"
+                                        showSearch
                                         value={this.state.value}
-                                        onChange={this.handleChange}
+                                        style={{ width: 144 }}
+                                        filterOption={false}
+                                        onChange={value => this.dataChange(value)}
+                                        onSearch={value => this.onSearch(value)}
                                     >
                                         {options}
                                     </Select>
