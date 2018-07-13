@@ -100,7 +100,7 @@ export default class GrayPolicy extends React.PureComponent {
        const content = '新增成功';
        new Promise((resolve) => {
            dispatch({
-               type: 'thirdParty/add',
+               type: 'grayPolicy/add',
                payload: {
                    data,
                    resolve,

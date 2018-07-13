@@ -18,6 +18,7 @@ const { TextArea } = Input;
 let timeout;
 const mapStateToProps = (state) => ({
     getPolicyList: state.grayPolicy.getPolicyList,
+    loading: state.loading.effects['grayPolicy/add'] || false,
 });
 @connect(mapStateToProps)
 @Form.create()
@@ -125,7 +126,7 @@ export default class PolicyModal extends React.PureComponent {
             wrapperCol: { span: 14 },
         };
         const forms = this.props.form;
-        const { children, record } = this.props;
+        const { children, record, loading } = this.props;
         const {
             getFieldDecorator,
             getFieldsError,
@@ -148,6 +149,7 @@ export default class PolicyModal extends React.PureComponent {
                             type="primary"
                             disabled={hasErrors(getFieldsError())}
                             onClick={this.handleSubmit}
+                            loading={loading}
                         >
                             确定
                         </Button>,
