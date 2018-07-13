@@ -172,7 +172,7 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div className={style.content}>
-                    <div className={style.lefts} ref="lefts"></div>
+                    <div className={style.lefts}></div>
                     <div className={style.rights}>
                         <p>规则命中排行</p>
                         <ul>
