@@ -40,7 +40,6 @@ export default {
             });
         },
         * getPolicySelect({ payload }, { call, put }) {
-            const { resolve } = payload;
             const response = yield call(post, API.getPolicyList, payload);
             yield put({
                 type: 'querySuc',
@@ -48,7 +47,6 @@ export default {
                     getPolicyList: response,
                 },
             });
-            yield call(resolve);
         },
         // 增加策略
         * add({ payload }, { call }) {

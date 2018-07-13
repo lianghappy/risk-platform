@@ -16,7 +16,6 @@ function hasErrors(fieldsError) {
 const Option = Select.Option;
 const { TextArea } = Input;
 let timeout;
-let currentValue;
 const mapStateToProps = (state) => ({
     getPolicyList: state.grayPolicy.getPolicyList,
 });
@@ -40,7 +39,19 @@ export default class PolicyModal extends React.PureComponent {
         value: '',
     };
     onSearch = (value) => {
-        console.log(value);
+        const {
+            dispatch,
+        } = this.props;
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        dispatch({
+            type: 'grayPolicy/getPolicySelect',
+            payload: {
+                companyId,
+                pageNum: 1,
+                pageSize: 100,
+                name: value,
+            },
+        });
     }
     handleSubmit = (e) => {
         e.preventDefault();
@@ -86,34 +97,19 @@ export default class PolicyModal extends React.PureComponent {
             clearTimeout(timeout);
             timeout = null;
         }
-        currentValue = val;
         const {
             dispatch,
-            getPolicyList,
         } = this.props;
-        const _this = this;
-        function querys() {
-            if (currentValue === val) {
-                new Promise((resolve) => {
-                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-                    dispatch({
-                        type: 'grayPolicy/getPolicySelect',
-                        payload: {
-                            companyId,
-                            pageNum: 1,
-                            pageSize: 100,
-                            name: val,
-                            resolve,
-                        },
-                    });
-                }).then(() => {
-                    _this.setState({
-                        data: getPolicyList,
-                    });
-                });
-            }
-        }
-        timeout = setTimeout(querys, 300);
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        dispatch({
+            type: 'grayPolicy/getPolicySelect',
+            payload: {
+                companyId,
+                pageNum: 1,
+                pageSize: 100,
+                name: val,
+            },
+        });
     }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
