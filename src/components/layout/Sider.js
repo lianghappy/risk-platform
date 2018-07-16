@@ -5,7 +5,7 @@ import { Link } from 'dva/router';
 import PropTypes from 'prop-types';
 import cs from 'classnames';
 import { menuKeyPick } from 'utils/common';
-import { authFirst, authsSecond } from 'utils/auth';
+// import { authFirst, authsSecond } from 'utils/auth';
 import { setPath } from 'utils/path';
 import styles from './Sider.scss';
 import logo from '../../assets/images/机蜜logo.svg';
@@ -22,8 +22,8 @@ export default class Sider extends React.PureComponent {
         flag: PropTypes.bool.isRequired,
     };
     render() {
-        const { location } = this.props;
-        const auth = this.props.flag ? authFirst : authsSecond;
+        const { location, auths } = this.props;
+        const auth = this.props.flag ? auths.auths : auths.authss;
         const menuKey = menuKeyPick(location);
 
         return (
