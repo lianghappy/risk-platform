@@ -36,10 +36,10 @@ export default class PeopleModal extends React.PureComponent {
         }
     }
     getLink = (rule, value, callback) => {
-        if (!(value.indexOf('http://') === 0) || !(value.indexOf('https://') === 0)) {
-            callback(rule.message);
-        } else {
+        if ((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0)) {
             callback();
+        } else {
+            callback(rule.message);
         }
     }
     handleSubmit = (e) => {
