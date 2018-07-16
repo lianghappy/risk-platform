@@ -1,5 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
+import * as echarts from 'echarts/lib/echarts';
+// 引入折线图。
+import 'echarts/lib/chart/bar';
+// 引入提示框组件、标题组件、工具箱组件。
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/toolbox';
 import { Layout, Input, Form, Button, Select } from 'antd';
 // import { roles } from 'utils/common';
 import style from './index.scss';
@@ -13,9 +20,11 @@ const mapStateToProps = (state) => {
 @connect(mapStateToProps)
 @Form.create()
 export default class Statistical extends React.PureComponent {
-    componentWillMount() {
-        // const myCHart = this.refs.lefts;
-
+    componentDidMount() {
+        const container = this.bar;
+        const myChart = echarts.init(container);
+        this.setOption(myChart);
+        window.onresize = myChart.resize;
     }
     onPageChange = (pageNum, pageSize, sysId) => {
         const {
@@ -58,12 +67,11 @@ export default class Statistical extends React.PureComponent {
             pageSize,
         });
     };
-    setOption = () => {
+    setOption = (mychart) => {
+        const { list } = this.props;
+        const normName = list.map(it => it.normName) || [];
+        const allHitNum = list.map(it => it.allHitNum) || [];
         const option = {
-            title: {
-                text: '世界人口总量',
-                subtext: '数据来自网络'
-            },
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -85,17 +93,17 @@ export default class Statistical extends React.PureComponent {
             },
             yAxis: {
                 type: 'category',
-                data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
+                data: normName
             },
             series: [
                 {
-                    name: '2011年',
+                    name: '命中数量',
                     type: 'bar',
-                    data: [18203, 23489, 29034, 104970, 131744, 630230]
+                    data: allHitNum
                 }
             ]
         };
-        return option;
+        mychart.setOption(option);
     }
     query(payload) {
         this.props.dispatch({
@@ -172,7 +180,7 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div className={style.content}>
-                    <div className={style.lefts}></div>
+                    <div className={style.lefts} ref={(c) => { this.bar = c; }}></div>
                     <div className={style.rights}>
                         <p>规则命中排行</p>
                         <ul>
@@ -181,7 +189,7 @@ export default class Statistical extends React.PureComponent {
                                     return (
                                         <li key={index}>
                                             <span className={index < 3 && style.firsts}>{index + 1}</span>
-                                            <span>{item.normName}</span>
+                                            <span className={style.next}>{item.normName}</span>
                                             <span>{item.allHitNum}</span>
                                         </li>
                                     );

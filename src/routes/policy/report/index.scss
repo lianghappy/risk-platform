@@ -14,6 +14,7 @@
 .lefts{
     width: 75%;
     height: 100%;
+    min-height: 700px;
 }
 .rights{
     width: 25%;
@@ -30,6 +31,15 @@
             align-items: center;
         }
     }
+}
+.next{
+    margin-left: 8px;
+    margin-right: 20px;
+    flex: 7;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
 }
 .firsts{
     width:16px;
