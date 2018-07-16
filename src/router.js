@@ -341,6 +341,14 @@ function RouterConfig({ history, app }) {
             import('models/policy/report/Statistical')
         ]
     });
+    // 增加规则
+    const addRegulars = dynamic({
+        app,
+        component: () => import('routes/policy/policies/regular/AddRegular.js'),
+        models: () => [
+            import('models/policy/policies/regular'),
+        ]
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -391,6 +399,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />
                     <PrivateRoute path={setPath('/grayPolicy')} exact component={grayPolicy} />
                     <PrivateRoute path={setPath('/statistical')} exact component={Statistical} />
+                    <PrivateRoute path={setPath('/addRegulars/:id')} exact component={addRegulars} />
                 </Main>
             </Switch>
         </Router>

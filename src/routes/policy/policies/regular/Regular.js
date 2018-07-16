@@ -16,7 +16,8 @@ import Pagination from 'components/Pagination/Pagination';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import treeConvert from 'utils/treeConvert';
-import RegularModal from './RegularModal';
+import { setPath } from 'utils/path';
+// import RegularModal from './RegularModal';
 import RegularEdit from './RegularEdit';
 import RegularDetail from './RegularDetail';
 
@@ -45,7 +46,7 @@ export default class Regular extends React.PureComponent {
 
     state = {
         stageId: base64.decode(this.props.match.params.id),
-        ruleName: this.props.history.location.state.name,
+        // ruleName: this.props.history.location.state.name,
         selectedRow: {},
         selectedRowKeys: [],
     };
@@ -274,7 +275,9 @@ export default class Regular extends React.PureComponent {
             });
         });
     };
-
+    addRegular = (stageId) => {
+        this.props.history.push(setPath(`/addRegulars/${base64.encode(stageId)}`));
+    }
     query(payload) {
         this.props.dispatch({
             type: 'regularPly/query',
@@ -307,7 +310,7 @@ export default class Regular extends React.PureComponent {
             selectedRowKeys,
             selectedRow,
             stageId,
-            ruleName,
+            // ruleName,
         } = this.state;
         // const type = list.stage !== undefined ? list.stage.type : '2';
         const columns = [{
@@ -483,7 +486,7 @@ export default class Regular extends React.PureComponent {
                 <div className="jm-toolBar">
                     {
                         roles('R_policy_ply_stg_rl_add') && Number(status) === 0 &&
-                    <RegularModal
+                    /* <RegularModal
                         stageId={stageId}
                         ruleName={ruleName}
                         onOk={this.modalOk}
@@ -491,7 +494,8 @@ export default class Regular extends React.PureComponent {
                         <Button type="primary" style={{ marginRight: 20 }}>
                             新增规则
                         </Button>
-                    </RegularModal>
+                    </RegularModal> */
+                    <Button type="primary" style={{ marginRight: 20 }} onClick={() => this.addRegular(stageId)}>新增规则</Button>
                     }
                     {
                         roles('R_policy_ply_stg_rl_clone') && Number(status) === 0 &&
