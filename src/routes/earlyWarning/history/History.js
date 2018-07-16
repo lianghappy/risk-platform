@@ -131,6 +131,41 @@ export default class History extends React.PureComponent {
             });
         });
     }
+    changeTime = (time) => {
+        const timess = [
+            { name: '1分钟', key: '1', type: 'minutes' },
+            { name: '5分钟', key: '5', type: 'minutes' },
+            { name: '30分钟', key: '30', type: 'minutes' },
+            { name: '1小时', key: '1', type: 'hours' },
+            { name: '2小时', key: '2', type: 'hours' },
+            { name: '5小时', key: '5', type: 'hours' },
+            { name: '10小时', key: '10', type: 'hours' },
+            { name: '12小时', key: '12', type: 'hours' },
+            { name: '24小时', key: '24', type: 'hours' },
+        ];
+        let TM = '0小时';
+        timess.forEach((item) => {
+            if (moment.duration(Number(item.key), item.type).asSeconds() === Number(time)) {
+                TM = item.name;
+            }
+        });
+        return TM;
+    }
+    changeCount = (count) => {
+        const value = [
+            { name: '平均值', key: 'avg' },
+            { name: '最大值', key: 'max' },
+            { name: '最小值', key: 'sum' },
+            { name: '累计值', key: 'min' },
+        ];
+        let counts = '';
+        value.forEach(item => {
+            if (item.key === count) {
+                counts = item.name;
+            }
+        });
+        return counts;
+    }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
@@ -150,23 +185,67 @@ export default class History extends React.PureComponent {
             product,
             strategy,
         } = this.props;
-        console.log(moment().add(-1, 'hours').format('X'));
-        console.log(moment().format('X'));
-        console.log(this.props.data);
 
 
         const { getFieldDecorator } = form;
         const columns = [
-            { title: '报警规则名称',
+            {
+                title: '报警规则名称',
                 dataIndex: 'name',
                 key: 'name',
-                render: (text, record) => (<span>{record.sleuthTargetName + record.threshold + record.judgeKey + record.judgeSymbol + record.judgeValue}</span>) },
-            { title: '发生时间', dataIndex: 'happenedTime', key: 'happenedTime' },
-            { title: '持续时间', dataIndex: 'duringTime', key: 'duringTime' },
-            { title: '策略名称', dataIndex: 'strategyName', key: 'strategyName' },
-            { title: '应用名称', dataIndex: 'appName', key: 'appName' },
-            { title: '产品名称', dataIndex: 'productName', key: 'productName' },
-            { title: '通知对象', dataIndex: 'sleuthTeamNames', key: 'sleuthTeamNames' },
+                render: (text, record) => (
+                    <span>
+                        {this.changeTime(record.silenceTime)}&nbsp;
+                        {record.sleuthTargetName}&nbsp;
+                        {this.changeCount(record.judgeKey)}&nbsp;
+                        {record.judgeSymbol}&nbsp;
+                        {record.judgeValue}&nbsp;<br />
+                    连续{record.alarmCount}次 则报警
+                    </span>
+                ),
+                width: 100,
+            },
+            {
+                title: '发生时间',
+                dataIndex: 'happenedTime',
+                key: 'happenedTime',
+                width: 100,
+            },
+            {
+                title: '持续时间',
+                dataIndex: 'duringTime',
+                key: 'duringTime',
+                width: 100,
+            },
+            {
+                title: '策略名称',
+                dataIndex: 'strategyName',
+                key: 'strategyName',
+                width: 100,
+            },
+            {
+                title: '应用名称',
+                dataIndex: 'appName',
+                key: 'appName',
+                width: 100,
+            },
+            {
+                title: '产品名称',
+                dataIndex: 'productName',
+                key: 'productName',
+                width: 100,
+            },
+            {
+                title: '通知对象',
+                dataIndex: 'sleuthTeamNames',
+                key: 'sleuthTeamNames',
+                width: 100,
+            }, {
+                title: '状态',
+                dataIndex: 'state',
+                key: 'state',
+                width: 100,
+            },
         ];
         return (
             <Layout className="layoutMar">
