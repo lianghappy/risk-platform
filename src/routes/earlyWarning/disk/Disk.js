@@ -60,7 +60,6 @@ export default class Disk extends React.PureComponent {
     state = {
         dashBoardId: '',
         index: 0,
-        getDiskData: this.props.getDiskData || [],
     }
     onDelete = () => {
         const { dashBoardId } = this.state;
@@ -85,7 +84,6 @@ export default class Disk extends React.PureComponent {
         });
         this.setState({
             dashBoardId: value,
-            getDiskData: this.props.getDiskData,
         });
     }
     modalOk = (data, callback) => {
@@ -152,9 +150,6 @@ export default class Disk extends React.PureComponent {
                 dashBoardId: value,
                 dateType: times[i].key,
             }
-        });
-        this.setState({
-            getDiskData: this.props.getDiskData,
         });
     }
     query(payload) {
@@ -262,7 +257,7 @@ export default class Disk extends React.PureComponent {
                     </div>
                     <div className={styles.disk}>
                         {
-                            this.state.getDiskData && this.state.getDiskData.map((item, index) => {
+                            this.props.getDiskData.map((item, index) => {
                                 let hourData = [];
                                 switch (times[this.state.index].key) {
                                 case '1m':
