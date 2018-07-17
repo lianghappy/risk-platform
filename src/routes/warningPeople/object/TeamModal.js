@@ -124,6 +124,10 @@ export default class TeamModal extends React.PureComponent {
                             {
                                 getFieldDecorator('description', {
                                     initialValue: record.description,
+                                    rules: [
+                                        { required: true, message: '请输入备注' },
+                                        { max: 200, message: '最多200位' }
+                                    ]
                                 })(
                                     <TextArea placeholder="请输入" />
                                 )

@@ -36,10 +36,10 @@ export default class PeopleModal extends React.PureComponent {
         }
     }
     getLink = (rule, value, callback) => {
-        if ((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0)) {
-            callback();
-        } else {
+        if (value && !((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0))) {
             callback(rule.message);
+        } else {
+            callback();
         }
     }
     handleSubmit = (e) => {
@@ -78,7 +78,7 @@ export default class PeopleModal extends React.PureComponent {
         });
     }
     checkPhone = (rule, value, callback) => {
-        if (value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -137,7 +137,7 @@ export default class PeopleModal extends React.PureComponent {
                                                 {
                                                     initialValue: record.sleuthPersonName,
                                                     rules: [
-                                                        { required: true, message: !record.dingRebot ? '请输入姓名' : '请输入' }
+                                                        { required: true, message: this.state.value === 1 ? '请输入姓名' : '请输入' }
                                                     ]
                                                 }
                                             )(
@@ -171,19 +171,22 @@ export default class PeopleModal extends React.PureComponent {
                                             label="验证码"
                                             {...formItemLayout}
                                         >
-                                            {
-                                                getFieldDecorator('verificationCode',
-                                                    {
-                                                        rules: [
-                                                            { required: true, message: '请输入验证码' }
-                                                        ]
-                                                    })(
-                                                    <div>
+
+                                            <div>
+                                                {
+                                                    getFieldDecorator('verificationCode',
+                                                        {
+                                                            rules: [
+                                                                { required: true, message: '请输入验证码' }
+                                                            ]
+                                                        })(
                                                         <Input style={{ width: '150px', marginRight: '10px' }} placeholder="请输入验证码" />
-                                                        <Button type="primary" onClick={() => this.getCode()}>获取验证码</Button>
-                                                    </div>
-                                                )
-                                            }
+                                                    )
+                                                }
+                                                <Button type="primary" onClick={() => this.getCode()}>获取验证码</Button>
+                                            </div>
+
+
                                         </Form.Item>
                                     }
                                     {
