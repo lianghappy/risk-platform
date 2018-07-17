@@ -11,6 +11,8 @@ import {
 import { connect } from 'dva';
 import styles from './index.scss';
 
+let uuid = 0;
+// const FormItem = Form.Item;
 
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -54,6 +56,32 @@ export default class PolicyModal extends React.PureComponent {
                 pageSize: 100,
                 name: value,
             },
+        });
+    }
+    remove = (k) => {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        // We need at least one passenger
+        if (keys.length === 1) {
+            return;
+        }
+
+        // can use data-binding to set
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    }
+    add = () => {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(uuid);
+        uuid++;
+        // can use data-binding to set
+        // important! notify form to detect changes
+        form.setFieldsValue({
+            keys: nextKeys,
         });
     }
     handleSubmit = (e) => {
@@ -132,8 +160,68 @@ export default class PolicyModal extends React.PureComponent {
         const {
             getFieldDecorator,
             getFieldsError,
+            getFieldValue,
         } = forms;
         const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
+        getFieldDecorator('keys', { initialValue: [] });
+        const keys = getFieldValue('keys');
+        const formItems = keys.map((k, index) => {
+            return (
+                <Form
+                    className={styles.forms}
+                    style={{ width: '400px' }}
+                    key={index}
+                >
+                    <Form.Item
+                        {...formItemLayout}
+                        label="策略名称"
+                        key={k}
+                    >
+                        {
+                            getFieldDecorator(`strategyName[${k}]`, {
+                                rules: [
+                                    { required: true, message: '请输入策略名称' },
+                                ],
+                            })(
+                                <Select
+                                    showSearch
+                                    value={this.state.value}
+                                    style={{ width: 144 }}
+                                    filterOption={false}
+                                    onChange={value => this.dataChange(value)}
+                                    onSearch={value => this.onSearch(value)}
+                                >
+                                    {options}
+                                </Select>
+                            )
+                        }
+                    </Form.Item>
+                    <Form.Item
+                        {...formItemLayout}
+                        label="策略占比"
+                        key={k}
+                    >
+                        {
+                            getFieldDecorator(`ratio[${k}]`, {
+                                rules: [
+                                    { required: true, message: '请输入策略占比' },
+                                ],
+                            })(
+                                <Input />
+                            )
+                        }
+                    </Form.Item>
+                    {keys.length > 1 ? (
+                        <Icon
+                            className={styles.delBtn}
+                            type="minus-circle-o"
+                            disabled={keys.length === 1}
+                            onClick={() => this.remove(k)}
+                        />
+                    ) : null}
+                </Form>
+            );
+        });
         return (
             <span>
                 <span role="button" tabIndex="0" onClick={this.handleShow}>
@@ -182,51 +270,10 @@ export default class PolicyModal extends React.PureComponent {
                             }
                         </Form.Item>
                         <Form.Item>
-                            <span>添加策略<Icon type="plus-circle-o" /></span>
+                            <span onClick={this.add} role="button" tabIndex="-1">添加策略<Icon type="plus-circle-o" /></span>
                         </Form.Item>
                     </Form>
-                    <Form
-                        className={styles.forms}
-                        style={{ width: '400px' }}
-                    >
-                        <Form.Item
-                            {...formItemLayout}
-                            label="策略名称"
-                        >
-                            {
-                                getFieldDecorator('strategyName', {
-                                    rules: [
-                                        { required: true, message: '请输入策略名称' },
-                                    ],
-                                })(
-                                    <Select
-                                        showSearch
-                                        value={this.state.value}
-                                        style={{ width: 144 }}
-                                        filterOption={false}
-                                        onChange={value => this.dataChange(value)}
-                                        onSearch={value => this.onSearch(value)}
-                                    >
-                                        {options}
-                                    </Select>
-                                )
-                            }
-                        </Form.Item>
-                        <Form.Item
-                            {...formItemLayout}
-                            label="策略占比"
-                        >
-                            {
-                                getFieldDecorator('ratio', {
-                                    rules: [
-                                        { required: true, message: '请输入策略占比' },
-                                    ],
-                                })(
-                                    <Input />
-                                )
-                            }
-                        </Form.Item>
-                    </Form>
+                    {formItems}
                 </Modal>
             </span>
         );
