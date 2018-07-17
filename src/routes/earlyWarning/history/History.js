@@ -279,7 +279,7 @@ export default class History extends React.PureComponent {
                         format="YYYY-MM-DD HH:mm"
                         placeholder={['开始时间', '结束时间']}
                         onChange={this.onChange}
-                        onOk={this.onOk}
+                        onOk={(value) => this.onOk(value)}
                     />
                 </div>
                 <Form
