@@ -191,18 +191,8 @@ export default class History extends React.PureComponent {
         const columns = [
             {
                 title: '报警规则名称',
-                dataIndex: 'name',
-                key: 'name',
-                render: (text, record) => (
-                    <span>
-                        {this.changeTime(record.silenceTime)}&nbsp;
-                        {record.sleuthTargetName}&nbsp;
-                        {this.changeCount(record.judgeKey)}&nbsp;
-                        {record.judgeSymbol}&nbsp;
-                        {record.judgeValue}&nbsp;<br />
-                    连续{record.alarmCount}次 则报警
-                    </span>
-                ),
+                dataIndex: 'sleuthConfigName',
+                key: 'sleuthConfigName',
                 width: 100,
             },
             {
