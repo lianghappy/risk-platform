@@ -2,7 +2,7 @@ import { routerRedux } from 'dva/router';
 import { setToken, post, setUserId, setDeviceId, signature } from 'utils/request';
 import treeConvert from 'utils/treeConvert';
 import API from 'utils/api';
-import authed from 'utils/auths';
+import { authed, autheds } from 'utils/auths';
 import { setPath, filterPath } from 'utils/path';
 
 const compare = (property) => {
@@ -23,7 +23,9 @@ const authConvert = (menus) => {
         return false;
     }); */
     let auths = [];
-    const auth = []; // 新权限数组
+    let authss = [];
+    const auth = [];
+    const auth2 = []; // 新权限数组
     if (menus.length > 0) {
         menus.forEach(item => {
             authed.forEach(it => {
@@ -33,16 +35,37 @@ const authConvert = (menus) => {
                     auth.push(it);
                 }
             });
+            autheds.forEach(it => {
+                if (it.id === item.id) {
+                    it.sort = item.sort;
+                    it.router = setPath(it.router);
+                    auth2.push(it);
+                }
+            });
         });
         auths = treeConvert({
             pId: 'pid',
             otherKeys: ['key', 'router', 'sort'],
         }, auth);
+        authss = treeConvert({
+            pId: 'pid',
+            otherKeys: ['key', 'router', 'sort'],
+        }, auth2);
         auths.forEach(item => {
-            item.children.sort(compare('sort'));
+            if (item.children) {
+                item.children.sort(compare('sort'));
+            }
+        });
+        authss.forEach(item => {
+            if (item.children) {
+                item.children.sort(compare('sort'));
+            }
         });
     }
-    return auths.sort(compare('sort'));
+    return {
+        auths: auths.sort(compare('sort')),
+        authss: authss.sort(compare('sort'))
+    };
 };
 
 /* eslint-disable consistent-return */

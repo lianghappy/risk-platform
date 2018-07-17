@@ -161,7 +161,7 @@ class OldProduct extends React.PureComponent {
                         </Popconfirm> */}
                         {
                             roles('R_apps_app_manage') &&
-                            <a role="button" tabIndex="-1" onClick={() => this.manage(record.id, record.productName)}>管理</a>
+                            <a role="button" tabIndex="-1" onClick={() => this.manage(record.productId, record.productName)}>管理</a>
                         }
                     </div>),
             },

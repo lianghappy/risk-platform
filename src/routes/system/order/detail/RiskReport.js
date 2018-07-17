@@ -106,9 +106,17 @@ export default class RiskReport extends React.PureComponent {
                                 <div className={styles.headers}>
                                     <span>阶段排序：{item.stageSort}</span>
                                     <span>阶段名称：{item.stageName }</span>
-                                    <span>阶段模式：{item.stageType}</span>
+                                    <span>阶段模式：
+                                        {item.stageType === '1' && '最坏匹配'}
+                                        {item.stageType === '2' && '权重匹配'}
+                                        {item.stageType === '3' && '最好匹配'}
+                                        {item.stageType === '4' && '人审预阶段'}
+                                    </span>
                                     <span>阶段得分：{item.stageScore}</span>
-                                    <span>阶段审核结果：{item.stageVerifyResult}</span>
+                                    <span>阶段审核结果：
+                                        {item.stageVerifyResult === 'Y' && '风控拒绝'}
+                                        {item.stageVerifyResult === 'N' && '风控通过'}
+                                    </span>
                                 </div>
                                 <Table
                                     className={styles.tables}

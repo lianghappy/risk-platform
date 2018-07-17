@@ -6,7 +6,7 @@ import styles from './index.scss';
 export default class PeopleModal extends React.PureComponent {
     state = {
         visible: false,
-        value: 1,
+        value: this.props.record.dingRebot ? 1 : 2,
     }
     onChange = (e) => {
         console.log('radio checked', e.target.value);
@@ -36,10 +36,10 @@ export default class PeopleModal extends React.PureComponent {
         }
     }
     getLink = (rule, value, callback) => {
-        if (!(value.indexOf('http://') === 0) || !(value.indexOf('https://') === 0)) {
-            callback(rule.message);
-        } else {
+        if ((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0)) {
             callback();
+        } else {
+            callback(rule.message);
         }
     }
     handleSubmit = (e) => {
@@ -66,11 +66,13 @@ export default class PeopleModal extends React.PureComponent {
         });
     };
     showModelHandler = () => {
+        this.props.form.resetFields();
         this.setState({
             visible: true,
         });
     }
     handleCancel = () => {
+        this.props.form.resetFields();
         this.setState({
             visible: false,
         });
@@ -115,7 +117,7 @@ export default class PeopleModal extends React.PureComponent {
                             <td className={styles.operate}>
                                 <Radio.Group
                                     onChange={this.onChange}
-                                    value={this.state.value}
+                                    value={record.dingRebot ? 2 : 1}
                                 >
                                     <Radio value={1}>通知人</Radio>
                                     <Radio value={2}>通知机器人</Radio>
@@ -127,7 +129,7 @@ export default class PeopleModal extends React.PureComponent {
                             <td className={styles.operate} style={{ paddingTop: '20px', paddingLeft: 0 }}>
                                 <Form>
                                     <Form.Item
-                                        label={this.state.value === 1 ? '姓名' : '钉钉机器人'}
+                                        label={!record.dingRebot ? '姓名' : '钉钉机器人'}
                                         {...formItemLayout}
                                     >
                                         {
@@ -135,7 +137,7 @@ export default class PeopleModal extends React.PureComponent {
                                                 {
                                                     initialValue: record.sleuthPersonName,
                                                     rules: [
-                                                        { required: true, message: this.state.value === 1 ? '请输入姓名' : '请输入' }
+                                                        { required: true, message: !record.dingRebot ? '请输入姓名' : '请输入' }
                                                     ]
                                                 }
                                             )(
@@ -144,7 +146,7 @@ export default class PeopleModal extends React.PureComponent {
                                         }
                                     </Form.Item>
                                     {
-                                        this.state.value === 1 &&
+                                        !record.dingRebot &&
                                         <Form.Item
                                             label="手机号"
                                             {...formItemLayout}
@@ -164,7 +166,7 @@ export default class PeopleModal extends React.PureComponent {
                                         </Form.Item>
                                     }
                                     {
-                                        this.state.value === 1 &&
+                                        !record.dingRebot &&
                                         <Form.Item
                                             label="验证码"
                                             {...formItemLayout}
@@ -185,7 +187,7 @@ export default class PeopleModal extends React.PureComponent {
                                         </Form.Item>
                                     }
                                     {
-                                        this.state.value === 2 &&
+                                        record.dingRebot &&
                                         <Form.Item
                                             label="钉钉机器人链接"
                                             {...formItemLayout}

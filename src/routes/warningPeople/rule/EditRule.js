@@ -131,16 +131,13 @@ export default class EditRule extends React.PureComponent {
         const value = [
             { name: '平均值', key: 'avg' },
             { name: '最大值', key: 'max' },
-            { name: '最小值', key: 'sum' },
-            { name: '累计值', key: 'min' },
+            { name: '最小值', key: 'min' },
         ];
         const judgeKey = [
             { key: '>' },
-            { key: '≥' },
+            { key: '>=' },
             { key: '<' },
-            { key: '≤' },
-            { key: '=' },
-            { key: '<>' },
+            { key: '<=' },
         ];
         const count = [
             { num: 1 },
@@ -186,7 +183,7 @@ export default class EditRule extends React.PureComponent {
                                             return (<Option value={item.id} key={index}>{item.name}</Option>);
                                         })
                                     }
-                                    <Option value="">全部</Option>
+                                    <Option value="all">全部</Option>
                                 </Select>
                             )
                         }

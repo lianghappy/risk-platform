@@ -252,7 +252,7 @@ export default class Order extends React.PureComponent {
                             label="风控下单时间"
                         >
                             {
-                                getFieldDecorator('orderStartTimeS')(
+                                getFieldDecorator('orderStartTime')(
                                     <RangePicker
                                         showTime={{
                                             hideDisabledOptions: true,
@@ -300,7 +300,7 @@ export default class Order extends React.PureComponent {
                         label="风控审核结束时间"
                     >
                         {
-                            getFieldDecorator('reviewEndTimeS')(
+                            getFieldDecorator('reviewEndTime')(
                                 <RangePicker
                                     showTime={{
                                         hideDisabledOptions: true,

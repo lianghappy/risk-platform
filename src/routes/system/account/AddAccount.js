@@ -62,7 +62,8 @@ class AddAccount extends React.PureComponent {
                             Object.assign(values, { confirm: MD5(values.confirm) });
                             Object.assign(values, { state: false });
                         }
-                        Object.assign(values, { userId });
+                        const company = JSON.parse(sessionStorage.userInfo).user.company;
+                        Object.assign(values, { userId, company });
                         Object.assign(values, { userName: values.name, realName: values.name });
                         Object.assign(values, { sysId: SYSID });
                         Object.assign(values, { type });
