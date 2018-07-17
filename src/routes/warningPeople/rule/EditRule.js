@@ -54,7 +54,7 @@ export default class EditRule extends React.PureComponent {
                         if (item === it.key) {
                             team.push({
                                 id: it.key,
-                                name: it.title,
+                                sleuthTeamName: it.title,
                             });
                         }
                     });
@@ -99,6 +99,26 @@ export default class EditRule extends React.PureComponent {
     }
     filterOption = (inputValue, option) => {
         return option.description.indexOf(inputValue) > -1;
+    }
+    changeTime = (time) => {
+        const times = [
+            { name: '1分钟', key: '1', type: 'minutes' },
+            { name: '5分钟', key: '5', type: 'minutes' },
+            { name: '30分钟', key: '30', type: 'minutes' },
+            { name: '1小时', key: '1', type: 'hours' },
+            { name: '2小时', key: '2', type: 'hours' },
+            { name: '5小时', key: '5', type: 'hours' },
+            { name: '10小时', key: '10', type: 'hours' },
+            { name: '12小时', key: '12', type: 'hours' },
+            { name: '24小时', key: '24', type: 'hours' },
+        ];
+        let TM = '0小时';
+        times.forEach((item) => {
+            if (moment.duration(Number(item.key), item.type).asSeconds() === Number(time)) {
+                TM = item.name;
+            }
+        });
+        return TM;
     }
     render() {
         const {
@@ -227,7 +247,7 @@ export default class EditRule extends React.PureComponent {
                             }
                             {
                                 getFieldDecorator('threshold', {
-                                    initialValue: record && record.threshold,
+                                    initialValue: record && this.changeTime(record.threshold),
                                 })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
@@ -281,7 +301,7 @@ export default class EditRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('silenceTime', {
-                                initialValue: record && record.silenceTime,
+                                initialValue: record && this.changeTime(record.silenceTime),
                                 rules: [
                                     { required: true, message: '请选择通道沉默时间' }
                                 ]

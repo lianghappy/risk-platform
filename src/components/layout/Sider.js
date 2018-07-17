@@ -23,7 +23,10 @@ export default class Sider extends React.PureComponent {
     };
     render() {
         const { location, auths } = this.props;
-        const auth = this.props.flag ? auths.auths : auths.authss;
+        let auth = [];
+        if (auths) {
+            auth = this.props.flag ? auths.auths : auths.authss;
+        }
         const menuKey = menuKeyPick(location);
 
         return (
