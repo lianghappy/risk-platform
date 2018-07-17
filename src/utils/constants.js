@@ -8,7 +8,7 @@ console.log(ENV);
 export const VERSION = version;
 // 秘钥
 export const PASSWORD = password;
-console.log(PASSWORD);
+// console.log(PASSWORD);
 // 表格每页条数
 export const PAGE_SIZE = 10;
 // 错误提示
