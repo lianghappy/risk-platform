@@ -54,7 +54,7 @@ export default class EditRule extends React.PureComponent {
                         if (item === it.key) {
                             team.push({
                                 id: it.key,
-                                name: it.title,
+                                sleuthTeamName: it.title,
                             });
                         }
                     });
