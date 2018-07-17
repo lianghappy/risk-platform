@@ -60,6 +60,7 @@ const times = [
 export default class History extends React.PureComponent {
     state = {
         btn: -1,
+        times: [],
     }
     onPageChange = (pageNum, pageSize) => {
         const {
@@ -74,6 +75,13 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
+            if (this.state.times) {
+                const value = this.state.times;
+                Object.assign(values, {
+                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimes: moment(value[0]._d).format('X'),
+                });
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -81,10 +89,6 @@ export default class History extends React.PureComponent {
             });
         });
     };
-    onChange(value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
-    }
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -100,6 +104,13 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
+            if (this.state.times) {
+                const value = this.state.times;
+                Object.assign(values, {
+                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimes: moment(value[0]._d).format('X'),
+                });
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -108,8 +119,23 @@ export default class History extends React.PureComponent {
         });
     }
     onOk(value) {
-        console.log('onOk: ', value);
+        this.setState({
+            btn: -1,
+            times: value,
+        });
+        this.props.form.validateFields((errors, values) => {
+            Object.assign(values, {
+                happenedTimee: moment(value[0]._d).format('X'),
+                happenedTimes: moment(value[0]._d).format('X'),
+            });
+            this.query({
+                ...values,
+                pageNum: 1,
+                pageSize: 10,
+            });
+        });
     }
+
     queryTime = (type, num, i, e) => {
         e.preventDefault();
         const {
@@ -128,6 +154,7 @@ export default class History extends React.PureComponent {
             });
             this.setState({
                 btn: i,
+                times: null
             });
         });
     }
