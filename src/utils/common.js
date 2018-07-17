@@ -73,6 +73,10 @@ export const menuKeyPick = (location) => {
         if (path[2] === '0') key.push('role');
         else key.push('role');
         break;
+    case 'addWarningRule':
+        if (path[2] === '0') key.push('warningRule');
+        else key.push('warningRule');
+        break;
     default:
         key.push(router);
     }
