@@ -9,6 +9,8 @@ import {
     Row,
     Col,
 } from 'antd';
+import cs from 'classnames';
+import style from './index.scss';
 
 const Option = Select.Option;
 function hasErrors(fieldsError) {
@@ -111,6 +113,14 @@ export default class AddTable extends React.PureComponent {
                     <div>
                         <div>
                             <p>1、选择图标类型</p>
+                            <span className={cs(
+                                'jm-icon',
+                                'anticon',
+                                style.bar
+                            )}
+                            >
+                            </span>
+                            <p className={style.barName}>折线图</p>
                         </div>
                         <div>
                             <p>2、选择监控项</p>

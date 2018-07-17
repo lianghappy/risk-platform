@@ -43,3 +43,14 @@
 .addTimed{
     margin-right: 8px;
 }
+.bar:before{
+    content: "\e64b";
+    color: #3B99FC;
+    font-size: 60px;
+    margin-left: 22px;
+}
+.barName{
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

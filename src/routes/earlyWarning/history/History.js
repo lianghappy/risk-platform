@@ -26,9 +26,13 @@ const times = [
         num: '1',
         keys: [1, 'h'],
     }, {
-        time: '3小时',
+        time: '2小时',
         type: 'hours',
-        num: '3',
+        num: '2',
+    }, {
+        time: '4小时',
+        type: 'hours',
+        num: '4',
     }, {
         time: '6小时',
         type: 'hours',
@@ -49,10 +53,6 @@ const times = [
         time: '7天',
         type: 'days',
         num: '7',
-    }, {
-        time: '14天',
-        type: 'days',
-        num: '14',
     }
 ];
 @connect(mapStateToProps)
