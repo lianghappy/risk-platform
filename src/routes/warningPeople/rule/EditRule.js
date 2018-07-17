@@ -183,7 +183,7 @@ export default class EditRule extends React.PureComponent {
                                             return (<Option value={item.id} key={index}>{item.name}</Option>);
                                         })
                                     }
-                                    <Option value="">全部</Option>
+                                    <Option value="all">全部</Option>
                                 </Select>
                             )
                         }
