@@ -34,6 +34,10 @@ export default class AddRule extends React.PureComponent {
         } = this.props;
         form.validateFields((errors, values) => {
             if (!errors) {
+                if (!/^[0-9]*$/.test(values.judgeValue)) {
+                    message.error('阈值只能输入数字');
+                    return;
+                }
                 strategys.forEach(item => {
                     if (item.id === values.strategyId) {
                         Object.assign(values, { strategyName: item.name });
