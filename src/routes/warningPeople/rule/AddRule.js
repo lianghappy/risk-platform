@@ -42,6 +42,9 @@ export default class AddRule extends React.PureComponent {
                     if (item.id === values.strategyId) {
                         Object.assign(values, { strategyName: item.name });
                     }
+                    if (values.strategyId === 'all') {
+                        Object.assign(values, { strategyName: 'all' });
+                    }
                 });
                 sleuthTargets.forEach(item => {
                     if (item.id === values.sleuthTargeId) {

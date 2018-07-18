@@ -29,30 +29,37 @@ const times = [
         time: '2小时',
         type: 'hours',
         num: '2',
+        keys: [2, 'h'],
     }, {
         time: '4小时',
         type: 'hours',
         num: '4',
+        keys: [4, 'h'],
     }, {
         time: '6小时',
         type: 'hours',
         num: '6',
+        keys: [6, 'h'],
     }, {
         time: '12小时',
         type: 'hours',
         num: '12',
+        keys: [12, 'h'],
     }, {
         time: '1天',
         type: 'days',
         num: '1',
+        keys: [1, 'd'],
     }, {
         time: '3天',
         type: 'days',
         num: '3',
+        keys: [3, 'd'],
     }, {
         time: '7天',
         type: 'days',
         num: '7',
+        keys: [7, 'd'],
     }
 ];
 @connect(mapStateToProps)
@@ -61,6 +68,7 @@ export default class History extends React.PureComponent {
     state = {
         btn: -1,
         times: [],
+        defaultTime: [],
     }
     onPageChange = (pageNum, pageSize) => {
         const {
@@ -104,7 +112,7 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
-            if (this.state.times) {
+            if (this.state.times && this.state.times.length > 0) {
                 const value = this.state.times;
                 Object.assign(values, {
                     happenedTimee: moment(value[0]._d).format('X'),
@@ -135,7 +143,12 @@ export default class History extends React.PureComponent {
             });
         });
     }
-
+    onChange(value) {
+        this.setState({
+            defaultTime: value,
+            times: value,
+        });
+    }
     queryTime = (type, num, i, e) => {
         e.preventDefault();
         const {
@@ -154,7 +167,8 @@ export default class History extends React.PureComponent {
             });
             this.setState({
                 btn: i,
-                times: null
+                times: null,
+                defaultTime: [moment().subtract(times[i].keys[0], times[i].keys[1]), moment()],
             });
         });
     }
@@ -278,7 +292,8 @@ export default class History extends React.PureComponent {
                         showTime={{ format: 'HH:mm' }}
                         format="YYYY-MM-DD HH:mm"
                         placeholder={['开始时间', '结束时间']}
-                        onChange={this.onChange}
+                        value={this.state.defaultTime}
+                        onChange={(value) => this.onChange(value)}
                         onOk={(value) => this.onOk(value)}
                     />
                 </div>
