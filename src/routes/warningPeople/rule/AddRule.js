@@ -33,6 +33,10 @@ export default class AddRule extends React.PureComponent {
             getPeopleList,
         } = this.props;
         form.validateFields((errors, values) => {
+            if (errors && (errors.threshold || errors.judgeKey || errors.judgeValue || errors.judgeSymbol)) {
+                message.error('请完善规则描述');
+                return;
+            }
             if (!errors) {
                 if (!/^[0-9]*$/.test(values.judgeValue)) {
                     message.error('阈值只能输入数字');
@@ -100,6 +104,13 @@ export default class AddRule extends React.PureComponent {
     }
     filterOption = (inputValue, option) => {
         return option.description.indexOf(inputValue) > -1;
+    }
+    validateName = (rule, value, callback) => {
+        if (value && (/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
     }
     render() {
         const {
@@ -197,7 +208,8 @@ export default class AddRule extends React.PureComponent {
                         {
                             getFieldDecorator('sleuthConfigName', {
                                 rules: [
-                                    { required: true, message: '请输入报警规则名称' }
+                                    { required: true, message: '请输入报警规则名称' },
+                                    { validator: this.validateName, message: '不能输入表情' }
                                 ]
                             })(
                                 <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />
@@ -211,7 +223,11 @@ export default class AddRule extends React.PureComponent {
 
                         <div>
                             {
-                                getFieldDecorator('sleuthTargeId')(
+                                getFieldDecorator('sleuthTargeId', {
+                                    rules: [
+                                        { required: true, message: '请完善规则描述' },
+                                    ]
+                                })(
                                     <Select style={{ width: '154px' }}>
                                         {
                                             sleuthTargets && sleuthTargets.map((item, index) => {
@@ -222,7 +238,11 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('threshold')(
+                                getFieldDecorator('threshold', {
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             times.map((item, index) => {
@@ -233,7 +253,11 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeKey')(
+                                getFieldDecorator('judgeKey', {
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             value.map((item, index) => {
@@ -244,7 +268,11 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeSymbol')(
+                                getFieldDecorator('judgeSymbol', {
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
+                                })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
                                             judgeKey.map((item, index) => {
@@ -255,7 +283,11 @@ export default class AddRule extends React.PureComponent {
                                 )
                             }
                             {
-                                getFieldDecorator('judgeValue')(
+                                getFieldDecorator('judgeValue', {
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
+                                })(
                                     <Input style={{ width: '154px', marginLeft: '16px' }} />
                                 )
                             }

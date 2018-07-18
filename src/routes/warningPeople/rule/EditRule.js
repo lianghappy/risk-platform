@@ -7,6 +7,17 @@ import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
 import styles from './index.scss';
 
+const times = [
+    { name: '1分钟', key: '1', type: 'minutes' },
+    { name: '5分钟', key: '5', type: 'minutes' },
+    { name: '30分钟', key: '30', type: 'minutes' },
+    { name: '1小时', key: '1', type: 'hours' },
+    { name: '2小时', key: '2', type: 'hours' },
+    { name: '5小时', key: '5', type: 'hours' },
+    { name: '10小时', key: '10', type: 'hours' },
+    { name: '12小时', key: '12', type: 'hours' },
+    { name: '24小时', key: '24', type: 'hours' },
+];
 const Option = Select.Option;
 const mapStateToProps = (state) => {
     return {
@@ -22,11 +33,45 @@ export default class EditRule extends React.PureComponent {
     static propTypes = {
         getPeopleList: PropTypes.array.isRequired,
         record: PropTypes.object.isRequired,
-
     }
     state = {
         targetKeys: [],
     }
+    componentDidMount() {
+        const {
+            dispatch,
+            getPeopleList,
+            record,
+        } = this.props;
+        const id = base64.decode(this.props.match.params.id);
+        new Promise((resolve) => {
+            dispatch({
+                type: 'EditWarningRule/getSingleRule',
+                payload: {
+                    id,
+                    resolve,
+                }
+            });
+        }).then(() => {
+            const targetKeys = [];
+            if (record.sleuthTeamNames) {
+                const names = record.sleuthTeamNames.split(',');
+                console.log(names);
+
+                getPeopleList.forEach((item) => {
+                    names.forEach(it => {
+                        if (item.title === it.sleuthTeamNames) {
+                            targetKeys.push(item.key);
+                        }
+                    });
+                });
+            }
+            this.setState({
+                targetKeys,
+            });
+        });
+    }
+
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -38,7 +83,7 @@ export default class EditRule extends React.PureComponent {
         } = this.props;
         form.validateFields((errors, values) => {
             if (!errors) {
-                if (/^[0-9]*$/.test(values.judgeValue)) {
+                if (!/^[0-9]*$/.test(values.judgeValue)) {
                     message.error('阈值只能输入数字');
                     return;
                 }
@@ -107,18 +152,14 @@ export default class EditRule extends React.PureComponent {
     filterOption = (inputValue, option) => {
         return option.description.indexOf(inputValue) > -1;
     }
+    validateName = (rule, value, callback) => {
+        if (value && (/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
     changeTime = (time) => {
-        const times = [
-            { name: '1分钟', key: '1', type: 'minutes' },
-            { name: '5分钟', key: '5', type: 'minutes' },
-            { name: '30分钟', key: '30', type: 'minutes' },
-            { name: '1小时', key: '1', type: 'hours' },
-            { name: '2小时', key: '2', type: 'hours' },
-            { name: '5小时', key: '5', type: 'hours' },
-            { name: '10小时', key: '10', type: 'hours' },
-            { name: '12小时', key: '12', type: 'hours' },
-            { name: '24小时', key: '24', type: 'hours' },
-        ];
         let TM = '0小时';
         times.forEach((item) => {
             if (moment.duration(Number(item.key), item.type).asSeconds() === Number(time)) {
@@ -144,17 +185,6 @@ export default class EditRule extends React.PureComponent {
                 sm: { span: 19 },
             },
         };
-        const times = [
-            { name: '1分钟', key: '1', type: 'minutes' },
-            { name: '5分钟', key: '5', type: 'minutes' },
-            { name: '30分钟', key: '30', type: 'minutes' },
-            { name: '1小时', key: '1', type: 'hours' },
-            { name: '2小时', key: '2', type: 'hours' },
-            { name: '5小时', key: '5', type: 'hours' },
-            { name: '10小时', key: '10', type: 'hours' },
-            { name: '12小时', key: '12', type: 'hours' },
-            { name: '24小时', key: '24', type: 'hours' },
-        ];
         const value = [
             { name: '平均值', key: 'avg' },
             { name: '最大值', key: 'max' },
@@ -226,7 +256,8 @@ export default class EditRule extends React.PureComponent {
                             getFieldDecorator('sleuthConfigName', {
                                 initialValue: record && record.sleuthConfigName,
                                 rules: [
-                                    { required: true, message: '请输入报警规则名称' }
+                                    { required: true, message: '请输入报警规则名称' },
+                                    { validator: this.validateName, message: '不能输入表情' }
                                 ]
                             })(
                                 <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />
@@ -242,6 +273,9 @@ export default class EditRule extends React.PureComponent {
                             {
                                 getFieldDecorator('sleuthTargeId', {
                                     initialValue: record && record.sleuthTargeId,
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
                                 })(
                                     <Select style={{ width: '154px' }}>
                                         {
@@ -254,12 +288,22 @@ export default class EditRule extends React.PureComponent {
                             }
                             {
                                 getFieldDecorator('threshold', {
-                                    initialValue: record && this.changeTime(record.threshold),
+                                    initialValue: record && Number(record.threshold),
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
                                 })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
-                                            times.map((item, index) => {
-                                                return (<Option value={moment.duration(Number(item.key), item.type).asSeconds()} key={index}>{item.name}</Option>);
+                                            times.map((item) => {
+                                                return (
+                                                    <Option
+                                                        value={moment.duration(Number(item.key), item.type).asSeconds()}
+                                                        key={moment.duration(Number(item.key), item.type).asSeconds()}
+                                                    >
+                                                        {item.name}
+                                                    </Option>
+                                                );
                                             })
                                         }
                                     </Select>
@@ -268,6 +312,9 @@ export default class EditRule extends React.PureComponent {
                             {
                                 getFieldDecorator('judgeKey', {
                                     initialValue: record && record.judgeKey,
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
                                 })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
@@ -281,6 +328,9 @@ export default class EditRule extends React.PureComponent {
                             {
                                 getFieldDecorator('judgeSymbol', {
                                     initialValue: record && record.judgeSymbol,
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
                                 })(
                                     <Select style={{ width: '154px', marginLeft: '16px' }}>
                                         {
@@ -294,13 +344,14 @@ export default class EditRule extends React.PureComponent {
                             {
                                 getFieldDecorator('judgeValue', {
                                     initialValue: record && record.judgeValue,
+                                    rules: [
+                                        { required: true, message: '请输入指标名称' },
+                                    ]
                                 })(
                                     <Input style={{ width: '154px', marginLeft: '16px' }} />
                                 )
                             }
                         </div>
-
-
                     </Form.Item>
                     <Form.Item
                         label="通道沉默时间"
@@ -308,15 +359,22 @@ export default class EditRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('silenceTime', {
-                                initialValue: record && this.changeTime(record.silenceTime),
+                                initialValue: record && Number(record.silenceTime),
                                 rules: [
                                     { required: true, message: '请选择通道沉默时间' }
                                 ]
                             })(
                                 <Select style={{ width: '154px' }}>
                                     {
-                                        times.map((item, index) => {
-                                            return (<Option value={moment.duration(Number(item.key), item.type).asSeconds()} key={index}>{item.name}</Option>);
+                                        times.map((item) => {
+                                            return (
+                                                <Option
+                                                    value={moment.duration(Number(item.key), item.type).asSeconds()}
+                                                    key={moment.duration(Number(item.key), item.type).asSeconds()}
+                                                >
+                                                    {item.name}
+                                                </Option>
+                                            );
                                         })
                                     }
                                 </Select>
@@ -353,7 +411,7 @@ export default class EditRule extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('sleuthTeams', {
-                                initialValue: record && record.threshold,
+                                initialValue: this.state.targetKeys,
                                 rules: [
                                     { required: true, message: '请选择通知对象' }
                                 ]
