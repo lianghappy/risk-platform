@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Button, Table, DatePicker, Select } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
+import { resultFormat } from 'utils/common.js';
 import Pagination from 'components/Pagination/Pagination';
 import styles from './index.scss';
 
@@ -192,6 +193,7 @@ export default class History extends React.PureComponent {
         });
         return TM;
     }
+
     changeCount = (count) => {
         const value = [
             { name: '平均值', key: 'avg' },
@@ -247,6 +249,7 @@ export default class History extends React.PureComponent {
                 dataIndex: 'duringTime',
                 key: 'duringTime',
                 width: 100,
+                render: (text, record) => (<span>{record.duringTime && resultFormat(record.duringTime)}</span>)
             },
             {
                 title: '策略名称',
