@@ -266,7 +266,8 @@ export default class EditRule extends React.PureComponent {
                                 initialValue: record && record.sleuthConfigName,
                                 rules: [
                                     { required: true, message: '请输入报警规则名称' },
-                                    { validator: this.validateName, message: '不能输入表情' }
+                                    { validator: this.validateName, message: '不能输入表情' },
+                                    { max: 20, message: '字符最多输入20位' }
                                 ]
                             })(
                                 <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />
@@ -283,7 +284,7 @@ export default class EditRule extends React.PureComponent {
                                 getFieldDecorator('sleuthTargeId', {
                                     initialValue: record && record.sleuthTargeId,
                                     rules: [
-                                        { required: true, message: '请输入指标名称' },
+                                        { required: true, message: '请完善规则描述' },
                                     ]
                                 })(
                                     <Select style={{ width: '154px' }}>

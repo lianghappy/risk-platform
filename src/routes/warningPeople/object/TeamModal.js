@@ -95,7 +95,8 @@ export default class TeamModal extends React.PureComponent {
                                     {
                                         initialValue: record.sleuthTeamName,
                                         rules: [
-                                            { required: true, message: '请输入组名' }
+                                            { required: true, message: '请输入组名' },
+                                            { max: 20, message: '输入字符最多20位' }
                                         ]
                                     },
                                 )(
@@ -112,7 +113,7 @@ export default class TeamModal extends React.PureComponent {
                                     initialValue: record.description,
                                     rules: [
                                         { required: true, message: '请输入备注' },
-                                        { max: 200, message: '最多200位' }
+                                        { max: 200, message: '输入字符最多200位' }
                                     ]
                                 })(
                                     <TextArea placeholder="请输入" />

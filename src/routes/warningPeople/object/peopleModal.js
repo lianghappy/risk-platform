@@ -137,7 +137,8 @@ export default class PeopleModal extends React.PureComponent {
                                                 {
                                                     initialValue: record.sleuthPersonName,
                                                     rules: [
-                                                        { required: true, message: this.state.value === 1 ? '请输入姓名' : '请输入' }
+                                                        { required: true, message: this.state.value === 1 ? '请输入姓名' : '请输入' },
+                                                        { max: 20, message: '输入字符最多20位' }
                                                     ]
                                                 }
                                             )(
