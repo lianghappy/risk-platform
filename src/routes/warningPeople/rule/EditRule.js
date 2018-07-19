@@ -40,8 +40,6 @@ export default class EditRule extends React.PureComponent {
     componentDidMount() {
         const {
             dispatch,
-            getPeopleList,
-            record,
         } = this.props;
         const id = base64.decode(this.props.match.params.id);
         new Promise((resolve) => {
@@ -52,15 +50,26 @@ export default class EditRule extends React.PureComponent {
                     resolve,
                 }
             });
+            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+            const appId = JSON.parse(sessionStorage.app).id;
+            const productId = JSON.parse(sessionStorage.product).id;
+            this.props.dispatch({
+                type: 'getPeople',
+                payload: {
+                    pageNum: 1,
+                    pageSize: 99,
+                    companyId,
+                    appId,
+                    productId,
+                }
+            });
         }).then(() => {
             const targetKeys = [];
-            if (record.sleuthTeamNames) {
-                const names = record.sleuthTeamNames.split(',');
-                console.log(names);
-
-                getPeopleList.forEach((item) => {
+            if (this.props.record.sleuthTeamNames) {
+                const names = this.props.record.sleuthTeamNames.split(',');
+                this.props.getPeopleList.forEach((item) => {
                     names.forEach(it => {
-                        if (item.title === it.sleuthTeamNames) {
+                        if (item.title === it) {
                             targetKeys.push(item.key);
                         }
                     });
