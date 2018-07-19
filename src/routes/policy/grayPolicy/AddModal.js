@@ -167,9 +167,8 @@ export default class PolicyModal extends React.PureComponent {
         const keys = getFieldValue('keys');
         const formItems = keys.map((k, index) => {
             return (
-                <Form
+                <div
                     className={styles.forms}
-                    style={{ width: '400px' }}
                     key={index}
                 >
                     <Form.Item
@@ -219,7 +218,7 @@ export default class PolicyModal extends React.PureComponent {
                             onClick={() => this.remove(k)}
                         />
                     ) : null}
-                </Form>
+                </div>
             );
         });
         return (
@@ -272,8 +271,8 @@ export default class PolicyModal extends React.PureComponent {
                         <Form.Item>
                             <span onClick={this.add} role="button" tabIndex="-1">添加策略<Icon type="plus-circle-o" /></span>
                         </Form.Item>
+                        {formItems}
                     </Form>
-                    {formItems}
                 </Modal>
             </span>
         );
