@@ -35,10 +35,14 @@
     height: 426px;
     width: 100%;
     border: 1px solid #eaeaea;
+    position: relative;
 }
 .smallDisk{
     height: 426px;
     width: 48%;
+    position: relative;
+    border: 1px solid #eaeaea;
+    margin-top: 20px;
 }
 .addTimed{
     margin-right: 8px;
@@ -49,8 +53,19 @@
     font-size: 60px;
     margin-left: 22px;
 }
+.close:before{
+    content: "\e64a";
+    font-size: 14px;
+    color: rgba(0,0,0,0.45);
+}
 .barName{
     margin-left: 30px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+.close{
+    position: absolute;
+    right: 24px;
+    top: 11px;
+    z-Index: 12;
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Select, Button, message, DatePicker, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import cs from 'classnames';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
 import { roles } from 'utils/common';
@@ -70,6 +71,31 @@ export default class Disk extends React.PureComponent {
             }
         });
     }
+     onDeleteTable = (boardAndSleuthId) => {
+         const {
+             dispatch,
+         } = this.props;
+         const { dashBoardId, index } = this.state;
+         new Promise((resolve) => {
+             dispatch({
+                 type: 'disk/delTable',
+                 payload: {
+                     data: {
+                         boardAndSleuthId
+                     },
+                     resolve,
+                 }
+             });
+         }).then(() => {
+             dispatch({
+                 type: 'disk/getData',
+                 payload: {
+                     dashBoardId,
+                     dateType: times[index].key,
+                 }
+             });
+         });
+     }
     creates = () => {
         message.error('请先选择监控大盘名称', DURATION);
     }
@@ -278,12 +304,40 @@ export default class Disk extends React.PureComponent {
                                 if (index === 0) {
                                     return (
                                         <div className={styles.bigDisk}>
+                                            <Popconfirm
+                                                placement="topRight"
+                                                title="您确定要删除吗？"
+                                                onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
+                                            >
+                                                <i
+                                                    className={cs(
+                                                        'jm-icon',
+                                                        'anticon',
+                                                        styles.close
+                                                    )}
+                                                >
+                                                </i>
+                                            </Popconfirm>
                                             <Line datas={hourData} />
                                         </div>
                                     );
                                 }
                                 return (
                                     <div className={styles.smallDisk} key={index}>
+                                        <Popconfirm
+                                            placement="topRight"
+                                            title="您确定要删除吗？"
+                                            onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
+                                        >
+                                            <i
+                                                className={cs(
+                                                    'jm-icon',
+                                                    'anticon',
+                                                    styles.close
+                                                )}
+                                            >
+                                            </i>
+                                        </Popconfirm>
                                         <Line datas={hourData} />
                                     </div>
                                 );
