@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Button, Table, DatePicker, Select } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
+import { resultFormat } from 'utils/common.js';
 import Pagination from 'components/Pagination/Pagination';
 import styles from './index.scss';
 
@@ -26,33 +27,40 @@ const times = [
         num: '1',
         keys: [1, 'h'],
     }, {
-        time: '3小时',
+        time: '2小时',
         type: 'hours',
-        num: '3',
+        num: '2',
+        keys: [2, 'h'],
+    }, {
+        time: '4小时',
+        type: 'hours',
+        num: '4',
+        keys: [4, 'h'],
     }, {
         time: '6小时',
         type: 'hours',
         num: '6',
+        keys: [6, 'h'],
     }, {
         time: '12小时',
         type: 'hours',
         num: '12',
+        keys: [12, 'h'],
     }, {
         time: '1天',
         type: 'days',
         num: '1',
+        keys: [1, 'd'],
     }, {
         time: '3天',
         type: 'days',
         num: '3',
+        keys: [3, 'd'],
     }, {
         time: '7天',
         type: 'days',
         num: '7',
-    }, {
-        time: '14天',
-        type: 'days',
-        num: '14',
+        keys: [7, 'd'],
     }
 ];
 @connect(mapStateToProps)
@@ -60,6 +68,8 @@ const times = [
 export default class History extends React.PureComponent {
     state = {
         btn: -1,
+        times: [],
+        defaultTime: [],
     }
     onPageChange = (pageNum, pageSize) => {
         const {
@@ -74,6 +84,13 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
+            if (this.state.times) {
+                const value = this.state.times;
+                Object.assign(values, {
+                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimes: moment(value[0]._d).format('X'),
+                });
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -81,10 +98,6 @@ export default class History extends React.PureComponent {
             });
         });
     };
-    onChange(value, dateString) {
-        console.log('Selected Time: ', value);
-        console.log('Formatted Selected Time: ', dateString);
-    }
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -100,6 +113,13 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
+            if (this.state.times && this.state.times.length > 0) {
+                const value = this.state.times;
+                Object.assign(values, {
+                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimes: moment(value[0]._d).format('X'),
+                });
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -108,7 +128,27 @@ export default class History extends React.PureComponent {
         });
     }
     onOk(value) {
-        console.log('onOk: ', value);
+        this.setState({
+            btn: -1,
+            times: value,
+        });
+        this.props.form.validateFields((errors, values) => {
+            Object.assign(values, {
+                happenedTimee: moment(value[0]._d).format('X'),
+                happenedTimes: moment(value[0]._d).format('X'),
+            });
+            this.query({
+                ...values,
+                pageNum: 1,
+                pageSize: 10,
+            });
+        });
+    }
+    onChange(value) {
+        this.setState({
+            defaultTime: value,
+            times: value,
+        });
     }
     queryTime = (type, num, i, e) => {
         e.preventDefault();
@@ -128,6 +168,8 @@ export default class History extends React.PureComponent {
             });
             this.setState({
                 btn: i,
+                times: null,
+                defaultTime: [moment().subtract(times[i].keys[0], times[i].keys[1]), moment()],
             });
         });
     }
@@ -151,6 +193,7 @@ export default class History extends React.PureComponent {
         });
         return TM;
     }
+
     changeCount = (count) => {
         const value = [
             { name: '平均值', key: 'avg' },
@@ -191,18 +234,8 @@ export default class History extends React.PureComponent {
         const columns = [
             {
                 title: '报警规则名称',
-                dataIndex: 'name',
-                key: 'name',
-                render: (text, record) => (
-                    <span>
-                        {this.changeTime(record.silenceTime)}&nbsp;
-                        {record.sleuthTargetName}&nbsp;
-                        {this.changeCount(record.judgeKey)}&nbsp;
-                        {record.judgeSymbol}&nbsp;
-                        {record.judgeValue}&nbsp;<br />
-                    连续{record.alarmCount}次 则报警
-                    </span>
-                ),
+                dataIndex: 'sleuthConfigName',
+                key: 'sleuthConfigName',
                 width: 100,
             },
             {
@@ -216,6 +249,7 @@ export default class History extends React.PureComponent {
                 dataIndex: 'duringTime',
                 key: 'duringTime',
                 width: 100,
+                render: (text, record) => (<span>{record.duringTime && resultFormat(record.duringTime)}</span>)
             },
             {
                 title: '策略名称',
@@ -261,8 +295,9 @@ export default class History extends React.PureComponent {
                         showTime={{ format: 'HH:mm' }}
                         format="YYYY-MM-DD HH:mm"
                         placeholder={['开始时间', '结束时间']}
-                        onChange={this.onChange}
-                        onOk={this.onOk}
+                        value={this.state.defaultTime}
+                        onChange={(value) => this.onChange(value)}
+                        onOk={(value) => this.onOk(value)}
                     />
                 </div>
                 <Form

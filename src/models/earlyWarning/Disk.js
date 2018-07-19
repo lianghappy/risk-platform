@@ -71,6 +71,11 @@ export default {
             yield call(post, API.delDisk, data);
             yield call(resolve);
         },
+        * delTable({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.delTableDisk, data);
+            yield call(resolve);
+        },
     },
     reducers: {
         querySrc(state, { payload }) {

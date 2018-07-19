@@ -337,6 +337,7 @@ export default class Order extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    className={styles.tableOrder}
                 />
                 <Pagination
                     current={pageNum}

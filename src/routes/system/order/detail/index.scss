@@ -35,7 +35,6 @@
     }
 }
 .tables{
-    max-height: 300px;
     thead{
         th{
             color:rgba(0,0,0,0.65)!important;
@@ -46,4 +45,13 @@
     :global(.ant-table-thead > tr > th, .ant-table-tbody > tr > td){
         padding: 8px 8px;
     }
+    td{
+        padding: 14px 8px!important;
+    }
+    :global(.ant-table-placeholder){
+        border: none!important;
+    }
+}
+.words{
+    word-break: break-word;
 }

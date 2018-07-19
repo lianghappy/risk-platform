@@ -73,6 +73,14 @@ export const menuKeyPick = (location) => {
         if (path[2] === '0') key.push('role');
         else key.push('role');
         break;
+    case 'addWarningRule':
+        if (path[2] === '0') key.push('warningRule');
+        else key.push('warningRule');
+        break;
+    case 'editWarningRule':
+        if (path[2] === '0') key.push('warningRule');
+        else key.push('warningRule');
+        break;
     default:
         key.push(router);
     }
@@ -175,4 +183,17 @@ export const roles = (name) => {
         if (item.id === name) flag = true;
     });
     return flag;
+};
+
+export const resultFormat = (result) => {
+    const h = Math.floor((result / 3600) % 24);
+    const m = Math.floor((result / 60) % 60);
+    const s = Math.floor((result % 60));
+    if (h < 1) {
+        return `${m}分钟${s}秒`;
+    }
+    if (m < 1) {
+        return `${s}秒`;
+    }
+    return `${h}小时${m}分钟${s}秒`;
 };

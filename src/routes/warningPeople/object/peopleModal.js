@@ -6,7 +6,7 @@ import styles from './index.scss';
 export default class PeopleModal extends React.PureComponent {
     state = {
         visible: false,
-        value: this.props.record.dingRebot ? 1 : 2,
+        value: this.props.record.dingRebot ? 2 : 1,
     }
     onChange = (e) => {
         console.log('radio checked', e.target.value);
@@ -36,10 +36,10 @@ export default class PeopleModal extends React.PureComponent {
         }
     }
     getLink = (rule, value, callback) => {
-        if ((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0)) {
-            callback();
-        } else {
+        if (value && !((value.indexOf('http://') === 0) || (value.indexOf('https://') === 0))) {
             callback(rule.message);
+        } else {
+            callback();
         }
     }
     handleSubmit = (e) => {
@@ -78,7 +78,7 @@ export default class PeopleModal extends React.PureComponent {
         });
     }
     checkPhone = (rule, value, callback) => {
-        if (value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -117,7 +117,7 @@ export default class PeopleModal extends React.PureComponent {
                             <td className={styles.operate}>
                                 <Radio.Group
                                     onChange={this.onChange}
-                                    value={record.dingRebot ? 2 : 1}
+                                    value={this.state.value}
                                 >
                                     <Radio value={1}>通知人</Radio>
                                     <Radio value={2}>通知机器人</Radio>
@@ -129,7 +129,7 @@ export default class PeopleModal extends React.PureComponent {
                             <td className={styles.operate} style={{ paddingTop: '20px', paddingLeft: 0 }}>
                                 <Form>
                                     <Form.Item
-                                        label={!record.dingRebot ? '姓名' : '钉钉机器人'}
+                                        label={this.state.value === 1 ? '姓名' : '钉钉机器人'}
                                         {...formItemLayout}
                                     >
                                         {
@@ -137,7 +137,7 @@ export default class PeopleModal extends React.PureComponent {
                                                 {
                                                     initialValue: record.sleuthPersonName,
                                                     rules: [
-                                                        { required: true, message: !record.dingRebot ? '请输入姓名' : '请输入' }
+                                                        { required: true, message: this.state.value === 1 ? '请输入姓名' : '请输入' }
                                                     ]
                                                 }
                                             )(
@@ -146,7 +146,7 @@ export default class PeopleModal extends React.PureComponent {
                                         }
                                     </Form.Item>
                                     {
-                                        !record.dingRebot &&
+                                        this.state.value === 1 &&
                                         <Form.Item
                                             label="手机号"
                                             {...formItemLayout}
@@ -166,28 +166,31 @@ export default class PeopleModal extends React.PureComponent {
                                         </Form.Item>
                                     }
                                     {
-                                        !record.dingRebot &&
+                                        this.state.value === 1 &&
                                         <Form.Item
                                             label="验证码"
                                             {...formItemLayout}
                                         >
-                                            {
-                                                getFieldDecorator('verificationCode',
-                                                    {
-                                                        rules: [
-                                                            { required: true, message: '请输入验证码' }
-                                                        ]
-                                                    })(
-                                                    <div>
+
+                                            <div>
+                                                {
+                                                    getFieldDecorator('verificationCode',
+                                                        {
+                                                            rules: [
+                                                                { required: true, message: '请输入验证码' }
+                                                            ]
+                                                        })(
                                                         <Input style={{ width: '150px', marginRight: '10px' }} placeholder="请输入验证码" />
-                                                        <Button type="primary" onClick={() => this.getCode()}>获取验证码</Button>
-                                                    </div>
-                                                )
-                                            }
+                                                    )
+                                                }
+                                                <Button type="primary" onClick={() => this.getCode()}>获取验证码</Button>
+                                            </div>
+
+
                                         </Form.Item>
                                     }
                                     {
-                                        record.dingRebot &&
+                                        this.state.value === 2 &&
                                         <Form.Item
                                             label="钉钉机器人链接"
                                             {...formItemLayout}

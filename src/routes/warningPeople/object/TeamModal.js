@@ -38,25 +38,14 @@ export default class TeamModal extends React.PureComponent {
             visible: true,
         });
         const mockData = [];
-        const targetKeys = [];
+        const targetKeys = this.props.record.sleuthPersonResponses ? this.props.record.sleuthPersonResponses.map(it => it.sleuthPersonId) : [];
         this.props.people.forEach(item => {
-            let flag = true;
             const data = {
                 key: item.sleuthPersonId,
-                title: `${item.sleuthPersonName}[${item.sleuthPersonPhone}]`,
-                description: `${item.sleuthPersonName}[${item.sleuthPersonPhone}]`,
+                title: item.sleuthPersonPhone ? `${item.sleuthPersonName}[${item.sleuthPersonPhone}]` : `${item.sleuthPersonName}[钉钉机器人]`,
+                description: item.sleuthPersonPhone ? `${item.sleuthPersonName}[${item.sleuthPersonPhone}]` : `${item.sleuthPersonName}[钉钉机器人]`,
             };
-            if (this.props.record.sleuthPersonResponses) {
-                this.props.record.sleuthPersonResponses.forEach(items => {
-                    if (items.sleuthPersonId === item.sleuthPersonId) {
-                        targetKeys.push(data.key);
-                        flag = false;
-                    }
-                });
-            }
-            if (flag) {
-                mockData.push(data);
-            }
+            mockData.push(data);
         });
         this.setState({ mockData, targetKeys });
     }
@@ -67,9 +56,6 @@ export default class TeamModal extends React.PureComponent {
     }
     handleChange = (targetKeys) => {
         this.setState({ targetKeys });
-    }
-    filterOption = (inputValue, option) => {
-        return option.description.indexOf(inputValue) > -1;
     }
     render() {
         const {
@@ -124,6 +110,10 @@ export default class TeamModal extends React.PureComponent {
                             {
                                 getFieldDecorator('description', {
                                     initialValue: record.description,
+                                    rules: [
+                                        { required: true, message: '请输入备注' },
+                                        { max: 200, message: '最多200位' }
+                                    ]
                                 })(
                                     <TextArea placeholder="请输入" />
                                 )
@@ -136,6 +126,7 @@ export default class TeamModal extends React.PureComponent {
                             {
                                 getFieldDecorator('personIds',
                                     {
+                                        initialValue: this.state.targetKeys,
                                         rules: [
                                             { required: true, message: '请选择联系人' }
                                         ]
@@ -144,7 +135,6 @@ export default class TeamModal extends React.PureComponent {
                                     <Transfer
                                         dataSource={this.state.mockData}
                                         showSearch
-                                        filterOption={this.filterOption}
                                         targetKeys={this.state.targetKeys}
                                         onChange={this.handleChange}
                                         render={item => item.title}

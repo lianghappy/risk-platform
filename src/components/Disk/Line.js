@@ -19,8 +19,13 @@ export default class Line extends React.PureComponent {
         const myChart = echarts.init(container);
         const Xdata = this.state.datas.lenght > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
         const Ydata = this.state.datas.length > 0 ? this.state.datas.map(item => item.value) : [];
+        const sleuthTargetName = this.state.datas && this.state.datas.length > 0 ? this.state.datas[0].sleuthTargetName : '';
+        let DW = '万分位';
+        if (this.state.datas && this.state.datas.length > 0) {
+            DW = this.state.datas[0].sleuthTargetId === '1' || this.state.datas[0].sleuthTargetId === '5' ? '数量' : '万分位';
+        }
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
-        this.setOption(myChart, Xdata, Ydata);
+        this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
         window.onresize = myChart.resize;
     }
     componentWillReceiveProps(nextProps) {
@@ -28,19 +33,24 @@ export default class Line extends React.PureComponent {
         this.setState({
             datas: nextProps.datas,
         });
-        console.log(nextProps.datas);
 
         const myChart = echarts.init(container);
         const Xdata = nextProps.datas && nextProps.datas.length > 0 ? nextProps.datas.map(item => item.sleuthTime) : [];
         const Ydata = nextProps.datas && nextProps.datas.length > 0 ? nextProps.datas.map(item => item.value) : [];
+        const sleuthTargetName = nextProps.datas && nextProps.datas.length > 0 ? nextProps.datas[0].sleuthTargetName : '';
+        let DW = '万分位';
+        if (nextProps.datas && nextProps.datas.length > 0) {
+            DW = nextProps.datas[0].sleuthTargetId === '1' || nextProps.datas[0].sleuthTargetId === '5' ? '数量' : '万分位';
+        }
         // 基于准备好的dom，初始化 echarts 实例并绘制图表。
-        this.setOption(myChart, Xdata, Ydata);
+        this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
+
         window.onresize = myChart.resize;
     }
-    setOption(myChart, Xdata, Ydata) {
+    setOption(myChart, Xdata, Ydata, sleuthTargetName, DW) {
         myChart.setOption({
             title: {
-                text: '单位：人/次',
+                text: `单位：${DW}`,
                 textStyle: {
                     fontSize: '13px',
                     color: 'rgba(0, 0, 0, 0.65)',
@@ -57,7 +67,7 @@ export default class Line extends React.PureComponent {
                 trigger: 'axis'
             },
             legend: {
-                data: ['邮件营销'],
+                data: [sleuthTargetName],
             },
             xAxis: {
                 type: 'category',
@@ -68,7 +78,7 @@ export default class Line extends React.PureComponent {
                 type: 'value',
             },
             series: [{
-                name: '邮件营销',
+                name: sleuthTargetName,
                 type: 'line',
                 smooth: true,
                 data: Ydata

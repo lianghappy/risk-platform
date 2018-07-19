@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Form, Select, Button, message, DatePicker, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import cs from 'classnames';
 import noMessage from 'assets/images/noMessage.svg';
 import Line from 'components/Disk/Line';
 import { roles } from 'utils/common';
@@ -60,8 +61,10 @@ export default class Disk extends React.PureComponent {
     state = {
         dashBoardId: '',
         index: 0,
-        getDiskData: this.props.getDiskData || [],
+        times: [moment().subtract(times[0].hour[0], times[0].hour[1]), moment()],
+        dateType: times[0].key,
     }
+
     onDelete = () => {
         const { dashBoardId } = this.state;
         this.props.dispatch({
@@ -71,23 +74,76 @@ export default class Disk extends React.PureComponent {
             }
         });
     }
+
+    onDeleteTable = (boardAndSleuthId) => {
+        const {
+            dispatch,
+        } = this.props;
+        const { dashBoardId, dateType } = this.state;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'disk/delTable',
+                payload: {
+                    data: {
+                        boardAndSleuthId
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            dispatch({
+                type: 'disk/getData',
+                payload: {
+                    dashBoardId,
+                    dateType,
+                }
+            });
+        });
+    }
+
+    onChange = (value) => {
+        this.setState({
+            times: value,
+            index: -1,
+        });
+    }
+
+    onOk = (value) => {
+        const {
+            dispatch,
+        } = this.props;
+        let dateType = '';
+        const { dashBoardId } = this.state;
+        if (value) {
+            dateType = '1m';
+        }
+        dispatch({
+            type: 'disk/getData',
+            payload: {
+                dateType,
+                dashBoardId,
+            }
+        });
+    }
+
     creates = () => {
         message.error('请先选择监控大盘名称', DURATION);
     }
+
     selectChange = (value) => {
-        const indexs = this.state.index;
+        const dateType = this.state.dateType;
         this.props.dispatch({
             type: 'disk/getData',
             payload: {
                 dashBoardId: value,
-                dateType: times[indexs].key,
+                dateType,
             }
         });
         this.setState({
             dashBoardId: value,
-            getDiskData: this.props.getDiskData,
         });
     }
+
     modalOk = (data, callback) => {
         const {
             dispatch,
@@ -110,6 +166,7 @@ export default class Disk extends React.PureComponent {
             this.query({});
         });
     };
+
     addModal = (data, callback) => {
         const {
             dispatch,
@@ -137,6 +194,7 @@ export default class Disk extends React.PureComponent {
             this.query({});
         });
     }
+
     changeTime = (i) => {
         if (!this.state.dashBoardId) {
             message.error('请先选择监控大盘名称', DURATION);
@@ -144,6 +202,8 @@ export default class Disk extends React.PureComponent {
         }
         this.setState({
             index: i,
+            times: [moment().subtract(times[i].hour[0], times[i].hour[1]), moment()],
+            dateType: times[i].key,
         });
         const value = this.state.dashBoardId;
         this.props.dispatch({
@@ -153,10 +213,8 @@ export default class Disk extends React.PureComponent {
                 dateType: times[i].key,
             }
         });
-        this.setState({
-            getDiskData: this.props.getDiskData,
-        });
     }
+
     query(payload) {
         const userId = JSON.parse(sessionStorage.userInfo).user.id;
         Object.assign(payload, { userId });
@@ -165,14 +223,12 @@ export default class Disk extends React.PureComponent {
             payload,
         });
     }
+
     render() {
         const {
             dashBoard,
             getDiskData,
         } = this.props;
-        console.log(getDiskData);
-
-        // const timeDay = times[this.state.index].hour;
 
         return (
             <Layout className="layoutMar">
@@ -190,7 +246,14 @@ export default class Disk extends React.PureComponent {
                                 >
                                     {
                                         dashBoard.map((item, index) => {
-                                            return (<Select.Option value={item.dashBoardId} key={index} >{item.dashBoardName}</Select.Option>);
+                                            return (
+                                                <Select.Option
+                                                    value={item.dashBoardId}
+                                                    key={index}
+                                                >
+                                                    {item.dashBoardName}
+                                                </Select.Option>
+                                            );
                                         })
                                     }
                                 </Select>
@@ -206,7 +269,13 @@ export default class Disk extends React.PureComponent {
                                     onOk={this.modalOk}
                                     type="add"
                                 >
-                                    <Button type="primary" size="small" className={styles.create}>创建监控大盘</Button>
+                                    <Button
+                                        type="primary"
+                                        size="small"
+                                        className={styles.create}
+                                    >
+                                    创建监控大盘
+                                    </Button>
                                 </CreateDisk>
 
                             </span>
@@ -218,7 +287,12 @@ export default class Disk extends React.PureComponent {
                                 title="您确定要删除吗？"
                                 onConfirm={() => this.onDelete()}
                             >
-                                <Button type="default" size="small">删除当前表盘</Button>
+                                <Button
+                                    type="default"
+                                    size="small"
+                                >
+                                删除当前表盘
+                                </Button>
                             </Popconfirm>
 
                         }
@@ -230,16 +304,24 @@ export default class Disk extends React.PureComponent {
                             {
                                 times.map((item, index) => {
                                     return (
-                                        <Button onClick={() => this.changeTime(index)} type={index === this.state.index ? 'primary' : 'default'} size="small" className={styles.addTimed} key={index}>{item.time}</Button>
+                                        <Button
+                                            onClick={() => this.changeTime(index)}
+                                            type={index === this.state.index ? 'primary' : 'default'}
+                                            size="small"
+                                            className={styles.addTimed}
+                                            key={index}
+                                        >
+                                            {item.time}
+                                        </Button>
                                     );
                                 })
                             }
                             <RangePicker
                                 showTime={{ format: 'HH:mm' }}
                                 format="YYYY-MM-DD HH:mm"
-                                value={[moment().subtract(times[this.state.index].hour[0], times[this.state.index].hour[1]), moment()]}
+                                value={this.state.times}
                                 placeholder={['开始时间', '结束时间']}
-                                onChange={this.onChange}
+                                onChange={(value) => this.onChange(value)}
                                 onOk={this.onOk}
                             />
                         </div>
@@ -255,16 +337,23 @@ export default class Disk extends React.PureComponent {
                                                 <Button type="default" size="small">添加图表</Button>
                                             </AddTable>
                                             :
-                                            <Button type="default" size="small" onClick={() => this.creates()}>添加图表</Button>
+                                            <Button
+                                                type="default"
+                                                size="small"
+                                                onClick={() => this.creates()
+                                                }
+                                            >
+                                             添加图表
+                                            </Button>
                                     }
                                 </div>
                         }
                     </div>
                     <div className={styles.disk}>
                         {
-                            this.state.getDiskData && this.state.getDiskData.map((item, index) => {
+                            getDiskData.map((item, index) => {
                                 let hourData = [];
-                                switch (times[this.state.index].key) {
+                                switch (this.state.dateType) {
                                 case '1m':
                                     hourData = item.dataByMinute;
                                     break;
@@ -280,22 +369,51 @@ export default class Disk extends React.PureComponent {
                                 default:
                                     break;
                                 }
+
                                 if (index === 0) {
                                     return (
                                         <div className={styles.bigDisk}>
+                                            <Popconfirm
+                                                placement="topRight"
+                                                title="您确定要删除吗？"
+                                                onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
+                                            >
+                                                <i
+                                                    className={cs(
+                                                        'jm-icon',
+                                                        'anticon',
+                                                        styles.close
+                                                    )}
+                                                >
+                                                </i>
+                                            </Popconfirm>
                                             <Line datas={hourData} />
                                         </div>
                                     );
                                 }
                                 return (
                                     <div className={styles.smallDisk} key={index}>
+                                        <Popconfirm
+                                            placement="topRight"
+                                            title="您确定要删除吗？"
+                                            onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
+                                        >
+                                            <i
+                                                className={cs(
+                                                    'jm-icon',
+                                                    'anticon',
+                                                    styles.close
+                                                )}
+                                            >
+                                            </i>
+                                        </Popconfirm>
                                         <Line datas={hourData} />
                                     </div>
                                 );
                             })
                         }
                         {
-                            this.props.getDiskData.length <= 0 &&
+                            getDiskData.length <= 0 &&
                             <div className={styles.noMessage}>
                                 <img src={noMessage} alt="暂无数据" />
                                 <h1>暂无数据</h1>

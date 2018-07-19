@@ -25,6 +25,7 @@ export default class LinkOrder extends React.PureComponent {
     };
     detail = (id) => {
         this.props.history.push(setPath(`/orderDetail/${base64.encode(id)}`));
+        window.location.reload();
     }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
