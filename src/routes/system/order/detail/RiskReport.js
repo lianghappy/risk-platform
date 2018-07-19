@@ -10,6 +10,7 @@ const mapStateToProps = (state) => {
         getReportList: state.orderDetail.getReportList,
         loading: state.loading.models.orderDetail,
         typeList: state.orderDetail.typeList,
+        categoryList: state.orderDetail.categoryList,
     };
 };
 @connect(mapStateToProps)
@@ -27,6 +28,21 @@ export default class RiskReport extends React.PureComponent {
         return name;
     }
     changeColumn = (ids) => {
+        const { typeList, categoryList } = this.props;
+        const filters = [];
+        const category = [];
+        typeList.forEach(item => {
+            filters.push({
+                text: item.name,
+                value: item.code,
+            });
+        });
+        categoryList.forEach(item => {
+            category.push({
+                text: item.name,
+                value: item.name,
+            });
+        });
         const columns = [
             {
                 title: '规则编号',
@@ -51,13 +67,17 @@ export default class RiskReport extends React.PureComponent {
                 dataIndex: 'channel',
                 key: 'channel',
                 width: 100,
-                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>)
+                render: (text, record) => (<span>{this.checkCode(record.channel)}</span>),
+                filters,
+                onFilter: (value, record) => record.channel.indexOf(value) === 0,
             },
             {
                 title: '所有类别',
                 dataIndex: 'categoryName',
                 key: 'categoryName',
                 width: 100,
+                filters: category,
+                onFilter: (value, record) => record.categoryName.indexOf(value) === 0,
             },
         ];
         if (ids === '2') {
@@ -119,6 +139,7 @@ export default class RiskReport extends React.PureComponent {
                                     </span>
                                 </div>
                                 <Table
+                                    scroll={{ y: 340 }}
                                     className={styles.tables}
                                     rowClassName={styles.tableTr}
                                     indentSize={10}
