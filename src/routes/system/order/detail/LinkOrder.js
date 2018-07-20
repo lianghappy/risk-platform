@@ -113,6 +113,7 @@ export default class LinkOrder extends React.PureComponent {
                     loading={loading}
                     dataSource={dataSource}
                     pagination={false}
+                    className={styles.tables}
                 />
                 <Pagination
                     current={pageNum}
