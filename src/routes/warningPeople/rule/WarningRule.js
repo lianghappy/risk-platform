@@ -182,6 +182,18 @@ export default class WarningRule extends React.PureComponent {
         } = this.props;
         const columns = [
             {
+                title: '报警ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '报警规则名称',
+                dataIndex: 'sleuthConfigName',
+                key: 'sleuthConfigName',
+                width: 100,
+            },
+            {
                 title: '策略名称',
                 dataIndex: 'strategyName',
                 key: 'strategyName',
