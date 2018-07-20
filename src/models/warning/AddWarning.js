@@ -90,6 +90,7 @@ export default {
                         type: 'getSelect',
                         payload: {
                             companyId,
+                            isEnable: 1,
                         }
                     });
                 }
