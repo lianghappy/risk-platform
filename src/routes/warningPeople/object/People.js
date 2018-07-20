@@ -61,7 +61,6 @@ export default class People extends React.PureComponent {
         });
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log('selectedRowKeys changed: ', selectedRows);
         this.setState({ selectedRows });
     }
     onQuery = (e) => {
