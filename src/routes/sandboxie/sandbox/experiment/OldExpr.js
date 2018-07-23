@@ -25,6 +25,7 @@ class OldExpr extends React.PureComponent {
         categories: PropTypes.array.isRequired,
     };
     componentDidMount() {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         const {
             pageSize,
             pageNum,
@@ -35,6 +36,7 @@ class OldExpr extends React.PureComponent {
             payload: {
                 pageSize,
                 pageNum,
+                companyId,
             },
         });
     }
@@ -111,6 +113,8 @@ class OldExpr extends React.PureComponent {
         });
     }
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'experiment/queryList',
             payload,

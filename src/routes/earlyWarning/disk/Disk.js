@@ -13,6 +13,7 @@ import AddTable from './AddTable';
 import styles from './index.scss';
 
 const { RangePicker } = DatePicker;
+const Option = Select.Option;
 const times = [
     {
         time: '1小时',
@@ -46,6 +47,21 @@ const times = [
         time: '14天',
         key: '6h',
         hour: [14, 'd'],
+    }
+];
+const frequency = [
+    {
+        time: '1分钟',
+        key: '1m',
+    }, {
+        time: '1小时',
+        key: '1h',
+    }, {
+        time: '6小时',
+        key: '6h',
+    }, {
+        time: '1天',
+        key: '1d',
     }
 ];
 const mapStateToProps = (state) => {
@@ -296,6 +312,24 @@ export default class Disk extends React.PureComponent {
                             </Popconfirm>
 
                         }
+                        {
+                            this.state.dashBoardId ?
+                                <AddTable
+                                    type="add"
+                                    onOk={this.addModal}
+                                >
+                                    <Button type="default" size="small">添加图表</Button>
+                                </AddTable>
+                                :
+                                <Button
+                                    type="default"
+                                    size="small"
+                                    onClick={() => this.creates()
+                                    }
+                                >
+                                             添加图表
+                                </Button>
+                        }
                     </div>
                 </div>
                 <div className={styles.charts}>
@@ -317,7 +351,10 @@ export default class Disk extends React.PureComponent {
                                 })
                             }
                             <RangePicker
-                                showTime={{ format: 'HH:mm' }}
+                                showTime={{
+                                    format: 'HH:mm',
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                                }}
                                 format="YYYY-MM-DD HH:mm"
                                 value={this.state.times}
                                 placeholder={['开始时间', '结束时间']}
@@ -328,24 +365,15 @@ export default class Disk extends React.PureComponent {
                         {
                             roles('R_warn_disk_add') &&
                                 <div className={styles.addCharts}>
-                                    {
-                                        this.state.dashBoardId ?
-                                            <AddTable
-                                                type="add"
-                                                onOk={this.addModal}
-                                            >
-                                                <Button type="default" size="small">添加图表</Button>
-                                            </AddTable>
-                                            :
-                                            <Button
-                                                type="default"
-                                                size="small"
-                                                onClick={() => this.creates()
-                                                }
-                                            >
-                                             添加图表
-                                            </Button>
-                                    }
+                                    <Select style={{ width: '80px' }}>
+                                        {
+                                            frequency.map(item => {
+                                                return (
+                                                    <Option value={item.key} key={item.key}>{item.time}</Option>
+                                                );
+                                            })
+                                        }
+                                    </Select>
                                 </div>
                         }
                     </div>

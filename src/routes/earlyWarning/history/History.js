@@ -292,7 +292,12 @@ export default class History extends React.PureComponent {
                         })
                     }
                     <RangePicker
-                        showTime={{ format: 'HH:mm' }}
+                        showTime={
+                            {
+                                format: 'HH:mm',
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                            }
+                        }
                         format="YYYY-MM-DD HH:mm"
                         placeholder={['开始时间', '结束时间']}
                         value={this.state.defaultTime}

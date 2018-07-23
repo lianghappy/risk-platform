@@ -38,6 +38,7 @@ class Start extends React.PureComponent {
         e.preventDefault();
         const username = JSON.parse(sessionStorage.userInfo).user.realName;
         const strategyId = base64.decode(this.props.match.params.id);
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         if (loading) return;
         form.validateFields((errors, value) => {
             if (!errors) {
@@ -50,6 +51,7 @@ class Start extends React.PureComponent {
                                 username,
                                 strategyId,
                                 ...values,
+                                companyId,
                             },
                             resolve,
                         },
