@@ -43,10 +43,6 @@ const times = [
         time: '7天',
         key: '6h',
         hour: [7, 'd'],
-    }, {
-        time: '14天',
-        key: '6h',
-        hour: [14, 'd'],
     }
 ];
 const frequency = [
@@ -78,16 +74,49 @@ export default class Disk extends React.PureComponent {
         dashBoardId: '',
         index: 0,
         times: [moment().subtract(times[0].hour[0], times[0].hour[1]), moment()],
-        dateType: times[0].key,
+        dateType: '',
+        startTime: moment().subtract(times[0].hour[0], times[0].hour[1]).format('X'),
+        endTime: moment().format('X'),
+    }
+
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'disk/getData',
+            payload: {
+                dashBoardId: '',
+                dateType: '1m',
+            },
+        });
     }
 
     onDelete = () => {
-        const { dashBoardId } = this.state;
-        this.props.dispatch({
-            type: 'disk/del',
-            payload: {
-                dashBoardId,
-            }
+        if (!this.state.dashBoardId) {
+            message.error('请先选择监控大盘名称', DURATION);
+            return;
+        }
+        if (!this.state.dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
+        }
+        const { dashBoardId, dateType } = this.state;
+        new Promise((resolve) => {
+            this.props.dispatch({
+                type: 'disk/del',
+                payload: {
+                    data: {
+                        dashBoardId
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            message.success('删除成功', DURATION);
+            this.setState({ dashBoardId: '' });
+            this.query({});
+            this.queryData({
+                dashBoardId: '',
+                dateType,
+            });
         });
     }
 
@@ -95,16 +124,24 @@ export default class Disk extends React.PureComponent {
         const {
             dispatch,
         } = this.props;
-        const { dashBoardId, dateType } = this.state;
+        if (!this.state.dashBoardId) {
+            message.error('请先选择监控大盘名称', DURATION);
+            return;
+        }
+        if (!this.state.dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
+        }
+        const { dateType, dashBoardId } = this.state;
+        const data = {};
+        Object.assign(data, { boardAndSleuthId });
         new Promise((resolve) => {
             dispatch({
                 type: 'disk/delTable',
                 payload: {
-                    data: {
-                        boardAndSleuthId
-                    },
+                    data,
                     resolve,
-                }
+                },
             });
         }).then(() => {
             dispatch({
@@ -121,24 +158,22 @@ export default class Disk extends React.PureComponent {
         this.setState({
             times: value,
             index: -1,
+            startTime: value[0].format('X'),
+            endTime: value[1].format('X')
         });
     }
 
-    onOk = (value) => {
-        const {
-            dispatch,
-        } = this.props;
-        let dateType = '';
-        const { dashBoardId } = this.state;
-        if (value) {
-            dateType = '1m';
+    onOk = () => {
+        const { dashBoardId, startTime, endTime, dateType } = this.state;
+        if (!dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
         }
-        dispatch({
-            type: 'disk/getData',
-            payload: {
-                dateType,
-                dashBoardId,
-            }
+        this.queryData({
+            dashBoardId,
+            startTime,
+            endTime,
+            dateType,
         });
     }
 
@@ -147,12 +182,18 @@ export default class Disk extends React.PureComponent {
     }
 
     selectChange = (value) => {
-        const dateType = this.state.dateType;
+        const { dateType, startTime, endTime } = this.state;
+        if (!dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
+        }
         this.props.dispatch({
             type: 'disk/getData',
             payload: {
                 dashBoardId: value,
                 dateType,
+                startTime,
+                endTime,
             }
         });
         this.setState({
@@ -216,18 +257,35 @@ export default class Disk extends React.PureComponent {
             message.error('请先选择监控大盘名称', DURATION);
             return;
         }
+        if (!this.state.dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
+        }
         this.setState({
             index: i,
             times: [moment().subtract(times[i].hour[0], times[i].hour[1]), moment()],
-            dateType: times[i].key,
+            startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
+            endTime: moment().format('X'),
         });
-        const value = this.state.dashBoardId;
-        this.props.dispatch({
-            type: 'disk/getData',
-            payload: {
-                dashBoardId: value,
-                dateType: times[i].key,
-            }
+        const { dateType, dashBoardId } = this.state;
+        this.queryData({
+            dashBoardId,
+            dateType,
+            startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
+            endTime: moment().format('X'),
+        });
+    }
+
+    handleChange = (value) => {
+        this.setState({
+            dateType: value
+        });
+        const { dateType, dashBoardId, startTime, endTime } = this.state;
+        this.queryData({
+            dashBoardId,
+            dateType,
+            startTime,
+            endTime,
         });
     }
 
@@ -236,6 +294,13 @@ export default class Disk extends React.PureComponent {
         Object.assign(payload, { userId });
         this.props.dispatch({
             type: 'disk/getdashBoard',
+            payload,
+        });
+    }
+
+    queryData(payload) {
+        this.props.dispatch({
+            type: 'disk/getData',
             payload,
         });
     }
@@ -259,6 +324,7 @@ export default class Disk extends React.PureComponent {
                                 <Select
                                     style={{ width: '206px' }}
                                     onChange={this.selectChange}
+                                    value={this.state.dashBoardId}
                                 >
                                     {
                                         dashBoard.map((item, index) => {
@@ -365,11 +431,20 @@ export default class Disk extends React.PureComponent {
                         {
                             roles('R_warn_disk_add') &&
                                 <div className={styles.addCharts}>
-                                    <Select style={{ width: '80px' }}>
+                                    <span>请选择监控频率：</span>
+                                    <Select
+                                        style={{ width: '80px' }}
+                                        onChange={(value) => this.handleChange(value)}
+                                    >
                                         {
                                             frequency.map(item => {
                                                 return (
-                                                    <Option value={item.key} key={item.key}>{item.time}</Option>
+                                                    <Option
+                                                        value={item.key}
+                                                        key={item.key}
+                                                    >
+                                                        {item.time}
+                                                    </Option>
                                                 );
                                             })
                                         }

@@ -150,6 +150,14 @@ export default class History extends React.PureComponent {
             times: value,
         });
     }
+    onReset = () => {
+        const { pageSize, form } = this.props;
+        form.resetFields();
+        this.query({
+            pageNum: 1,
+            pageSize,
+        });
+    };
     queryTime = (type, num, i, e) => {
         e.preventDefault();
         const {
@@ -359,7 +367,8 @@ export default class History extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">查询</Button>
+                        <Button type="primary" disabled={this.props.loading} htmlType="submit" style={{ marginRight: '20px' }}>查询</Button>
+                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                     </Form.Item>
                 </Form>
                 <Table
