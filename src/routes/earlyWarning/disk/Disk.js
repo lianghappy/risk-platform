@@ -372,6 +372,7 @@ export default class Disk extends React.PureComponent {
                                 <Button
                                     type="default"
                                     size="small"
+                                    style={{ marginRight: '20px' }}
                                 >
                                 删除当前表盘
                                 </Button>
