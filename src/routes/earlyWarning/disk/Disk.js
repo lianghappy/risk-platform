@@ -91,7 +91,7 @@ export default class Disk extends React.PureComponent {
 
     onDelete = () => {
         if (!this.state.dashBoardId) {
-            message.error('请先选择监控大盘名称', DURATION);
+            message.error('请先选择监控大盘', DURATION);
             return;
         }
         if (!this.state.dateType) {
@@ -125,7 +125,7 @@ export default class Disk extends React.PureComponent {
             dispatch,
         } = this.props;
         if (!this.state.dashBoardId) {
-            message.error('请先选择监控大盘名称', DURATION);
+            message.error('请先选择监控大盘', DURATION);
             return;
         }
         if (!this.state.dateType) {
@@ -165,6 +165,10 @@ export default class Disk extends React.PureComponent {
 
     onOk = () => {
         const { dashBoardId, startTime, endTime, dateType } = this.state;
+        if (!this.state.dashBoardId) {
+            message.error('请选择监控大盘', DURATION);
+            return;
+        }
         if (!dateType) {
             message.error('请选择监控频率', DURATION);
             return;
@@ -178,10 +182,13 @@ export default class Disk extends React.PureComponent {
     }
 
     creates = () => {
-        message.error('请先选择监控大盘名称', DURATION);
+        message.error('请选择监控大盘', DURATION);
     }
 
     selectChange = (value) => {
+        this.setState({
+            dashBoardId: value,
+        });
         const { dateType, startTime, endTime } = this.state;
         if (!dateType) {
             message.error('请选择监控频率', DURATION);
@@ -195,9 +202,6 @@ export default class Disk extends React.PureComponent {
                 startTime,
                 endTime,
             }
-        });
-        this.setState({
-            dashBoardId: value,
         });
     }
 
@@ -248,13 +252,19 @@ export default class Disk extends React.PureComponent {
         }).then(() => {
             message.success('添加成功');
             callback();
-            this.query({});
+            const { dateType, startTime, endTime } = this.state;
+            this.queryData({
+                dashBoardId,
+                dateType,
+                startTime,
+                endTime,
+            });
         });
     }
 
     changeTime = (i) => {
         if (!this.state.dashBoardId) {
-            message.error('请先选择监控大盘名称', DURATION);
+            message.error('请选择监控大盘', DURATION);
             return;
         }
         if (!this.state.dateType) {
@@ -280,10 +290,14 @@ export default class Disk extends React.PureComponent {
         this.setState({
             dateType: value
         });
-        const { dateType, dashBoardId, startTime, endTime } = this.state;
+        if (!this.state.dashBoardId) {
+            message.error('请选择监控大盘', DURATION);
+            return;
+        }
+        const { dashBoardId, startTime, endTime } = this.state;
         this.queryData({
             dashBoardId,
-            dateType,
+            dateType: value,
             startTime,
             endTime,
         });
