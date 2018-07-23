@@ -84,10 +84,10 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
-            if (this.state.times) {
+            if (this.state.times && this.state.times.length > 0) {
                 const value = this.state.times;
                 Object.assign(values, {
-                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimee: moment(value[1]._d).format('X'),
                     happenedTimes: moment(value[0]._d).format('X'),
                 });
             }
@@ -116,7 +116,7 @@ export default class History extends React.PureComponent {
             if (this.state.times && this.state.times.length > 0) {
                 const value = this.state.times;
                 Object.assign(values, {
-                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimee: moment(value[1]._d).format('X'),
                     happenedTimes: moment(value[0]._d).format('X'),
                 });
             }
@@ -134,7 +134,7 @@ export default class History extends React.PureComponent {
         });
         this.props.form.validateFields((errors, values) => {
             Object.assign(values, {
-                happenedTimee: moment(value[0]._d).format('X'),
+                happenedTimee: moment(value[1]._d).format('X'),
                 happenedTimes: moment(value[0]._d).format('X'),
             });
             this.query({
