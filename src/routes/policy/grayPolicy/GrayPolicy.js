@@ -7,6 +7,7 @@ import { DURATION } from 'utils/constants';
 import style from './index.scss';
 import AddModal from './AddModal';
 import Pagination from '../../../components/Pagination/Pagination';
+import GrayDetails from './Detail';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -135,14 +136,14 @@ export default class GrayPolicy extends React.PureComponent {
        const columns = [
            {
                title: '灰度策略标识',
-               dataIndex: 'grayStrategyId',
-               key: 'grayStrategyId',
+               dataIndex: 'id',
+               key: 'id',
                width: 100,
            },
            {
                title: '灰度策略名称',
-               dataIndex: 'grayStrategyName',
-               key: 'grayStrategyName',
+               dataIndex: 'name',
+               key: 'name',
                width: 100,
            },
            {
@@ -177,7 +178,11 @@ export default class GrayPolicy extends React.PureComponent {
                width: 100,
                render: (text, record) => (
                    <span>
-                       <a>详情</a>
+                       <GrayDetails
+                           grayStrategyId={record.id}
+                       >
+                           <a>详情</a>
+                       </GrayDetails>
                        <a className="jm-del" >编辑</a>
                        <Popconfirm
                            placement="topRight"

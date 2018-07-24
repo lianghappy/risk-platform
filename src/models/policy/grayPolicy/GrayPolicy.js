@@ -12,6 +12,9 @@ export default {
         typeList: [],
         grayPolicyList: [],
         getPolicyList: [],
+        grayDetails: {},
+        garyStrategyName: '',
+        remark: '',
     },
     effects: {
         // 查询
@@ -45,6 +48,17 @@ export default {
                 type: 'querySuc',
                 payload: {
                     getPolicyList: response,
+                },
+            });
+        },
+        * details({ payload }, { call, put }) {
+            const response = yield call(post, API.grayPolicyDetails, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    grayDetails: response,
+                    garyStrategyName: response[0].garyStrategyName,
+                    remark: response[0].remark
                 },
             });
         },

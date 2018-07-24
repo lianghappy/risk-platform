@@ -14,9 +14,9 @@ import styles from './index.scss';
 let uuid = 0;
 // const FormItem = Form.Item;
 
-function hasErrors(fieldsError) {
-    return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
+// function hasErrors(fieldsError) {
+//     return Object.keys(fieldsError).some(field => fieldsError[field]);
+// }
 const Option = Select.Option;
 const { TextArea } = Input;
 let timeout;
@@ -99,6 +99,16 @@ export default class PolicyModal extends React.PureComponent {
                     if (type === 'edit') {
                         Object.assign(values, { id: record.id });
                     }
+                    const details = [];
+                    values.keys.forEach((index) => {
+                        details.push({
+                            strategyId: values.strategyName[index].key,
+                            strategyName: values.strategyName[index].label,
+                            ratio: values.ratio[index],
+                        });
+                    });
+                    delete values.keys;
+                    Object.assign(values, { details });
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -122,7 +132,7 @@ export default class PolicyModal extends React.PureComponent {
     };
     dataChange = (val) => {
         this.setState({
-            value: val,
+            value: val.label,
         });
         if (timeout) {
             clearTimeout(timeout);
@@ -138,7 +148,7 @@ export default class PolicyModal extends React.PureComponent {
                 companyId,
                 pageNum: 1,
                 pageSize: 100,
-                name: val,
+                name: val.label,
             },
         });
     }
@@ -159,7 +169,6 @@ export default class PolicyModal extends React.PureComponent {
         const { children, record, loading } = this.props;
         const {
             getFieldDecorator,
-            getFieldsError,
             getFieldValue,
         } = forms;
         const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
@@ -183,6 +192,7 @@ export default class PolicyModal extends React.PureComponent {
                                 ],
                             })(
                                 <Select
+                                    labelInValue
                                     showSearch
                                     value={this.state.value}
                                     style={{ width: 144 }}
@@ -236,7 +246,6 @@ export default class PolicyModal extends React.PureComponent {
                         <Button
                             key="submit"
                             type="primary"
-                            disabled={hasErrors(getFieldsError())}
                             onClick={this.handleSubmit}
                             loading={loading}
                         >
@@ -269,7 +278,13 @@ export default class PolicyModal extends React.PureComponent {
                             }
                         </Form.Item>
                         <Form.Item>
-                            <span onClick={this.add} role="button" tabIndex="-1">添加策略<Icon type="plus-circle-o" /></span>
+                            <span
+                                onClick={this.add}
+                                role="button"
+                                tabIndex="-1"
+                            >
+                            添加策略<Icon type="plus-circle-o" style={{ marginLeft: '10px' }} />
+                            </span>
                         </Form.Item>
                         {formItems}
                     </Form>

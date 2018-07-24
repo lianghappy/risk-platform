@@ -18,13 +18,14 @@
 .forms{
     background-color: #D9D9D9;
     border:1px solid rgba(217,217,217,1);
+    margin-bottom: 10px;
     :global(.ant-form-item){
         margin-bottom: 10px;
     }
 }
 .delBtn{
     float: right;
-    margin-top: -67px;
+    margin-top: -60px;
     z-index: 12;
-
+    margin-right: 13px;
 }
