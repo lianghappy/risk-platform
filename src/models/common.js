@@ -6,6 +6,9 @@ export default {
     state: {
         breadcrumbItems: [],
         flag: true,
+        searchFields: {
+            order: {}, // 订单列表
+        },
     },
     reducers: {
         setBreadcrumb(state, { payload }) {
@@ -19,6 +22,18 @@ export default {
                 ...state,
                 flag: payload,
             };
-        }
+        },
+        setSearchFields(state, { payload }) {
+            const { type, searchFields } = payload;
+            return {
+                ...state,
+                searchFields: {
+                    ...state.searchFields,
+                    [type]: {
+                        ...searchFields,
+                    }
+                }
+            };
+        },
     },
 };
