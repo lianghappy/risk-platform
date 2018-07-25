@@ -247,6 +247,8 @@ const api = {
     grayPolicyUpdate: `${API}/api/risk/manager/strategy/grayStrategy/update/v1`,
     grayPolicyDel: `${API}/api/risk/manager/strategy/grayStrategy/delete/v1`,
     grayPolicyDetails: `${API}/api/risk/manager/strategy/grayStrategy/details/v1`,
+    // 更改状态
+    grayPlyChangeStatus: `${API}/api/risk/manager/strategy/grayStrategy/modifyStatus/v1`,
 
     /* ------------------------------------数据报表---------------------------------------- */
     getReportList: `${API}/api/risk/manager/policy/normHit/normHitStatistic/v1`,

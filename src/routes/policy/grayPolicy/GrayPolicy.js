@@ -65,6 +65,7 @@ export default class GrayPolicy extends React.PureComponent {
            pageSize,
        });
    }
+
    onDelete = (id) => {
        const {
            pageSize,
@@ -91,6 +92,38 @@ export default class GrayPolicy extends React.PureComponent {
            });
        });
    }
+
+   changes = (grayStrategyId, e) => {
+       const {
+           dispatch,
+           pageSize,
+           pageNum,
+           form,
+       } = this.props;
+       new Promise((resolve) => {
+           dispatch({
+               type: 'grayPolicy/changeStatus',
+               payload: {
+                   data: {
+                       grayStrategyId,
+                       status: e ? 1 : 0,
+                   },
+                   resolve,
+               },
+           });
+       }).then(() => {
+           message.success('状态更新成功', DURATION);
+           form.validateFields((errors, values) => {
+               this.query({
+                   ...values,
+                   pageNum,
+                   pageSize,
+               });
+           });
+       });
+       console.log(e);
+   }
+
    modalOk = (data, callback) => {
        const {
            dispatch,
@@ -98,10 +131,11 @@ export default class GrayPolicy extends React.PureComponent {
            pageNum,
            form,
        } = this.props;
-       const content = '新增成功';
+       const content = data.grayStrategyId === undefined ? '新增成功' : '编辑成功';
+       const url = data.grayStrategyId === undefined ? 'grayPolicy/add' : 'grayPolicy/update';
        new Promise((resolve) => {
            dispatch({
-               type: 'grayPolicy/add',
+               type: url,
                payload: {
                    data,
                    resolve,
@@ -163,7 +197,14 @@ export default class GrayPolicy extends React.PureComponent {
                dataIndex: 'status',
                key: 'status',
                width: 100,
-               render: (text, record) => (<Switch checkedChildren="开启" unCheckedChildren="关闭" onChange={(e) => this.changes(record, e)} checked={record.status === 'true'} />)
+               render: (text, record) => (
+                   <Switch
+                       checkedChildren="开启"
+                       unCheckedChildren="关闭"
+                       onChange={(e) => this.changes(record.id, e)}
+                       checked={record.status === '1'}
+                   />
+               )
            },
            {
                title: '备注',
@@ -183,7 +224,14 @@ export default class GrayPolicy extends React.PureComponent {
                        >
                            <a>详情</a>
                        </GrayDetails>
-                       <a className="jm-del" >编辑</a>
+                       <AddModal
+                           visible={false}
+                           type="edit"
+                           onOk={this.modalOk}
+                           record={record.id}
+                       >
+                           <a className="jm-del" >编辑</a>
+                       </AddModal>
                        <Popconfirm
                            placement="topRight"
                            title="您确定要删除吗？"
@@ -242,7 +290,7 @@ export default class GrayPolicy extends React.PureComponent {
                    visible={false}
                    type="add"
                    onOk={this.modalOk}
-                   record={{}}
+                   record=""
                >
                    <Button
                        type="primary"

@@ -21,11 +21,13 @@ const Option = Select.Option;
 const { TextArea } = Input;
 let timeout;
 const mapStateToProps = (state) => ({
+    grayDetails: state.grayPolicy.grayDetails,
+    details: state.grayPolicy.details,
     getPolicyList: state.grayPolicy.getPolicyList,
     loading: state.loading.effects['grayPolicy/add'] || false,
 });
-@connect(mapStateToProps)
 @Form.create()
+@connect(mapStateToProps)
 export default class PolicyModal extends React.PureComponent {
     static propTypes = {
         children: PropTypes.oneOfType([
@@ -97,10 +99,10 @@ export default class PolicyModal extends React.PureComponent {
             if (!err) {
                 new Promise(resolve => {
                     if (type === 'edit') {
-                        Object.assign(values, { id: record.id });
+                        Object.assign(values, { grayStrategyId: record });
                     }
                     const details = [];
-                    values.keys.forEach((index) => {
+                    values.keys.forEach((item, index) => {
                         details.push({
                             strategyId: values.strategyName[index].key,
                             strategyName: values.strategyName[index].label,
@@ -119,6 +121,18 @@ export default class PolicyModal extends React.PureComponent {
 
     handleShow = () => {
         // this.props.form.validateFields();
+        if (this.props.record) {
+            const {
+                dispatch,
+                record,
+            } = this.props;
+            dispatch({
+                type: 'grayPolicy/details',
+                payload: {
+                    grayStrategyId: record,
+                }
+            });
+        }
         this.setState({
             visible: true,
         });
@@ -166,13 +180,18 @@ export default class PolicyModal extends React.PureComponent {
             wrapperCol: { span: 14 },
         };
         const forms = this.props.form;
-        const { children, record, loading } = this.props;
+        const {
+            children,
+            loading,
+            details,
+            grayDetails,
+        } = this.props;
         const {
             getFieldDecorator,
             getFieldValue,
         } = forms;
         const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
-        getFieldDecorator('keys', { initialValue: [] });
+        getFieldDecorator('keys', { initialValue: grayDetails || [] });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k, index) => {
             return (
@@ -186,15 +205,16 @@ export default class PolicyModal extends React.PureComponent {
                         key={k}
                     >
                         {
-                            getFieldDecorator(`strategyName[${k}]`, {
+                            getFieldDecorator(`strategyName[${index}]`, {
                                 rules: [
                                     { required: true, message: '请输入策略名称' },
                                 ],
                             })(
                                 <Select
+                                    mode="multiple"
                                     labelInValue
                                     showSearch
-                                    value={this.state.value}
+                                    value={this.state.value ? this.state.value : k.strategyName}
                                     style={{ width: 144 }}
                                     filterOption={false}
                                     onChange={value => this.dataChange(value)}
@@ -211,7 +231,8 @@ export default class PolicyModal extends React.PureComponent {
                         key={k}
                     >
                         {
-                            getFieldDecorator(`ratio[${k}]`, {
+                            getFieldDecorator(`ratio[${index}]`, {
+                                initialValue: k.ratio,
                                 rules: [
                                     { required: true, message: '请输入策略占比' },
                                 ],
@@ -260,7 +281,7 @@ export default class PolicyModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('grayStrategyName', {
-                                    initialValue: record.grayStrategyName,
+                                    initialValue: details.grayStrategyName,
                                     rules: [
                                         { required: true, message: '请输入灰度策略名称' },
                                     ],
@@ -273,7 +294,7 @@ export default class PolicyModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('remark', {
-                                    initialValue: record.remark,
+                                    initialValue: details.remark,
                                 })(<TextArea placeholder="请输入灰度策略名称" />)
                             }
                         </Form.Item>

@@ -29,3 +29,9 @@
     z-index: 12;
     margin-right: 13px;
 }
+.tableForm{
+    :global(.ant-form-item-label label){
+        color:rgba(0,0,0,0.85);
+        font-size:16px;
+    }
+}

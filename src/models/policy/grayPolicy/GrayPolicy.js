@@ -12,9 +12,8 @@ export default {
         typeList: [],
         grayPolicyList: [],
         getPolicyList: [],
-        grayDetails: {},
-        garyStrategyName: '',
-        remark: '',
+        grayDetails: [],
+        details: {},
     },
     effects: {
         // 查询
@@ -56,9 +55,8 @@ export default {
             yield put({
                 type: 'querySuc',
                 payload: {
-                    grayDetails: response,
-                    garyStrategyName: response[0].garyStrategyName,
-                    remark: response[0].remark
+                    grayDetails: response.details,
+                    details: response,
                 },
             });
         },
@@ -76,6 +74,11 @@ export default {
         * del({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.grayPolicyDel, data);
+            yield call(resolve);
+        },
+        * changeStatus({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.grayPlyChangeStatus, data);
             yield call(resolve);
         },
     },

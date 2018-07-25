@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Modal, Button, Form, Table } from 'antd';
+import styles from './index.scss';
 
 const FormItem = Form.Item;
 const mapStateToProps = (state) => {
     return {
         grayDetails: state.grayPolicy.grayDetails,
-        garyStrategyName: state.grayPolicy.garyStrategyName,
-        remark: state.grayPolicy.remark,
+        details: state.grayPolicy.details,
     };
 };
 @connect(mapStateToProps)
@@ -42,11 +42,14 @@ export default class GrayDetails extends React.PureComponent {
     };
 
     render() {
+        const formItemLayout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 14 },
+        };
         const {
             children,
             grayDetails: dataSource,
-            garyStrategyName,
-            remark,
+            details,
         } = this.props;
         const columns = [
             {
@@ -86,25 +89,28 @@ export default class GrayDetails extends React.PureComponent {
                         </Button>,
                     ]}
                 >
-                    <Form>
+                    <Form className={styles.tableForm}>
                         <FormItem
                             label="灰度策略名称"
+                            {...formItemLayout}
                         >
-                            <span>{garyStrategyName}</span>
+                            <span>{details.grayStrategyName}</span>
                         </FormItem>
                         <FormItem
                             label="备注"
+                            {...formItemLayout}
                         >
-                            <span>{remark}</span>
+                            <span>{details.remark}</span>
                         </FormItem>
                         <FormItem
                             label="策略"
+                            colon={false}
                         >
                             <Table
                                 columns={columns}
                                 dataSource={dataSource}
                                 pagination={false}
-
+                                scroll={{ y: 300 }}
                             />
                         </FormItem>
                     </Form>
