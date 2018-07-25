@@ -418,7 +418,7 @@ class LinkRuler extends React.PureComponent {
                                 this.state.categoryId && roles('R_policy_rule_link_add') ?
                                     <RegularModal
                                         onOk={this.modalOk}
-                                        categoryId={this.state.selectedKeys}
+                                        categoryId={this.state.categoryId}
                                         ruleName={this.state.ruleName}
                                     >
                                         <Button disabled={this.state.categoryId === '0'} type="primary" style={{ marginRight: 20 }}>
