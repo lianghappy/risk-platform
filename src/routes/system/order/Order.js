@@ -17,20 +17,22 @@ const mapStateToProps = (state) => {
         pageSize: state.order.pageSize,
         loading: state.loading.models.order,
         searchFields: state.common.searchFields,
+        type: state.order.type,
     };
 };
 @connect(mapStateToProps)
 @Form.create()
 export default class Order extends React.PureComponent {
     state = {
+        type: 'order',
         better: false,
-        searchFields: this.props.searchFields[this.props.type] || {},
+        searchFields: this.props.searchFields.order || {},
     }
     componentDidMount() {
         const {
             dispatch,
-            type,
         } = this.props;
+        const { type, } = this.state;
         dispatch({
             type: 'common/setSearchFields',
             payload: {
@@ -91,7 +93,8 @@ export default class Order extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form, dispatch, type } = this.props;
+        const { pageSize, form, dispatch } = this.props;
+        const { type } = this.state;
         this.setState({
             searchFields: {},
         });
@@ -116,8 +119,8 @@ export default class Order extends React.PureComponent {
         const {
             form,
             dispatch,
-            type,
         } = this.props;
+        const { type, } = this.state;
         form.validateFields((err, values) => {
             dispatch({
                 type: 'common/setSearchFields',
