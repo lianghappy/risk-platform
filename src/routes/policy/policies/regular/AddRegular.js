@@ -7,6 +7,10 @@ import styles from './addRegular.scss';
 const FormItem = Form.Item;
 @Form.create()
 export default class AddRegular extends React.PureComponent {
+    modalOk = (data) => {
+        console.log(data);
+    }
+
     render() {
         const formItemLayout = {
             labelCol: { span: 3 },

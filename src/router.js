@@ -344,9 +344,9 @@ function RouterConfig({ history, app }) {
     // 增加规则
     const addRegulars = dynamic({
         app,
-        component: () => import('routes/policy/policies/regular/AddRegular.js'),
+        component: () => import('routes/policy/policies/regular/AddRegular'),
         models: () => [
-            import('models/policy/policies/regular'),
+            import('models/policy/policies/AddRegular'),
         ]
     });
     return (
