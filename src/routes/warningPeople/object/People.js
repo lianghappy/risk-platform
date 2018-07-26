@@ -22,6 +22,12 @@ export default class People extends React.PureComponent {
         selectedRowKeys: [],
         selectedRows: [],
     }
+    componentDidMount() {
+        this.query({
+            pageNum: 1,
+            pageSize: 10,
+        });
+    }
     onPageChange = (pageNum, pageSize) => {
         const { loading, form } = this.props;
         if (loading) return;

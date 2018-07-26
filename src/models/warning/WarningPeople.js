@@ -29,8 +29,6 @@ export default {
                 type: 'querySuc',
                 payload: {
                     warningTeam: response,
-                    pageNum: payload.pageNum,
-                    pageSize: PAGE_SIZE,
                 },
             });
         },
@@ -95,7 +93,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/warningPeople') {
-                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                    // const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setSide',
                         flag: false,
@@ -103,14 +101,6 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '报警对象' }],
-                    });
-                    dispatch({
-                        type: 'getWarningList',
-                        payload: {
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                            companyId,
-                        }
                     });
                 }
             });
