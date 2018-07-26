@@ -57,7 +57,7 @@ export default class Basic extends React.PureComponent {
                 <Row className={styles.columns}>
                     <Col span={12}>
                         <span>风控审核状态：</span>
-                        <span>{orderBasic.result === 0 && '拒绝'}{orderBasic.result === 1 && '通过'}{orderBasic.result === 2 && '进人审'}</span>
+                        <span>{orderBasic.result === '0' && '拒绝'}{orderBasic.result === '1' && '通过'}{orderBasic.result === '2' && '进人审'}</span>
                     </Col>
                     <Col span={12}>
                         <span>策略标识：</span>

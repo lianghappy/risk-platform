@@ -7,9 +7,11 @@ export default class PeopleModal extends React.PureComponent {
     state = {
         visible: false,
         value: this.props.record.dingRebot ? 2 : 1,
+        getCode: true,
+        times: 60,
+        noCode: false,
     }
     onChange = (e) => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -31,7 +33,13 @@ export default class PeopleModal extends React.PureComponent {
                     }
                 });
             }).then(() => {
+                this.setState({
+                    noCode: false,
+                    times: 60,
+                    getCode: false,
+                });
                 message.success('验证码发送成功');
+                this.startCountDown();
             });
         }
     }
@@ -83,6 +91,21 @@ export default class PeopleModal extends React.PureComponent {
         } else {
             callback();
         }
+    }
+    startCountDown() {
+        this.stop();
+        this.interval = setInterval(() => {
+            const t = this.state.times - 1;
+            if (t >= 0) {
+                this.setState({ times: t });
+            } else {
+                this.setState({ getCode: true, noCode: true });
+                this.stop();
+            }
+        }, 1000);
+    }
+    stop() {
+        clearInterval(this.interval);
     }
     render() {
         const {
@@ -184,7 +207,12 @@ export default class PeopleModal extends React.PureComponent {
                                                         <Input style={{ width: '150px', marginRight: '10px' }} placeholder="请输入验证码" />
                                                     )
                                                 }
-                                                <Button type="primary" onClick={() => this.getCode()}>获取验证码</Button>
+                                                {
+                                                    this.state.getCode ?
+                                                        <Button type="primary" onClick={() => this.getCode()}>{this.state.noCode ? '重新获取' : '获取验证码'}</Button>
+                                                        :
+                                                        <Button type="primary" disabled >{`已发送${this.state.times}`}</Button>
+                                                }
                                             </div>
 
 

@@ -71,3 +71,6 @@ table {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical!important;
 }
+:global(.ant-tooltip-inner){
+    word-break: break-all;
+}
