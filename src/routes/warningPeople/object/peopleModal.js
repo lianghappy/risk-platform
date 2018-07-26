@@ -86,7 +86,7 @@ export default class PeopleModal extends React.PureComponent {
         });
     }
     checkPhone = (rule, value, callback) => {
-        if (value && value.length > 0 && !(/\d{11}/.test(value))) {
+        if (value && value.length > 0 && !(/^1[0-9]{10}$/.test(value))) {
             callback(rule.message);
         } else {
             callback();

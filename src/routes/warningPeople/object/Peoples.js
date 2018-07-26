@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Button, Form, Table, message, Popconfirm } from 'antd';
+import { Layout, Button, Form, Table, message, Popconfirm, Tooltip } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
 import noMessage from 'assets/images/noMessage.svg';
@@ -170,6 +170,13 @@ export default class Peoples extends React.PureComponent {
                 dataIndex: 'dingRebot',
                 key: 'dingRebot',
                 width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.dingRebot} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.dingRebot}
+                        </span>
+                    </Tooltip>
+                ),
             },
             {
                 title: '添加人',
