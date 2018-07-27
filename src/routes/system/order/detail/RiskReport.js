@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Table } from 'antd';
+import { Layout, Table, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import styles from './index.scss';
@@ -70,6 +70,8 @@ export default class RiskReport extends React.PureComponent {
                 render: (text, record) => (<span>{this.checkCode(record.channel)}</span>),
                 filters,
                 onFilter: (value, record) => record.channel.indexOf(value) === 0,
+                filterIcon: (<Icon type="search" />),
+                filtered: true,
             },
             {
                 title: '所有类别',
@@ -78,6 +80,7 @@ export default class RiskReport extends React.PureComponent {
                 width: 100,
                 filters: category,
                 onFilter: (value, record) => record.categoryName.indexOf(value) === 0,
+                filterIcon: (<Icon type="search" />),
             },
         ];
         if (ids === '2') {

@@ -67,7 +67,7 @@ export default {
         },
         // 获取所有类别
         * getCategory({ payload }, { call, put }) {
-            const response = yield call(post, API.getCategory, payload);
+            const response = yield call(post, API.getCategoryList, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
@@ -126,8 +126,7 @@ export default {
                     dispatch({
                         type: 'getCategory',
                         payload: {
-                            pageSize: 1,
-                            pageNum: 999,
+                            sysId: 'risk'
                         }
                     });
                 }
