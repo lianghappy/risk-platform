@@ -37,7 +37,7 @@ export default class EditRule extends React.PureComponent {
     state = {
         targetKeys: [],
     }
-    componentDidMount() {
+    componentWillMount() {
         const {
             dispatch,
         } = this.props;
@@ -50,7 +50,7 @@ export default class EditRule extends React.PureComponent {
                     resolve,
                 }
             });
-            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+            /* const companyId = JSON.parse(sessionStorage.userInfo).user.company;
             const appId = JSON.parse(sessionStorage.app).id;
             const productId = JSON.parse(sessionStorage.product).id;
             this.props.dispatch({
@@ -62,7 +62,7 @@ export default class EditRule extends React.PureComponent {
                     appId,
                     productId,
                 }
-            });
+            }); */
         }).then(() => {
             const targetKeys = [];
             if (this.props.record.sleuthTeamNames) {

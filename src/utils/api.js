@@ -230,7 +230,8 @@ const api = {
     getReport: `${API}/api/risk/manager/collector/sample/riskReport/v1`,
 
     /* ------------------------监控大盘-------------------------- */
-    dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
+    UserdashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
+    dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/v1`,
     addDisks: `${API}/api/risk/manager/monitor/dashBoard/create/v1`,
     addDiskTable: `${API}/api/risk/manager/monitor/boardAndSleuth/create/v1`,
     dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,

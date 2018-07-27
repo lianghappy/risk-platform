@@ -91,11 +91,9 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '监控大盘' }],
                     });
-                    const userId = JSON.parse(sessionStorage.userInfo).user.id;
                     dispatch({
                         type: 'getdashBoard',
                         payload: {
-                            userId,
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                         },

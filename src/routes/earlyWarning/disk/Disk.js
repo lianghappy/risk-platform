@@ -304,8 +304,8 @@ export default class Disk extends React.PureComponent {
     }
 
     query(payload) {
-        const userId = JSON.parse(sessionStorage.userInfo).user.id;
-        Object.assign(payload, { userId });
+        /* const userId = JSON.parse(sessionStorage.userInfo).user.id;
+        Object.assign(payload, { userId }); */
         this.props.dispatch({
             type: 'disk/getdashBoard',
             payload,
