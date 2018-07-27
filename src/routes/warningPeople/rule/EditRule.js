@@ -27,8 +27,8 @@ const mapStateToProps = (state) => {
         record: state.EditWarningRule.record,
     };
 };
-@Form.create()
 @connect(mapStateToProps)
+@Form.create()
 export default class EditRule extends React.PureComponent {
     static propTypes = {
         getPeopleList: PropTypes.array.isRequired,
@@ -37,64 +37,34 @@ export default class EditRule extends React.PureComponent {
     state = {
         targetKeys: [],
     }
-    componentWillMount() {
+    componentDidMount() {
         /*   const {
             dispatch,
         } = this.props; */
-        // const id = base64.decode(this.props.match.params.id);
-        console.log(encodeURIComponent('fa\'huo'));
-
-        const targetKeys = [];
-        if (this.props.record.sleuthTeamNames) {
-            const names = this.props.record.sleuthTeamNames.split(',');
-            this.props.getPeopleList.forEach((item) => {
-                names.forEach(it => {
-                    if (item.title === it) {
-                        targetKeys.push(item.key);
-                    }
-                });
-            });
-        }
-        this.setState({
-            targetKeys,
-        });
-        /* new Promise((resolve) => {
-            dispatch({
-                type: 'EditWarningRule/getSingleRule',
-                payload: {
-                    id,
-                    resolve,
-                }
-            });
-            /* const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-            const appId = JSON.parse(sessionStorage.app).id;
-            const productId = JSON.parse(sessionStorage.product).id;
-            this.props.dispatch({
-                type: 'getPeople',
-                payload: {
-                    pageNum: 1,
-                    pageSize: 99,
-                    companyId,
-                    appId,
-                    productId,
-                }
-            }); */
-        /* }).then(() => {
-            const targetKeys = [];
-            if (this.props.record.sleuthTeamNames) {
-                const names = this.props.record.sleuthTeamNames.split(',');
-                this.props.getPeopleList.forEach((item) => {
-                    names.forEach(it => {
-                        if (item.title === it) {
-                            targetKeys.push(item.key);
-                        }
-                    });
-                });
+        const id = base64.decode(this.props.match.params.id);
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        const appId = JSON.parse(sessionStorage.app).id;
+        const productId = JSON.parse(sessionStorage.product).id;
+        this.props.dispatch({
+            type: 'EditWarningRule/getPeople',
+            payload: {
+                pageNum: 1,
+                pageSize: 999,
+                companyId,
+                appId,
+                productId,
             }
-            this.setState({
-                targetKeys,
-            });
-        });  */
+        }).then(() => {
+            this.init();
+        });
+        this.props.dispatch({
+            type: 'EditWarningRule/getSingleRule',
+            payload: {
+                id,
+            }
+        }).then(() => {
+            this.init();
+        });
     }
 
     onQuery = (e) => {
@@ -168,6 +138,27 @@ export default class EditRule extends React.PureComponent {
             }
         });
     }
+
+    init = () => {
+        const {
+            record,
+            getPeopleList,
+        } = this.props;
+        const targetKeys = [];
+        if (record.sleuthTeamNames && getPeopleList.length !== 0) {
+            // todo
+            const names = this.props.record.sleuthTeamNames.split(',');
+            this.props.getPeopleList.forEach((item) => {
+                names.forEach(it => {
+                    if (item.title === it) {
+                        targetKeys.push(item.key);
+                    }
+                });
+            });
+        }
+        this.setState({ targetKeys });
+    };
+
     cancel = () => {
         window.history.back(-1);
     }

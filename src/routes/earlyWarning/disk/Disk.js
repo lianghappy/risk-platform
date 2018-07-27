@@ -74,7 +74,7 @@ export default class Disk extends React.PureComponent {
         dashBoardId: '',
         index: 0,
         times: [moment().subtract(times[0].hour[0], times[0].hour[1]), moment()],
-        dateType: '',
+        dateType: '1m',
         startTime: moment().subtract(times[0].hour[0], times[0].hour[1]).format('X'),
         endTime: moment().format('X'),
     }
@@ -449,6 +449,7 @@ export default class Disk extends React.PureComponent {
                                     <span>请选择监控频率：</span>
                                     <Select
                                         style={{ width: '80px' }}
+                                        value={this.state.dateType}
                                         onChange={(value) => this.handleChange(value)}
                                     >
                                         {

@@ -2,7 +2,7 @@ import API from 'utils/api';
 import { post } from 'utils/request';
 import { PAGE_SIZE } from 'utils/constants';
 import { filterPath, setPath } from 'utils/path';
-import base64 from 'utils/base64';
+// import base64 from 'utils/base64';
 
 export default {
     namespace: 'EditWarningRule',
@@ -72,7 +72,7 @@ export default {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
                 if (path[1] === 'editWarningRule') {
-                    const id = base64.decode(path[2]);
+                    // const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [
@@ -90,7 +90,7 @@ export default {
                         flag: false,
                     });
                     const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-                    const appId = JSON.parse(sessionStorage.app).id;
+                    /*     const appId = JSON.parse(sessionStorage.app).id;
                     const productId = JSON.parse(sessionStorage.product).id;
                     dispatch({
                         type: 'getPeople',
@@ -101,7 +101,7 @@ export default {
                             appId,
                             productId,
                         }
-                    });
+                    }); */
                     dispatch({
                         type: 'getSelect',
                         payload: {
@@ -109,12 +109,12 @@ export default {
                             isEnable: 1,
                         }
                     });
-                    dispatch({
+                    /*  dispatch({
                         type: 'getSingleRule',
                         payload: {
                             id,
                         }
-                    });
+                    }); */
                 }
             });
         },
