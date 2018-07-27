@@ -2,6 +2,7 @@ import API from 'utils/api';
 import { post } from 'utils/request';
 import { PAGE_SIZE } from 'utils/constants';
 import { filterPath, setPath } from 'utils/path';
+import base64 from 'utils/base64';
 
 export default {
     namespace: 'EditWarningRule',
@@ -25,7 +26,7 @@ export default {
             });
         },
         * getSingleRule({ payload }, { call, put }) {
-            const { resolve } = payload;
+            // const { resolve } = payload;
             const response = yield call(post, API.getSingleRule, payload);
             yield put({
                 type: 'querySuc',
@@ -33,7 +34,7 @@ export default {
                     record: response,
                 }
             });
-            yield call(resolve);
+            // yield call(resolve);
         },
         * getPeople({ payload }, { call, put }) {
             const response = yield call(post, API.getNoPeoples, payload);
@@ -71,6 +72,7 @@ export default {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
                 if (path[1] === 'editWarningRule') {
+                    const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [
@@ -105,6 +107,12 @@ export default {
                         payload: {
                             companyId,
                             isEnable: 1,
+                        }
+                    });
+                    dispatch({
+                        type: 'getSingleRule',
+                        payload: {
+                            id,
                         }
                     });
                 }

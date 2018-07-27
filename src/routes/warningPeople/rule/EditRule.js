@@ -38,11 +38,27 @@ export default class EditRule extends React.PureComponent {
         targetKeys: [],
     }
     componentWillMount() {
-        const {
+        /*   const {
             dispatch,
-        } = this.props;
-        const id = base64.decode(this.props.match.params.id);
-        new Promise((resolve) => {
+        } = this.props; */
+        // const id = base64.decode(this.props.match.params.id);
+        console.log(encodeURIComponent('fa\'huo'));
+
+        const targetKeys = [];
+        if (this.props.record.sleuthTeamNames) {
+            const names = this.props.record.sleuthTeamNames.split(',');
+            this.props.getPeopleList.forEach((item) => {
+                names.forEach(it => {
+                    if (item.title === it) {
+                        targetKeys.push(item.key);
+                    }
+                });
+            });
+        }
+        this.setState({
+            targetKeys,
+        });
+        /* new Promise((resolve) => {
             dispatch({
                 type: 'EditWarningRule/getSingleRule',
                 payload: {
@@ -63,7 +79,7 @@ export default class EditRule extends React.PureComponent {
                     productId,
                 }
             }); */
-        }).then(() => {
+        /* }).then(() => {
             const targetKeys = [];
             if (this.props.record.sleuthTeamNames) {
                 const names = this.props.record.sleuthTeamNames.split(',');
@@ -78,7 +94,7 @@ export default class EditRule extends React.PureComponent {
             this.setState({
                 targetKeys,
             });
-        });
+        });  */
     }
 
     onQuery = (e) => {

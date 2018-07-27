@@ -279,8 +279,8 @@ export default class History extends React.PureComponent {
             },
             {
                 title: '通知对象',
-                dataIndex: 'sleuthTeamNames',
-                key: 'sleuthTeamNames',
+                dataIndex: 'informTarget',
+                key: 'informTarget',
                 width: 100,
             }, {
                 title: '状态',
