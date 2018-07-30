@@ -16,6 +16,7 @@ export default {
         getReportList: [],
         typeList: [],
         categoryList: [],
+        reportResult: {},
     },
     effects: {
         // 订单基本信息
@@ -49,8 +50,9 @@ export default {
             yield put({
                 type: 'querySuc',
                 payload: {
-                    getReport: response,
-                    getReportList: response ? response.normList : [],
+                    reportResult: response,
+                    getReport: response.riskOrderHitNorm,
+                    getReportList: response.riskOrderHitNorm ? response.riskOrderHitNorm.normList : [],
                 },
             });
         },
