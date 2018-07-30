@@ -133,7 +133,7 @@ class AddPolicy extends React.PureComponent {
                             label="风险阈值"
                         >
                             <div>
-                                <span>-∞&lt;   拒绝 ≤ </span>
+                                <span>-∞&lt;   拒绝 &lt; </span>
                                 {
                                     getFieldDecorator('refuseScore', {
                                         initialValue: record.refuseScore,
@@ -143,7 +143,7 @@ class AddPolicy extends React.PureComponent {
                                         ],
                                     })(<Input style={{ width: '50px' }} />)
                                 }
-                                <span> &lt;   需人审  ≤ </span>
+                                <span> ≤   需人审  &lt; </span>
                                 {
                                     getFieldDecorator('passScore', {
                                         initialValue: record.passScore,
@@ -152,7 +152,7 @@ class AddPolicy extends React.PureComponent {
                                         ],
                                     })(<Input style={{ width: '50px' }} />)
                                 }
-                                <span>&lt;   通过  ≤ +∞</span>
+                                <span>≤   通过  &lt; +∞</span>
                             </div>
                         </Form.Item>
                         <Form.Item
