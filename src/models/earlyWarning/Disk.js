@@ -15,6 +15,7 @@ export default {
         app: [],
         product: [],
         getDiskData: [],
+        singleData: {},
     },
     effects: {
         * getSelect({ payload }, { call, put }) {
@@ -50,6 +51,15 @@ export default {
                 type: 'querySrc',
                 payload: {
                     getDiskData: response,
+                },
+            });
+        },
+        * getSingleData({ payload }, { call, put }) {
+            const response = yield call(post, API.SingleDisk, payload);
+            yield put({
+                type: 'querySrc',
+                payload: {
+                    singleData: response,
                 },
             });
         },

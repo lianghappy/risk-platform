@@ -101,40 +101,6 @@ export default class Disk extends React.PureComponent {
         });
     }
 
-    onDeleteTable = (boardAndSleuthId) => {
-        const {
-            dispatch,
-        } = this.props;
-        if (!this.state.dashBoardId) {
-            message.error('请先选择监控大盘', DURATION);
-            return;
-        }
-        if (!this.state.dateType) {
-            message.error('请选择监控频率', DURATION);
-            return;
-        }
-        const { dateType, dashBoardId } = this.state;
-        const data = {};
-        Object.assign(data, { boardAndSleuthId });
-        new Promise((resolve) => {
-            dispatch({
-                type: 'disk/delTable',
-                payload: {
-                    data,
-                    resolve,
-                },
-            });
-        }).then(() => {
-            dispatch({
-                type: 'disk/getData',
-                payload: {
-                    dashBoardId,
-                    dateType,
-                }
-            });
-        });
-    }
-
     creates = () => {
         message.error('请选择监控大盘', DURATION);
     }
@@ -335,7 +301,15 @@ export default class Disk extends React.PureComponent {
                     }
                     {
                         getDiskData.length > 0 &&
-                        <SingleDisk dashBoardId={dashBoardId} />
+                        getDiskData.map((item, index) => {
+                            return (
+                                <SingleDisk
+                                    dashBoardId={dashBoardId}
+                                    key={`${Date.now()}${index}`}
+                                    data={item}
+                                />
+                            );
+                        })
                     }
                     {
                         getDiskData.length <= 0 &&

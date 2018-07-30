@@ -45,6 +45,7 @@ export default {
                 const path = filterPath(pathname).split('/');
                 if (path[2] === 'recordHistory') {
                     const strategyId = base64.decode(path[3]);
+                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略沙箱', link: setPath('/sandboxie') },
@@ -62,6 +63,7 @@ export default {
                             pageNum: 1,
                             pageSize: PAGE_SIZE,
                             strategyId,
+                            companyId,
                         },
                     });
                 }

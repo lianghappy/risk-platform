@@ -13,11 +13,9 @@ export default class Line extends React.PureComponent {
         datas: this.props.datas || [],
     }
     componentDidMount() {
-        console.log(this.props.datas);
-
         const container = this.line;
         const myChart = echarts.init(container);
-        const Xdata = this.state.datas.lenght > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
+        const Xdata = this.state.datas.length > 0 ? this.state.datas.map(item => item.sleuthTime) : [];
         const Ydata = this.state.datas.length > 0 ? this.state.datas.map(item => item.value) : [];
         const sleuthTargetName = this.state.datas && this.state.datas.length > 0 ? this.state.datas[0].sleuthTargetName : '';
         let DW = '万分位';
@@ -28,7 +26,7 @@ export default class Line extends React.PureComponent {
         this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
         window.onresize = myChart.resize;
     }
-    componentWillReceiveProps(nextProps) {
+    /*  componentWillReceiveProps(nextProps) {
         const container = this.line;
         this.setState({
             datas: nextProps.datas,
@@ -46,7 +44,7 @@ export default class Line extends React.PureComponent {
         this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
 
         window.onresize = myChart.resize;
-    }
+    } */
     setOption(myChart, Xdata, Ydata, sleuthTargetName, DW) {
         myChart.setOption({
             title: {

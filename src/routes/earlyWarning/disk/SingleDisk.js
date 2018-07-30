@@ -58,7 +58,7 @@ const frequency = [
 ];
 const mapStateToProps = (state) => {
     return {
-        getDiskData: state.disk.getDiskData,
+        singleData: state.disk.singleData
     };
 };
 @connect(mapStateToProps)
@@ -68,19 +68,22 @@ export default class SingleDisk extends React.PureComponent {
         times: [moment().subtract(times[0].hour[0], times[0].hour[1]), moment()],
         dateType: '1m',
         dashBoardId: this.props.dashBoardId,
+        boardAndSleuthId: '',
+        item: this.props.data || {},
     }
 
-    onChange = (value) => {
+    onChange = (value, boardAndSleuthId) => {
         this.setState({
             times: value,
             index: -1,
             startTime: value[0].format('X'),
-            endTime: value[1].format('X')
+            endTime: value[1].format('X'),
+            boardAndSleuthId,
         });
     }
 
     onOk = () => {
-        const { dashBoardId, startTime, endTime, dateType } = this.state;
+        const { boardAndSleuthId, startTime, endTime, dateType } = this.state;
         if (!this.state.dashBoardId) {
             message.error('请选择监控大盘', DURATION);
             return;
@@ -90,14 +93,49 @@ export default class SingleDisk extends React.PureComponent {
             return;
         }
         this.queryData({
-            dashBoardId,
+            boardAndSleuthId,
             startTime,
             endTime,
             dateType,
         });
     }
 
-    changeTime = (i) => {
+    onDeleteTable = (boardAndSleuthId) => {
+        const {
+            dispatch,
+        } = this.props;
+        if (!this.state.dashBoardId) {
+            message.error('请先选择监控大盘', DURATION);
+            return;
+        }
+        if (!this.state.dateType) {
+            message.error('请选择监控频率', DURATION);
+            return;
+        }
+        const { dateType, dashBoardId } = this.state;
+        const data = {};
+        Object.assign(data, { boardAndSleuthId });
+        new Promise((resolve) => {
+            dispatch({
+                type: 'disk/delTable',
+                payload: {
+                    data,
+                    resolve,
+                },
+            });
+        }).then(() => {
+            dispatch({
+                type: 'disk/getData',
+                payload: {
+                    dashBoardId,
+                    dateType,
+                }
+            });
+        });
+    }
+
+    changeTime = (i, boardAndSleuthId) => {
+        // event.preventDefault();
         if (!this.state.dashBoardId) {
             message.error('请选择监控大盘', DURATION);
             return;
@@ -111,27 +149,29 @@ export default class SingleDisk extends React.PureComponent {
             times: [moment().subtract(times[i].hour[0], times[i].hour[1]), moment()],
             startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
             endTime: moment().format('X'),
+            boardAndSleuthId,
         });
-        const { dateType, dashBoardId } = this.state;
+        const { dateType } = this.state;
         this.queryData({
-            dashBoardId,
+            boardAndSleuthId,
             dateType,
             startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
             endTime: moment().format('X'),
         });
     }
 
-    handleChange = (value) => {
+    handleChange = (value, boardAndSleuthId) => {
         this.setState({
-            dateType: value
+            dateType: value,
+            boardAndSleuthId,
         });
         if (!this.state.dashBoardId) {
             message.error('请选择监控大盘', DURATION);
             return;
         }
-        const { dashBoardId, startTime, endTime } = this.state;
+        const { startTime, endTime } = this.state;
         this.queryData({
-            dashBoardId,
+            boardAndSleuthId,
             dateType: value,
             startTime,
             endTime,
@@ -140,93 +180,94 @@ export default class SingleDisk extends React.PureComponent {
 
     queryData(payload) {
         this.props.dispatch({
-            type: 'disk/getData',
+            type: 'disk/getSingleData',
             payload,
+        }).then(() => {
+            const { singleData } = this.props;
+            this.setState({
+                item: singleData
+            });
         });
     }
 
     render() {
         const {
-            getDiskData,
-        } = this.props;
+            item,
+        } = this.state;
+        let hourData = [];
+        switch (this.state.dateType) {
+        case '1m':
+            hourData = item.dataByMinute;
+            break;
+        case '1h':
+            hourData = item.dataByOneHour;
+            break;
+        case '6h':
+            hourData = item.dataBySixHour;
+            break;
+        case '1d':
+            hourData = item.dataByDay;
+            break;
+        default:
+            break;
+        }
         return (
-            <div>
-                {
-                    getDiskData.map((item, index) => {
-                        let hourData = [];
-                        switch (this.state.dateType) {
-                        case '1m':
-                            hourData = item.dataByMinute;
-                            break;
-                        case '1h':
-                            hourData = item.dataByOneHour;
-                            break;
-                        case '6h':
-                            hourData = item.dataBySixHour;
-                            break;
-                        case '1d':
-                            hourData = item.dataByDay;
-                            break;
-                        default:
-                            break;
-                        }
-                        return (
-                            <div className={styles.chartDetail} key={`${Date.now()}${index}`}>
-                                <div className={styles.chartTitle}>
-                                    <span>{item.chartName}</span>
-                                    <Popconfirm
-                                        placement="topRight"
-                                        title="您确定要删除吗？"
-                                        onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
-                                    >
-                                        <i
-                                            className={cs(
-                                                'jm-icon',
-                                                'anticon',
-                                                styles.close
-                                            )}
+            <div className={styles.chartDetail}>
+                <div className={styles.chartTitle}>
+                    <span>{item.chartName}</span>
+                    <Popconfirm
+                        placement="topRight"
+                        title="您确定要删除吗？"
+                        onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
+                    >
+                        <i
+                            className={cs(
+                                'jm-icon',
+                                'anticon',
+                                styles.close
+                            )}
+                        >
+                        </i>
+                    </Popconfirm>
+                </div>
+                <div className={styles.chartTable}>
+                    <div className={styles.times}>
+                        <div className={styles.slectTime}>
+                            {
+                                times.map((items, indexs) => {
+                                    return (
+                                        <Button
+                                            onClick={() => this.changeTime(indexs, item.boardAndSleuthId)}
+                                            type={indexs === this.state.index ? 'primary' : 'default'}
+                                            size="small"
+                                            className={styles.addTimed}
+                                            key={indexs}
                                         >
-                                        </i>
-                                    </Popconfirm>
-                                </div>
-                                <div className={styles.chartTable}>
-                                    <div className={styles.times}>
-                                        <div className={styles.slectTime}>
-                                            {
-                                                times.map((items, indexs) => {
-                                                    return (
-                                                        <Button
-                                                            onClick={() => this.changeTime(indexs)}
-                                                            type={indexs === this.state.index ? 'primary' : 'default'}
-                                                            size="small"
-                                                            className={styles.addTimed}
-                                                            key={indexs}
-                                                        >
-                                                            {items.time}
-                                                        </Button>
-                                                    );
-                                                })
-                                            }
-                                            <RangePicker
-                                                showTime={{
-                                                    format: 'HH:mm',
-                                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                                                }}
-                                                format="YYYY-MM-DD HH:mm"
-                                                value={this.state.times}
-                                                placeholder={['开始时间', '结束时间']}
-                                                onChange={(value) => this.onChange(value)}
-                                                onOk={this.onOk}
-                                            />
-                                        </div>
-                                        {
-                                            roles('R_warn_disk_add') &&
+                                            {items.time}
+                                        </Button>
+                                    );
+                                })
+                            }
+                            <RangePicker
+                                showTime={{
+                                    format: 'HH:mm',
+                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                                }}
+                                format="YYYY-MM-DD HH:mm"
+                                value={this.state.times}
+                                placeholder={['开始时间', '结束时间']}
+                                onChange={(value) => this.onChange(value, item.boardAndSleuthId)}
+                                onOk={this.onOk}
+                            />
+                        </div>
+                        {
+                            roles('R_warn_disk_add') &&
                                 <div className={styles.addCharts}>
                                     <span>请选择监控频率：</span>
                                     <Select
                                         style={{ width: '80px' }}
                                         value={this.state.dateType}
-                                        onChange={(value) => this.handleChange(value)}
+                                        onChange={(value) => this.handleChange(value, item.boardAndSleuthId)}
                                     >
                                         {
                                             frequency.map(it => {
@@ -242,19 +283,16 @@ export default class SingleDisk extends React.PureComponent {
                                         }
                                     </Select>
                                 </div>
-                                        }
-                                    </div>
-                                    <div className={styles.disk}>
-                                        <div className={styles.bigDisk} key={index}>
-                                            <Line datas={hourData} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })
-                }
+                        }
+                    </div>
+                    <div className={styles.disk}>
+                        <div className={styles.bigDisk}>
+                            <Line datas={hourData} />
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
         );
     }
