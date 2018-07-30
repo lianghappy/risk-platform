@@ -125,7 +125,7 @@ export default class RiskReport extends React.PureComponent {
         return (
             <Layout className={styles.riskReport}>
                 {
-                    !reportResult.msg &&
+                    !reportResult.msg && getReport &&
                     getReport.map((item, index) => {
                         return (
                             <div className={styles.lists} key={index}>
