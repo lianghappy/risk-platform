@@ -178,7 +178,8 @@ class RecordHistory extends React.PureComponent {
                         }
                     </div>
                 ),
-                width: 100 },
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>

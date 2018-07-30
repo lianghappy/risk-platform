@@ -26,7 +26,7 @@ export default class Line extends React.PureComponent {
         this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
         window.onresize = myChart.resize;
     }
-    /*  componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {
         const container = this.line;
         this.setState({
             datas: nextProps.datas,
@@ -44,7 +44,7 @@ export default class Line extends React.PureComponent {
         this.setOption(myChart, Xdata, Ydata, sleuthTargetName, DW);
 
         window.onresize = myChart.resize;
-    } */
+    }
     setOption(myChart, Xdata, Ydata, sleuthTargetName, DW) {
         myChart.setOption({
             title: {
@@ -85,12 +85,7 @@ export default class Line extends React.PureComponent {
     }
     render() {
         return (
-            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}>
-                {/*               {
-                    this.state.datas.length === 0 &&
-                    <span>暂无数据</span>
-                } */}
-            </div>
+            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}></div>
         );
     }
 }
