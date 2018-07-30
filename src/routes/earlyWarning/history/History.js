@@ -206,8 +206,7 @@ export default class History extends React.PureComponent {
         const value = [
             { name: '平均值', key: 'avg' },
             { name: '最大值', key: 'max' },
-            { name: '最小值', key: 'sum' },
-            { name: '累计值', key: 'min' },
+            { name: '最小值', key: 'min' },
         ];
         let counts = '';
         value.forEach(item => {

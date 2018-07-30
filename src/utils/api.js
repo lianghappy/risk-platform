@@ -237,6 +237,8 @@ const api = {
     dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,
     delDisk: `${API}/api/risk/manager/monitor/dashBoard/delete/v1`,
     delTableDisk: `${API}/api/risk/manager/monitor/boardAndSleuth/delete/v1`,
+    // 单个大盘操作
+    SingleDisk: `${API}/api/risk/manager/monitor/dashBoard/chart/data/v1`,
 
 };
 

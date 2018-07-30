@@ -1,8 +1,15 @@
+.chart{
+    margin: 16px 21px 20px;
+    background: #fff;
+}
 .containers{
     background-color: #fff;
     display: flex;
     justify-content: space-between;
     padding: 16px 24px 16px 16px;
+    height: 66px;
+    margin-bottom: 8px;
+    border-radius: 8px;
     border-bottom: 1px solid #eaeaea;
 }
 .create{
@@ -11,6 +18,29 @@
 .charts{
     padding: 14px 24px 25px 16px;
     background-color: #fff;
+    border-radius: 10px 10px 0px 0px;
+}
+.chartDetail{
+    border-top: 1px solid #eaeaea;
+    margin-bottom: 16px;
+}
+.chartTitle{
+    height: 50px;
+    border-right: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 28px;
+    span{
+        font-size:16px;
+        color:rgba(0,0,0,0.75);
+    }
+}
+.chartTable{
+    padding: 14px 24px 25px 16px;
+    background-color: #fff;
+    border: 1px solid #eaeaea;
 }
 .times{
     display: flex;
@@ -34,7 +64,6 @@
 .bigDisk{
     height: 426px;
     width: 100%;
-    border: 1px solid #eaeaea;
     position: relative;
 }
 .smallDisk{
@@ -64,10 +93,7 @@
     margin-bottom: 20px;
 }
 .close{
-    position: absolute;
-    right: 24px;
-    top: 11px;
-    z-Index: 12;
+   margin-right: 20px;
 }
 .addCharts{
     display: flex;

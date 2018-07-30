@@ -209,7 +209,8 @@ export default class AddRule extends React.PureComponent {
                             getFieldDecorator('sleuthConfigName', {
                                 rules: [
                                     { required: true, message: '请输入报警规则名称' },
-                                    { validator: this.validateName, message: '不能输入表情' }
+                                    { validator: this.validateName, message: '不能输入表情' },
+                                    { max: 20, message: '报警规则名称最多20位' }
                                 ]
                             })(
                                 <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />

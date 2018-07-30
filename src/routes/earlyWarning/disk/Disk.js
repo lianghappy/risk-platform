@@ -1,19 +1,17 @@
 import React from 'react';
-import { Layout, Form, Select, Button, message, DatePicker, Popconfirm } from 'antd';
+import { Layout, Form, Select, Button, message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import cs from 'classnames';
 import noMessage from 'assets/images/noMessage.svg';
-import Line from 'components/Disk/Line';
 import { roles } from 'utils/common';
 import { DURATION } from 'utils/constants';
 // import Lines from './Line';
 import CreateDisk from './CreateDisk';
 import AddTable from './AddTable';
+import SingleDisk from './SingleDisk';
 import styles from './index.scss';
 
-const { RangePicker } = DatePicker;
-const Option = Select.Option;
+
 const times = [
     {
         time: '1小时',
@@ -45,21 +43,6 @@ const times = [
         hour: [7, 'd'],
     }
 ];
-const frequency = [
-    {
-        time: '1分钟',
-        key: '1m',
-    }, {
-        time: '1小时',
-        key: '1h',
-    }, {
-        time: '6小时',
-        key: '6h',
-    }, {
-        time: '1天',
-        key: '1d',
-    }
-];
 const mapStateToProps = (state) => {
     return {
         dashBoard: state.disk.dashBoard,
@@ -72,8 +55,6 @@ const mapStateToProps = (state) => {
 export default class Disk extends React.PureComponent {
     state = {
         dashBoardId: '',
-        index: 0,
-        times: [moment().subtract(times[0].hour[0], times[0].hour[1]), moment()],
         dateType: '1m',
         startTime: moment().subtract(times[0].hour[0], times[0].hour[1]).format('X'),
         endTime: moment().format('X'),
@@ -151,33 +132,6 @@ export default class Disk extends React.PureComponent {
                     dateType,
                 }
             });
-        });
-    }
-
-    onChange = (value) => {
-        this.setState({
-            times: value,
-            index: -1,
-            startTime: value[0].format('X'),
-            endTime: value[1].format('X')
-        });
-    }
-
-    onOk = () => {
-        const { dashBoardId, startTime, endTime, dateType } = this.state;
-        if (!this.state.dashBoardId) {
-            message.error('请选择监控大盘', DURATION);
-            return;
-        }
-        if (!dateType) {
-            message.error('请选择监控频率', DURATION);
-            return;
-        }
-        this.queryData({
-            dashBoardId,
-            startTime,
-            endTime,
-            dateType,
         });
     }
 
@@ -262,47 +216,6 @@ export default class Disk extends React.PureComponent {
         });
     }
 
-    changeTime = (i) => {
-        if (!this.state.dashBoardId) {
-            message.error('请选择监控大盘', DURATION);
-            return;
-        }
-        if (!this.state.dateType) {
-            message.error('请选择监控频率', DURATION);
-            return;
-        }
-        this.setState({
-            index: i,
-            times: [moment().subtract(times[i].hour[0], times[i].hour[1]), moment()],
-            startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
-            endTime: moment().format('X'),
-        });
-        const { dateType, dashBoardId } = this.state;
-        this.queryData({
-            dashBoardId,
-            dateType,
-            startTime: moment().subtract(times[i].hour[0], times[i].hour[1]).format('X'),
-            endTime: moment().format('X'),
-        });
-    }
-
-    handleChange = (value) => {
-        this.setState({
-            dateType: value
-        });
-        if (!this.state.dashBoardId) {
-            message.error('请选择监控大盘', DURATION);
-            return;
-        }
-        const { dashBoardId, startTime, endTime } = this.state;
-        this.queryData({
-            dashBoardId,
-            dateType: value,
-            startTime,
-            endTime,
-        });
-    }
-
     query(payload) {
         /* const userId = JSON.parse(sessionStorage.userInfo).user.id;
         Object.assign(payload, { userId }); */
@@ -324,9 +237,9 @@ export default class Disk extends React.PureComponent {
             dashBoard,
             getDiskData,
         } = this.props;
-
+        const { dashBoardId } = this.state;
         return (
-            <Layout className="layoutMar">
+            <Layout className={styles.chart}>
                 <div className={styles.containers}>
                     <div className={styles.left}>
                         <Form
@@ -393,152 +306,44 @@ export default class Disk extends React.PureComponent {
                             </Popconfirm>
 
                         }
-                        {
-                            this.state.dashBoardId ?
-                                <AddTable
-                                    type="add"
-                                    onOk={this.addModal}
-                                >
-                                    <Button type="default" size="small">添加图表</Button>
-                                </AddTable>
-                                :
-                                <Button
-                                    type="default"
-                                    size="small"
-                                    onClick={() => this.creates()
-                                    }
-                                >
-                                             添加图表
-                                </Button>
-                        }
                     </div>
                 </div>
                 <div className={styles.charts}>
-                    <div className={styles.times}>
-                        <div className={styles.slectTime}>
-                            {
-                                times.map((item, index) => {
-                                    return (
-                                        <Button
-                                            onClick={() => this.changeTime(index)}
-                                            type={index === this.state.index ? 'primary' : 'default'}
-                                            size="small"
-                                            className={styles.addTimed}
-                                            key={index}
-                                        >
-                                            {item.time}
-                                        </Button>
-                                    );
-                                })
-                            }
-                            <RangePicker
-                                showTime={{
-                                    format: 'HH:mm',
-                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                                }}
-                                format="YYYY-MM-DD HH:mm"
-                                value={this.state.times}
-                                placeholder={['开始时间', '结束时间']}
-                                onChange={(value) => this.onChange(value)}
-                                onOk={this.onOk}
-                            />
-                        </div>
-                        {
-                            roles('R_warn_disk_add') &&
-                                <div className={styles.addCharts}>
-                                    <span>请选择监控频率：</span>
-                                    <Select
-                                        style={{ width: '80px' }}
-                                        value={this.state.dateType}
-                                        onChange={(value) => this.handleChange(value)}
-                                    >
-                                        {
-                                            frequency.map(item => {
-                                                return (
-                                                    <Option
-                                                        value={item.key}
-                                                        key={item.key}
-                                                    >
-                                                        {item.time}
-                                                    </Option>
-                                                );
-                                            })
-                                        }
-                                    </Select>
-                                </div>
-                        }
-                    </div>
-                    <div className={styles.disk}>
-                        {
-                            getDiskData.map((item, index) => {
-                                let hourData = [];
-                                switch (this.state.dateType) {
-                                case '1m':
-                                    hourData = item.dataByMinute;
-                                    break;
-                                case '1h':
-                                    hourData = item.dataByOneHour;
-                                    break;
-                                case '6h':
-                                    hourData = item.dataBySixHour;
-                                    break;
-                                case '1d':
-                                    hourData = item.dataByDay;
-                                    break;
-                                default:
-                                    break;
+                    {
+                        this.state.dashBoardId ?
+                            <AddTable
+                                type="add"
+                                onOk={this.addModal}
+                            >
+                                <Button
+                                    type="primary"
+                                    size="small"
+                                    style={{ marginBottom: '12px' }}
+                                >添加图表
+                                </Button>
+                            </AddTable>
+                            :
+                            <Button
+                                type="primary"
+                                size="small"
+                                onClick={() => this.creates()
                                 }
-
-                                if (index === 0) {
-                                    return (
-                                        <div className={styles.bigDisk}>
-                                            <Popconfirm
-                                                placement="topRight"
-                                                title="您确定要删除吗？"
-                                                onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
-                                            >
-                                                <i
-                                                    className={cs(
-                                                        'jm-icon',
-                                                        'anticon',
-                                                        styles.close
-                                                    )}
-                                                >
-                                                </i>
-                                            </Popconfirm>
-                                            <Line datas={hourData} />
+                                style={{ marginBottom: '12px' }}
+                            >
+                                             添加图表
+                            </Button>
+                    }
+                    {
+                        getDiskData.length > 0 &&
+                        <SingleDisk dashBoardId={dashBoardId} />
+                    }
+                    {
+                        getDiskData.length <= 0 &&
+                                        <div className={styles.noMessage}>
+                                            <img src={noMessage} alt="暂无数据" />
+                                            <h1>暂无数据</h1>
                                         </div>
-                                    );
-                                }
-                                return (
-                                    <div className={styles.smallDisk} key={index}>
-                                        <Popconfirm
-                                            placement="topRight"
-                                            title="您确定要删除吗？"
-                                            onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
-                                        >
-                                            <i
-                                                className={cs(
-                                                    'jm-icon',
-                                                    'anticon',
-                                                    styles.close
-                                                )}
-                                            >
-                                            </i>
-                                        </Popconfirm>
-                                        <Line datas={hourData} />
-                                    </div>
-                                );
-                            })
-                        }
-                        {
-                            getDiskData.length <= 0 &&
-                            <div className={styles.noMessage}>
-                                <img src={noMessage} alt="暂无数据" />
-                                <h1>暂无数据</h1>
-                            </div>
-                        }
-                    </div>
+                    }
                 </div>
             </Layout>
         );
