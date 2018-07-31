@@ -87,6 +87,10 @@ export default {
                         payload: [{ name: '实验样本' }],
                     });
                     dispatch({
+                        type: 'common/setSide',
+                        flag: false,
+                    });
+                    dispatch({
                         type: 'getSamplesList',
                         payload: {
                             sysId: SYSID,

@@ -46,7 +46,7 @@ const times = [
 const mapStateToProps = (state) => {
     return {
         dashBoard: state.disk.dashBoard,
-        loading: state.loading.models.disk,
+        // loading: state.loading.models.disk,
         app: state.disk.app,
         getDiskData: state.disk.getDiskData,
     };
@@ -191,18 +191,12 @@ export default class Disk extends React.PureComponent {
         });
     }
 
-    queryData(payload) {
-        this.props.dispatch({
-            type: 'disk/getData',
-            payload,
-        });
-    }
-
     render() {
         const {
             dashBoard,
             getDiskData,
         } = this.props;
+
         const { dashBoardId } = this.state;
         return (
             <Layout className={styles.chart}>
@@ -301,11 +295,11 @@ export default class Disk extends React.PureComponent {
                     }
                     {
                         getDiskData.length > 0 &&
-                        getDiskData.map((item, index) => {
+                        getDiskData.map((item) => {
                             return (
                                 <SingleDisk
                                     dashBoardId={dashBoardId}
-                                    key={`${Date.now()}${index}`}
+                                    key={item.boardAndSleuthId}
                                     data={item}
                                 />
                             );

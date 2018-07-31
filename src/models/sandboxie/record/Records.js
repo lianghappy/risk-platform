@@ -11,6 +11,7 @@ export default {
         pageNum: 1,
         pageSize: PAGE_SIZE,
         download: {},
+        downCount: {},
     },
     effects: {
         // 获取规则类别列表
@@ -40,6 +41,19 @@ export default {
             });
             yield call(resolve);
         },
+        * downCount({ payload }, { call, put }) {
+            const { data, resolve } = payload;
+            yield call(post, API.downCount, data);
+            const response = yield call(post, API.downCount, data);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    downCount: response,
+                    sysId: SYSID,
+                },
+            });
+            yield call(resolve);
+        },
     },
     reducers: {
         querySuc(state, { payload }) {
@@ -54,6 +68,10 @@ export default {
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '实验记录' }],
+                    });
+                    dispatch({
+                        type: 'common/setSide',
+                        flag: false,
                     });
                     dispatch({
                         type: 'recordHistoryList',

@@ -1,10 +1,18 @@
 import React from 'react';
+// 引入 echarts 主模块。
+import * as echarts from 'echarts/dist/echarts';
+// 引入折线图。
+import 'echarts/lib/chart/line';
+// 引入提示框组件、标题组件、工具箱组件。
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
+import 'echarts/lib/component/toolbox';
 import { Select, Button, DatePicker, Popconfirm, message } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import { roles } from 'utils/common';
 import { DURATION } from 'utils/constants';
-import Line from 'components/Disk/Line';
+// import Line from 'components/Disk/Line';
 import cs from 'classnames';
 import styles from './index.scss';
 
@@ -72,6 +80,19 @@ export default class SingleDisk extends React.PureComponent {
         item: this.props.data || {},
     }
 
+    componentDidMount() {
+        const { data } = this.props;
+        const container = this.line;
+        const myChart = echarts.init(container);
+        this.setOption(myChart, data);
+        window.addEventListener('resize', this.resizeListener);
+        this.resizeListener();
+        window.onresize = myChart.resize;
+    }
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.resizeListener);
+    }
+
     onChange = (value, boardAndSleuthId) => {
         this.setState({
             times: value,
@@ -134,6 +155,99 @@ export default class SingleDisk extends React.PureComponent {
         });
     }
 
+    setOption(myChart, datas) {
+        const {
+            dateType
+        } = this.state;
+        let hourData = [];
+        switch (dateType) {
+        case '1m':
+            hourData = datas.dataByMinute;
+            break;
+        case '1h':
+            hourData = datas.dataByOneHour;
+            break;
+        case '6h':
+            hourData = datas.dataBySixHour;
+            break;
+        case '1d':
+            hourData = datas.dataByDay;
+            break;
+        default:
+            break;
+        }
+        const Xdata = hourData && hourData.length > 0 ? hourData.map(it => it.sleuthTime) : [];
+        const Ydata = hourData && hourData.length > 0 ? hourData.map(it => it.value) : [];
+        const sleuthTargetName = hourData && hourData.length > 0 ? hourData[0].sleuthTargetName : '';
+        let DW = '万分位';
+        if (hourData && hourData.length > 0) {
+            DW = hourData[0].sleuthTargetId === '1' || hourData[0].sleuthTargetId === '5' ? '数量' : '万分位';
+        }
+        myChart.setOption({
+            title: {
+                text: `单位：${DW}`,
+                textStyle: {
+                    fontSize: '13px',
+                    color: 'rgba(0, 0, 0, 0.65)',
+                    lineHeight: '28px',
+                },
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true,
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: [sleuthTargetName],
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: Xdata,
+            },
+            yAxis: {
+                type: 'value',
+            },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 10,
+                    show: true,
+                    xAxisIndex: [0],
+                }, {
+                    start: 0,
+                    end: 10,
+                    handleSize: '80%',
+                    handleStyle: {
+                        color: '#fff',
+                        shadowBlur: 3,
+                        shadowColor: 'rgba(0, 0, 0, 0.6)',
+                        shadowOffsetX: 2,
+                        shadowOffsetY: 2
+                    },
+                    bottom: -5,
+                }
+            ],
+            series: [{
+                name: sleuthTargetName,
+                type: 'line',
+                smooth: true,
+                data: Ydata
+            }]
+        });
+    }
+
+    resizeListener = () => {
+        const container = this.line;
+        const myChart = echarts.init(container);
+        myChart.resize();
+    }
+
     changeTime = (i, boardAndSleuthId) => {
         // event.preventDefault();
         if (!this.state.dashBoardId) {
@@ -187,6 +301,15 @@ export default class SingleDisk extends React.PureComponent {
             this.setState({
                 item: singleData
             });
+            const container = this.line;
+            const myChart = echarts.init(container);
+            this.setOption(myChart, singleData);
+        });
+    }
+
+    test = () => {
+        this.setState({
+            index: new Date().getTime(),
         });
     }
 
@@ -194,23 +317,8 @@ export default class SingleDisk extends React.PureComponent {
         const {
             item,
         } = this.state;
-        let hourData = [];
-        switch (this.state.dateType) {
-        case '1m':
-            hourData = item.dataByMinute;
-            break;
-        case '1h':
-            hourData = item.dataByOneHour;
-            break;
-        case '6h':
-            hourData = item.dataBySixHour;
-            break;
-        case '1d':
-            hourData = item.dataByDay;
-            break;
-        default:
-            break;
-        }
+        console.log(item);
+
         return (
             <div className={styles.chartDetail}>
                 <div className={styles.chartTitle}>
@@ -287,7 +395,7 @@ export default class SingleDisk extends React.PureComponent {
                     </div>
                     <div className={styles.disk}>
                         <div className={styles.bigDisk}>
-                            <Line datas={hourData} />
+                            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}></div>
                         </div>
                     </div>
                 </div>

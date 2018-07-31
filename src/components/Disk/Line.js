@@ -1,6 +1,6 @@
 import React from 'react';
 // 引入 echarts 主模块。
-import * as echarts from 'echarts/lib/echarts';
+import * as echarts from 'echarts/dist/echarts';
 // 引入折线图。
 import 'echarts/lib/chart/line';
 // 引入提示框组件、标题组件、工具箱组件。
@@ -75,6 +75,26 @@ export default class Line extends React.PureComponent {
             yAxis: {
                 type: 'value',
             },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 10,
+                    show: true,
+                    xAxisIndex: [0],
+                }, {
+                    start: 0,
+                    end: 10,
+                    handleSize: '80%',
+                    handleStyle: {
+                        color: '#fff',
+                        shadowBlur: 3,
+                        shadowColor: 'rgba(0, 0, 0, 0.6)',
+                        shadowOffsetX: 2,
+                        shadowOffsetY: 2
+                    },
+                }
+            ],
             series: [{
                 name: sleuthTargetName,
                 type: 'line',

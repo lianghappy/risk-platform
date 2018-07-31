@@ -104,6 +104,28 @@ class RecordHistory extends React.PureComponent {
             window.location.href = this.props.download.url;
         });
     }
+    downCount = (rest) => {
+        const {
+            dispatch,
+        } = this.props;
+        const operators = JSON.parse(sessionStorage.userInfo).user.realName;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'recordSand/downCount',
+                payload: {
+                    data: {
+                        analysisRecordId: rest.id,
+                        operators,
+                        record: rest.record,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            // console.log(this.props.download);
+            window.location.href = this.props.downCount.url;
+        });
+    }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
@@ -173,9 +195,12 @@ class RecordHistory extends React.PureComponent {
                                 <span>实验还未完成，请耐心等待</span>
                                 :
                                 roles('R_exp_record_result') &&
+                                <span>
                                     <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
-
+                                    <a role="button" tabIndex="-1" style={{ marginLeft: '10px' }} onClick={() => this.downCount(rest[1])}>规则名称统计</a>
+                                </span>
                         }
+
                     </div>
                 ),
                 width: 100,
@@ -260,5 +285,6 @@ const mapStateToProps = (state) => ({
     pageNum: state.recordSand.pageNum,
     pageSize: state.recordSand.pageSize,
     download: state.recordSand.download,
+    downCount: state.recordSand.downCount,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(RecordHistory)));

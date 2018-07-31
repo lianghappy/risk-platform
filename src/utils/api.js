@@ -164,6 +164,8 @@ const api = {
     recordHistoryList: `${API}/api/risk/manager/analysis/analysisRecord/list/v1`,
     // 下载实验结果
     download: `${API}/api/risk/manager/analysis/analysisRecord/download/v1`,
+    // 下载规则命中统计
+    downCount: `${API}/api/risk/manager/analysis/analysisRecord/downloadHitNormNums/v1`,
 
     /* ---------- 沙箱样本 ----------*/
     // 沙箱样本
