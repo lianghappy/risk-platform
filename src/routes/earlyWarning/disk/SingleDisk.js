@@ -207,7 +207,10 @@ export default class SingleDisk extends React.PureComponent {
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: Xdata,
+                axisLine: { onZero: false },
+                data: Xdata.map((str) => {
+                    return str.replace(' ', '\n');
+                }),
             },
             yAxis: {
                 type: 'value',
@@ -230,7 +233,8 @@ export default class SingleDisk extends React.PureComponent {
                         shadowOffsetX: 2,
                         shadowOffsetY: 2
                     },
-                    bottom: -5,
+                    show: true,
+                    realtime: true,
                 }
             ],
             series: [{

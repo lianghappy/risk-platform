@@ -116,14 +116,14 @@ class RecordHistory extends React.PureComponent {
                     data: {
                         analysisRecordId: rest.id,
                         operators,
-                        record: rest.record,
+                        hitNormRecord: rest.hitNormRecord,
                     },
                     resolve,
                 }
             });
         }).then(() => {
             // console.log(this.props.download);
-            window.location.href = this.props.downCount.url;
+            window.location.href = this.props.downCount.hitNormRecord;
         });
     }
     query(payload) {
