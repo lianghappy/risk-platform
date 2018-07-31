@@ -191,6 +191,13 @@ export default class Disk extends React.PureComponent {
         });
     }
 
+    queryData(payload) {
+        this.props.dispatch({
+            type: 'disk/getData',
+            payload,
+        });
+    }
+
     render() {
         const {
             dashBoard,
