@@ -16,6 +16,7 @@ export default {
         product: [],
         getDiskData: [],
         singleData: {},
+        createDisk: {},
     },
     effects: {
         * getSelect({ payload }, { call, put }) {
@@ -64,9 +65,15 @@ export default {
             });
         },
         // 创建大盘
-        * create({ payload }, { call }) {
+        * create({ payload }, { call, put }) {
             const { data, resolve } = payload;
-            yield call(post, API.addDisks, data);
+            const response = yield call(post, API.addDisks, data);
+            yield put({
+                type: 'querySrc',
+                payload: {
+                    createDisk: response,
+                },
+            });
             yield call(resolve);
         },
         // 添加

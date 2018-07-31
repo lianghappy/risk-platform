@@ -49,6 +49,7 @@ const mapStateToProps = (state) => {
         // loading: state.loading.models.disk,
         app: state.disk.app,
         getDiskData: state.disk.getDiskData,
+        createDisk: state.disk.createDisk,
     };
 };
 @connect(mapStateToProps)
@@ -143,8 +144,19 @@ export default class Disk extends React.PureComponent {
             });
         }).then(() => {
             callback();
-            message.success('创建成功');
             this.query({});
+            const { createDisk } = this.props;
+            this.setState({
+                dashBoardId: createDisk.dashBoardId,
+            });
+            message.success('创建成功');
+            const { dateType, startTime, endTime } = this.state;
+            this.queryData({
+                dashBoardId: createDisk.dashBoardId,
+                dateType,
+                startTime,
+                endTime,
+            });
         });
     };
 
