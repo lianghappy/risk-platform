@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import moment from 'moment';
 import base64 from 'utils/base64';
-import { Form, Button, Col, Row, Input } from 'antd';
+import { Form, Button, Col, Row, Input, message } from 'antd';
 import { setPath } from 'utils/path';
 import SampleDetail from './Details';
 import style from '../index.scss';
@@ -36,6 +36,10 @@ class Start extends React.PureComponent {
             loading,
         } = this.props;
         e.preventDefault();
+        if (Number(this.state.total) === 0) {
+            message.error('你选择的样本数量为0，无法开始试验');
+            return;
+        }
         const username = JSON.parse(sessionStorage.userInfo).user.realName;
         const strategyId = base64.decode(this.props.match.params.id);
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
@@ -104,7 +108,15 @@ class Start extends React.PureComponent {
                         </Col>
                     </Row>
                     <FormItem>
-                        <Button style={{ marginLeft: '170px' }} type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>开始实验</Button>
+                        <Button
+                            style={{ marginLeft: '170px' }}
+                            type="primary"
+                            htmlType="submit"
+                            disabled={this.props.loading}
+                            className={style.save}
+                        >
+                        开始实验
+                        </Button>
                     </FormItem>
                 </Form>
             </div>

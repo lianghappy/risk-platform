@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, Select, DatePicker } from 'antd';
+import { Layout, Input, Form, Button, Table, Select, DatePicker, message } from 'antd';
 import base64 from 'utils/base64';
 import moment from 'moment';
 import { setPath } from 'utils/path';
@@ -92,6 +92,10 @@ class OldExpr extends React.PureComponent {
         const {
             dispatch,
         } = this.props;
+        if (Number(values.num) === 0) {
+            message.error('你选择的样本数量为0，无法开始试验');
+            return;
+        }
         const username = JSON.parse(sessionStorage.userInfo).user.realName;
         const strategyId = base64.decode(this.props.match.params.id);
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
@@ -191,7 +195,13 @@ class OldExpr extends React.PureComponent {
                                 </LookRisk>
                         }
 
-                        <a role="button" tabIndex="-1" onClick={() => this.starts(rest[1])}>开始实验</a>
+                        <a
+                            role="button"
+                            tabIndex="-1"
+                            onClick={() => this.starts(rest[1])}
+                        >
+                        开始实验
+                        </a>
                     </div>
                 ),
                 width: 100,
