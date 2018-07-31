@@ -235,6 +235,7 @@ export default class SingleDisk extends React.PureComponent {
                     },
                     show: true,
                     realtime: true,
+                    bottom: 'auto',
                 }
             ],
             series: [{

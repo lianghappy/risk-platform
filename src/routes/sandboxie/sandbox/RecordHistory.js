@@ -123,7 +123,9 @@ class RecordHistory extends React.PureComponent {
     }
     query(payload) {
         const strategyId = base64.decode(this.props.match.params.id);
-        payload.strategyId = strategyId;
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { strategyId, companyId });
+
         this.props.dispatch({
             type: 'recordHistory/recordHistoryList',
             payload,
