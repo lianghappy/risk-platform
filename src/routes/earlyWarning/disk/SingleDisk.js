@@ -197,7 +197,7 @@ export default class SingleDisk extends React.PureComponent {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '9%',
                 containLabel: true,
             },
             tooltip: {
@@ -219,7 +219,7 @@ export default class SingleDisk extends React.PureComponent {
             },
             dataZoom: [
                 {
-                    type: 'inside',
+                    type: 'slider',
                     start: 0,
                     end: 10,
                     show: true,
@@ -404,7 +404,7 @@ export default class SingleDisk extends React.PureComponent {
                     </div>
                     <div className={styles.disk}>
                         <div className={styles.bigDisk}>
-                            <div style={{ width: '100%', height: '100%' }} ref={(c) => { this.line = c; }}></div>
+                            <div style={{ width: '100%', height: '430px' }} ref={(c) => { this.line = c; }}></div>
                         </div>
                     </div>
                 </div>
