@@ -1,6 +1,12 @@
 .chart{
     margin: 16px 21px 20px;
     background: #fff;
+    min-height: 800px;
+    :global(.ant-spin){
+        position: absolute!important;
+        top: 49%;
+        left: 50%;
+    }
 }
 .containers{
     background-color: #fff;
@@ -98,4 +104,11 @@
 .addCharts{
     display: flex;
     align-items: center;
+}
+.loadChart{
+    display: flex;
+    justify-content: center;
+    min-height: 800px;
+    background: #fff;
+    margin: 16px 21px 20px;
 }

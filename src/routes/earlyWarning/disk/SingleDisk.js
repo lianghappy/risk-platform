@@ -78,6 +78,8 @@ export default class SingleDisk extends React.PureComponent {
         dashBoardId: this.props.dashBoardId,
         boardAndSleuthId: '',
         item: this.props.data || {},
+        startTime: moment().subtract(times[0].hour[0], times[0].hour[1]).format('X'),
+        endTime: moment().format('X'),
     }
 
     componentDidMount() {
@@ -325,7 +327,6 @@ export default class SingleDisk extends React.PureComponent {
         const {
             item,
         } = this.state;
-        console.log(item);
 
         return (
             <div className={styles.chartDetail}>

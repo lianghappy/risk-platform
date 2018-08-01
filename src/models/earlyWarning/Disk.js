@@ -108,13 +108,7 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '监控大盘' }],
                     });
-                    dispatch({
-                        type: 'getdashBoard',
-                        payload: {
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
-                    });
+
                     dispatch({
                         type: 'getSelect',
                         payload: {

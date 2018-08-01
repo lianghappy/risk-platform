@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Select, Button, message, Popconfirm } from 'antd';
+import { Layout, Form, Select, Button, message, Popconfirm, Spin } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import noMessage from 'assets/images/noMessage.svg';
@@ -46,7 +46,7 @@ const times = [
 const mapStateToProps = (state) => {
     return {
         dashBoard: state.disk.dashBoard,
-        // loading: state.loading.models.disk,
+        loading: state.loading.effects['disk/getdashBoard'] || state.loading.effects['disk/getData'],
         app: state.disk.app,
         getDiskData: state.disk.getDiskData,
         createDisk: state.disk.createDisk,
@@ -62,6 +62,15 @@ export default class Disk extends React.PureComponent {
     }
 
     componentDidMount() {
+        this.props.dispatch({
+            type: 'disk/getdashBoard',
+            payload: {
+                pageNum: 1,
+                pageSize: 999
+            },
+        }).then(() => {
+            this.init();
+        });
         this.props.dispatch({
             type: 'disk/getData',
             payload: {
@@ -100,6 +109,22 @@ export default class Disk extends React.PureComponent {
                 dateType,
             });
         });
+    }
+
+    init = () => {
+        if (this.props.dashBoard.length > 0) {
+            const dashBoardId = this.props.dashBoard[0].dashBoardId;
+            const { dateType, startTime, endTime } = this.state;
+            this.setState({
+                dashBoardId,
+            });
+            this.queryData({
+                dashBoardId,
+                dateType,
+                startTime,
+                endTime,
+            });
+        }
     }
 
     creates = () => {
@@ -214,11 +239,13 @@ export default class Disk extends React.PureComponent {
         const {
             dashBoard,
             getDiskData,
+            loading,
         } = this.props;
 
         const { dashBoardId } = this.state;
         return (
             <Layout className={styles.chart}>
+                <Spin spinning={loading} delay={500} tip="Loading..." />
                 <div className={styles.containers}>
                     <div className={styles.left}>
                         <Form
@@ -287,6 +314,8 @@ export default class Disk extends React.PureComponent {
                         }
                     </div>
                 </div>
+                {
+                    !loading &&
                 <div className={styles.charts}>
                     {
                         this.state.dashBoardId ?
@@ -332,6 +361,7 @@ export default class Disk extends React.PureComponent {
                                         </div>
                     }
                 </div>
+                }
             </Layout>
         );
     }
