@@ -25,6 +25,24 @@ export default {
                 },
             });
         },
+        // 初始化查询
+        * firstQuery({ payload }, { put, select }) {
+            const { type } = payload;
+            const _type = {
+                order: 'getOrderList',
+            }[type];
+            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+            const searchFields = yield select(state => state.common.searchFields[type]);
+            yield put({
+                type: _type,
+                payload: {
+                    ...searchFields,
+                    pageNum: 1,
+                    pageSize: PAGE_SIZE,
+                    companyId,
+                },
+            });
+        },
     },
     reducers: {
         querySuc(state, { payload }) {
@@ -35,6 +53,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/order') {
+                    const type = 'order';
                     const companyId = JSON.parse(sessionStorage.userInfo).user.company;
                     dispatch({
                         type: 'common/setBreadcrumb',
@@ -45,11 +64,12 @@ export default {
                         payload: true,
                     });
                     dispatch({
-                        type: 'getOrderList',
+                        type: 'firstQuery',
                         payload: {
                             pageNum: 1,
                             pageSize: 10,
                             companyId,
+                            type,
                         },
                     });
                 }

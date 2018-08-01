@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Button, Form, Table, message, Popconfirm } from 'antd';
+import { Layout, Button, Form, Table, message, Popconfirm, Tooltip } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
 import noMessage from 'assets/images/noMessage.svg';
@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
     return {
         warningTeam: state.warningPeople.warningTeam,
         warningList: state.warningPeople.warningList,
-        loading: state.loading.models.warningPeople,
+        loading: state.loading.effects['warningPeople/getTeam'],
     };
 };
 @connect(mapStateToProps)
@@ -23,9 +23,15 @@ export default class Peoples extends React.PureComponent {
         this.props.dispatch({
             type: 'warningPeople/getTeam',
             payload: {
-                pageNum: 1,
-                pageSize: 10,
                 companyId,
+            }
+        });
+        this.props.dispatch({
+            type: 'warningPeople/getWarningList',
+            payload: {
+                companyId,
+                pageSize: 100,
+                pageNum: 1,
             }
         });
     }
@@ -72,8 +78,6 @@ export default class Peoples extends React.PureComponent {
         const {
             dispatch,
             form,
-            pageNum,
-            pageSize,
         } = this.props;
         new Promise((resolve) => {
             dispatch({
@@ -91,8 +95,6 @@ export default class Peoples extends React.PureComponent {
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
-                    pageNum,
-                    pageSize,
                 });
             });
         });
@@ -100,8 +102,6 @@ export default class Peoples extends React.PureComponent {
     modalOk = (data, callback) => {
         const {
             dispatch,
-            pageSize,
-            pageNum,
             form,
         } = this.props;
         const content = data.id !== undefined ? '更新成功' : '新增成功';
@@ -131,8 +131,6 @@ export default class Peoples extends React.PureComponent {
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
-                    pageNum,
-                    pageSize,
                 });
             });
         });
@@ -170,6 +168,13 @@ export default class Peoples extends React.PureComponent {
                 dataIndex: 'dingRebot',
                 key: 'dingRebot',
                 width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.dingRebot} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.dingRebot}
+                        </span>
+                    </Tooltip>
+                ),
             },
             {
                 title: '添加人',

@@ -16,6 +16,7 @@ export default {
         getReportList: [],
         typeList: [],
         categoryList: [],
+        reportResult: {},
     },
     effects: {
         // 订单基本信息
@@ -49,8 +50,9 @@ export default {
             yield put({
                 type: 'querySuc',
                 payload: {
-                    getReport: response,
-                    getReportList: response ? response.normList : [],
+                    reportResult: response,
+                    getReport: response.riskOrderHitNorm,
+                    getReportList: response.riskOrderHitNorm ? response.riskOrderHitNorm.normList : [],
                 },
             });
         },
@@ -67,7 +69,7 @@ export default {
         },
         // 获取所有类别
         * getCategory({ payload }, { call, put }) {
-            const response = yield call(post, API.getCategory, payload);
+            const response = yield call(post, API.getCategoryList, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
@@ -126,8 +128,7 @@ export default {
                     dispatch({
                         type: 'getCategory',
                         payload: {
-                            pageSize: 1,
-                            pageNum: 999,
+                            sysId: 'risk'
                         }
                     });
                 }

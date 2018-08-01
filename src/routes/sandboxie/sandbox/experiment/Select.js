@@ -40,6 +40,8 @@ class StartExper extends React.PureComponent {
                 Object.assign(values, { orderTimes: moment(values.times[0]._d).format('X') });
                 Object.assign(values, { orderTimee: moment(values.times[1]._d).format('X') });
                 delete values.times;
+                const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                Object.assign(values, { companyId });
                 new Promise(() => {
                     dispatch({
                         type: 'experiment/start',

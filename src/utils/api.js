@@ -164,6 +164,8 @@ const api = {
     recordHistoryList: `${API}/api/risk/manager/analysis/analysisRecord/list/v1`,
     // 下载实验结果
     download: `${API}/api/risk/manager/analysis/analysisRecord/download/v1`,
+    // 下载规则命中统计
+    downCount: `${API}/api/risk/manager/analysis/analysisRecord/downloadHitNormNums/v1`,
 
     /* ---------- 沙箱样本 ----------*/
     // 沙箱样本
@@ -230,12 +232,15 @@ const api = {
     getReport: `${API}/api/risk/manager/collector/sample/riskReport/v1`,
 
     /* ------------------------监控大盘-------------------------- */
-    dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
+    UserdashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/byUser/v1`,
+    dashBoard: `${API}/api/risk/manager/monitor/dashBoard/list/v1`,
     addDisks: `${API}/api/risk/manager/monitor/dashBoard/create/v1`,
     addDiskTable: `${API}/api/risk/manager/monitor/boardAndSleuth/create/v1`,
     dashBoardData: `${API}/api/risk/manager/monitor/dashBoard/data/list/v1`,
     delDisk: `${API}/api/risk/manager/monitor/dashBoard/delete/v1`,
     delTableDisk: `${API}/api/risk/manager/monitor/boardAndSleuth/delete/v1`,
+    // 单个大盘操作
+    SingleDisk: `${API}/api/risk/manager/monitor/dashBoard/chart/data/v1`,
 
     /* ---------------------------第三方产品------------------------------ */
     getThirdPartyList: `${API}/api/risk/manager/collector/thirdpartyManage/list/v1`,

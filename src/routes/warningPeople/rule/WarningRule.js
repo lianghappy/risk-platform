@@ -142,8 +142,7 @@ export default class WarningRule extends React.PureComponent {
         const value = [
             { name: '平均值', key: 'avg' },
             { name: '最大值', key: 'max' },
-            { name: '最小值', key: 'sum' },
-            { name: '累计值', key: 'min' },
+            { name: '最小值', key: 'min' },
         ];
         let counts = '';
         value.forEach(item => {
@@ -181,6 +180,18 @@ export default class WarningRule extends React.PureComponent {
             sleuthTargets,
         } = this.props;
         const columns = [
+            {
+                title: '报警ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '报警规则名称',
+                dataIndex: 'sleuthConfigName',
+                key: 'sleuthConfigName',
+                width: 100,
+            },
             {
                 title: '策略名称',
                 dataIndex: 'strategyName',

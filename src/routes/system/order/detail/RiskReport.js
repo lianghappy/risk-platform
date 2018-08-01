@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Table } from 'antd';
+import { Layout, Table, Icon, Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import styles from './index.scss';
@@ -11,6 +11,7 @@ const mapStateToProps = (state) => {
         loading: state.loading.models.orderDetail,
         typeList: state.orderDetail.typeList,
         categoryList: state.orderDetail.categoryList,
+        reportResult: state.orderDetail.reportResult,
     };
 };
 @connect(mapStateToProps)
@@ -70,6 +71,8 @@ export default class RiskReport extends React.PureComponent {
                 render: (text, record) => (<span>{this.checkCode(record.channel)}</span>),
                 filters,
                 onFilter: (value, record) => record.channel.indexOf(value) === 0,
+                filterIcon: (<Icon type="search" />),
+                filtered: true,
             },
             {
                 title: '所有类别',
@@ -78,6 +81,7 @@ export default class RiskReport extends React.PureComponent {
                 width: 100,
                 filters: category,
                 onFilter: (value, record) => record.categoryName.indexOf(value) === 0,
+                filterIcon: (<Icon type="search" />),
             },
         ];
         if (ids === '2') {
@@ -114,12 +118,14 @@ export default class RiskReport extends React.PureComponent {
     }
     render() {
         const {
+            reportResult,
             getReport,
             loading,
         } = this.props;
         return (
             <Layout className={styles.riskReport}>
                 {
+                    !reportResult.msg && getReport &&
                     getReport.map((item, index) => {
                         return (
                             <div className={styles.lists} key={index}>
@@ -151,6 +157,29 @@ export default class RiskReport extends React.PureComponent {
                             </div>
                         );
                     })
+                }
+                {
+                    reportResult.msg &&
+                    <div className={styles.lists}>
+                        <div>
+                            <Row>
+                                <Col span={12}>
+                                    <span>样本策略评估结果：</span>
+                                    <span>{reportResult.result === '0' && '拒绝'}{reportResult.result === '1' && '通过'}{reportResult.result === '2' && '进人审'}</span>
+                                </Col>
+                                <Col span={12}>
+                                    <span>样本策略评估异常信息：</span>
+                                    <span>{reportResult.msg}</span>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={12}>
+                                    <span>评估得分：</span>
+                                    <span>{reportResult.score}</span>
+                                </Col>
+                            </Row>
+                        </div>
+                    </div>
                 }
             </Layout>
         );

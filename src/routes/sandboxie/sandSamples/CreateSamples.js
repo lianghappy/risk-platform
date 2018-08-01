@@ -80,7 +80,8 @@ class CreateSamples extends React.PureComponent {
                     message.error('风控评分最高分比最低分高');
                     return;
                 }
-                Object.assign(values, { orderTimeStart: moment(values.times[0]._d).format('X') });
+                const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                Object.assign(values, { orderTimeStart: moment(values.times[0]._d).format('X'), companyId });
                 Object.assign(values, { orderTimeEnd: moment(values.times[1]._d).format('X') });
                 new Promise((resolve) => {
                     dispatch({

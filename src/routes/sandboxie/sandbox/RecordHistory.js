@@ -99,9 +99,33 @@ class RecordHistory extends React.PureComponent {
             message.info('下载成功');
         });
     }
+    downCount = (rest) => {
+        const {
+            dispatch,
+        } = this.props;
+        const operators = JSON.parse(sessionStorage.userInfo).user.realName;
+        new Promise((resolve) => {
+            dispatch({
+                type: 'recordHistory/downCount',
+                payload: {
+                    data: {
+                        analysisRecordId: rest.id,
+                        operators,
+                        hitNormRecord: rest.hitNormRecord,
+                    },
+                    resolve,
+                }
+            });
+        }).then(() => {
+            // console.log(this.props.download);
+            window.location.href = this.props.downCount.hitNormRecord;
+        });
+    }
     query(payload) {
         const strategyId = base64.decode(this.props.match.params.id);
-        payload.strategyId = strategyId;
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { strategyId, companyId });
+
         this.props.dispatch({
             type: 'recordHistory/recordHistoryList',
             payload,
@@ -137,8 +161,12 @@ class RecordHistory extends React.PureComponent {
                             Number(rest[1].state) === 1 ?
                                 <span>实验还未完成，请耐心等待</span>
                                 :
-                                <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
+                                <span>
+                                    <a role="button" tabIndex="-1" onClick={() => this.download(rest[1])}>下载实验结果</a>
+                                    <a role="button" tabIndex="-1" style={{ marginLeft: '10px' }} onClick={() => this.downCount(rest[1])}>规则名称统计</a>
+                                </span>
                         }
+
                     </div>
                 ),
                 width: 100 },
@@ -195,5 +223,7 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.recordHistory,
     pageNum: state.recordHistory.pageNum,
     pageSize: state.recordHistory.pageSize,
+    download: state.recordHistory.download,
+    downCount: state.recordHistory.downCount,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(RecordHistory)));

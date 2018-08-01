@@ -16,14 +16,32 @@ const mapStateToProps = (state) => {
         pageNum: state.order.pageNum,
         pageSize: state.order.pageSize,
         loading: state.loading.models.order,
+        searchFields: state.common.searchFields,
+        type: state.order.type,
     };
 };
 @connect(mapStateToProps)
 @Form.create()
 export default class Order extends React.PureComponent {
     state = {
+        type: 'order',
         better: false,
+        searchFields: this.props.searchFields.order || {},
     }
+    componentDidMount() {
+        const {
+            dispatch,
+        } = this.props;
+        const { type, } = this.state;
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
+        });
+    }
+
     onPageChange = (pageNum, pageSize) => {
         const {
             loading,
@@ -75,7 +93,18 @@ export default class Order extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form } = this.props;
+        const { pageSize, form, dispatch } = this.props;
+        const { type } = this.state;
+        this.setState({
+            searchFields: {},
+        });
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
+        });
         form.resetFields();
         this.query({
             pageNum: 1,
@@ -87,8 +116,23 @@ export default class Order extends React.PureComponent {
         this.setState({ better: !flag });
     }
     detail = (id) => {
-        this.props.history.push(setPath(`/orderDetail/${base64.encode(id)}`));
+        const {
+            form,
+            dispatch,
+        } = this.props;
+        const { type, } = this.state;
+        form.validateFields((err, values) => {
+            dispatch({
+                type: 'common/setSearchFields',
+                payload: {
+                    type,
+                    searchFields: values,
+                },
+            });
+            this.props.history.push(setPath(`/orderDetail/${base64.encode(id)}`));
+        });
     }
+
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
@@ -106,6 +150,7 @@ export default class Order extends React.PureComponent {
             pageNum,
         } = this.props;
         const { getFieldDecorator } = form;
+        const { searchFields, } = this.state;
         const result = [{
             name: '风控通过',
             key: 1,
@@ -214,7 +259,9 @@ export default class Order extends React.PureComponent {
                         label="风控订单ID"
                     >
                         {
-                            getFieldDecorator('sampleId')(
+                            getFieldDecorator('sampleId', {
+                                initialValue: searchFields.sampleId,
+                            })(
                                 <Input />
                             )
                         }
@@ -223,7 +270,9 @@ export default class Order extends React.PureComponent {
                         label="调用方唯一标识"
                     >
                         {
-                            getFieldDecorator('clientId')(
+                            getFieldDecorator('clientId', {
+                                initialValue: searchFields.clientId,
+                            })(
                                 <Input />
                             )
                         }
@@ -232,7 +281,9 @@ export default class Order extends React.PureComponent {
                         label="用户手机号"
                     >
                         {
-                            getFieldDecorator('phone')(
+                            getFieldDecorator('phone', {
+                                initialValue: searchFields.phone,
+                            })(
                                 <Input />
                             )
                         }
@@ -241,7 +292,9 @@ export default class Order extends React.PureComponent {
                         label="用户身份证姓名"
                     >
                         {
-                            getFieldDecorator('idCardName')(
+                            getFieldDecorator('idCardName', {
+                                initialValue: searchFields.idCardName,
+                            })(
                                 <Input />
                             )
                         }
@@ -252,7 +305,9 @@ export default class Order extends React.PureComponent {
                             label="风控下单时间"
                         >
                             {
-                                getFieldDecorator('orderStartTime')(
+                                getFieldDecorator('orderStartTime', {
+                                    initialValue: searchFields.orderStartTime,
+                                })(
                                     <RangePicker
                                         showTime={{
                                             hideDisabledOptions: true,
@@ -270,7 +325,9 @@ export default class Order extends React.PureComponent {
                         label="风控审核状态"
                     >
                         {
-                            getFieldDecorator('result')(
+                            getFieldDecorator('result', {
+                                initialValue: searchFields.result,
+                            })(
                                 <Select style={{ width: '157px' }}>
                                     {
                                         result.map(item => {
@@ -288,7 +345,9 @@ export default class Order extends React.PureComponent {
                         label="身份证号"
                     >
                         {
-                            getFieldDecorator('idCardNum')(
+                            getFieldDecorator('idCardNum', {
+                                initialValue: searchFields.idCardNum,
+                            })(
                                 <Input />
                             )
                         }
@@ -300,7 +359,9 @@ export default class Order extends React.PureComponent {
                         label="风控审核结束时间"
                     >
                         {
-                            getFieldDecorator('reviewEndTime')(
+                            getFieldDecorator('reviewEndTime', {
+                                initialValue: searchFields.reviewEndTime,
+                            })(
                                 <RangePicker
                                     showTime={{
                                         hideDisabledOptions: true,

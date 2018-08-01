@@ -1,8 +1,8 @@
 import React from 'react';
-import { Layout, Form, Button, Input, Table, message, Popconfirm } from 'antd';
+import { Layout, Form, Button, Input, Table, message, Popconfirm, Tooltip } from 'antd';
 import { connect } from 'dva';
 import { DURATION } from 'utils/constants';
-import { roles } from 'utils/common';
+import { roles, rowSelect } from 'utils/common';
 import Pagination from 'components/Pagination/Pagination';
 import PeopleModal from './peopleModal';
 import styles from './index.scss';
@@ -19,7 +19,14 @@ const mapStateToProps = (state) => {
 @Form.create()
 export default class People extends React.PureComponent {
     state={
+        selectedRowKeys: [],
         selectedRows: [],
+    }
+    componentDidMount() {
+        this.query({
+            pageNum: 1,
+            pageSize: 10,
+        });
     }
     onPageChange = (pageNum, pageSize) => {
         const { loading, form } = this.props;
@@ -61,8 +68,27 @@ export default class People extends React.PureComponent {
         });
     }
     onSelectChange = (selectedRowKeys, selectedRows) => {
-        console.log('selectedRowKeys changed: ', selectedRows);
-        this.setState({ selectedRows });
+        if (selectedRows.length > 0) {
+            this.setState({
+                selectedRows,
+                selectedRowKeys,
+            });
+        }
+    }
+    onSelectAll = (selected) => {
+        if (!selected) {
+            this.setState({ selectedRowKeys: [] });
+        }
+    }
+    onSelect = (record, selected) => {
+        record.id = record.sleuthPersonId;
+        const {
+            selectedRowKeys,
+        } = rowSelect.onSelect(this.state, record, selected);
+
+        this.setState({
+            selectedRowKeys,
+        });
     }
     onQuery = (e) => {
         e.preventDefault();
@@ -81,10 +107,7 @@ export default class People extends React.PureComponent {
         });
     }
     onDels = () => {
-        const personIds = [];
-        this.state.selectedRows.forEach(item => {
-            personIds.push(item.sleuthPersonId);
-        });
+        const personIds = this.state.selectedRowKeys;
         const {
             dispatch,
             form,
@@ -103,6 +126,9 @@ export default class People extends React.PureComponent {
             });
         }).then(() => {
             message.success('批量删除成功');
+            this.setState({
+                selectedRows: [],
+            });
             form.validateFields((errors, values) => {
                 this.query({
                     ...values,
@@ -170,10 +196,13 @@ export default class People extends React.PureComponent {
             form,
         } = this.props;
         const { getFieldDecorator } = form;
-        const { selectedRows } = this.state;
+        const { selectedRows, selectedRowKeys } = this.state;
         const rowSelection = {
+            selectedRowKeys,
             selectedRows,
             onChange: this.onSelectChange,
+            onSelectAll: this.onSelectAll,
+            onSelect: this.onSelect,
         };
         const hasSelected = selectedRows.length > 0;
         const columns = [
@@ -194,12 +223,26 @@ export default class People extends React.PureComponent {
                 dataIndex: 'dingRebot',
                 key: 'dingRebot',
                 width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.dingRebot} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.dingRebot}
+                        </span>
+                    </Tooltip>
+                ),
             },
             {
                 title: '所属报警组',
                 dataIndex: 'sleuthTeamName',
                 key: 'sleuthTeamName',
                 width: 100,
+                render: (text, record) => (
+                    <Tooltip title={record.sleuthTeamName} className="description">
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {record.sleuthTeamName}
+                        </span>
+                    </Tooltip>
+                ),
             },
             {
                 title: '添加人',
@@ -301,6 +344,7 @@ export default class People extends React.PureComponent {
                     pagination={false}
                     dataSource={dataSource}
                     loading={loading}
+                    rowKey="sleuthPersonId"
                     rowSelection={rowSelection}
                 />
                 <Pagination

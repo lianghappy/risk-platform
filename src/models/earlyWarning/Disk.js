@@ -15,6 +15,8 @@ export default {
         app: [],
         product: [],
         getDiskData: [],
+        singleData: {},
+        createDisk: {},
     },
     effects: {
         * getSelect({ payload }, { call, put }) {
@@ -53,10 +55,25 @@ export default {
                 },
             });
         },
+        * getSingleData({ payload }, { call, put }) {
+            const response = yield call(post, API.SingleDisk, payload);
+            yield put({
+                type: 'querySrc',
+                payload: {
+                    singleData: response,
+                },
+            });
+        },
         // 创建大盘
-        * create({ payload }, { call }) {
+        * create({ payload }, { call, put }) {
             const { data, resolve } = payload;
-            yield call(post, API.addDisks, data);
+            const response = yield call(post, API.addDisks, data);
+            yield put({
+                type: 'querySrc',
+                payload: {
+                    createDisk: response,
+                },
+            });
             yield call(resolve);
         },
         // 添加
@@ -91,19 +108,12 @@ export default {
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '监控大盘' }],
                     });
-                    const userId = JSON.parse(sessionStorage.userInfo).user.id;
-                    dispatch({
-                        type: 'getdashBoard',
-                        payload: {
-                            userId,
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
-                    });
+
                     dispatch({
                         type: 'getSelect',
                         payload: {
                             companyId,
+                            isEnable: 1,
                         },
                     });
                 }

@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, Select, DatePicker } from 'antd';
+import { Layout, Input, Form, Button, Table, Select, DatePicker, message } from 'antd';
 import base64 from 'utils/base64';
 import moment from 'moment';
 import { setPath } from 'utils/path';
@@ -25,6 +25,7 @@ class OldExpr extends React.PureComponent {
         categories: PropTypes.array.isRequired,
     };
     componentDidMount() {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         const {
             pageSize,
             pageNum,
@@ -35,6 +36,7 @@ class OldExpr extends React.PureComponent {
             payload: {
                 pageSize,
                 pageNum,
+                companyId,
             },
         });
     }
@@ -90,8 +92,13 @@ class OldExpr extends React.PureComponent {
         const {
             dispatch,
         } = this.props;
+        if (Number(values.num) === 0) {
+            message.error('你选择的样本数量为0，无法开始试验');
+            return;
+        }
         const username = JSON.parse(sessionStorage.userInfo).user.realName;
         const strategyId = base64.decode(this.props.match.params.id);
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         new Promise((resolve) => {
             dispatch({
                 type: 'experiment/startsExper',
@@ -100,6 +107,7 @@ class OldExpr extends React.PureComponent {
                         strategyId,
                         username,
                         sampleId: values.id,
+                        companyId,
                     },
                     resolve,
                 },
@@ -109,6 +117,8 @@ class OldExpr extends React.PureComponent {
         });
     }
     query(payload) {
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        Object.assign(payload, { companyId });
         this.props.dispatch({
             type: 'experiment/queryList',
             payload,
@@ -131,16 +141,39 @@ class OldExpr extends React.PureComponent {
         }
 
         const columns = [
-            { title: '样本ID', dataIndex: 'id', key: 'id', width: 100, },
-            { title: '样本名称', dataIndex: 'name', key: 'name', width: 100, },
-            { title: '样本总数量', dataIndex: 'num', key: 'num', width: 100, },
-            { title: '样本生成时间', dataIndex: 'generateTime', key: 'generateTime', width: 100, },
-            { title: '数据源',
+            {
+                title: '样本ID',
+                dataIndex: 'id',
+                key: 'id',
+                width: 100,
+            },
+            {
+                title: '样本名称',
+                dataIndex: 'name',
+                key: 'name',
+                width: 100,
+            },
+            {
+                title: '样本总数量',
+                dataIndex: 'num',
+                key: 'num',
+                width: 100,
+            },
+            {
+                title: '样本生成时间',
+                dataIndex: 'generateTime',
+                key: 'generateTime',
+                width: 100,
+            },
+            {
+                title: '数据源',
                 dataIndex: 'type',
                 key: 'type',
                 render: (...rest) => (<span>{Number(rest[1].type) === 1 ? '宽表' : '风控独立系统'}</span>),
-                width: 100, },
-            { title: '操作',
+                width: 100,
+            },
+            {
+                title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
                 render: (...rest) => (
@@ -162,10 +195,17 @@ class OldExpr extends React.PureComponent {
                                 </LookRisk>
                         }
 
-                        <a role="button" tabIndex="-1" onClick={() => this.starts(rest[1])}>开始实验</a>
+                        <a
+                            role="button"
+                            tabIndex="-1"
+                            onClick={() => this.starts(rest[1])}
+                        >
+                        开始实验
+                        </a>
                     </div>
                 ),
-                width: 100, },
+                width: 100,
+            },
         ];
         return (
             <Layout className={style.container}>

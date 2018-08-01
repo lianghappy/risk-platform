@@ -8,11 +8,13 @@ import {
     Select,
     Row,
     Col,
+    Input,
 } from 'antd';
 import cs from 'classnames';
 import style from './index.scss';
 
 const Option = Select.Option;
+const FormItem = Form.Item;
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
@@ -113,6 +115,26 @@ export default class AddTable extends React.PureComponent {
                     <div>
                         <div>
                             <p>1、选择图标类型</p>
+                            <Form>
+                                <Row>
+                                    <Col span="12">
+                                        <FormItem
+                                            {...formItemLayout}
+                                            label="图表名称"
+                                        >
+                                            {
+                                                getFieldDecorator('chartName', {
+                                                    rules: [
+                                                        { required: true, message: '请输入新建监控大盘名称' },
+                                                    ],
+                                                })(
+                                                    <Input />
+                                                )
+                                            }
+                                        </FormItem>
+                                    </Col>
+                                </Row>
+                            </Form>
                             <span className={cs(
                                 'jm-icon',
                                 'anticon',

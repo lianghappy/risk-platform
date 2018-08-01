@@ -1,8 +1,17 @@
 import React from 'react';
+import { connect } from 'dva';
 import { Modal, Form, Input, Transfer } from 'antd';
 // import styles from './index.scss';
 
 const { TextArea } = Input;
+const mapStateToProps = (state) => {
+    return {
+        warningList: state.warningPeople.warningList,
+        loading: state.loading.effects['warningPeople/addTeam'] || state.loading.effects['warningPeople/updataTeam'] || false,
+        // loading: state.loading.models.warningPeople,
+    };
+};
+@connect(mapStateToProps)
 @Form.create()
 export default class TeamModal extends React.PureComponent {
     state = {
@@ -39,7 +48,7 @@ export default class TeamModal extends React.PureComponent {
         });
         const mockData = [];
         const targetKeys = this.props.record.sleuthPersonResponses ? this.props.record.sleuthPersonResponses.map(it => it.sleuthPersonId) : [];
-        this.props.people.forEach(item => {
+        this.props.warningList.forEach(item => {
             const data = {
                 key: item.sleuthPersonId,
                 title: item.sleuthPersonPhone ? `${item.sleuthPersonName}[${item.sleuthPersonPhone}]` : `${item.sleuthPersonName}[钉钉机器人]`,
@@ -62,6 +71,7 @@ export default class TeamModal extends React.PureComponent {
             children,
             form,
             record,
+            loading,
         } = this.props;
         const { getFieldDecorator } = form;
         const formItemLayout = {
@@ -82,6 +92,7 @@ export default class TeamModal extends React.PureComponent {
                     width="680px"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
+                    confirmLoading={loading}
                     title={this.props.type === 'add' ? '新增收件组' : '编辑收件组'}
                     onOk={this.handleSubmit}
                 >
@@ -95,7 +106,8 @@ export default class TeamModal extends React.PureComponent {
                                     {
                                         initialValue: record.sleuthTeamName,
                                         rules: [
-                                            { required: true, message: '请输入组名' }
+                                            { required: true, message: '请输入组名' },
+                                            { max: 20, message: '输入字符最多20位' }
                                         ]
                                     },
                                 )(
@@ -112,7 +124,7 @@ export default class TeamModal extends React.PureComponent {
                                     initialValue: record.description,
                                     rules: [
                                         { required: true, message: '请输入备注' },
-                                        { max: 200, message: '最多200位' }
+                                        { max: 200, message: '输入字符最多200位' }
                                     ]
                                 })(
                                     <TextArea placeholder="请输入" />

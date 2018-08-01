@@ -84,10 +84,10 @@ export default class History extends React.PureComponent {
                     happenedTimes: moment().add(-Number(times[this.state.btn].num), times[this.state.btn].type).format('X'),
                 });
             }
-            if (this.state.times) {
+            if (this.state.times && this.state.times.length > 0) {
                 const value = this.state.times;
                 Object.assign(values, {
-                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimee: moment(value[1]._d).format('X'),
                     happenedTimes: moment(value[0]._d).format('X'),
                 });
             }
@@ -116,7 +116,7 @@ export default class History extends React.PureComponent {
             if (this.state.times && this.state.times.length > 0) {
                 const value = this.state.times;
                 Object.assign(values, {
-                    happenedTimee: moment(value[0]._d).format('X'),
+                    happenedTimee: moment(value[1]._d).format('X'),
                     happenedTimes: moment(value[0]._d).format('X'),
                 });
             }
@@ -134,7 +134,7 @@ export default class History extends React.PureComponent {
         });
         this.props.form.validateFields((errors, values) => {
             Object.assign(values, {
-                happenedTimee: moment(value[0]._d).format('X'),
+                happenedTimee: moment(value[1]._d).format('X'),
                 happenedTimes: moment(value[0]._d).format('X'),
             });
             this.query({
@@ -150,6 +150,14 @@ export default class History extends React.PureComponent {
             times: value,
         });
     }
+    onReset = () => {
+        const { pageSize, form } = this.props;
+        form.resetFields();
+        this.query({
+            pageNum: 1,
+            pageSize,
+        });
+    };
     queryTime = (type, num, i, e) => {
         e.preventDefault();
         const {
@@ -198,8 +206,7 @@ export default class History extends React.PureComponent {
         const value = [
             { name: '平均值', key: 'avg' },
             { name: '最大值', key: 'max' },
-            { name: '最小值', key: 'sum' },
-            { name: '累计值', key: 'min' },
+            { name: '最小值', key: 'min' },
         ];
         let counts = '';
         value.forEach(item => {
@@ -271,8 +278,8 @@ export default class History extends React.PureComponent {
             },
             {
                 title: '通知对象',
-                dataIndex: 'sleuthTeamNames',
-                key: 'sleuthTeamNames',
+                dataIndex: 'informTarget',
+                key: 'informTarget',
                 width: 100,
             }, {
                 title: '状态',
@@ -292,7 +299,12 @@ export default class History extends React.PureComponent {
                         })
                     }
                     <RangePicker
-                        showTime={{ format: 'HH:mm' }}
+                        showTime={
+                            {
+                                format: 'HH:mm',
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                            }
+                        }
                         format="YYYY-MM-DD HH:mm"
                         placeholder={['开始时间', '结束时间']}
                         value={this.state.defaultTime}
@@ -354,7 +366,8 @@ export default class History extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">查询</Button>
+                        <Button type="primary" disabled={this.props.loading} htmlType="submit" style={{ marginRight: '20px' }}>查询</Button>
+                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
                     </Form.Item>
                 </Form>
                 <Table

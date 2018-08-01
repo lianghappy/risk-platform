@@ -27,8 +27,8 @@ const mapStateToProps = (state) => {
         record: state.EditWarningRule.record,
     };
 };
-@Form.create()
 @connect(mapStateToProps)
+@Form.create()
 export default class EditRule extends React.PureComponent {
     static propTypes = {
         getPeopleList: PropTypes.array.isRequired,
@@ -38,46 +38,32 @@ export default class EditRule extends React.PureComponent {
         targetKeys: [],
     }
     componentDidMount() {
-        const {
+        /*   const {
             dispatch,
-        } = this.props;
+        } = this.props; */
         const id = base64.decode(this.props.match.params.id);
-        new Promise((resolve) => {
-            dispatch({
-                type: 'EditWarningRule/getSingleRule',
-                payload: {
-                    id,
-                    resolve,
-                }
-            });
-            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-            const appId = JSON.parse(sessionStorage.app).id;
-            const productId = JSON.parse(sessionStorage.product).id;
-            this.props.dispatch({
-                type: 'getPeople',
-                payload: {
-                    pageNum: 1,
-                    pageSize: 99,
-                    companyId,
-                    appId,
-                    productId,
-                }
-            });
-        }).then(() => {
-            const targetKeys = [];
-            if (this.props.record.sleuthTeamNames) {
-                const names = this.props.record.sleuthTeamNames.split(',');
-                this.props.getPeopleList.forEach((item) => {
-                    names.forEach(it => {
-                        if (item.title === it) {
-                            targetKeys.push(item.key);
-                        }
-                    });
-                });
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        const appId = JSON.parse(sessionStorage.app).id;
+        const productId = JSON.parse(sessionStorage.product).id;
+        this.props.dispatch({
+            type: 'EditWarningRule/getPeople',
+            payload: {
+                pageNum: 1,
+                pageSize: 999,
+                companyId,
+                appId,
+                productId,
             }
-            this.setState({
-                targetKeys,
-            });
+        }).then(() => {
+            this.init();
+        });
+        this.props.dispatch({
+            type: 'EditWarningRule/getSingleRule',
+            payload: {
+                id,
+            }
+        }).then(() => {
+            this.init();
         });
     }
 
@@ -152,6 +138,27 @@ export default class EditRule extends React.PureComponent {
             }
         });
     }
+
+    init = () => {
+        const {
+            record,
+            getPeopleList,
+        } = this.props;
+        const targetKeys = [];
+        if (record.sleuthTeamNames && getPeopleList.length !== 0) {
+            // todo
+            const names = this.props.record.sleuthTeamNames.split(',');
+            this.props.getPeopleList.forEach((item) => {
+                names.forEach(it => {
+                    if (item.title === it) {
+                        targetKeys.push(item.key);
+                    }
+                });
+            });
+        }
+        this.setState({ targetKeys });
+    };
+
     cancel = () => {
         window.history.back(-1);
     }
@@ -162,7 +169,7 @@ export default class EditRule extends React.PureComponent {
         return option.description.indexOf(inputValue) > -1;
     }
     validateName = (rule, value, callback) => {
-        if (value && (/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]/g.test(value))) {
+        if (value && (/[^\u0020-\u007E\u00A0-\u00BE\u2E80-\uA4CF\uF900-\uFAFF\uFE30-\uFE4F\uFF00-\uFFEF\u0080-\u009F\u2000-\u201f\u2026\u2022\u20ac\r\n]/g.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -266,7 +273,8 @@ export default class EditRule extends React.PureComponent {
                                 initialValue: record && record.sleuthConfigName,
                                 rules: [
                                     { required: true, message: '请输入报警规则名称' },
-                                    { validator: this.validateName, message: '不能输入表情' }
+                                    { validator: this.validateName, message: '不能输入表情' },
+                                    { max: 20, message: '字符最多输入20位' }
                                 ]
                             })(
                                 <Input placeholder="请输入报警规则名称" style={{ width: '157px' }} />
@@ -283,7 +291,7 @@ export default class EditRule extends React.PureComponent {
                                 getFieldDecorator('sleuthTargeId', {
                                     initialValue: record && record.sleuthTargeId,
                                     rules: [
-                                        { required: true, message: '请输入指标名称' },
+                                        { required: true, message: '请完善规则描述' },
                                     ]
                                 })(
                                     <Select style={{ width: '154px' }}>
