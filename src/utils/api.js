@@ -257,6 +257,10 @@ const api = {
 
     /* ------------------------------------数据报表---------------------------------------- */
     getReportList: `${API}/api/risk/manager/policy/normHit/normHitStatistic/v1`,
+    // 规则命中统计的下拉菜单
+    NormHitChannal: `${API}/api/risk/manager/policy/normHit/NormHitChannal/v1`,
+    // 根据策略查找阶段
+    normHit: `${API}/api/risk/manager/policy/normHit/StageChannal/v1`,
 
 };
 

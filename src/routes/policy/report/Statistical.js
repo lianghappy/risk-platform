@@ -7,25 +7,53 @@ import 'echarts/lib/chart/bar';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
-import { Layout, Input, Form, Button, Select } from 'antd';
+import { Layout, Input, Form, Button, Select, Cascader } from 'antd';
 // import { roles } from 'utils/common';
 import style from './index.scss';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
+const pageCount = [
+    { count: 10 },
+    { count: 20 },
+    { count: 30 },
+    { count: 40 },
+    { count: 50 },
+];
 const mapStateToProps = (state) => {
     return {
-        list: state.statistical.list
+        list: state.statistical.list,
+        NormHitChannal: state.statistical.NormHitChannal,
+        getStage: state.statistical.getStage,
     };
 };
 @connect(mapStateToProps)
 @Form.create()
 export default class Statistical extends React.PureComponent {
+    state={
+        options: [],
+    }
+
     componentDidMount() {
+        this.props.dispatch({
+            type: 'statistical/getReportList',
+            payload: {
+                pageNum: 1,
+                pageSize: 10,
+            },
+        }).then(() => {
+            this.init();
+        });
+        this.props.dispatch({
+            type: 'statistical/getSelect',
+        }).then(() => {
+            this.init();
+        });
         const container = this.bar;
         const myChart = echarts.init(container);
-        this.setOption(myChart);
         window.onresize = myChart.resize;
     }
+
     onPageChange = (pageNum, pageSize, sysId) => {
         const {
             form,
@@ -41,6 +69,7 @@ export default class Statistical extends React.PureComponent {
             });
         });
     };
+
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -59,6 +88,7 @@ export default class Statistical extends React.PureComponent {
             });
         });
     }
+
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
@@ -67,6 +97,11 @@ export default class Statistical extends React.PureComponent {
             pageSize,
         });
     };
+
+    onChange = (value, selectedOptions) => {
+        console.log(value, selectedOptions);
+    }
+
     setOption = (mychart) => {
         const { list } = this.props;
         const normName = list.map(it => it.normName) || [];
@@ -105,6 +140,39 @@ export default class Statistical extends React.PureComponent {
         };
         mychart.setOption(option);
     }
+
+    loadData = (selectedOptions) => {
+        console.log(selectedOptions);
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'getStage',
+            payload: {
+                strategyId: selectedOptions.value,
+            }
+        });
+    }
+
+    init = () => {
+        const container = this.bar;
+        const myChart = echarts.init(container);
+        this.setOption(myChart);
+        window.onresize = myChart.resize;
+        const { NormHitChannal } = this.props;
+        const option = [];
+        if (NormHitChannal.strategys) {
+            NormHitChannal.strategys.forEach(item => {
+                option.push({
+                    label: item.name,
+                    value: item.id,
+                    isLeaf: false,
+                });
+            });
+            this.setState({
+                options: option,
+            });
+        }
+    }
+
     query(payload) {
         this.props.dispatch({
             type: 'policy/getPolicyList',
@@ -113,7 +181,7 @@ export default class Statistical extends React.PureComponent {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        console.log(this.props.list);
+        const { NormHitChannal } = this.props;
 
         return (
             <Layout
@@ -127,49 +195,55 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                     <FormItem label="数据源" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
-                        }
-                    </FormItem>
-                    <FormItem label="策略名称" >
-                        {
-                            getFieldDecorator('isEnable')(
+                            getFieldDecorator('thirdpartyName')(
                                 <Select style={{ width: '157px' }}>
-                                    <Select.Option value="1">已上架</Select.Option>
-                                    <Select.Option value="0">未上架</Select.Option>
-                                    <Select.Option value="2">已下架</Select.Option>
+                                    {
+                                        NormHitChannal.dateSources &&
+                                        NormHitChannal.dateSources.map((item) => {
+                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
+                                        })
+                                    }
                                 </Select>
                             )
                         }
                     </FormItem>
-                    <FormItem label="阶段名称" >
+                    <FormItem label="策略名称" >
                         {
-                            getFieldDecorator('isEnable')(
-                                <Select style={{ width: '157px' }}>
-                                    <Select.Option value="1">已上架</Select.Option>
-                                    <Select.Option value="0">未上架</Select.Option>
-                                    <Select.Option value="2">已下架</Select.Option>
-                                </Select>
+                            getFieldDecorator('strategyName')(
+                                <Cascader
+                                    options={this.state.options}
+                                    loadData={this.loadData}
+                                    onChange={this.onChange}
+                                    changeOnSelect
+                                />
                             )
                         }
                     </FormItem>
                     <FormItem label="状态名称" >
                         {
-                            getFieldDecorator('isEnable')(
+                            getFieldDecorator('status')(
                                 <Select style={{ width: '157px' }}>
-                                    <Select.Option value="1">已上架</Select.Option>
-                                    <Select.Option value="0">未上架</Select.Option>
-                                    <Select.Option value="2">已下架</Select.Option>
+                                    {
+                                        NormHitChannal.status &&
+                                        NormHitChannal.status.map((item) => {
+                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
+                                        })
+                                    }
                                 </Select>
                             )
                         }
                     </FormItem>
                     <FormItem label="数据展示" >
                         {
-                            getFieldDecorator('isEnable')(
+                            getFieldDecorator('pageSize')(
                                 <Select style={{ width: '157px' }}>
-                                    <Select.Option value="1">已上架</Select.Option>
-                                    <Select.Option value="0">未上架</Select.Option>
-                                    <Select.Option value="2">已下架</Select.Option>
+                                    {
+                                        pageCount.map((item) => {
+                                            return (
+                                                <Option value={item.count} key={item.count}>{item.count}</Option>
+                                            );
+                                        })
+                                    }
                                 </Select>
                             )
                         }

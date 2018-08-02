@@ -10,6 +10,8 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        NormHitChannal: {},
+        getStage: [],
     },
     effects: {
         // 获取策略
@@ -22,6 +24,26 @@ export default {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: PAGE_SIZE,
+                },
+            });
+        },
+        // 获取策略
+        * getSelect({ payload }, { call, put }) {
+            const response = yield call(post, API.NormHitChannal, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    NormHitChannal: response,
+                },
+            });
+        },
+        // 获取阶段
+        * getStage({ payload }, { call, put }) {
+            const response = yield call(post, API.normHit, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    getStage: response,
                 },
             });
         },
@@ -42,13 +64,6 @@ export default {
                     dispatch({
                         type: 'common/setSide',
                         flag: false,
-                    });
-                    dispatch({
-                        type: 'getReportList',
-                        payload: {
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
                     });
                 }
             });
