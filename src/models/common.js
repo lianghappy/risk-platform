@@ -8,6 +8,7 @@ export default {
         flag: true,
         searchFields: {
             order: {}, // 订单列表
+            rule: {}, // 指标列表
         },
     },
     reducers: {

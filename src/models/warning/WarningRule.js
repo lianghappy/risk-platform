@@ -44,6 +44,28 @@ export default {
             yield call(post, API.updateStatus, data);
             yield call(resolve);
         },
+        // 初始化查询
+        * firstQuery({ payload }, { put, select }) {
+            const { type } = payload;
+            const _type = {
+                rule: 'getWarningRuleList',
+            }[type];
+            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+            const appId = JSON.parse(sessionStorage.app).id;
+            const productId = JSON.parse(sessionStorage.product).id;
+            const searchFields = yield select(state => state.common.searchFields[type]);
+            yield put({
+                type: _type,
+                payload: {
+                    ...searchFields,
+                    pageNum: searchFields.pageNum ? searchFields.pageNum : 1,
+                    pageSize: PAGE_SIZE,
+                    companyId,
+                    appId,
+                    productId,
+                },
+            });
+        },
     },
     reducers: {
         querySuc(state, { payload }) {
@@ -62,18 +84,15 @@ export default {
                         type: 'common/setSide',
                         flag: false,
                     });
+                    const type = 'rule';
                     const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-                    const appId = JSON.parse(sessionStorage.app).id;
-                    const productId = JSON.parse(sessionStorage.product).id;
                     dispatch({
-                        type: 'getWarningRuleList',
+                        type: 'firstQuery',
                         payload: {
                             pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                            companyId,
-                            appId,
-                            productId,
-                        }
+                            pageSize: 10,
+                            type,
+                        },
                     });
                     dispatch({
                         type: 'getSelect',

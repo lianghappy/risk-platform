@@ -19,11 +19,31 @@ const mapStateToProps = (state) => {
         sleuthTargets: state.warningRule.sleuthTargets,
         strategys: state.warningRule.strategys,
         pageSize: state.warningRule.pageSize,
+        searchFields: state.common.searchFields,
     };
 };
 @connect(mapStateToProps)
 @Form.create()
 export default class WarningRule extends React.PureComponent {
+    state = {
+        searchFields: this.props.searchFields.rule || {},
+        type: 'rule'
+    }
+
+    componentDidMount() {
+        const {
+            dispatch,
+        } = this.props;
+        const { type, } = this.state;
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
+        });
+    }
+
     onPageChange = (pageNum, pageSize) => {
         this.props.form.validateFields((errors, values) => {
             this.query({
@@ -107,15 +127,38 @@ export default class WarningRule extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form } = this.props;
+        const { pageSize, form, dispatch, type } = this.props;
         form.resetFields();
         this.query({
             pageNum: 1,
             pageSize,
             sysId: 'risk',
         });
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
+        });
     };
       onEdit = (id) => {
+          const {
+              form,
+              dispatch,
+              pageNum,
+          } = this.props;
+          const { type } = this.state;
+          form.validateFields((err, values) => {
+              Object.assign(values, { pageNum });
+              dispatch({
+                  type: 'common/setSearchFields',
+                  payload: {
+                      type,
+                      searchFields: values,
+                  },
+              });
+          });
           this.props.history.push(setPath(`/editWarningRule/${base64.encode(id)}`));
       }
     changeTime = (time) => {
@@ -179,6 +222,7 @@ export default class WarningRule extends React.PureComponent {
             strategys,
             sleuthTargets,
         } = this.props;
+        const { searchFields, } = this.state;
         const columns = [
             {
                 title: '报警ID',
@@ -283,7 +327,9 @@ export default class WarningRule extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="策略名称" >
                         {
-                            getFieldDecorator('strategyId')(
+                            getFieldDecorator('strategyId', {
+                                initialValue: searchFields.strategyId,
+                            })(
                                 <Select style={{ width: '275px' }}>
                                     {
                                         strategys && strategys.map((item, index) => {
@@ -296,7 +342,9 @@ export default class WarningRule extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem label="监控指标" >
-                        {getFieldDecorator('sleuthTargetId')(
+                        {getFieldDecorator('sleuthTargetId', {
+                            initialValue: searchFields.sleuthTargetId,
+                        })(
                             <Select style={{ width: '154px' }}>
                                 {
                                     sleuthTargets && sleuthTargets.map((item, index) => {
@@ -308,7 +356,9 @@ export default class WarningRule extends React.PureComponent {
                     </FormItem>
                     <Form.Item label="状态">
                         {
-                            getFieldDecorator('state')(
+                            getFieldDecorator('state', {
+                                initialValue: searchFields.state,
+                            })(
                                 <Select style={{ width: '157px' }}>
                                     <Select.Option value="0">禁用</Select.Option>
                                     <Select.Option value="1">启用</Select.Option>
