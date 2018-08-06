@@ -276,7 +276,8 @@ export default class Regular extends React.PureComponent {
         });
     };
     addRegular = (stageId) => {
-        this.props.history.push(setPath(`/addRegulars/${base64.encode(stageId)}`));
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/addRegulars/${base64.encode(stageId)}/${strangesId}`));
     }
     query(payload) {
         this.props.dispatch({

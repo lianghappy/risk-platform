@@ -1,6 +1,7 @@
 import React from 'react';
-import { Layout, Form, Input, Icon } from 'antd';
+import { Layout, Form, Input, Button } from 'antd';
 import base64 from 'utils/base64';
+import { setPath } from 'utils/path';
 import RegularModal from './RegularModal';
 import styles from './addRegular.scss';
 import SingleInput from './SingleInput';
@@ -11,6 +12,39 @@ let uuid = 1;
 export default class AddRegular extends React.PureComponent {
     state={
         datas: [],
+    }
+
+    onSubmit = () => {
+        const {
+            form,
+            dispatch,
+        } = this.props;
+        form.validateFields((errors, values) => {
+            if (!errors) {
+                const { datas } = this.state;
+                datas.forEach(item => {
+                    if ((Object.keys(values.reason)).includes(item.id)) {
+                        item.compareSymbol = values.reason[item.id].compareSymbol;
+                        item.judgeValue = values.reason[item.id].judgeValue;
+                    }
+                });
+                new Promise((resolve) => {
+                    dispatch({
+                        type: 'addRegularPly/add',
+                        payload: {
+                            ...values,
+                            resolve,
+                        }
+                    });
+                }).then(() => {
+                    const id = this.props.match.params.id;
+                    const strategyId = this.props.match.params.stageId;
+                    this.props.history.push({
+                        pathname: setPath(`/regular/${id}/${strategyId}`),
+                    });
+                });
+            }
+        });
     }
 
     remove(k) {
@@ -39,11 +73,24 @@ export default class AddRegular extends React.PureComponent {
         });
     }
 
-    modalOk = (data) => {
+    modalOk = (data, callback) => {
+        callback();
         console.log(data);
+        /* const { datas } = this.state;
+        data.categoryAndRuleList.forEach(item => {
+            datas.push(item);
+        }); */
         this.setState({
             datas: data.categoryAndRuleList,
         });
+    }
+
+    checkChannel(rule, value, callback) {
+        if (value && value.compareSymbol && value.judgeValue) {
+            callback();
+        } else {
+            callback('请输入判定符号和判定阈值');
+        }
     }
 
     render() {
@@ -51,43 +98,65 @@ export default class AddRegular extends React.PureComponent {
             labelCol: { span: 3 },
             wrapperCol: { span: 6 },
         };
+        const formItemLayouts = {
+            labelCol: { span: 3 },
+            wrapperCol: { span: 8 },
+        };
         const stageId = base64.decode(this.props.match.params.id);
         const { getFieldDecorator, getFieldValue } = this.props.form;
+        console.log(this.state.datas);
+
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k) => {
             return (
-                <FormItem
-                    required={false}
-                    key={k.id}
-                >
-                    <div style={{ display: 'flex' }}>
-                        {getFieldDecorator(`reason[${k.id}]`, {
-                            validateTrigger: ['onChange'],
-                            rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
-                        })(
-                            <SingleInput data={k} />,
-                        )}
-                        {keys.length > 1 ? (
-                            <Icon
-                                className={styles.dynamic_delete_button}
-                                type="minus-circle-o"
-                                disabled={keys.length === 1}
-                                onClick={() => this.remove(k)}
-                            />
-                        ) : null}
-                    </div>
-                </FormItem>
+                <div key={k.id} style={{ background: 'rgba(250,250,250,1)' }}>
+                    <FormItem
+                        label="规则字段"
+                        {...formItemLayouts}
+                    >
+                        <span style={{ marginRight: '20px' }}>{k.ruleName}</span>
+                        <a role="button" tabIndex="-1" onClick={() => this.remove(k)}>删除</a>
+                    </FormItem>
+                    <FormItem
+                        required={false}
+                        label="判定符号"
+                        {...formItemLayouts}
+                    >
+                        <div style={{ display: 'flex' }}>
+                            {getFieldDecorator(`reason[${k.id}]`, {
+                                validateTrigger: ['onChange'],
+                                rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
+                            })(
+                                <SingleInput value={k} />,
+                            )}
+                        </div>
+                    </FormItem>
+                </div>
             );
         });
         return (
             <Layout className="layoutMar">
-                <Form className={styles.regular}>
+                <Form
+                    className={styles.regular}
+                    onSubmit={this.onSubmit}
+                >
                     <FormItem
                         label="规则名称"
                         {...formItemLayout}
                     >
-                        <Input />
+                        {
+                            getFieldDecorator('name', {
+                                rule: [
+                                    {
+                                        required: true,
+                                        message: '请输入规则名称'
+                                    }
+                                ]
+                            })(
+                                <Input />
+                            )
+                        }
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
@@ -98,13 +167,35 @@ export default class AddRegular extends React.PureComponent {
                         label="分值"
                         {...formItemLayout}
                     >
-                        <Input />
+                        {
+                            getFieldDecorator('score', {
+                                rule: [
+                                    {
+                                        required: true,
+                                        message: '请输入分值'
+                                    }
+                                ]
+                            })(
+                                <Input />
+                            )
+                        }
                     </FormItem>
                     <FormItem
                         label="权重"
                         {...formItemLayout}
                     >
-                        <Input />
+                        {
+                            getFieldDecorator('weight', {
+                                rule: [
+                                    {
+                                        required: true,
+                                        message: '请输入权重'
+                                    }
+                                ]
+                            })(
+                                <Input />
+                            )
+                        }
                     </FormItem>
                     <FormItem
                         {...formItemLayout}
@@ -123,6 +214,10 @@ export default class AddRegular extends React.PureComponent {
                         </div>
                     </FormItem>
                     {formItems}
+                    <FormItem>
+                        <Button type="primary" htmlType="submit" style={{ marginRight: '24px' }} >新增</Button>
+                        <Button type="default">取消</Button>
+                    </FormItem>
                 </Form>
             </Layout>
         );

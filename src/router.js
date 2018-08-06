@@ -399,7 +399,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/thirdPartyManage')} exact component={ThirdParty} />
                     <PrivateRoute path={setPath('/grayPolicy')} exact component={grayPolicy} />
                     <PrivateRoute path={setPath('/statistical')} exact component={Statistical} />
-                    <PrivateRoute path={setPath('/addRegulars/:id')} exact component={addRegulars} />
+                    <PrivateRoute path={setPath('/addRegulars/:id/:stageId')} exact component={addRegulars} />
                 </Main>
             </Switch>
         </Router>

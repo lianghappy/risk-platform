@@ -136,6 +136,8 @@ const api = {
     regularAdd: `${API}/api/risk/manager/policy/norm/create/v1`,
     regularUpdate: `${API}/api/risk/manager/policy/norm/update/v1`,
     regularClone: `${API}/api/risk/manager/policy/norm/clone/v1`,
+    // 新增规则组
+    AddRegulars: `${API}/api/risk/manager/policy/normGroup/create/v1`,
 
 
     // 黑白名单

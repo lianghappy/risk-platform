@@ -1,14 +1,15 @@
 import React from 'react';
-import { Input } from 'antd';
+import { Input, Select } from 'antd';
 
+const Option = Select.Option;
 export default class ReasnPrice extends React.Component {
     constructor(props) {
         super(props);
 
         const value = this.props.value || {};
         this.state = {
-            price: value.price || '',
-            reason: value.reason || '',
+            compareSymbol: value.compareSymbol || '=',
+            judgeValue: value.judgeValue || '',
         };
     }
 
@@ -20,11 +21,11 @@ export default class ReasnPrice extends React.Component {
     }
 
     handleNumberChange(e) {
-        const price = parseInt(e || 0, 10);
+        const judgeValue = parseInt(e || 0, 10);
         if (!('value' in this.props)) {
-            this.setState({ price });
+            this.setState({ judgeValue });
         }
-        this.triggerChange({ price });
+        this.triggerChange({ judgeValue });
     }
 
     handleReasonChange(reason) {
@@ -43,18 +44,19 @@ export default class ReasnPrice extends React.Component {
 
     render() {
         return (
-            <div style={{ display: 'flex', width: '100%' }}>
+            <div style={{ display: 'flex' }}>
+                <Select
+                    style={{ width: '154px', marginRight: '20px' }}
+                    value={this.state.compareSymbol}
+                >
+                    <Option value="=">=</Option>
+                </Select>
                 <Input
                     type="text"
-                    value={this.state.reason}
-                    onChange={e => this.handleReasonChange(e.target.value)}
-                    style={{ flex: 1, marginRight: 8 }}
-                />
-                <Input
-                    type="text"
-                    value={this.state.price}
+                    value={this.state.judgeValue}
                     onChange={e => this.handleNumberChange(e.target.value)}
-                    style={{ flex: 1, marginRight: 8 }}
+                    style={{ width: '154px' }}
+                    placeholder="请输入判定阈值"
                 />
             </div>
         );
