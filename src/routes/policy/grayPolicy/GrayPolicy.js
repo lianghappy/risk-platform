@@ -265,9 +265,9 @@ export default class GrayPolicy extends React.PureComponent {
                        {
                            getFieldDecorator('status')(
                                <Select style={{ width: '157px' }}>
-                                   <Option value="1">禁用</Option>
-                                   <Option value="0">启用</Option>
-                                   <Option value="">所有</Option>
+                                   <Option value="1">已上架</Option>
+                                   <Option value="0">未上架</Option>
+                                   <Option value="2">已下架</Option>
                                </Select>
                            )
                        }

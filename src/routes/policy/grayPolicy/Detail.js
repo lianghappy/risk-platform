@@ -64,9 +64,16 @@ export default class GrayDetails extends React.PureComponent {
                 width: 100,
             }, {
                 title: '策略状态',
-                dataIndex: 'id',
-                key: 'id',
+                dataIndex: 'status',
+                key: 'status',
                 width: 100,
+                render: (text, record) => (
+                    <span>
+                        {record.status === '0' && '未上架'}
+                        {record.status === '1' && '已上架'}
+                        {record.status === '2' && '已下架'}
+                    </span>
+                )
             },
         ];
         return (

@@ -201,6 +201,40 @@ class AddStrategy extends React.PureComponent {
                         }
                         <Form.Item
                             {...formItemLayout}
+                            label="resultSkip"
+                        >
+                            {
+                                getFieldDecorator('resultSkip', {
+                                    initialValue: record.resultSkip !== undefined
+                                        ? record.resultSkip : '',
+                                    setFieldsValue: '1',
+                                })(
+                                    <Select onSelect={this.onSelect} defaultValue="1">
+                                        <Option value="1">是</Option>
+                                        <Option value="0">否</Option>
+                                    </Select>
+                                )
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
+                            label="阶段结果优先级"
+                        >
+                            {
+                                getFieldDecorator('resultLevel', {
+                                    initialValue: record.resultLevel !== undefined
+                                        ? record.type : '',
+                                    rules: [
+                                        { required: true, message: '请输入阶段阶段结果优先级' },
+                                        { validator: this.checkRecord, message: '请输入数字' }
+                                    ],
+                                })(
+                                    <Input />
+                                )
+                            }
+                        </Form.Item>
+                        <Form.Item
+                            {...formItemLayout}
                             label="权重"
                         >
                             {

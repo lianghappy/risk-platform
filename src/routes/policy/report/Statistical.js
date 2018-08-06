@@ -54,7 +54,7 @@ export default class Statistical extends React.PureComponent {
         window.onresize = myChart.resize;
     }
 
-    onPageChange = (pageNum, pageSize, sysId) => {
+    onPageChange = (pageNum, pageSize) => {
         const {
             form,
             loading,
@@ -65,7 +65,6 @@ export default class Statistical extends React.PureComponent {
                 ...values,
                 pageNum,
                 pageSize,
-                sysId,
             });
         });
     };
@@ -73,18 +72,14 @@ export default class Statistical extends React.PureComponent {
     onQuery = (e) => {
         e.preventDefault();
         const {
-            pageSize,
             loading,
             form,
-            sysId,
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
             this.query({
                 ...values,
                 pageNum: 1,
-                pageSize,
-                sysId,
             });
         });
     }
@@ -144,10 +139,11 @@ export default class Statistical extends React.PureComponent {
     loadData = (selectedOptions) => {
         console.log(selectedOptions);
         const { dispatch } = this.props;
+        // 搜索数据
         dispatch({
-            type: 'getStage',
+            type: 'statistical/getStage',
             payload: {
-                strategyId: selectedOptions.value,
+                strategyId: selectedOptions[0].value,
             }
         });
     }
@@ -175,7 +171,7 @@ export default class Statistical extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'policy/getPolicyList',
+            type: 'statistical/getReportList',
             payload,
         });
     }
@@ -235,7 +231,9 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                     <FormItem label="数据展示" >
                         {
-                            getFieldDecorator('pageSize')(
+                            getFieldDecorator('pageSize', {
+                                initialValue: '10'
+                            })(
                                 <Select style={{ width: '157px' }}>
                                     {
                                         pageCount.map((item) => {

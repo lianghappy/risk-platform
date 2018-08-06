@@ -26,8 +26,8 @@ const mapStateToProps = (state) => ({
     getPolicyList: state.grayPolicy.getPolicyList,
     loading: state.loading.effects['grayPolicy/add'] || false,
 });
-@Form.create()
 @connect(mapStateToProps)
+@Form.create()
 export default class PolicyModal extends React.PureComponent {
     static propTypes = {
         children: PropTypes.oneOfType([
@@ -44,6 +44,8 @@ export default class PolicyModal extends React.PureComponent {
         visible: this.props.visible || false,
         // data: [],
         value: '',
+        details: {},
+        grayDetails: [],
     };
     onSearch = (value) => {
         const {
@@ -131,6 +133,12 @@ export default class PolicyModal extends React.PureComponent {
                 payload: {
                     grayStrategyId: record,
                 }
+            }).then(() => {
+                const { details, grayDetails } = this.props;
+                this.setState({
+                    details,
+                    grayDetails,
+                });
             });
         }
         this.setState({
@@ -183,13 +191,12 @@ export default class PolicyModal extends React.PureComponent {
         const {
             children,
             loading,
-            details,
-            grayDetails,
         } = this.props;
         const {
             getFieldDecorator,
             getFieldValue,
         } = forms;
+        const { details, grayDetails } = this.state;
         const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
         getFieldDecorator('keys', { initialValue: grayDetails || [] });
         const keys = getFieldValue('keys');
@@ -211,7 +218,6 @@ export default class PolicyModal extends React.PureComponent {
                                 ],
                             })(
                                 <Select
-                                    mode="multiple"
                                     labelInValue
                                     showSearch
                                     value={this.state.value ? this.state.value : k.strategyName}
