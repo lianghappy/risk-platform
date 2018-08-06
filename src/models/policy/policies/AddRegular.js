@@ -68,6 +68,7 @@ export default {
         * add({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.AddRegulars, data);
+            console.log('111');
             yield call(resolve);
         },
         // 规则类型

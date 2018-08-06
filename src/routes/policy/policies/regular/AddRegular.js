@@ -1,5 +1,6 @@
 import React from 'react';
 import { Layout, Form, Input, Button } from 'antd';
+import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
 import RegularModal from './RegularModal';
@@ -9,6 +10,7 @@ import SingleInput from './SingleInput';
 const FormItem = Form.Item;
 let uuid = 1;
 @Form.create()
+@connect()
 export default class AddRegular extends React.PureComponent {
     state={
         datas: [],
@@ -28,20 +30,23 @@ export default class AddRegular extends React.PureComponent {
                         item.judgeValue = values.reason[item.id].judgeValue;
                     }
                 });
+                values.normList = values.keys;
+                delete values.keys;
+                values.stageId = base64.decode(this.props.match.params.id);
                 new Promise((resolve) => {
                     dispatch({
                         type: 'addRegularPly/add',
                         payload: {
-                            ...values,
+                            data: {
+                                ...values,
+                            },
                             resolve,
                         }
                     });
                 }).then(() => {
                     const id = this.props.match.params.id;
                     const strategyId = this.props.match.params.stageId;
-                    this.props.history.push({
-                        pathname: setPath(`/regular/${id}/${strategyId}`),
-                    });
+                    this.props.history.push(setPath(`/regular/${id}/${strategyId}`));
                 });
             }
         });
@@ -93,6 +98,10 @@ export default class AddRegular extends React.PureComponent {
         }
     }
 
+    cancel = () => {
+        window.location.href = document.referrer;
+    }
+
     render() {
         const formItemLayout = {
             labelCol: { span: 3 },
@@ -139,7 +148,6 @@ export default class AddRegular extends React.PureComponent {
             <Layout className="layoutMar">
                 <Form
                     className={styles.regular}
-                    onSubmit={this.onSubmit}
                 >
                     <FormItem
                         label="规则名称"
@@ -215,8 +223,8 @@ export default class AddRegular extends React.PureComponent {
                     </FormItem>
                     {formItems}
                     <FormItem>
-                        <Button type="primary" htmlType="submit" style={{ marginRight: '24px' }} >新增</Button>
-                        <Button type="default">取消</Button>
+                        <Button type="primary" onClick={() => this.onSubmit()} style={{ marginRight: '24px' }} >新增</Button>
+                        <Button type="default" onClick={() => this.cancel()}>取消</Button>
                     </FormItem>
                 </Form>
             </Layout>
