@@ -127,7 +127,8 @@ export default class WarningRule extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form, dispatch, type } = this.props;
+        const { pageSize, form, dispatch } = this.props;
+        const { type } = this.state;
         form.resetFields();
         this.query({
             pageNum: 1,
