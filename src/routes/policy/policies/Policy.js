@@ -26,7 +26,22 @@ class Policy extends React.PureComponent {
     state = {
         clone: {},
         selectedRowKeys: [],
+        searchFields: this.props.searchFields.policy || {},
+        type: 'policy'
     };
+    componentDidMount() {
+        const {
+            dispatch,
+        } = this.props;
+        const { type, } = this.state;
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
+        });
+    }
     onPageChange = (pageNum, pageSize, sysId) => {
         const {
             form,
@@ -61,11 +76,19 @@ class Policy extends React.PureComponent {
         });
     }
     onReset = () => {
-        const { pageSize, form } = this.props;
+        const { pageSize, form, dispatch } = this.props;
+        const { type } = this.state;
         form.resetFields();
         this.query({
             pageNum: 1,
             pageSize,
+        });
+        dispatch({
+            type: 'common/setSearchFields',
+            payload: {
+                type,
+                searchFields: {},
+            },
         });
     };
     onRowChange = (selectedRowKeys) => {
@@ -201,6 +224,22 @@ class Policy extends React.PureComponent {
     }
     stage = (e, value) => {
         e.preventDefault();
+        const { type } = this.state;
+        const {
+            form,
+            dispatch,
+            pageNum,
+        } = this.props;
+        form.validateFields((err, values) => {
+            Object.assign(values, { pageNum });
+            dispatch({
+                type: 'common/setSearchFields',
+                payload: {
+                    type,
+                    searchFields: values,
+                },
+            });
+        });
         this.props.history.push(setPath(`/strategy/${base64.encode(value.id)}`));
     }
     showDeleteConfirm = (ids) => {
@@ -230,6 +269,7 @@ class Policy extends React.PureComponent {
             list: dataSource,
             loading,
         } = this.props;
+        const { searchFields, } = this.state;
         const columns = [
             {
                 title: '策略标识',
@@ -298,7 +338,8 @@ class Policy extends React.PureComponent {
                     );
                 },
                 width: 100, },
-            { title: '操作',
+            {
+                title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',
                 render: (...rest) => (
@@ -361,17 +402,23 @@ class Policy extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="策略名称" >
                         {
-                            getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
+                            getFieldDecorator('name', {
+                                initialValue: searchFields.name,
+                            })(<Input placeholder="请输入策略名称" />)
                         }
                     </FormItem>
                     <FormItem label="策略标识" >
                         {
-                            getFieldDecorator('id')(<Input placeholder="请输入策略标识" />)
+                            getFieldDecorator('id', {
+                                initialValue: searchFields.id,
+                            })(<Input placeholder="请输入策略标识" />)
                         }
                     </FormItem>
                     <FormItem label="上架状态" >
                         {
-                            getFieldDecorator('isEnable')(
+                            getFieldDecorator('isEnable', {
+                                initialValue: searchFields.isEnable,
+                            })(
                                 <Select style={{ width: '157px' }}>
                                     <Select.Option value="1">已上架</Select.Option>
                                     <Select.Option value="0">未上架</Select.Option>
@@ -439,5 +486,6 @@ const mapStateToProps = (state) => ({
     loading: state.loading.models.policy,
     pageNum: state.policy.pageNum,
     pageSize: state.policy.pageSize,
+    searchFields: state.common.searchFields,
 });
 export default connect(mapStateToProps)(Form.create()(CSSModules(Policy)));

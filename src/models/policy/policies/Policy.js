@@ -55,6 +55,24 @@ export default {
             yield call(post, API.updataEnable, data);
             yield call(resolve);
         },
+        // 初始化查询
+        * firstQuery({ payload }, { put, select }) {
+            const { type } = payload;
+            const _type = {
+                policy: 'getPolicyList',
+            }[type];
+            const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+            const searchFields = yield select(state => state.common.searchFields[type]);
+            yield put({
+                type: _type,
+                payload: {
+                    ...searchFields,
+                    pageNum: searchFields.pageNum ? searchFields.pageNum : 1,
+                    pageSize: PAGE_SIZE,
+                    companyId,
+                },
+            });
+        },
     },
     reducers: {
         getPolicyListSuc(state, { payload }) {
@@ -65,7 +83,7 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 if (filterPath(pathname) === '/policy') {
-                    const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+                    const type = 'policy';
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略管理' }],
@@ -75,12 +93,11 @@ export default {
                         flag: false,
                     });
                     dispatch({
-                        type: 'getPolicyList',
+                        type: 'firstQuery',
                         payload: {
-                            sysId: SYSID,
                             pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                            companyId,
+                            pageSize: 10,
+                            type,
                         },
                     });
                 }

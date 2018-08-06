@@ -39,7 +39,7 @@ class AddPolicy extends React.PureComponent {
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
-                if (Number(values.refuseScore) < Number(values.passScore)) {
+                if (Number(values.refuseScore) < Number(values.passScore) || Number(values.refuseScore) < Number(values.passScore)) {
                     new Promise(resolve => {
                         if (type === 'edit' || type === 'clone') {
                             Object.assign(values, { isEnable: record.isEnable });
@@ -51,7 +51,7 @@ class AddPolicy extends React.PureComponent {
                         this.handleCancel();
                     });
                 } else {
-                    message.error('通过分大于拒绝分');
+                    message.error('通过分大于等于拒绝分');
                 }
             }
         });
