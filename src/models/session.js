@@ -31,15 +31,21 @@ const authConvert = (menus) => {
             authed.forEach(it => {
                 if (it.id === item.id) {
                     it.sort = item.sort;
-                    it.router = setPath(it.router);
-                    auth.push(it);
+                    // it.router = setPath(it.router);
+                    auth.push({
+                        ...it,
+                        router: setPath(it.router),
+                    });
                 }
             });
             autheds.forEach(it => {
                 if (it.id === item.id) {
                     it.sort = item.sort;
-                    it.router = setPath(it.router);
-                    auth2.push(it);
+                    // it.router = setPath(it.router);
+                    auth2.push({
+                        ...it,
+                        router: setPath(it.router),
+                    });
                 }
             });
         });
@@ -163,7 +169,13 @@ export default {
             return { ...state, ...payload, isLogin: true };
         },
         logoutSuc() {
-            return { isLogin: false };
+            return {
+                user: null,
+                menus: null,
+                auths: [],
+                token: null,
+                isLogin: false,
+            };
         },
     },
     subscriptions: {
