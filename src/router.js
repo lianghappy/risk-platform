@@ -275,6 +275,7 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/warningPeople/rule/AddRule'),
         models: () => [
             import('models/warning/AddWarning'),
+            import('models/warning/warnCommon')
         ],
     });
     // 编辑报警规则
@@ -283,6 +284,7 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/warningPeople/rule/EditRule'),
         models: () => [
             import('models/warning/EditWarning'),
+            import('models/warning/warnCommon')
         ],
     });
     // 监控大盘

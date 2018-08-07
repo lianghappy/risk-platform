@@ -8,7 +8,7 @@ import ConditionInput from './conditionInput';
 import styles from './index.scss';
 
 const Option = Select.Option;
-let uuid = 1;
+let uuid = 0;
 const mapStateToProps = (state) => {
     return {
         getPeopleList: state.addWarningRule.getPeopleList,
@@ -143,7 +143,7 @@ export default class AddRule extends React.PureComponent {
     }
 
     checkChannel(rule, value, callback) {
-        if (value && value.price && value.reason) {
+        if (value && value.judgeKey && value.judgeValue && value.compareSymbol) {
             callback();
         } else {
             callback('请输入赔付原因和金额!');
@@ -181,7 +181,7 @@ export default class AddRule extends React.PureComponent {
                     {...formItemLayoutWithOutLabel}
                 >
                     <div style={{ display: 'flex' }}>
-                        {getFieldDecorator(`condition[${k}]`, {
+                        {getFieldDecorator(`judgeConditionList[${k}]`, {
                             validateTrigger: ['onChange'],
                             rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
                         })(

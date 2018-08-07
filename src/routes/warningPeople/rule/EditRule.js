@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
+import { Layout, Form, Input, Transfer, Select, Button, message, Icon } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
+import ConditionInput from './conditionInput';
 import styles from './index.scss';
 
 const times = [
@@ -27,6 +28,7 @@ const mapStateToProps = (state) => {
         record: state.EditWarningRule.record,
     };
 };
+let uuid = 0;
 @connect(mapStateToProps)
 @Form.create()
 export default class EditRule extends React.PureComponent {
@@ -159,6 +161,32 @@ export default class EditRule extends React.PureComponent {
         this.setState({ targetKeys });
     };
 
+    remove(k) {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        // We need at least one passenger
+        if (keys.length === 0) {
+            return;
+        }
+
+        // can use data-binding to set
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    }
+
+    add() {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(uuid);
+        uuid++;
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
+    }
+
     cancel = () => {
         window.history.back(-1);
     }
@@ -190,7 +218,7 @@ export default class EditRule extends React.PureComponent {
             sleuthTargets,
             record,
         } = this.props;
-        const { getFieldDecorator } = this.props.form;
+        // const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -220,6 +248,41 @@ export default class EditRule extends React.PureComponent {
             { num: 5 },
             { num: 6 },
         ];
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: { span: 24, offset: 0 },
+                sm: { span: 20, offset: 4 },
+            },
+        };
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        getFieldDecorator('keys', { initialValue: [] });
+        const keys = getFieldValue('keys');
+        const formItems = keys.map((k) => {
+            return (
+                <Form.Item
+                    required={false}
+                    key={k}
+                    {...formItemLayoutWithOutLabel}
+                >
+                    <div style={{ display: 'flex' }}>
+                        {getFieldDecorator(`judgeConditionList[${k}]`, {
+                            validateTrigger: ['onChange'],
+                            rules: [{ required: true, validator: (rule, values, callback) => this.checkChannel(rule, values, callback) }],
+                        })(
+                            <ConditionInput />,
+                        )}
+                        {keys.length > 0 ? (
+                            <Icon
+                                className={styles.dynamic_delete_button}
+                                type="minus-circle-o"
+                                disabled={keys.length === 1}
+                                onClick={() => this.remove(k)}
+                            />
+                        ) : null}
+                    </div>
+                </Form.Item>
+            );
+        });
         return (
             <Layout className="layoutMar">
                 <Form
@@ -261,6 +324,13 @@ export default class EditRule extends React.PureComponent {
                             )
                         }
                     </Form.Item>
+                    <Form.Item
+                        label="判定条件"
+                        {...formItemLayout}
+                    >
+                        <Icon type="plus-circle-o" onClick={() => this.add()} />
+                    </Form.Item>
+                    {formItems}
                     <Form.Item>
                         <span className={styles.headers}>2、设置报警规则</span>
                     </Form.Item>
