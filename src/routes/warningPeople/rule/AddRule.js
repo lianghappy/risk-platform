@@ -104,7 +104,7 @@ export default class AddRule extends React.PureComponent {
         // can use data-binding to get
         const keys = form.getFieldValue('keys');
         // We need at least one passenger
-        if (keys.length === 1) {
+        if (keys.length === 0) {
             return;
         }
 
@@ -171,7 +171,7 @@ export default class AddRule extends React.PureComponent {
             },
         };
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        getFieldDecorator('keys', { initialValue: [0] });
+        getFieldDecorator('keys', { initialValue: [] });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k) => {
             return (
@@ -187,7 +187,7 @@ export default class AddRule extends React.PureComponent {
                         })(
                             <ConditionInput />,
                         )}
-                        {keys.length > 1 ? (
+                        {keys.length > 0 ? (
                             <Icon
                                 className={styles.dynamic_delete_button}
                                 type="minus-circle-o"
