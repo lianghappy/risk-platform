@@ -6,6 +6,8 @@ import {
     Button,
     Input,
     Select,
+    Tooltip,
+    Icon,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -201,13 +203,25 @@ class AddStrategy extends React.PureComponent {
                         }
                         <Form.Item
                             {...formItemLayout}
-                            label="resultSkip"
+                            label={(
+                                <span>
+                                    skip&nbsp;
+                                    <Tooltip title="即使命中该阶段，仍然会执行下一阶段。">
+                                        <Icon type="question-circle-o" />
+                                    </Tooltip>
+                                </span>
+                            )}
                         >
                             {
                                 getFieldDecorator('resultSkip', {
                                     initialValue: record.resultSkip !== undefined
-                                        ? record.resultSkip : '',
-                                    setFieldsValue: '1',
+                                        ? record.resultSkip : '1',
+                                    rule: [
+                                        {
+                                            required: true,
+                                            message: '请选择skip'
+                                        }
+                                    ]
                                 })(
                                     <Select onSelect={this.onSelect} defaultValue="1">
                                         <Option value="1">是</Option>

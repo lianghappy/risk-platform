@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Input, Button } from 'antd';
+import { Layout, Form, Input, Button, message } from 'antd';
 import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
@@ -8,7 +8,7 @@ import styles from './addRegular.scss';
 import SingleInput from './SingleInput';
 
 const FormItem = Form.Item;
-let uuid = 1;
+let uuid = 0;
 const mapStateToProps = (state) => {
     return {
         normList: state.editRegularPly.normList,
@@ -53,6 +53,10 @@ export default class EditRegular extends React.PureComponent {
             dispatch,
         } = this.props;
         form.validateFields((errors, values) => {
+            if (!values.reason) {
+                message.error('请添加规则');
+                return;
+            }
             if (!errors) {
                 const { datas } = this.state;
                 const ids = JSON.parse(sessionStorage.regular).id;
@@ -60,6 +64,12 @@ export default class EditRegular extends React.PureComponent {
                     if ((Object.keys(values.reason)).includes(item.id)) {
                         item.compareSymbol = values.reason[item.id].compareSymbol;
                         item.judgeValue = values.reason[item.id].judgeValue;
+                    }
+                    if (item.createTime) {
+                        delete item.createTime;
+                    }
+                    if (item.updateTime) {
+                        delete item.updateTime;
                     }
                 });
                 values.normList = values.keys;
@@ -69,6 +79,7 @@ export default class EditRegular extends React.PureComponent {
                 if (!(JSON.parse(sessionStorage.regular).type === 'edit')) {
                     url = 'editRegularPly/clone';
                 }
+                delete values.reason;
                 new Promise((resolve) => {
                     dispatch({
                         type: url,
@@ -126,11 +137,26 @@ export default class EditRegular extends React.PureComponent {
 
     modalOk = (data, callback) => {
         callback();
-        console.log(data);
         /* const { datas } = this.state;
         data.categoryAndRuleList.forEach(item => {
             datas.push(item);
         }); */
+        const values = this.state.datas;
+        const val = [];
+        data.categoryAndRuleList.forEach(item => {
+            val.push(item.id);
+        });
+        values.forEach(item => {
+            if (!val.includes(item.id)) {
+                data.categoryAndRuleList.push(item);
+            }
+        });
+        /*  data.categoryAndRuleList.forEach(item => {
+            if (!val.includes(item.id)) {
+                values.push(item);
+            }
+        }); */
+
         this.setState({
             datas: data.categoryAndRuleList,
         });
@@ -173,7 +199,7 @@ export default class EditRegular extends React.PureComponent {
                         label="规则字段"
                         {...formItemLayouts}
                     >
-                        <span style={{ marginRight: '20px' }}>{k.ruleName}</span>
+                        <span style={{ marginRight: '20px' }}>{k.name}</span>
                         <a role="button" tabIndex="-1" onClick={() => this.remove(k)}>删除</a>
                     </FormItem>
                     <FormItem
@@ -183,6 +209,7 @@ export default class EditRegular extends React.PureComponent {
                     >
                         <div style={{ display: 'flex' }}>
                             {getFieldDecorator(`reason[${k.id}]`, {
+                                initialValue: k,
                                 validateTrigger: ['onChange'],
                                 rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
                             })(
@@ -275,7 +302,7 @@ export default class EditRegular extends React.PureComponent {
                     </FormItem>
                     {formItems}
                     <FormItem>
-                        <Button type="primary" onClick={() => this.onSubmit()} style={{ marginRight: '24px' }} >新增</Button>
+                        <Button type="primary" onClick={() => this.onSubmit()} style={{ marginRight: '24px' }} >保存</Button>
                         <Button type="default" onClick={() => this.cancel()}>取消</Button>
                     </FormItem>
                 </Form>

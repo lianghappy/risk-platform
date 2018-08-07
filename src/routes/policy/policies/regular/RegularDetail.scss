@@ -6,3 +6,8 @@
     color:rgba(0,0,0,0.85);
     font-size:16px;
 }
+.forms{
+    :global(.ant-form-item){
+        margin-bottom: 8px;
+    }
+}

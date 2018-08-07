@@ -61,7 +61,7 @@ export default class RegularModal extends React.PureComponent {
                     categoryId: item.categoryId,
                     categoryName: item.categoryName,
                     ruleId: item.ruleId,
-                    ruleName: item.ruleName,
+                    name: item.ruleName,
                     code: item.code,
                     judgeKey: item.judgeKey,
                     channel: item.channel,

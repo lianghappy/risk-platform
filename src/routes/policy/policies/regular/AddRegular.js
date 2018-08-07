@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Input, Button } from 'antd';
+import { Layout, Form, Input, Button, message } from 'antd';
 import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
@@ -8,7 +8,7 @@ import styles from './addRegular.scss';
 import SingleInput from './SingleInput';
 
 const FormItem = Form.Item;
-let uuid = 1;
+let uuid = 0;
 @Form.create()
 @connect()
 export default class AddRegular extends React.PureComponent {
@@ -17,6 +17,7 @@ export default class AddRegular extends React.PureComponent {
     }
 
     componentDidMount() {
+        console.log('重新渲染');
         this.props.dispatch({ type: 'commonRegular/queryCategory' });
         this.props.dispatch({
             type: 'commonRegular/queryCompareSymbol',
@@ -38,6 +39,10 @@ export default class AddRegular extends React.PureComponent {
             dispatch,
         } = this.props;
         form.validateFields((errors, values) => {
+            if (!values.reason) {
+                message.error('请添加规则');
+                return;
+            }
             if (!errors) {
                 const { datas } = this.state;
                 datas.forEach(item => {
@@ -96,11 +101,22 @@ export default class AddRegular extends React.PureComponent {
 
     modalOk = (data, callback) => {
         callback();
-        console.log(data);
-        /* const { datas } = this.state;
+        const values = this.state.datas;
+        const val = [];
         data.categoryAndRuleList.forEach(item => {
-            datas.push(item);
+            val.push(item.id);
+        });
+        values.forEach(item => {
+            if (!val.includes(item.id)) {
+                data.categoryAndRuleList.push(item);
+            }
+        });
+        /*  data.categoryAndRuleList.forEach(item => {
+            if (!val.includes(item.id)) {
+                values.push(item);
+            }
         }); */
+
         this.setState({
             datas: data.categoryAndRuleList,
         });
@@ -140,7 +156,7 @@ export default class AddRegular extends React.PureComponent {
                         label="规则字段"
                         {...formItemLayouts}
                     >
-                        <span style={{ marginRight: '20px' }}>{k.ruleName}</span>
+                        <span style={{ marginRight: '20px' }}>{k.name}</span>
                         <a role="button" tabIndex="-1" onClick={() => this.remove(k)}>删除</a>
                     </FormItem>
                     <FormItem

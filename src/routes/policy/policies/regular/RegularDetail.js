@@ -4,6 +4,7 @@ import {
     Form,
     Button,
     Table,
+    Tooltip,
 } from 'antd';
 import { connect } from 'dva';
 import styles from './RegularDetail.scss';
@@ -51,14 +52,21 @@ export default class RegularDetail extends React.PureComponent {
         const columns = [
             {
                 title: '规则字段',
-                dataIndex: 'categoryName',
-                key: 'categoryName',
+                dataIndex: 'name',
+                key: 'name',
                 width: 100,
             }, {
                 title: '规则配置说明',
                 dataIndex: 'indexdescribe',
                 key: 'indexdescribe',
                 width: 100,
+                render: (text, records) => (
+                    <Tooltip title={records.indexdescribe}>
+                        <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                            {records.indexdescribe}
+                        </span>
+                    </Tooltip>
+                )
             }, {
                 title: '判断符号',
                 dataIndex: 'compareSymbol',
@@ -122,6 +130,7 @@ export default class RegularDetail extends React.PureComponent {
                                 columns={columns}
                                 dataSource={dataSource}
                                 pagination={false}
+                                scroll={{ y: 300 }}
                             />
                         </FormItem>
                     </Form>

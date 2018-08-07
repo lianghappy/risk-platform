@@ -279,6 +279,17 @@ export default class Regular extends React.PureComponent {
         const strangesId = this.props.match.params.strageId;
         this.props.history.push(setPath(`/editRegulars/${base64.encode(stageId)}/${strangesId}`));
     }
+    cloneRegular = (stageId) => {
+        const id = this.state.selectedRowKeys[0];
+        sessionStorage.removeItem('regular');
+        const regular = {
+            id,
+            type: 'clone',
+        };
+        sessionStorage.setItem('regular', JSON.stringify(regular));
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/editRegulars/${base64.encode(stageId)}/${strangesId}`));
+    }
     query(payload) {
         this.props.dispatch({
             type: 'regularPly/query',
@@ -426,7 +437,11 @@ export default class Regular extends React.PureComponent {
                     }
                     {
                         roles('R_policy_ply_stg_rl_clone') && Number(status) === 0 &&
-                        <Button type="primary" disabled={selectedRowKeys.length === 0}>
+                        <Button
+                            type="primary"
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={() => this.cloneRegular(stageId)}
+                        >
                             克隆规则
                         </Button>
                     }

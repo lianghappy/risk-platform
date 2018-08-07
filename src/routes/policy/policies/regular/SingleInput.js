@@ -21,6 +21,11 @@ export default class SingleInput extends React.Component {
         };
     }
 
+    componentDidMount() {
+        const value = this.props.value;
+        this.triggerChange(value);
+    }
+
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
             const value = nextProps.value;
@@ -28,10 +33,11 @@ export default class SingleInput extends React.Component {
         }
     }
 
-    onChange = (value) => {
+    onChange = (compareSymbol) => {
         this.setState({
-            compareSymbol: value,
+            compareSymbol,
         });
+        this.triggerChange({ compareSymbol });
     }
 
     handleNumberChange(e) {
