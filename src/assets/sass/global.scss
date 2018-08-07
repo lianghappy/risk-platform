@@ -74,3 +74,11 @@ table {
 :global(.ant-tooltip-inner){
     word-break: break-all;
 }
+:global(.toastText){
+    color: red;
+    font-size: 13px;
+    float: right;
+    margin-right: 12px;
+    /* text-align: right; */
+    margin-top: 12px;
+}
