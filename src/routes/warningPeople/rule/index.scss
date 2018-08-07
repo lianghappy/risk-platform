@@ -27,3 +27,13 @@
     margin-top: 67px;
     margin-left: 200px;
 }
+.dynamic_delete_button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    -webkit-transition: all .3s;
+    -o-transition: all .3s;
+    transition: all .3s;
+}

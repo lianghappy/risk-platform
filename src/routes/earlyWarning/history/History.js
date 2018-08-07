@@ -277,6 +277,30 @@ export default class History extends React.PureComponent {
                 width: 100,
             },
             {
+                title: ' 商品类型',
+                dataIndex: 'goodsType',
+                key: 'goodsType',
+                width: 100,
+            },
+            {
+                title: '业务流程',
+                dataIndex: 'businessFlow',
+                key: 'businessFlow',
+                width: 100,
+            },
+            {
+                title: '下单终端',
+                dataIndex: 'sceneType',
+                key: 'sceneType',
+                width: 100,
+            },
+            {
+                title: '授权认证类型',
+                dataIndex: 'liveType',
+                key: 'liveType',
+                width: 100,
+            },
+            {
                 title: '通知对象',
                 dataIndex: 'informTarget',
                 key: 'informTarget',

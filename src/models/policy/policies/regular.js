@@ -8,7 +8,7 @@ import { filterPath, setPath } from 'utils/path';
 export default {
     namespace: 'regularPly',
     state: {
-        list: {}, // 规则列表
+        list: [], // 规则列表
         pageNum: 1,
         pageSize: PAGE_SIZE,
         categories: [], // 规则类型
@@ -18,28 +18,28 @@ export default {
         status: '',
         compareSymbol: [],
         getUnCategory: [],
-        typeStages: '',
         ruleView: {},
+        normList: [],
     },
     effects: {
         * query({ payload }, { call, put }) {
-            const response = yield call(post, API.regular, payload);
+            const response = yield call(post, API.regularList, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
-                    typeStages: response.stage.type,
                 },
             });
         },
         * ruleView({ payload }, { call, put }) {
-            const response = yield call(post, API.ruleView, payload);
+            const response = yield call(post, API.rulesView, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
                     ruleView: response,
+                    normList: response.normList,
                 },
             });
         },
@@ -67,7 +67,7 @@ export default {
         },
         * del({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.regularDel, data);
+            yield call(post, API.regularDels, data);
             yield call(resolve);
         },
         * add({ payload }, { call }) {

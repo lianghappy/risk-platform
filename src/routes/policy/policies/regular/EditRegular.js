@@ -9,11 +9,17 @@ import SingleInput from './SingleInput';
 
 const FormItem = Form.Item;
 let uuid = 1;
+const mapStateToProps = (state) => {
+    return {
+        normList: state.editRegularPly.normList,
+        ruleView: state.editRegularPly.ruleView,
+    };
+};
 @Form.create()
-@connect()
-export default class AddRegular extends React.PureComponent {
+@connect(mapStateToProps)
+export default class EditRegular extends React.PureComponent {
     state={
-        datas: [],
+        datas: this.props.normList || [],
     }
 
     componentDidMount() {
@@ -30,6 +36,15 @@ export default class AddRegular extends React.PureComponent {
                 type: 'rule',
             },
         });
+        const id = JSON.parse(sessionStorage.regular).id;
+        this.props.dispatch({
+            type: 'editRegularPly/ruleView',
+            payload: {
+                id,
+            }
+        }).then(() => {
+            this.init();
+        });
     }
 
     onSubmit = () => {
@@ -40,6 +55,7 @@ export default class AddRegular extends React.PureComponent {
         form.validateFields((errors, values) => {
             if (!errors) {
                 const { datas } = this.state;
+                const ids = JSON.parse(sessionStorage.regular).id;
                 datas.forEach(item => {
                     if ((Object.keys(values.reason)).includes(item.id)) {
                         item.compareSymbol = values.reason[item.id].compareSymbol;
@@ -49,12 +65,17 @@ export default class AddRegular extends React.PureComponent {
                 values.normList = values.keys;
                 delete values.keys;
                 values.stageId = base64.decode(this.props.match.params.id);
+                let url = 'editRegularPly/update';
+                if (!(JSON.parse(sessionStorage.regular).type === 'edit')) {
+                    url = 'editRegularPly/clone';
+                }
                 new Promise((resolve) => {
                     dispatch({
-                        type: 'addRegularPly/add',
+                        type: url,
                         payload: {
                             data: {
                                 ...values,
+                                id: ids,
                             },
                             resolve,
                         }
@@ -66,6 +87,15 @@ export default class AddRegular extends React.PureComponent {
                 });
             }
         });
+    }
+
+    init = () => {
+        const { normList } = this.props;
+        if (normList.length > 0) {
+            this.setState({
+                datas: normList
+            });
+        }
     }
 
     remove(k) {
@@ -128,8 +158,11 @@ export default class AddRegular extends React.PureComponent {
             wrapperCol: { span: 8 },
         };
         const stageId = base64.decode(this.props.match.params.id);
-        const { getFieldDecorator, getFieldValue } = this.props.form;
-        console.log(this.state.datas);
+        const {
+            getFieldDecorator,
+            getFieldValue,
+        } = this.props.form;
+        const { ruleView } = this.props;
 
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
@@ -171,6 +204,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('name', {
+                                initialValue: ruleView.name ? ruleView.name : '',
                                 rule: [
                                     {
                                         required: true,
@@ -193,6 +227,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('score', {
+                                initialValue: ruleView.score ? ruleView.score : '',
                                 rule: [
                                     {
                                         required: true,
@@ -210,6 +245,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('weight', {
+                                initialValue: ruleView.weight ? ruleView.weight : '',
                                 rule: [
                                     {
                                         required: true,

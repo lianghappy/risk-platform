@@ -5,9 +5,7 @@ import {
     Table,
     Button,
     Input,
-    Select,
     Popconfirm,
-    Cascader,
     message,
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -15,10 +13,8 @@ import base64 from 'utils/base64';
 import Pagination from 'components/Pagination/Pagination';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
-import treeConvert from 'utils/treeConvert';
 import { setPath } from 'utils/path';
 // import RegularModal from './RegularModal';
-import RegularEdit from './RegularEdit';
 import RegularDetail from './RegularDetail';
 
 @connect((state) => ({
@@ -29,7 +25,6 @@ import RegularDetail from './RegularDetail';
     channels: state.regularPly.channels,
     categories: state.regularPly.categories,
     status: state.regularPly.status,
-    typeStages: state.regularPly.typeStages,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -47,7 +42,6 @@ export default class Regular extends React.PureComponent {
     state = {
         stageId: base64.decode(this.props.match.params.id),
         // ruleName: this.props.history.location.state.name,
-        selectedRow: {},
         selectedRowKeys: [],
     };
 
@@ -163,7 +157,7 @@ export default class Regular extends React.PureComponent {
                 id === this.state.selectedRowKeys[0]
             ) {
                 this.setState({
-                    selectedRow: {},
+                    // selectedRow: {},
                     selectedRowKeys: [],
                 });
             }
@@ -176,11 +170,6 @@ export default class Regular extends React.PureComponent {
         });
     };
 
-    onSelect = (record) => {
-        this.setState({
-            selectedRow: record,
-        });
-    };
 
     editOk = (type, data, callback) => {
         const {
@@ -279,6 +268,17 @@ export default class Regular extends React.PureComponent {
         const strangesId = this.props.match.params.strageId;
         this.props.history.push(setPath(`/addRegulars/${base64.encode(stageId)}/${strangesId}`));
     }
+
+    editRegular = (stageId, id) => {
+        sessionStorage.removeItem('regular');
+        const regular = {
+            id,
+            type: 'edit',
+        };
+        sessionStorage.setItem('regular', JSON.stringify(regular));
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/editRegulars/${base64.encode(stageId)}/${strangesId}`));
+    }
     query(payload) {
         this.props.dispatch({
             type: 'regularPly/query',
@@ -292,24 +292,15 @@ export default class Regular extends React.PureComponent {
         const {
             form,
             loading,
-            list,
+            list: dataSource,
             pageSize,
             pageNum,
-            categories,
-            channels,
             status,
-            typeStages,
         } = this.props;
-        const categoryList = treeConvert({
-            pId: 'pid',
-            tId: 'value',
-            tName: 'label',
-        }, categories);
-        const dataSource = list.normList !== undefined ? list.normList : [];
+        // const dataSource = list.normList !== undefined ? list.normList : [];
         const { getFieldDecorator } = form;
         const {
             selectedRowKeys,
-            selectedRow,
             stageId,
             // ruleName,
         } = this.state;
@@ -325,30 +316,14 @@ export default class Regular extends React.PureComponent {
             key: 'name',
             width: 100,
         }, {
-            title: '规则类型',
-            dataIndex: 'categoryName',
-            key: 'categoryName',
+            title: '分值',
+            dataIndex: 'score',
+            key: 'score',
             width: 100,
         }, {
-            title: '风险代码',
-            dataIndex: 'code',
-            key: 'code',
-            width: 100,
-        }, {
-            title: '规则来源',
-            dataIndex: 'channel',
-            key: 'channel',
-            width: 100,
-            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
-        }, {
-            title: '判断符号',
-            dataIndex: 'compareSymbol',
-            key: 'compareSymbol',
-            width: 100,
-        }, {
-            title: '判定阀值',
-            dataIndex: 'judgeValue',
-            key: 'judgeValue',
+            title: '权重',
+            dataIndex: 'weight',
+            key: 'weight',
             width: 100,
         }, {
             title: '操作',
@@ -358,22 +333,18 @@ export default class Regular extends React.PureComponent {
                 <div>
                     {
                         roles('R_policy_ply_stg_rl_edit') && Number(status) === 0 &&
-                    <RegularEdit
-                        type="update"
-                        stageType={typeStages}
-                        record={record}
-                        disabled={false}
-                        onOk={this.editOk}
-                    >
-                        <a style={{ marginRight: 5 }}>编辑</a>
-                    </RegularEdit>
+                        <a
+                            style={{ marginRight: 5 }}
+                            tabIndex="-1"
+                            role="button"
+                            onClick={() => this.editRegular(stageId, record.id)}
+                        >编辑
+                        </a>
                     }
                     {
                         roles('R_policy_ply_stg_rl_dtl') &&
                     <RegularDetail
-                        record={record}
-                        type={typeStages}
-                        onOk={this.modalOk}
+                        id={record.id}
                     >
                         <a style={{ marginRight: 5 }}>详情</a>
                     </RegularDetail>
@@ -390,20 +361,6 @@ export default class Regular extends React.PureComponent {
                 </div>
             ),
         }];
-
-        if (typeStages === '2') {
-            columns.splice(columns.length - 2, 0, {
-                title: '权重',
-                dataIndex: 'weight',
-                key: 'weight',
-                width: 100,
-            }, {
-                title: '分值',
-                dataIndex: 'score',
-                key: 'score',
-                width: 100,
-            });
-        }
 
         const rowSelection = {
             type: 'radio',
@@ -422,37 +379,6 @@ export default class Regular extends React.PureComponent {
                     <Form.Item label="规则编号">
                         {
                             getFieldDecorator('ruleId')(<Input />)
-                        }
-                    </Form.Item>
-                    <Form.Item label="规则类型">
-                        {
-                            getFieldDecorator('categoryId')(<Cascader
-                                options={categoryList}
-                                placeholder=""
-                                changeOnSelect
-                                style={{ width: '270px' }}
-                            />)
-                        }
-                    </Form.Item>
-                    <Form.Item label="规则来源">
-                        {
-                            getFieldDecorator('channel')(
-                                <Select allowClear>
-                                    {channels.map(item => (
-                                        <Select.Option
-                                            value={item.code}
-                                            key={item.code}
-                                        >
-                                            {item.name}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            )
-                        }
-                    </Form.Item>
-                    <Form.Item label="风险代码">
-                        {
-                            getFieldDecorator('code')(<Input />)
                         }
                     </Form.Item>
                     <Form.Item label="规则名称">
@@ -500,17 +426,9 @@ export default class Regular extends React.PureComponent {
                     }
                     {
                         roles('R_policy_ply_stg_rl_clone') && Number(status) === 0 &&
-                    <RegularEdit
-                        type="clone"
-                        stageType={typeStages}
-                        record={selectedRow}
-                        disabled={selectedRowKeys.length === 0}
-                        onOk={this.editOk}
-                    >
                         <Button type="primary" disabled={selectedRowKeys.length === 0}>
                             克隆规则
                         </Button>
-                    </RegularEdit>
                     }
                 </div>
                 <Table

@@ -209,7 +209,6 @@ export default class PolicyModal extends React.PureComponent {
                     <Form.Item
                         {...formItemLayout}
                         label="策略名称"
-                        key={k}
                     >
                         {
                             getFieldDecorator(`strategyName[${index}]`, {
@@ -234,7 +233,6 @@ export default class PolicyModal extends React.PureComponent {
                     <Form.Item
                         {...formItemLayout}
                         label="策略占比"
-                        key={k}
                     >
                         {
                             getFieldDecorator(`ratio[${index}]`, {

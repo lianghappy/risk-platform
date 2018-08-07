@@ -347,6 +347,17 @@ function RouterConfig({ history, app }) {
         component: () => import('routes/policy/policies/regular/AddRegular'),
         models: () => [
             import('models/policy/policies/AddRegular'),
+            import('models/policy/policies/commonRegular'),
+
+        ]
+    });
+    // 编辑或者克隆规则
+    const EditRegulars = dynamic({
+        app,
+        component: () => import('routes/policy/policies/regular/EditRegular'),
+        models: () => [
+            import('models/policy/policies/EditRegular'),
+            import('models/policy/policies/commonRegular'),
         ]
     });
     return (
@@ -400,6 +411,7 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/grayPolicy')} exact component={grayPolicy} />
                     <PrivateRoute path={setPath('/statistical')} exact component={Statistical} />
                     <PrivateRoute path={setPath('/addRegulars/:id/:stageId')} exact component={addRegulars} />
+                    <PrivateRoute path={setPath('/editRegulars/:id/:stageId')} exact component={EditRegulars} />
                 </Main>
             </Switch>
         </Router>

@@ -162,6 +162,7 @@ export default class WarningRule extends React.PureComponent {
           });
           this.props.history.push(setPath(`/editWarningRule/${base64.encode(id)}`));
       }
+
     changeTime = (time) => {
         const times = [
             { name: '1分钟', key: '1', type: 'minutes' },

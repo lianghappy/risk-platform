@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from 'antd';
 
 const Option = Select.Option;
-export default class ReasnPrice extends React.Component {
+export default class ConditionInput extends React.Component {
     constructor(props) {
         super(props);
 

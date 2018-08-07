@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
+import { Layout, Form, Input, Transfer, Select, Button, message, Icon } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import { setPath } from 'utils/path';
+import ConditionInput from './conditionInput';
 import styles from './index.scss';
 
 const Option = Select.Option;
+let uuid = 1;
 const mapStateToProps = (state) => {
     return {
         getPeopleList: state.addWarningRule.getPeopleList,
@@ -96,6 +98,33 @@ export default class AddRule extends React.PureComponent {
             }
         });
     }
+
+    remove(k) {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        // We need at least one passenger
+        if (keys.length === 1) {
+            return;
+        }
+
+        // can use data-binding to set
+        form.setFieldsValue({
+            keys: keys.filter(key => key !== k),
+        });
+    }
+
+    add() {
+        const { form } = this.props;
+        // can use data-binding to get
+        const keys = form.getFieldValue('keys');
+        const nextKeys = keys.concat(uuid);
+        uuid++;
+        form.setFieldsValue({
+            keys: nextKeys,
+        });
+    }
+
     cancel = () => {
         window.history.back(-1);
     }
@@ -112,12 +141,19 @@ export default class AddRule extends React.PureComponent {
             callback();
         }
     }
+
+    checkChannel(rule, value, callback) {
+        if (value && value.price && value.reason) {
+            callback();
+        } else {
+            callback('请输入赔付原因和金额!');
+        }
+    }
     render() {
         const {
             strategys,
             sleuthTargets,
         } = this.props;
-        const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
                 xs: { span: 24 },
@@ -128,6 +164,41 @@ export default class AddRule extends React.PureComponent {
                 sm: { span: 19 },
             },
         };
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: { span: 24, offset: 0 },
+                sm: { span: 20, offset: 4 },
+            },
+        };
+        const { getFieldDecorator, getFieldValue } = this.props.form;
+        getFieldDecorator('keys', { initialValue: [0] });
+        const keys = getFieldValue('keys');
+        const formItems = keys.map((k) => {
+            return (
+                <Form.Item
+                    required={false}
+                    key={k}
+                    {...formItemLayoutWithOutLabel}
+                >
+                    <div style={{ display: 'flex' }}>
+                        {getFieldDecorator(`condition[${k}]`, {
+                            validateTrigger: ['onChange'],
+                            rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
+                        })(
+                            <ConditionInput />,
+                        )}
+                        {keys.length > 1 ? (
+                            <Icon
+                                className={styles.dynamic_delete_button}
+                                type="minus-circle-o"
+                                disabled={keys.length === 1}
+                                onClick={() => this.remove(k)}
+                            />
+                        ) : null}
+                    </div>
+                </Form.Item>
+            );
+        });
         const times = [
             { name: '1分钟', key: '1', type: 'minutes' },
             { name: '5分钟', key: '5', type: 'minutes' },
@@ -198,6 +269,13 @@ export default class AddRule extends React.PureComponent {
                             )
                         }
                     </Form.Item>
+                    <Form.Item
+                        label="判定条件"
+                        {...formItemLayout}
+                    >
+                        <Icon type="plus-circle-o" onClick={() => this.add()} />
+                    </Form.Item>
+                    {formItems}
                     <Form.Item>
                         <span className={styles.headers}>2、设置报警规则</span>
                     </Form.Item>

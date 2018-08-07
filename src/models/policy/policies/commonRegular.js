@@ -1,24 +1,20 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
-import base64 from 'utils/base64';
-// import treeConvert from 'utils/treeConvert';
-import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'addRegularPly',
+    namespace: 'commonRegular',
     state: {
-        list: {}, // 规则列表
         pageNum: 1,
         pageSize: PAGE_SIZE,
         categories: [], // 规则类型
         channels: [], // 规则来源
         regulars: [],
         _pageNum: 1,
-        status: '',
         compareSymbol: [],
         getUnCategory: [],
         ruleView: {},
+        normList: [],
     },
     effects: {
         * query({ payload }, { call, put }) {
@@ -29,25 +25,17 @@ export default {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
+                    typeStages: response.stage.type,
                 },
             });
         },
         * ruleView({ payload }, { call, put }) {
-            const response = yield call(post, API.ruleView, payload);
+            const response = yield call(post, API.rulesView, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
                     ruleView: response,
-                },
-            });
-        },
-        * getPolicyDetail({ payload }, { call, put }) {
-            const { data } = payload;
-            const response = yield call(post, API.getPolicyDetail, payload, data);
-            yield put({
-                type: 'querySuc',
-                payload: {
-                    status: response.isEnable,
+                    normList: response.normList,
                 },
             });
         },
@@ -62,11 +50,6 @@ export default {
                     pageSize: PAGE_SIZE,
                 },
             });
-        },
-        * add({ payload }, { call }) {
-            const { data, resolve } = payload;
-            yield call(post, API.AddRegulars, data);
-            yield call(resolve);
         },
         // 规则类型
         * queryCategory(action, { call, put }) {
@@ -117,35 +100,6 @@ export default {
     reducers: {
         querySuc(state, { payload }) {
             return { ...state, ...payload };
-        },
-    },
-    subscriptions: {
-        setup({ dispatch, history }) {
-            return history.listen(({ pathname }) => {
-                const path = filterPath(pathname).split('/');
-                if (path[1] === 'addRegulars') {
-                    const id = base64.decode(path[2]);
-                    dispatch({
-                        type: 'common/setBreadcrumb',
-                        payload: [{ name: '策略管理', link: setPath('/policy') },
-                            { name: '阶段管理', link: setPath(`/strategy/${path[3]}`) },
-                            { name: '规则管理', link: setPath(`/regular/${path[2]}/${path[3]}`) },
-                            { name: '新增规则管理' }],
-                    });
-                    dispatch({
-                        type: 'query',
-                        payload: {
-                            stageId: id,
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
-                    });
-                    dispatch({
-                        type: 'common/setSide',
-                        flag: false,
-                    });
-                }
-            });
         },
     },
 };

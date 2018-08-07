@@ -1,12 +1,12 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
-import base64 from 'utils/base64';
+// import base64 from 'utils/base64';
 // import treeConvert from 'utils/treeConvert';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'addRegularPly',
+    namespace: 'editRegularPly',
     state: {
         list: {}, // 规则列表
         pageNum: 1,
@@ -18,6 +18,7 @@ export default {
         status: '',
         compareSymbol: [],
         getUnCategory: [],
+        typeStages: '',
         ruleView: {},
     },
     effects: {
@@ -29,15 +30,17 @@ export default {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
+                    typeStages: response.stage.type,
                 },
             });
         },
         * ruleView({ payload }, { call, put }) {
-            const response = yield call(post, API.ruleView, payload);
+            const response = yield call(post, API.rulesView, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
                     ruleView: response,
+                    normList: response.normList,
                 },
             });
         },
@@ -63,9 +66,16 @@ export default {
                 },
             });
         },
-        * add({ payload }, { call }) {
+        * update({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.AddRegulars, data);
+            yield call(post, API.updateRegulars, data);
+            console.log('111');
+            yield call(resolve);
+        },
+        * clone({ payload }, { call }) {
+            const { data, resolve } = payload;
+            yield call(post, API.cloneRegulars, data);
+            console.log('111');
             yield call(resolve);
         },
         // 规则类型
@@ -123,8 +133,8 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
-                if (path[1] === 'addRegulars') {
-                    const id = base64.decode(path[2]);
+                if (path[1] === 'editRegulars') {
+                    // const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
                         payload: [{ name: '策略管理', link: setPath('/policy') },
@@ -132,14 +142,13 @@ export default {
                             { name: '规则管理', link: setPath(`/regular/${path[2]}/${path[3]}`) },
                             { name: '新增规则管理' }],
                     });
+                    /*                   const id = sessionStorage.regular ? JSON.parse(sessionStorage.regular).id : '';
                     dispatch({
-                        type: 'query',
+                        type: 'ruleView',
                         payload: {
-                            stageId: id,
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
-                    });
+                            id,
+                        }
+                    }); */
                     dispatch({
                         type: 'common/setSide',
                         flag: false,

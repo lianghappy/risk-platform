@@ -20,12 +20,12 @@ import styles from './RegularModal.scss';
 
 const TreeNode = Tree.TreeNode;
 @connect((state) => ({
-    channels: state.addRegularPly.channels,
-    categories: state.addRegularPly.categories,
-    regulars: state.addRegularPly.regulars,
-    pageNum: state.addRegularPly._pageNum,
-    getUnCategory: state.addRegularPly.getUnCategory,
-    loading: state.loading.effects['addRegularPly/queryRegular'] || false,
+    channels: state.commonRegular.channels,
+    categories: state.commonRegular.categories,
+    regulars: state.commonRegular.regulars,
+    pageNum: state.commonRegular._pageNum,
+    getUnCategory: state.commonRegular.getUnCategory,
+    loading: state.loading.effects['commonRegular/queryRegular'] || false,
     onSubmiting: state.loading.effects['addRegularPly/add'] || false,
 }))
 @Form.create()
@@ -247,13 +247,18 @@ export default class RegularModal extends React.PureComponent {
 
     showModelHandler = () => {
         this.props.dispatch({
-            type: 'addRegularPly/queryRegular',
+            type: 'commonRegular/queryRegular',
             payload: {
                 pageNum: 1,
                 pageSize: 5,
             },
         });
-
+        this.props.dispatch({
+            type: 'commonRegular/queryChannel',
+            payload: {
+                type: 'rule',
+            },
+        });
         this.setState({
             visible: true,
             selectedRows: [],
@@ -265,13 +270,13 @@ export default class RegularModal extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'addRegularPly/queryRegular',
+            type: 'commonRegular/queryRegular',
             payload,
         });
     }
     unQuery(payload) {
         this.props.dispatch({
-            type: 'addRegularPly/getUnCategory',
+            type: 'commonRegular/getUnCategory',
             payload,
         });
     }

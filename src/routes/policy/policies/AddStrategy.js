@@ -6,6 +6,8 @@ import {
     Button,
     Input,
     Select,
+    Tooltip,
+    Icon,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -203,7 +205,14 @@ class AddStrategy extends React.PureComponent {
                         }
                         <Form.Item
                             {...formItemLayout}
-                            label="resultSkip"
+                            label={(
+                                <span>
+                                    skip&nbsp;
+                                    <Tooltip title="What do you want others to call you?">
+                                        <Icon type="question-circle-o" />
+                                    </Tooltip>
+                                </span>
+                            )}
                         >
                             {
                                 getFieldDecorator('resultSkip', {

@@ -138,6 +138,12 @@ const api = {
     regularClone: `${API}/api/risk/manager/policy/norm/clone/v1`,
     // 新增规则组
     AddRegulars: `${API}/api/risk/manager/policy/normGroup/create/v1`,
+    // list规则
+    regularList: `${API}/api/risk/manager/policy/normGroup/list/v1`,
+    rulesView: `${API}/api/risk/manager/policy/normGroup/get/v1`,
+    regularDels: `${API}/api/risk/manager/policy/normGroup/delete/v1`,
+    updateRegulars: `${API}/api/risk/manager/policy/normGroup/update/v1`,
+    cloneRegulars: `${API}/api/risk/manager/policy/normGroup/clone/v1`,
 
 
     // 黑白名单

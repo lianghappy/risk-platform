@@ -1,14 +1,22 @@
 import React from 'react';
 import { Input, Select } from 'antd';
+import { connect } from 'dva';
 
 const Option = Select.Option;
-export default class ReasnPrice extends React.Component {
+const mapStateToProps = (state) => {
+    return {
+        compareSymbol: state.commonRegular.compareSymbol
+    };
+};
+@connect(mapStateToProps)
+export default class SingleInput extends React.Component {
     constructor(props) {
         super(props);
 
         const value = this.props.value || {};
+
         this.state = {
-            compareSymbol: value.compareSymbol || '=',
+            compareSymbol: value.compareSymbol || '',
             judgeValue: value.judgeValue || '',
         };
     }
@@ -18,6 +26,12 @@ export default class ReasnPrice extends React.Component {
             const value = nextProps.value;
             this.setState(value);
         }
+    }
+
+    onChange = (value) => {
+        this.setState({
+            compareSymbol: value,
+        });
     }
 
     handleNumberChange(e) {
@@ -43,13 +57,21 @@ export default class ReasnPrice extends React.Component {
     }
 
     render() {
+        const { compareSymbol, value } = this.props;
+        console.log(value);
+
         return (
             <div style={{ display: 'flex' }}>
                 <Select
                     style={{ width: '154px', marginRight: '20px' }}
                     value={this.state.compareSymbol}
+                    onChange={this.onChange}
                 >
-                    <Option value="=">=</Option>
+                    {
+                        compareSymbol.map((item, index) => {
+                            return (<Option value={item.code} key={index}>{item.name}</Option>);
+                        })
+                    }
                 </Select>
                 <Input
                     type="text"
