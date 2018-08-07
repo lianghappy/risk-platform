@@ -266,6 +266,7 @@ export default class EditRule extends React.PureComponent {
                 >
                     <div style={{ display: 'flex' }}>
                         {getFieldDecorator(`judgeConditionList[${k}]`, {
+                            initialValue: k,
                             validateTrigger: ['onChange'],
                             rules: [{ required: true, validator: (rule, values, callback) => this.checkChannel(rule, values, callback) }],
                         })(

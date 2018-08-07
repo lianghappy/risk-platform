@@ -37,6 +37,11 @@ export default class ConditionInput extends React.Component {
         };
     }
 
+    componentDidMount() {
+        const value = this.props.value;
+        this.triggerChange(value);
+    }
+
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
             const value = nextProps.value;

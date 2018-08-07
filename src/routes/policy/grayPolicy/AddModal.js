@@ -11,7 +11,7 @@ import {
 import { connect } from 'dva';
 import styles from './index.scss';
 
-let uuid = 0;
+let uuid = 1;
 // const FormItem = Form.Item;
 
 // function hasErrors(fieldsError) {
@@ -45,7 +45,7 @@ export default class PolicyModal extends React.PureComponent {
         // data: [],
         value: '',
         details: {},
-        grayDetails: [],
+        grayDetails: [0],
     };
     onSearch = (value) => {
         const {
@@ -198,7 +198,7 @@ export default class PolicyModal extends React.PureComponent {
         } = forms;
         const { details, grayDetails } = this.state;
         const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
-        getFieldDecorator('keys', { initialValue: grayDetails || [] });
+        getFieldDecorator('keys', { initialValue: grayDetails || [0] });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k, index) => {
             return (

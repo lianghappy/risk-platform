@@ -8,6 +8,17 @@
 }
 .forms{
     :global(.ant-form-item){
-        margin-bottom: 8px;
+        margin-bottom: 0px;
+    }
+    td{
+        padding: 8px 8px!important;
+        border-bottom: none!important;
+    }
+    th{
+        padding: 8px 8px!important;
+        border-bottom: none!important;
+    }
+    :global(.ant-table-content){
+        border: 1px solid #eaeaea;
     }
 }
