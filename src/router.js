@@ -329,6 +329,13 @@ function RouterConfig({ history, app }) {
                             <Redirect to={setPath('/IndexPage')} />
                         )}
                     />
+                    <Route
+                        path={setPath('/index.html')}
+                        exact
+                        render={() => (
+                            <Redirect to={setPath('/login')} />
+                        )}
+                    />
                     <PrivateRoute path={setPath('/IndexPage')} exact component={IndexPage} />
                     <PrivateRoute path={setPath('/account')} exact component={Account} />
                     <PrivateRoute path={setPath('/role')} exact component={Role} />
