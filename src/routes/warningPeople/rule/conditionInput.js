@@ -35,11 +35,25 @@ export default class ConditionInput extends React.Component {
             compareSymbol: value.compareSymbol || '',
             getAllType: [],
         };
+        console.log(this.props.value);
     }
 
     componentDidMount() {
-        const value = this.props.value;
-        this.triggerChange(value);
+        const { value } = this.props;
+        let type = value.judgeKey;
+        if (type === 'goodsType') {
+            type = 'productType';
+        } else if (type === 'businessFlow') {
+            type = 'businessProcess';
+        }
+        this.props.dispatch({
+            type: 'warnCommon/getAllType',
+            payload: {
+                type,
+            }
+        }).then(() => {
+            this.init();
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -84,6 +98,18 @@ export default class ConditionInput extends React.Component {
             compareSymbol,
         });
         this.triggerChange({ compareSymbol });
+    }
+
+    init = () => {
+        const { getAllType, value } = this.props;
+        this.setState({
+            getAllType,
+        });
+        this.triggerChange({
+            judgeKey: value.judgeKey,
+            judgeValue: value.judgeValue,
+            compareSymbol: value.compareSymbol
+        });
     }
 
     triggerChange(changedValue) {

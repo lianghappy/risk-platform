@@ -13,6 +13,7 @@ export default {
         sleuthTargets: [],
         strategys: [],
         record: {},
+        judgeConditionList: [],
     },
     effects: {
         * getSelect({ payload }, { call, put }) {
@@ -32,6 +33,7 @@ export default {
                 type: 'querySuc',
                 payload: {
                     record: response,
+                    judgeConditionList: response.judgeConditionList,
                 }
             });
             // yield call(resolve);

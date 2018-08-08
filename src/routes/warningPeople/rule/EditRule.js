@@ -26,6 +26,7 @@ const mapStateToProps = (state) => {
         sleuthTargets: state.EditWarningRule.sleuthTargets,
         strategys: state.EditWarningRule.strategys,
         record: state.EditWarningRule.record,
+        judgeConditionList: state.EditWarningRule.judgeConditionList,
     };
 };
 let uuid = 0;
@@ -38,6 +39,7 @@ export default class EditRule extends React.PureComponent {
     }
     state = {
         targetKeys: [],
+        judgeConditionList: [],
     }
     componentDidMount() {
         /*   const {
@@ -145,6 +147,7 @@ export default class EditRule extends React.PureComponent {
         const {
             record,
             getPeopleList,
+            judgeConditionList,
         } = this.props;
         const targetKeys = [];
         if (record.sleuthTeamNames && getPeopleList.length !== 0) {
@@ -158,7 +161,7 @@ export default class EditRule extends React.PureComponent {
                 });
             });
         }
-        this.setState({ targetKeys });
+        this.setState({ targetKeys, judgeConditionList });
     };
 
     remove(k) {
@@ -212,6 +215,13 @@ export default class EditRule extends React.PureComponent {
         });
         return TM;
     }
+    checkChannel(rule, value, callback) {
+        if (value && value.judgeKey && value.judgeValue && value.compareSymbol) {
+            callback();
+        } else {
+            callback('请输入赔付原因和金额!');
+        }
+    }
     render() {
         const {
             strategys,
@@ -254,18 +264,21 @@ export default class EditRule extends React.PureComponent {
                 sm: { span: 20, offset: 4 },
             },
         };
+        const { judgeConditionList } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        getFieldDecorator('keys', { initialValue: [] });
+        console.log(judgeConditionList);
+
+        getFieldDecorator('keys', { initialValue: judgeConditionList });
         const keys = getFieldValue('keys');
-        const formItems = keys.map((k) => {
+        const formItems = keys.map((k, index) => {
             return (
                 <Form.Item
                     required={false}
-                    key={k}
+                    key={index}
                     {...formItemLayoutWithOutLabel}
                 >
                     <div style={{ display: 'flex' }}>
-                        {getFieldDecorator(`judgeConditionList[${k}]`, {
+                        {getFieldDecorator(`judgeConditionList[${index}]`, {
                             initialValue: k,
                             validateTrigger: ['onChange'],
                             rules: [{ required: true, validator: (rule, values, callback) => this.checkChannel(rule, values, callback) }],

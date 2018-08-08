@@ -2,13 +2,13 @@
 
 // 环境变量
 export const ENV = jimiEnv;
-console.log(ENV);
+console.log(jimiEnv);
 
 // 版本号
 export const VERSION = version;
 // 秘钥
 export const PASSWORD = password;
-console.log(PASSWORD);
+console.log(password);
 // 表格每页条数
 export const PAGE_SIZE = 10;
 // 错误提示
