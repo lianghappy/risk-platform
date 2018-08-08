@@ -232,7 +232,7 @@ export default class EditRegular extends React.PureComponent {
                         {
                             getFieldDecorator('name', {
                                 initialValue: ruleView.name ? ruleView.name : '',
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
                                         message: '请输入规则名称'
@@ -255,7 +255,7 @@ export default class EditRegular extends React.PureComponent {
                         {
                             getFieldDecorator('score', {
                                 initialValue: ruleView.score ? ruleView.score : '',
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
                                         message: '请输入分值'
@@ -273,7 +273,7 @@ export default class EditRegular extends React.PureComponent {
                         {
                             getFieldDecorator('weight', {
                                 initialValue: ruleView.weight ? ruleView.weight : '',
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
                                         message: '请输入权重'

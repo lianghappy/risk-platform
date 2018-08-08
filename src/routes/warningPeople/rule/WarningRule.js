@@ -10,6 +10,21 @@ import Pagination from '../../../components/Pagination/Pagination';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
+const datas = [
+    {
+        name: '商品类型',
+        key: 'goodsType',
+    }, {
+        name: '业务流程',
+        key: 'businessFlow',
+    }, {
+        name: '下单终端',
+        key: 'sceneType',
+    }, {
+        name: '授权认证类型',
+        key: 'liveType',
+    },
+];
 // const Option = Select.Option;
 const mapStateToProps = (state) => {
     return {
@@ -200,6 +215,15 @@ export default class WarningRule extends React.PureComponent {
     add = () => {
         this.props.history.push(setPath('/addWarningRule'));
     }
+    checkKeys = (key) => {
+        let name = '';
+        datas.forEach(item => {
+            if (key === item.key) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         const appId = JSON.parse(sessionStorage.app).id;
@@ -239,10 +263,17 @@ export default class WarningRule extends React.PureComponent {
                 width: 100,
             },
             {
-                title: '策略名称',
+                title: '关联资源',
                 dataIndex: 'strategyName',
                 key: 'strategyName',
                 width: 100,
+                render: (text, record) => {
+                    const judgeConditionList = record.judgeConditionList &&
+                    record.judgeConditionList.map((item, index) => {
+                        return (<span key={index}>{this.checkKeys(item.judgeKey)}{item.compareSymbol}{item.judgeValue}</span>);
+                    });
+                    return (<span>{record.strategyName}{judgeConditionList}</span>);
+                }
             },
             {
                 title: '状态',

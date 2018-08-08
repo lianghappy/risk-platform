@@ -187,10 +187,10 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('name', {
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
-                                        message: '请输入规则名称'
+                                        message: '请输入规则名称',
                                     }
                                 ]
                             })(
@@ -209,7 +209,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('score', {
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
                                         message: '请输入分值'
@@ -226,7 +226,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('weight', {
-                                rule: [
+                                rules: [
                                     {
                                         required: true,
                                         message: '请输入权重'

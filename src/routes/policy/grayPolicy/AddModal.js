@@ -262,7 +262,7 @@ export default class PolicyModal extends React.PureComponent {
                     {children}
                 </span>
                 <Modal
-                    title="新增"
+                    title={this.props.type === 'edit' ? '编辑' : '新增'}
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                     onOk={this.handleSubmit}

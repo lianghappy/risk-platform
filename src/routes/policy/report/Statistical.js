@@ -253,22 +253,25 @@ export default class Statistical extends React.PureComponent {
                 </Form>
                 <div className={style.content}>
                     <div className={style.lefts} ref={(c) => { this.bar = c; }}></div>
-                    <div className={style.rights}>
-                        <p>规则命中排行</p>
-                        <ul>
-                            {
-                                this.props.list.map((item, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <span className={index < 3 && style.firsts}>{index + 1}</span>
-                                            <span className={style.next}>{item.normName}</span>
-                                            <span>{item.allHitNum}</span>
-                                        </li>
-                                    );
-                                })
-                            }
-                        </ul>
-                    </div>
+                    {
+                        this.props.list && this.props.list.length > 0 &&
+                        <div className={style.rights}>
+                            <p>规则命中排行</p>
+                            <ul>
+                                {
+                                    this.props.list.map((item, index) => {
+                                        return (
+                                            <li key={index}>
+                                                <span className={index < 3 && style.firsts}>{index + 1}</span>
+                                                <span className={style.next}>{item.normName}</span>
+                                                <span>{item.allHitNum}</span>
+                                            </li>
+                                        );
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    }
                 </div>
             </Layout>
         );

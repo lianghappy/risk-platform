@@ -67,7 +67,7 @@ export default {
         },
         * del({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.regularDels, data);
+            yield call(post, API.regularsDels, data);
             yield call(resolve);
         },
         * add({ payload }, { call }) {

@@ -146,7 +146,7 @@ export default class AddRule extends React.PureComponent {
         if (value && value.judgeKey && value.judgeValue && value.compareSymbol) {
             callback();
         } else {
-            callback('请输入赔付原因和金额!');
+            callback('请输入判定条件!');
         }
     }
     render() {

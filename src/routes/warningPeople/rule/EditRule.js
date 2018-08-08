@@ -219,7 +219,7 @@ export default class EditRule extends React.PureComponent {
         if (value && value.judgeKey && value.judgeValue && value.compareSymbol) {
             callback();
         } else {
-            callback('请输入赔付原因和金额!');
+            callback('请输入判定条件!');
         }
     }
     render() {
@@ -266,7 +266,6 @@ export default class EditRule extends React.PureComponent {
         };
         const { judgeConditionList } = this.state;
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        console.log(judgeConditionList);
 
         getFieldDecorator('keys', { initialValue: judgeConditionList });
         const keys = getFieldValue('keys');

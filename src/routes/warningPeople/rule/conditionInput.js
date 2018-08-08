@@ -35,25 +35,26 @@ export default class ConditionInput extends React.Component {
             compareSymbol: value.compareSymbol || '',
             getAllType: [],
         };
-        console.log(this.props.value);
     }
 
     componentDidMount() {
         const { value } = this.props;
-        let type = value.judgeKey;
-        if (type === 'goodsType') {
-            type = 'productType';
-        } else if (type === 'businessFlow') {
-            type = 'businessProcess';
-        }
-        this.props.dispatch({
-            type: 'warnCommon/getAllType',
-            payload: {
-                type,
+        if (value && value.judgeKey) {
+            let type = value.judgeKey;
+            if (type === 'goodsType') {
+                type = 'productType';
+            } else if (type === 'businessFlow') {
+                type = 'businessProcess';
             }
-        }).then(() => {
-            this.init();
-        });
+            this.props.dispatch({
+                type: 'warnCommon/getAllType',
+                payload: {
+                    type,
+                }
+            }).then(() => {
+                this.init();
+            });
+        }
     }
 
     componentWillReceiveProps(nextProps) {

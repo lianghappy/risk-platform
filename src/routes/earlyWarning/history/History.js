@@ -8,18 +8,21 @@ import styles from './index.scss';
 
 const { RangePicker } = DatePicker;
 const Option = Select.Option;
-const mapStateToProps = (state) => {
-    return {
-        list: state.history.list,
-        app: state.history.app,
-        product: state.history.product,
-        strategy: state.history.strategy,
-        data: state.history.data,
-        loading: state.loading.models.history,
-        pageNum: state.history.pageNum,
-        pageSize: state.history.pageSize,
-    };
-};
+const datas = [
+    {
+        name: '商品类型',
+        key: 'goodsType',
+    }, {
+        name: '业务流程',
+        key: 'businessFlow',
+    }, {
+        name: '下单终端',
+        key: 'sceneType',
+    }, {
+        name: '授权认证类型',
+        key: 'liveType',
+    },
+];
 const times = [
     {
         time: '1小时',
@@ -63,6 +66,18 @@ const times = [
         keys: [7, 'd'],
     }
 ];
+const mapStateToProps = (state) => {
+    return {
+        list: state.history.list,
+        app: state.history.app,
+        product: state.history.product,
+        strategy: state.history.strategy,
+        data: state.history.data,
+        loading: state.loading.models.history,
+        pageNum: state.history.pageNum,
+        pageSize: state.history.pageSize,
+    };
+};
 @connect(mapStateToProps)
 @Form.create()
 export default class History extends React.PureComponent {
@@ -216,6 +231,15 @@ export default class History extends React.PureComponent {
         });
         return counts;
     }
+    checkKeys = (key) => {
+        let name = '';
+        datas.forEach(item => {
+            if (key === item.key) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId });
@@ -259,10 +283,17 @@ export default class History extends React.PureComponent {
                 render: (text, record) => (<span>{record.duringTime && resultFormat(record.duringTime)}</span>)
             },
             {
-                title: '策略名称',
+                title: '关联规则',
                 dataIndex: 'strategyName',
                 key: 'strategyName',
                 width: 100,
+                render: (text, record) => {
+                    const judgeConditionList = record.judgeConditionList &&
+                    record.judgeConditionList.map((item, index) => {
+                        return (<span key={index}>{this.checkKeys(item.judgeKey)}{item.compareSymbol}{item.judgeValue}</span>);
+                    });
+                    return (<span>{record.strategyName}{judgeConditionList}</span>);
+                }
             },
             {
                 title: '应用名称',
@@ -275,32 +306,7 @@ export default class History extends React.PureComponent {
                 dataIndex: 'productName',
                 key: 'productName',
                 width: 100,
-            },
-            {
-                title: ' 商品类型',
-                dataIndex: 'goodsType',
-                key: 'goodsType',
-                width: 100,
-            },
-            {
-                title: '业务流程',
-                dataIndex: 'businessFlow',
-                key: 'businessFlow',
-                width: 100,
-            },
-            {
-                title: '下单终端',
-                dataIndex: 'sceneType',
-                key: 'sceneType',
-                width: 100,
-            },
-            {
-                title: '授权认证类型',
-                dataIndex: 'liveType',
-                key: 'liveType',
-                width: 100,
-            },
-            {
+            }, {
                 title: '通知对象',
                 dataIndex: 'informTarget',
                 key: 'informTarget',

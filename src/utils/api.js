@@ -144,6 +144,7 @@ const api = {
     regularDels: `${API}/api/risk/manager/policy/normGroup/delete/v1`,
     updateRegulars: `${API}/api/risk/manager/policy/normGroup/update/v1`,
     cloneRegulars: `${API}/api/risk/manager/policy/normGroup/clone/v1`,
+    regularsDels: `${API}/api/risk/manager/policy/normGroup/delete/v1`,
 
 
     // 黑白名单
