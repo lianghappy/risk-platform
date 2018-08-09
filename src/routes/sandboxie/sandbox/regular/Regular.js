@@ -16,8 +16,7 @@ import Pagination from 'components/Pagination/Pagination';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
 import treeConvert from 'utils/treeConvert';
-import RegularModal from './RegularModal';
-import RegularEdit from './RegularEdit';
+import { setPath } from 'utils/path';
 import RegularDetail from './RegularDetail';
 
 @connect((state) => ({
@@ -28,7 +27,6 @@ import RegularDetail from './RegularDetail';
     channels: state.regular.channels,
     categories: state.regular.categories,
     status: state.regular.status,
-    typeStages: state.regular.typeStages,
 }))
 @Form.create()
 export default class Regular extends React.PureComponent {
@@ -45,8 +43,6 @@ export default class Regular extends React.PureComponent {
 
     state = {
         stageId: base64.decode(this.props.match.params.id),
-        ruleName: this.props.history.location.state.name,
-        selectedRow: {},
         selectedRowKeys: [],
     };
 
@@ -162,7 +158,6 @@ export default class Regular extends React.PureComponent {
                 id === this.state.selectedRowKeys[0]
             ) {
                 this.setState({
-                    selectedRow: {},
                     selectedRowKeys: [],
                 });
             }
@@ -175,11 +170,6 @@ export default class Regular extends React.PureComponent {
         });
     };
 
-    onSelect = (record) => {
-        this.setState({
-            selectedRow: record,
-        });
-    };
     checkChannel = (code) => {
         let name = '';
         this.props.channels.forEach(item => {
@@ -276,6 +266,33 @@ export default class Regular extends React.PureComponent {
         });
     };
 
+    addRegular = (stageId) => {
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/addRegular/${base64.encode(stageId)}/${strangesId}`));
+    }
+
+    editRegular = (stageId, id) => {
+        sessionStorage.removeItem('regulars');
+        const regular = {
+            id,
+            type: 'edit',
+        };
+        sessionStorage.setItem('regulars', JSON.stringify(regular));
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/editRegular/${base64.encode(stageId)}/${strangesId}`));
+    }
+    cloneRegular = (stageId) => {
+        const id = this.state.selectedRowKeys[0];
+        sessionStorage.removeItem('regulars');
+        const regular = {
+            id,
+            type: 'clone',
+        };
+        sessionStorage.setItem('regulars', JSON.stringify(regular));
+        const strangesId = this.props.match.params.strageId;
+        this.props.history.push(setPath(`/editRegular/${base64.encode(stageId)}/${strangesId}`));
+    }
+
     query(payload) {
         this.props.dispatch({
             type: 'regular/query',
@@ -296,8 +313,8 @@ export default class Regular extends React.PureComponent {
             categories,
             channels,
             status,
-            typeStages,
         } = this.props;
+        const { stageId } = this.state;
         const categoryList = treeConvert({
             pId: 'pid',
             tId: 'value',
@@ -307,9 +324,6 @@ export default class Regular extends React.PureComponent {
         const { getFieldDecorator } = form;
         const {
             selectedRowKeys,
-            selectedRow,
-            stageId,
-            ruleName,
         } = this.state;
         // const type = list.stage !== undefined ? list.stage.type : '1';
         const columns = [{
@@ -323,30 +337,14 @@ export default class Regular extends React.PureComponent {
             key: 'name',
             width: 100,
         }, {
-            title: '规则类型',
-            dataIndex: 'categoryName',
-            key: 'categoryName',
+            title: '分值',
+            dataIndex: 'score',
+            key: 'score',
             width: 100,
         }, {
-            title: '风险代码',
-            dataIndex: 'code',
-            key: 'code',
-            width: 100,
-        }, {
-            title: '规则来源',
-            dataIndex: 'channel',
-            key: 'channel',
-            width: 100,
-            render: (text, record) => (<span>{this.checkChannel(record.channel)}</span>)
-        }, {
-            title: '判断符号',
-            dataIndex: 'compareSymbol',
-            key: 'compareSymbol',
-            width: 100,
-        }, {
-            title: '判定阀值',
-            dataIndex: 'judgeValue',
-            key: 'judgeValue',
+            title: '权重',
+            dataIndex: 'weight',
+            key: 'weight',
             width: 100,
         }, {
             title: '操作',
@@ -355,29 +353,25 @@ export default class Regular extends React.PureComponent {
             render: (text, record) => (
                 <div>
                     {
-                        roles('R_exp_sanb_stg_rl_edit') && Number(status) === 0 &&
-                    <RegularEdit
-                        type="update"
-                        stageType={typeStages}
-                        record={record}
-                        disabled={false}
-                        onOk={this.editOk}
-                    >
-                        <a style={{ marginRight: 5 }}>编辑</a>
-                    </RegularEdit>
+                        roles('R_policy_ply_stg_rl_edit') && Number(status) === 0 &&
+                        <a
+                            style={{ marginRight: 5 }}
+                            tabIndex="-1"
+                            role="button"
+                            onClick={() => this.editRegular(stageId, record.id)}
+                        >编辑
+                        </a>
                     }
                     {
-                        roles('R_exp_sanb_stg_rl_det') &&
+                        roles('R_policy_ply_stg_rl_dtl') &&
                     <RegularDetail
-                        record={record}
-                        type={typeStages}
-                        onOk={this.modalOk}
+                        id={record.id}
                     >
                         <a style={{ marginRight: 5 }}>详情</a>
                     </RegularDetail>
                     }
                     {
-                        roles('R_exp_sanb_stg_rl_del') && Number(status) === 0 &&
+                        roles('R_policy_ply_stg_rl_del') && Number(status) === 0 &&
                     <Popconfirm
                         title="你确定要删除该规则吗"
                         onConfirm={() => this.onDelete(record.id)}
@@ -388,20 +382,6 @@ export default class Regular extends React.PureComponent {
                 </div>
             ),
         }];
-
-        if (typeStages === '2') {
-            columns.splice(columns.length - 2, 0, {
-                title: '权重',
-                dataIndex: 'weight',
-                key: 'weight',
-                width: 100,
-            }, {
-                title: '分值',
-                dataIndex: 'score',
-                key: 'score',
-                width: 100,
-            });
-        }
 
         const rowSelection = {
             type: 'radio',
@@ -485,29 +465,19 @@ export default class Regular extends React.PureComponent {
                 <div className="jm-toolBar">
                     {
                         roles('R_exp_sanb_stg_rl_add') && Number(status) === 0 &&
-                    <RegularModal
-                        stageId={stageId}
-                        ruleName={ruleName}
-                        onOk={this.modalOk}
-                    >
-                        <Button type="primary" style={{ marginRight: 20 }}>
+                        <Button
+                            type="primary"
+                            style={{ marginRight: 20 }}
+                            onClick={() => this.addRegular(stageId)}
+                        >
                             新增规则
                         </Button>
-                    </RegularModal>
                     }
                     {
                         roles('R_exp_sanb_stg_rl_clone') && Number(status) === 0 &&
-                    <RegularEdit
-                        type="clone"
-                        stageType={typeStages}
-                        record={selectedRow}
-                        disabled={selectedRowKeys.length === 0}
-                        onOk={this.editOk}
-                    >
                         <Button type="primary" disabled={selectedRowKeys.length === 0}>
                             克隆规则
                         </Button>
-                    </RegularEdit>
                     }
                 </div>
                 <Table

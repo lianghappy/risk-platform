@@ -1,18 +1,20 @@
 import React from 'react';
 import { connect } from 'dva';
 import * as echarts from 'echarts/lib/echarts';
+import moment from 'moment';
 // 引入折线图。
 import 'echarts/lib/chart/bar';
 // 引入提示框组件、标题组件、工具箱组件。
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
-import { Layout, Input, Form, Button, Select, Cascader } from 'antd';
+import { Layout, Form, Button, Select, Cascader, DatePicker } from 'antd';
 // import { roles } from 'utils/common';
 import style from './index.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
+const { RangePicker } = DatePicker;
 const pageCount = [
     { count: 10 },
     { count: 20 },
@@ -61,6 +63,11 @@ export default class Statistical extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.start && values.start.length > 0) {
+                Object.assign(values, { statisticDateU: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
+                delete values.start;
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -77,6 +84,11 @@ export default class Statistical extends React.PureComponent {
         } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.start && values.start.length > 0) {
+                Object.assign(values, { statisticDateU: moment(values.start[0]._d).format('X') });
+                Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
+                delete values.start;
+            }
             this.query({
                 ...values,
                 pageNum: 1,
@@ -186,7 +198,14 @@ export default class Statistical extends React.PureComponent {
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="下单时间" >
                         {
-                            getFieldDecorator('name')(<Input placeholder="请输入策略名称" />)
+                            getFieldDecorator('start')(
+                                <RangePicker
+                                    showTime={{
+                                        hideDisabledOptions: true,
+                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                                    }}
+                                />
+                            )
                         }
                     </FormItem>
                     <FormItem label="数据源" >

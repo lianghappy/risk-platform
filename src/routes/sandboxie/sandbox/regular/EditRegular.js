@@ -9,11 +9,17 @@ import SingleInput from './SingleInput';
 
 const FormItem = Form.Item;
 let uuid = 0;
+const mapStateToProps = (state) => {
+    return {
+        normList: state.editRegularPly.normList,
+        ruleView: state.editRegularPly.ruleView,
+    };
+};
 @Form.create()
-@connect()
-export default class AddRegular extends React.PureComponent {
+@connect(mapStateToProps)
+export default class EditRegular extends React.PureComponent {
     state={
-        datas: [],
+        datas: this.props.normList || [],
     }
 
     componentDidMount() {
@@ -30,6 +36,15 @@ export default class AddRegular extends React.PureComponent {
                 type: 'rule',
             },
         });
+        const id = JSON.parse(sessionStorage.regular).id;
+        this.props.dispatch({
+            type: 'editRegularPly/ruleView',
+            payload: {
+                id,
+            }
+        }).then(() => {
+            this.init();
+        });
     }
 
     onSubmit = () => {
@@ -44,21 +59,34 @@ export default class AddRegular extends React.PureComponent {
             }
             if (!errors) {
                 const { datas } = this.state;
+                const ids = JSON.parse(sessionStorage.regular).id;
                 datas.forEach(item => {
                     if ((Object.keys(values.reason)).includes(item.id)) {
                         item.compareSymbol = values.reason[item.id].compareSymbol;
                         item.judgeValue = values.reason[item.id].judgeValue;
                     }
+                    if (item.createTime) {
+                        delete item.createTime;
+                    }
+                    if (item.updateTime) {
+                        delete item.updateTime;
+                    }
                 });
                 values.normList = values.keys;
                 delete values.keys;
                 values.stageId = base64.decode(this.props.match.params.id);
+                let url = 'editRegularPly/update';
+                if (!(JSON.parse(sessionStorage.regular).type === 'edit')) {
+                    url = 'editRegularPly/clone';
+                }
+                delete values.reason;
                 new Promise((resolve) => {
                     dispatch({
-                        type: 'addRegularPly/add',
+                        type: url,
                         payload: {
                             data: {
                                 ...values,
+                                id: ids,
                             },
                             resolve,
                         }
@@ -70,6 +98,15 @@ export default class AddRegular extends React.PureComponent {
                 });
             }
         });
+    }
+
+    init = () => {
+        const { normList } = this.props;
+        if (normList.length > 0) {
+            this.setState({
+                datas: normList
+            });
+        }
     }
 
     remove(k) {
@@ -100,6 +137,10 @@ export default class AddRegular extends React.PureComponent {
 
     modalOk = (data, callback) => {
         callback();
+        /* const { datas } = this.state;
+        data.categoryAndRuleList.forEach(item => {
+            datas.push(item);
+        }); */
         const values = this.state.datas;
         const val = [];
         data.categoryAndRuleList.forEach(item => {
@@ -143,8 +184,11 @@ export default class AddRegular extends React.PureComponent {
             wrapperCol: { span: 8 },
         };
         const stageId = base64.decode(this.props.match.params.id);
-        const { getFieldDecorator, getFieldValue } = this.props.form;
-        console.log(this.state.datas);
+        const {
+            getFieldDecorator,
+            getFieldValue,
+        } = this.props.form;
+        const { ruleView } = this.props;
 
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
@@ -165,6 +209,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         <div style={{ display: 'flex' }}>
                             {getFieldDecorator(`reason[${k.id}]`, {
+                                initialValue: k,
                                 validateTrigger: ['onChange'],
                                 rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
                             })(
@@ -186,10 +231,11 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('name', {
+                                initialValue: ruleView.name ? ruleView.name : '',
                                 rules: [
                                     {
                                         required: true,
-                                        message: '请输入规则名称',
+                                        message: '请输入规则名称'
                                     }
                                 ]
                             })(
@@ -208,6 +254,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('score', {
+                                initialValue: ruleView.score ? ruleView.score : '',
                                 rules: [
                                     {
                                         required: true,
@@ -225,6 +272,7 @@ export default class AddRegular extends React.PureComponent {
                     >
                         {
                             getFieldDecorator('weight', {
+                                initialValue: ruleView.weight ? ruleView.weight : '',
                                 rules: [
                                     {
                                         required: true,
@@ -254,7 +302,7 @@ export default class AddRegular extends React.PureComponent {
                     </FormItem>
                     {formItems}
                     <FormItem>
-                        <Button type="primary" onClick={() => this.onSubmit()} style={{ marginRight: '24px' }} >新增</Button>
+                        <Button type="primary" onClick={() => this.onSubmit()} style={{ marginRight: '24px' }} >保存</Button>
                         <Button type="default" onClick={() => this.cancel()}>取消</Button>
                     </FormItem>
                 </Form>

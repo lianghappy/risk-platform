@@ -1,12 +1,12 @@
 import { post } from 'utils/request';
 import API from 'utils/api';
 import { PAGE_SIZE } from 'utils/constants';
-import base64 from 'utils/base64';
+// import base64 from 'utils/base64';
 // import treeConvert from 'utils/treeConvert';
 import { filterPath, setPath } from 'utils/path';
 
 export default {
-    namespace: 'regular',
+    namespace: 'editRegularPly',
     state: {
         list: {}, // 规则列表
         pageNum: 1,
@@ -18,18 +18,19 @@ export default {
         status: '',
         compareSymbol: [],
         getUnCategory: [],
+        typeStages: '',
         ruleView: {},
-        normList: [],
     },
     effects: {
         * query({ payload }, { call, put }) {
-            const response = yield call(post, API.regularList, payload);
+            const response = yield call(post, API.regular, payload);
             yield put({
                 type: 'querySuc',
                 payload: {
                     list: response,
                     pageNum: payload.pageNum,
                     pageSize: payload.pageSize,
+                    typeStages: response.stage.type,
                 },
             });
         },
@@ -65,33 +66,16 @@ export default {
                 },
             });
         },
-        * queryCompareSymbol({ payload }, { call, put }) {
-            const response = yield call(post, API.getBlackType, payload);
-            yield put({
-                type: 'querySuc',
-                payload: {
-                    compareSymbol: response,
-                },
-            });
-        },
-        * del({ payload }, { call }) {
-            const { data, resolve } = payload;
-            yield call(post, API.regularsDels, data);
-            yield call(resolve);
-        },
-        * add({ payload }, { call }) {
-            const { data, resolve } = payload;
-            yield call(post, API.regularAdd, data);
-            yield call(resolve);
-        },
         * update({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.regularUpdate, data);
+            yield call(post, API.updateRegulars, data);
+            console.log('111');
             yield call(resolve);
         },
         * clone({ payload }, { call }) {
             const { data, resolve } = payload;
-            yield call(post, API.regularClone, data);
+            yield call(post, API.cloneRegulars, data);
+            console.log('111');
             yield call(resolve);
         },
         // 规则类型
@@ -120,6 +104,15 @@ export default {
                 },
             });
         },
+        * queryCompareSymbol({ payload }, { call, put }) {
+            const response = yield call(post, API.getBlackType, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    compareSymbol: response,
+                },
+            });
+        },
         * queryRegular({ payload }, { call, put }) {
             const response = yield call(post, API.getLinkRuler, payload);
             yield put({
@@ -140,45 +133,25 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
-                if (path[1] === 'regulars') {
-                    const id = base64.decode(path[2]);
-                    const ids = base64.decode(path[3]);
+                if (path[1] === 'editRegulars') {
+                    // const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: [{ name: '策略沙箱', link: setPath('/sandboxie') },
-                            { name: '阶段管理', link: setPath(`/strategies/${path[3]}`) },
-                            { name: '规则管理' }],
+                        payload: [{ name: '策略管理', link: setPath('/policy') },
+                            { name: '阶段管理', link: setPath(`/strategy/${path[3]}`) },
+                            { name: '规则管理', link: setPath(`/regular/${path[2]}/${path[3]}`) },
+                            { name: '新增规则管理' }],
                     });
+                    /*                   const id = sessionStorage.regular ? JSON.parse(sessionStorage.regular).id : '';
+                    dispatch({
+                        type: 'ruleView',
+                        payload: {
+                            id,
+                        }
+                    }); */
                     dispatch({
                         type: 'common/setSide',
                         flag: false,
-                    });
-                    dispatch({
-                        type: 'query',
-                        payload: {
-                            stageId: id,
-                            pageNum: 1,
-                            pageSize: PAGE_SIZE,
-                        },
-                    });
-                    dispatch({ type: 'queryCategory' });
-                    dispatch({
-                        type: 'queryChannel',
-                        payload: {
-                            type: 'rule',
-                        },
-                    });
-                    dispatch({
-                        type: 'queryCompareSymbol',
-                        payload: {
-                            type: 'compareSymbol',
-                        },
-                    });
-                    dispatch({
-                        type: 'getPolicyDetail',
-                        payload: {
-                            id: ids,
-                        },
                     });
                 }
             });

@@ -362,6 +362,25 @@ function RouterConfig({ history, app }) {
             import('models/policy/policies/commonRegular'),
         ]
     });
+    // 增加规则
+    const addRegular = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/regular/AddRegular'),
+        models: () => [
+            import('models/sandboxie/sandbox/AddRegular'),
+            import('models/policy/policies/commonRegular'),
+
+        ]
+    });
+    // 编辑或者克隆规则
+    const EditRegular = dynamic({
+        app,
+        component: () => import('routes/sandboxie/sandbox/regular/EditRegular'),
+        models: () => [
+            import('models/sandboxie/sandbox/EditRegular'),
+            import('models/policy/policies/commonRegular'),
+        ]
+    });
     return (
         <Router history={history}>
             <Switch>
@@ -421,6 +440,8 @@ function RouterConfig({ history, app }) {
                     <PrivateRoute path={setPath('/statistical')} exact component={Statistical} />
                     <PrivateRoute path={setPath('/addRegulars/:id/:stageId')} exact component={addRegulars} />
                     <PrivateRoute path={setPath('/editRegulars/:id/:stageId')} exact component={EditRegulars} />
+                    <PrivateRoute path={setPath('/addRegular/:id/:stageId')} exact component={addRegular} />
+                    <PrivateRoute path={setPath('/editRegular/:id/:stageId')} exact component={EditRegular} />
                 </Main>
             </Switch>
         </Router>

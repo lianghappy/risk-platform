@@ -20,13 +20,13 @@ import styles from './RegularModal.scss';
 
 const TreeNode = Tree.TreeNode;
 @connect((state) => ({
-    channels: state.regular.channels,
-    categories: state.regular.categories,
-    regulars: state.regular.regulars,
-    pageNum: state.regular._pageNum,
-    getUnCategory: state.regular.getUnCategory,
-    loading: state.loading.effects['regular/queryRegular'] || false,
-    onSubmiting: state.loading.effects['regular/add'] || false,
+    channels: state.commonRegular.channels,
+    categories: state.commonRegular.categories,
+    regulars: state.commonRegular.regulars,
+    pageNum: state.commonRegular._pageNum,
+    getUnCategory: state.commonRegular.getUnCategory,
+    loading: state.loading.effects['commonRegular/queryRegular'] || false,
+    onSubmiting: state.loading.effects['addRegularPly/add'] || false,
 }))
 @Form.create()
 export default class RegularModal extends React.PureComponent {
@@ -61,7 +61,7 @@ export default class RegularModal extends React.PureComponent {
                     categoryId: item.categoryId,
                     categoryName: item.categoryName,
                     ruleId: item.ruleId,
-                    ruleName: item.ruleName,
+                    name: item.ruleName,
                     code: item.code,
                     judgeKey: item.judgeKey,
                     channel: item.channel,
@@ -129,6 +129,7 @@ export default class RegularModal extends React.PureComponent {
 
         form.validateFields((errors, values) => {
             const categoryId = this.state.categorieId;
+
             if (categoryId === '0') {
                 this.unQuery({
                     ...values,
@@ -214,6 +215,7 @@ export default class RegularModal extends React.PureComponent {
                 });
             } else {
                 const categoryId = this.state.categorieId;
+
                 this.query({
                     ...values,
                     pageNum: 1,
@@ -223,7 +225,15 @@ export default class RegularModal extends React.PureComponent {
             }
         });
     };
-
+    checkChannel = (code) => {
+        let name = '';
+        this.props.channels.forEach(item => {
+            if (item.code === code) {
+                name = item.name;
+            }
+        });
+        return name;
+    }
     handleCancel = () => {
         this.props.form.resetFields();
         this.setState({
@@ -237,13 +247,18 @@ export default class RegularModal extends React.PureComponent {
 
     showModelHandler = () => {
         this.props.dispatch({
-            type: 'regular/queryRegular',
+            type: 'commonRegular/queryRegular',
             payload: {
                 pageNum: 1,
                 pageSize: 5,
             },
         });
-
+        this.props.dispatch({
+            type: 'commonRegular/queryChannel',
+            payload: {
+                type: 'rule',
+            },
+        });
         this.setState({
             visible: true,
             selectedRows: [],
@@ -252,25 +267,16 @@ export default class RegularModal extends React.PureComponent {
             categorieId: '',
         });
     };
-    checkChannel = (code) => {
-        let name = '';
-        this.props.channels.forEach(item => {
-            if (item.code === code) {
-                name = item.name;
-            }
-        });
-        return name;
-    }
 
     query(payload) {
         this.props.dispatch({
-            type: 'regular/queryRegular',
+            type: 'commonRegular/queryRegular',
             payload,
         });
     }
     unQuery(payload) {
         this.props.dispatch({
-            type: 'regular/getUnCategory',
+            type: 'commonRegular/getUnCategory',
             payload,
         });
     }
@@ -385,6 +391,7 @@ export default class RegularModal extends React.PureComponent {
                     <div className={styles.layout}>
                         <div className={styles.left}>
                             <Tree
+                                draggable
                                 selectedKeys={this.state.selectedKeys}
                                 onSelect={this.onSelects}
                             >
