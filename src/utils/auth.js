@@ -260,6 +260,10 @@ export const authFirst = [
             name: '黑白名单',
             key: 'black',
             router: '/black',
+        }, {
+            name: '第三方产品',
+            key: 'thirdPartyManage',
+            router: '/thirdPartyManage',
         }],
     }, {
         name: '应用中心',

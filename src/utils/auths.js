@@ -35,6 +35,12 @@ export const authed = [
         pid: 'R_system',
         id: 'R_system_baw',
     }, {
+        name: '第三方产品',
+        key: 'thirdPartyManage',
+        router: '/thirdPartyManage',
+        pid: 'R_system',
+        id: 'R_system_third',
+    }, {
         name: '应用中心',
         key: 'application',
         id: 'R_apps',

@@ -7,8 +7,10 @@ import {
     Input,
     Select,
     Icon,
+    message,
 } from 'antd';
 import { connect } from 'dva';
+import { DURATION } from 'utils/constants';
 import styles from './index.scss';
 
 let uuid = 1;
@@ -19,7 +21,6 @@ let uuid = 1;
 // }
 const Option = Select.Option;
 const { TextArea } = Input;
-let timeout;
 const mapStateToProps = (state) => ({
     grayDetails: state.grayPolicy.grayDetails,
     details: state.grayPolicy.details,
@@ -43,7 +44,6 @@ export default class PolicyModal extends React.PureComponent {
     state = {
         visible: this.props.visible || false,
         // data: [],
-        value: '',
         details: {},
         grayDetails: [0],
     };
@@ -99,6 +99,18 @@ export default class PolicyModal extends React.PureComponent {
         // const userId = JSON.parse(sessionStorage.userInfo).user.id;
         form.validateFields((err, values) => {
             if (!err) {
+                if (values && values.keys.length < 1) {
+                    message.error('最少添加两个策略', DURATION);
+                    return;
+                }
+                let sum = 0;
+                Object.key(values.radio).forEach(item => {
+                    sum += item;
+                });
+                if (sum > 100) {
+                    message.error('所有的策略占比少于100', DURATION);
+                    return;
+                }
                 new Promise(resolve => {
                     if (type === 'edit') {
                         Object.assign(values, { grayStrategyId: record });
@@ -123,6 +135,15 @@ export default class PolicyModal extends React.PureComponent {
 
     handleShow = () => {
         // this.props.form.validateFields();
+        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
+        this.props.dispatch({
+            type: 'grayPolicy/getPolicySelect',
+            payload: {
+                companyId,
+                pageNum: 1,
+                pageSize: 100,
+            },
+        });
         if (this.props.record) {
             const {
                 dispatch,
@@ -152,28 +173,7 @@ export default class PolicyModal extends React.PureComponent {
             visible: false,
         });
     };
-    dataChange = (val) => {
-        this.setState({
-            value: val.label,
-        });
-        if (timeout) {
-            clearTimeout(timeout);
-            timeout = null;
-        }
-        const {
-            dispatch,
-        } = this.props;
-        const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-        dispatch({
-            type: 'grayPolicy/getPolicySelect',
-            payload: {
-                companyId,
-                pageNum: 1,
-                pageSize: 100,
-                name: val.label,
-            },
-        });
-    }
+
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
         Object.assign(payload, { companyId, pageNum: 1, pageSize: 100 });
@@ -191,13 +191,14 @@ export default class PolicyModal extends React.PureComponent {
         const {
             children,
             loading,
+            getPolicyList,
         } = this.props;
         const {
             getFieldDecorator,
             getFieldValue,
         } = forms;
         const { details, grayDetails } = this.state;
-        const options = this.props.getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
+        const options = getPolicyList.map(d => <Option key={d.id}>{d.name}</Option>);
         getFieldDecorator('keys', { initialValue: grayDetails || [0] });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k, index) => {
@@ -207,11 +208,11 @@ export default class PolicyModal extends React.PureComponent {
                     key={index}
                 >
                     <Form.Item
-                        {...formItemLayout}
                         label="策略名称"
                     >
                         {
                             getFieldDecorator(`strategyName[${index}]`, {
+                                initialValue: k.strategyName,
                                 rules: [
                                     { required: true, message: '请输入策略名称' },
                                 ],
@@ -219,11 +220,10 @@ export default class PolicyModal extends React.PureComponent {
                                 <Select
                                     labelInValue
                                     showSearch
-                                    value={this.state.value ? this.state.value : k.strategyName}
-                                    style={{ width: 144 }}
-                                    filterOption={false}
-                                    onChange={value => this.dataChange(value)}
-                                    onSearch={value => this.onSearch(value)}
+                                    style={{ width: 200 }}
+                                    placeholder="Select a person"
+                                    optionFilterProp="children"
+                                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
                                     {options}
                                 </Select>
@@ -231,7 +231,6 @@ export default class PolicyModal extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item
-                        {...formItemLayout}
                         label="策略占比"
                     >
                         {
@@ -277,6 +276,7 @@ export default class PolicyModal extends React.PureComponent {
                             确定
                         </Button>,
                     ]}
+                    width="600px"
                 >
                     <Form layout="horizontal">
                         <Form.Item

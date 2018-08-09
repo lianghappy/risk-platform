@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Button, Table, message, Select, DatePicker } from 'antd';
+import { Layout, Form, Button, Table, message, Select, DatePicker } from 'antd';
 import { DURATION, SYSID } from 'utils/constants';
 import moment from 'moment';
 // import { roles } from 'utils/common';
@@ -35,6 +35,21 @@ export default class ThirdPartyManage extends React.PureComponent {
         const { loading, form } = this.props;
         if (loading) return;
         form.validateFields((errors, values) => {
+            if (values && values.statisticsDate && values.statisticsDate.length > 0) {
+                Object.assign(values, { statisticsDateU: moment(values.statisticsDate[0]._d).format('X') });
+                Object.assign(values, { statisticsDateL: moment(values.statisticsDate[1]._d).format('X') });
+                delete values.statisticsDate;
+            }
+            if (values && values.times && values.times.length > 0) {
+                Object.assign(values, { startDateU: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { startDateL: moment(values.times[1]._d).format('X') });
+                delete values.times;
+            }
+            if (values && values.time && values.time.length > 0) {
+                Object.assign(values, { endDateU: moment(values.time[0]._d).format('X') });
+                Object.assign(values, { endDateL: moment(values.time[1]._d).format('X') });
+                delete values.time;
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -52,6 +67,21 @@ export default class ThirdPartyManage extends React.PureComponent {
        } = this.props;
        if (loading) return;
        form.validateFields((errors, values) => {
+           if (values && values.statisticsDate && values.statisticsDate.length > 0) {
+               Object.assign(values, { statisticsDateU: moment(values.statisticsDate[0]._d).format('X') });
+               Object.assign(values, { statisticsDateL: moment(values.statisticsDate[1]._d).format('X') });
+               delete values.statisticsDate;
+           }
+           if (values && values.times && values.times.length > 0) {
+               Object.assign(values, { startDateU: moment(values.times[0]._d).format('X') });
+               Object.assign(values, { startDateL: moment(values.times[1]._d).format('X') });
+               delete values.times;
+           }
+           if (values && values.time && values.time.length > 0) {
+               Object.assign(values, { endDateU: moment(values.time[0]._d).format('X') });
+               Object.assign(values, { endDateL: moment(values.time[1]._d).format('X') });
+               delete values.time;
+           }
            this.query({
                ...values,
                pageNum: 1,
@@ -236,7 +266,14 @@ export default class ThirdPartyManage extends React.PureComponent {
                    </FormItem>
                    <FormItem label="统计时间">
                        {
-                           getFieldDecorator('statisticsDate')(<Input placeholder="请输入用户姓名" />)
+                           getFieldDecorator('statisticsDate')(
+                               <RangePicker
+                                   showTime={{
+                                       hideDisabledOptions: true,
+                                       defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
+                                   }}
+                               />
+                           )
                        }
                    </FormItem>
                    <FormItem label="签约日" >
@@ -251,7 +288,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                    </FormItem>
                    <FormItem label="到期日" >
                        {
-                           getFieldDecorator('times')(<RangePicker
+                           getFieldDecorator('time')(<RangePicker
                                showTime={{
                                    hideDisabledOptions: true,
                                    defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],
