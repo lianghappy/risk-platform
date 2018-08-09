@@ -54,8 +54,8 @@ export default class GrayDetails extends React.PureComponent {
         const columns = [
             {
                 title: '策略名称',
-                dataIndex: 'garyStrategyName',
-                key: 'garyStrategyName',
+                dataIndex: 'strategyName',
+                key: 'strategyName',
                 width: 100,
             }, {
                 title: '策略占比(%)',
@@ -69,9 +69,9 @@ export default class GrayDetails extends React.PureComponent {
                 width: 100,
                 render: (text, record) => (
                     <span>
-                        {record.status === '0' && '未上架'}
-                        {record.status === '1' && '已上架'}
-                        {record.status === '2' && '已下架'}
+                        {record.isEnable === '0' && '未上架'}
+                        {record.isEnable === '1' && '已上架'}
+                        {record.isEnable === '2' && '已下架'}
                     </span>
                 )
             },

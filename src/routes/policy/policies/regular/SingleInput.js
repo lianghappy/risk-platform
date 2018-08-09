@@ -41,7 +41,7 @@ export default class SingleInput extends React.Component {
     }
 
     handleNumberChange(e) {
-        const judgeValue = parseInt(e || 0, 10);
+        const judgeValue = e;
         if (!('value' in this.props)) {
             this.setState({ judgeValue });
         }
