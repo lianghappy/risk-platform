@@ -138,9 +138,10 @@ class Black extends React.PureComponent {
         const {
             pageSize,
             pageNum,
-            list: dataSource,
+            list,
             loading,
         } = this.props;
+        const dataSource = list || [];
         const columns = [
             {
                 title: '用户手机号',

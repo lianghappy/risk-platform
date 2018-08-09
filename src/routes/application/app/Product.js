@@ -145,14 +145,14 @@ class Product extends React.PureComponent {
                 <Table
                     rowSelection={rowSelection}
                     columns={adds}
-                    dataSource={this.state.dataSource}
+                    dataSource={this.state.dataSource ? this.state.dataSource : []}
                     pagination={false}
                     loading={loading}
                 />
                 <Pagination
                     current={pageNum}
                     pageSize={pageSize}
-                    dataSize={this.state.dataSource.length}
+                    dataSize={this.state.dataSource ? this.state.dataSource.length : 0}
                     onChange={this.onPageChange}
                     showQuickJumper
                 />

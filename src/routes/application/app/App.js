@@ -140,9 +140,10 @@ class AppIndex extends React.PureComponent {
         const {
             pageSize,
             pageNum,
-            list: dataSource,
+            list,
             loading,
         } = this.props;
+        const dataSource = list || [];
         const { getFieldDecorator } = this.props.form;
         const columns = [
             { title: '应用名称', dataIndex: 'name', key: 'name' },

@@ -326,10 +326,11 @@ class LinkRuler extends React.PureComponent {
         const {
             pageSize,
             pageNum,
-            list: dataSource,
+            list,
             loading,
             getUnCategory,
         } = this.props;
+        const dataSource = list || [];
         const { categoryId } = this.state;
         const columns = [
             { title: '规则编号', dataIndex: 'id', key: 'id', width: 100, },

@@ -176,14 +176,14 @@ class OldProduct extends React.PureComponent {
                 {/* <Button className={style.btns} type="primary" onClick={this.all} disabled={this.state.selectedRows.length === 0}>批量删除</Button> */}
                 <Table
                     columns={dels}
-                    dataSource={this.state.dataSource}
+                    dataSource={this.state.dataSource ? this.state.dataSource : []}
                     pagination={false}
                     loading={loading}
                 />
                 <Pagination
                     current={pageNum}
                     pageSize={pageSize}
-                    dataSize={this.state.dataSource.length}
+                    dataSize={this.state.dataSource ? this.state.dataSource.length : 0}
                     onChange={this.onPageChange}
                     showQuickJumper
                 />

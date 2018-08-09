@@ -243,11 +243,12 @@ export default class WarningRule extends React.PureComponent {
         const {
             pageSize,
             pageNum,
-            warningRule: dataSource,
+            warningRule,
             loading,
             strategys,
             sleuthTargets,
         } = this.props;
+        const dataSource = warningRule || [];
         const { searchFields, } = this.state;
         const columns = [
             {

@@ -250,7 +250,7 @@ export default class History extends React.PureComponent {
     }
     render() {
         const {
-            list: dataSource,
+            list,
             loading,
             pageSize,
             pageNum,
@@ -259,7 +259,7 @@ export default class History extends React.PureComponent {
             product,
             strategy,
         } = this.props;
-
+        const dataSource = list || [];
 
         const { getFieldDecorator } = form;
         const columns = [

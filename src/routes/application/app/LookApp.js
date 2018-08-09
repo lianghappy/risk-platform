@@ -153,7 +153,7 @@ class AppIndex extends React.PureComponent {
                     this.state.current === '.$del' ?
                         <OldProduct
                             loading={loading}
-                            dataSource={listSign}
+                            dataSource={listSign || []}
                             current={pageNum}
                             pageSize={pageSize}
                             type={this.state.current}
@@ -164,7 +164,7 @@ class AppIndex extends React.PureComponent {
                         :
                         <Product
                             loading={loading}
-                            dataSource={listNoSign}
+                            dataSource={listNoSign || []}
                             current={pageNum}
                             pageSize={pageSize}
                             type={this.state.current}

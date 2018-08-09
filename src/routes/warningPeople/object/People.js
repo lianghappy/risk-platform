@@ -189,12 +189,13 @@ export default class People extends React.PureComponent {
     }
     render() {
         const {
-            warningList: dataSource,
+            warningList,
             loading,
             pageNum,
             pageSize,
             form,
         } = this.props;
+        const dataSource = warningList || [];
         const { getFieldDecorator } = form;
         const { selectedRows, selectedRowKeys } = this.state;
         const rowSelection = {
