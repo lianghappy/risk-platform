@@ -235,9 +235,7 @@ export default class Statistical extends React.PureComponent {
         const { NormHitChannal } = this.props;
 
         return (
-            <Layout
-                className="layoutMar"
-            >
+            <Layout className={style.statical}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem label="下单时间" >
                         {

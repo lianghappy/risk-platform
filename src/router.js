@@ -338,7 +338,7 @@ function RouterConfig({ history, app }) {
     // 数据统计
     const Statistical = dynamic({
         app,
-        component: () => import('routes/policy/report/Statistical'),
+        component: () => import('routes/policy/report/index'),
         models: () => [
             import('models/policy/report/Statistical')
         ]

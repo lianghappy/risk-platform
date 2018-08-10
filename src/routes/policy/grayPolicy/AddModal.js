@@ -222,10 +222,10 @@ export default class PolicyModal extends React.PureComponent {
                                 <Select
                                     labelInValue
                                     showSearch
-                                    optionFilterProp={k.strategyId}
                                     style={{ width: 200 }}
                                     placeholder="请选择策略"
-                                    /* optionFilterProp="children" */
+                                    defaultValue={{ key: k.strategyId }}
+                                    optionFilterProp="children"
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
                                     {options}

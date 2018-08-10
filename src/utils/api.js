@@ -270,6 +270,8 @@ const api = {
     NormHitChannal: `${API}/api/risk/manager/policy/normHit/NormHitChannal/v1`,
     // 根据策略查找阶段
     normHit: `${API}/api/risk/manager/policy/normHit/StageChannal/v1`,
+    // 三方统计
+    dailyRecord: `${API}/api/risk/manager/collector/thirdpartyManage/dailyRecord/v1`,
 
 };
 

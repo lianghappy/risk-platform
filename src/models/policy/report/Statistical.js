@@ -12,6 +12,7 @@ export default {
         pageSize: PAGE_SIZE,
         NormHitChannal: {},
         getStage: [],
+        dailyRecord: [],
     },
     effects: {
         // 获取策略
@@ -44,6 +45,16 @@ export default {
                 type: 'querySuc',
                 payload: {
                     getStage: response,
+                },
+            });
+        },
+        // 获取第三方数据
+        * dailyRecord({ payload }, { call, put }) {
+            const response = yield call(post, API.dailyRecord, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    dailyRecord: response,
                 },
             });
         },

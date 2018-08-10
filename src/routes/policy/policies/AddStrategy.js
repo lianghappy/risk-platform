@@ -244,7 +244,7 @@ class AddStrategy extends React.PureComponent {
                             {
                                 getFieldDecorator('resultLevel', {
                                     initialValue: record.resultLevel !== undefined
-                                        ? record.type : '',
+                                        ? record.resultLevel : '',
                                     rules: [
                                         { required: true, message: '请输入阶段阶段结果优先级' },
                                         { validator: this.checkRecord, message: '请输入数字' }
