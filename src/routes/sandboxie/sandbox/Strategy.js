@@ -209,7 +209,7 @@ class Policy extends React.PureComponent {
                 width: 100,
             },
             {
-                title: '权重',
+                title: '权重(%)',
                 dataIndex: 'weight',
                 key: 'weight',
                 render: (text, record) => (<span>{(record.weight / 100)}</span>),

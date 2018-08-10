@@ -8,6 +8,7 @@ import {
     Select,
     Tooltip,
     Icon,
+    message,
 } from 'antd';
 import { connect } from 'dva';
 
@@ -43,6 +44,10 @@ class AddStrategy extends React.PureComponent {
         const that = this;
         form.validateFields((err, values) => {
             if (!err) {
+                if (values && Number(values.weight) > 100) {
+                    message.error('输入权重不能超过100');
+                    return;
+                }
                 new Promise(resolve => {
                     if (title === 'edit') {
                         Object.assign(values, { id: record.id });
