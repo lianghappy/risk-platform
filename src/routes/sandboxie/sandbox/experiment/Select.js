@@ -60,6 +60,12 @@ class StartExper extends React.PureComponent {
             callback();
         }
     }
+    disabledDate = (current) => {
+        console.log(current);
+
+        // Can not select days before today and today
+        return current && current > moment().endOf('day');
+    }
     query(payload) {
         this.props.dispatch({
             type: 'experiment/getPolicyList',
@@ -83,6 +89,7 @@ class StartExper extends React.PureComponent {
                                         { required: true, message: '请选择下单时间' },
                                     ],
                                 })(<RangePicker
+                                    disabledDate={this.disabledDate}
                                     showTime={{
                                         hideDisabledOptions: true,
                                         defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
