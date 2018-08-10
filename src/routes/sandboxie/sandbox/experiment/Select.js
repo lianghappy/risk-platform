@@ -61,10 +61,8 @@ class StartExper extends React.PureComponent {
         }
     }
     disabledDate = (current) => {
-        console.log(current);
-
         // Can not select days before today and today
-        return current && current > moment().endOf('day');
+        return current >= moment();
     }
     query(payload) {
         this.props.dispatch({

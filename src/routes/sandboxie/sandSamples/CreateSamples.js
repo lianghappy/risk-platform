@@ -104,6 +104,10 @@ class CreateSamples extends React.PureComponent {
             callback();
         }
     }
+    disabledDate = (current) => {
+        // Can not select days before today and today
+        return current >= moment();
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -231,6 +235,7 @@ class CreateSamples extends React.PureComponent {
                                             { required: true, message: '请选择下单时间' },
                                         ],
                                     })(<RangePicker
+                                        disabledDate={this.disabledDate}
                                         showTime={{
                                             hideDisabledOptions: true,
                                             defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
