@@ -127,6 +127,15 @@ export default class ThirdPartyManage extends React.PureComponent {
            });
        });
    };
+   checkCode = (code) => {
+       let name = '';
+       this.props.typeList.forEach(item => {
+           if (item.code === code) {
+               name = item.name;
+           }
+       });
+       return name;
+   }
    query(payload) {
        Object.assign(payload, { sysId: 'risk' });
        this.props.dispatch({
@@ -149,6 +158,9 @@ export default class ThirdPartyManage extends React.PureComponent {
                dataIndex: 'thirdparty',
                key: 'thirdparty',
                width: 100,
+               render: (text, record) => (
+                   <span>{this.checkCode(record.thirdparty)}</span>
+               )
            },
            {
                title: '产品名称',
@@ -185,6 +197,9 @@ export default class ThirdPartyManage extends React.PureComponent {
                dataIndex: 'rental',
                key: 'rental',
                width: 100,
+               render: (text, record) => (
+                   <span>{record.rental / 100}</span>
+               )
            },
            {
                title: '上线时间',
@@ -216,6 +231,9 @@ export default class ThirdPartyManage extends React.PureComponent {
                dataIndex: 'price',
                key: 'price',
                width: 100,
+               render: (text, record) => (
+                   <span>{record.price / 100}</span>
+               )
            },
            {
                title: '收费方式',
@@ -334,6 +352,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                </AddModal>
 
                <Table
+                   className="tableChange"
                    columns={columns}
                    loading={loading}
                    pagination={false}

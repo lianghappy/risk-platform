@@ -54,6 +54,10 @@ export default class AddModal extends React.PureComponent {
                     if (values && values.endDate) {
                         Object.assign(values, { endDate: moment(values.endDate._d).format('X') });
                     }
+                    Object.assign(values, {
+                        price: ((values.price) * 1000) / 10,
+                        rental: ((values.rental) * 1000) / 10
+                    });
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();
@@ -84,7 +88,6 @@ export default class AddModal extends React.PureComponent {
         const forms = this.props.form;
         const {
             children,
-            record,
             typeList,
         } = this.props;
         const {
@@ -120,7 +123,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('thirdparty', {
-                                    initialValue: record.account,
                                     rules: [
                                         { required: true, message: '请选择三方数据源' },
                                     ],
@@ -141,7 +143,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('productName', {
-                                    initialValue: record.userName,
                                     rules: [
                                         { required: true, message: '请输入产品名称' },
                                         { max: 20, message: '最多20位' }
@@ -173,7 +174,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('costType', {
-                                    initialValue: record.password,
                                     rules: [
                                         { required: true, message: '请选择查询/查得' },
                                     ],
@@ -191,7 +191,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('chargeType', {
-                                    initialValue: record.password,
                                     rules: [
                                         { required: true, message: '请选择收费方式' },
                                     ],
@@ -210,7 +209,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('price', {
-                                    initialValue: record.password,
                                     rules: [
                                         {
                                             required: true,
@@ -226,7 +224,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('rental', {
-                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,
@@ -244,7 +241,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('releaseDate', {
-                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,
@@ -262,7 +258,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('startDate', {
-                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,
@@ -280,7 +275,6 @@ export default class AddModal extends React.PureComponent {
                         >
                             {
                                 getFieldDecorator('endDate', {
-                                    initialValue: record.role,
                                     rules: [
                                         {
                                             required: true,

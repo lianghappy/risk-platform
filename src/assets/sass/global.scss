@@ -82,3 +82,12 @@ table {
     /* text-align: right; */
     margin-top: 12px;
 }
+.tableChange{
+    :global(.ant-table-thead > tr > th){
+        padding: 8px!important;
+    }
+    :global(.ant-table-tbody > tr > td){
+        padding: 8px!important;
+    }
+}
+
