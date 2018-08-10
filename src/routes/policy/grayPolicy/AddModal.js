@@ -103,13 +103,15 @@ export default class PolicyModal extends React.PureComponent {
                     message.error('最少添加两个策略', DURATION);
                     return;
                 }
-                let sum = 0;
-                Object.key(values.radio).forEach(item => {
-                    sum += item;
-                });
-                if (sum > 100) {
-                    message.error('所有的策略占比少于100', DURATION);
-                    return;
+                if (values && values.ratio) {
+                    let sum = 0;
+                    Object.keys(values.ratio).forEach(item => {
+                        sum += item;
+                    });
+                    if (sum > 100) {
+                        message.error('所有的策略占比少于100', DURATION);
+                        return;
+                    }
                 }
                 new Promise(resolve => {
                     if (type === 'edit') {

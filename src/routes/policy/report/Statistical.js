@@ -64,8 +64,10 @@ export default class Statistical extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (values && values.start && values.start.length > 0) {
-                Object.assign(values, { statisticDateU: moment(values.start[0]._d).format('X') });
-                Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
+                Object.assign(values, {
+                    statisticDateU: moment(values.start[0]._d).format('X'),
+                    statisticDateL: moment(values.start[1]._d).format('X'),
+                });
                 delete values.start;
             }
             if (values && values.strategyId) {
@@ -91,8 +93,11 @@ export default class Statistical extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (values && values.start && values.start.length > 0) {
-                Object.assign(values, { statisticDateU: moment(values.start[0]._d).format('X') });
-                Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
+                Object.assign(values, {
+                    statisticDateU: moment(values.start[0]._d).format('X'),
+                    statisticDateL: moment(values.start[1]._d).format('X')
+                });
+
                 delete values.start;
             }
             if (values && values.strategyId) {
@@ -198,7 +203,6 @@ export default class Statistical extends React.PureComponent {
         const container = this.bar;
         const myChart = echarts.init(container);
         this.setOption(myChart);
-        window.onresize = myChart.resize;
         const { NormHitChannal } = this.props;
         const option = [];
         if (NormHitChannal.strategys) {
@@ -219,6 +223,11 @@ export default class Statistical extends React.PureComponent {
         this.props.dispatch({
             type: 'statistical/getReportList',
             payload,
+        }).then(() => {
+            const container = this.bar;
+            const myChart = echarts.init(container);
+            this.setOption(myChart);
+            window.onresize = myChart.resize;
         });
     }
     render() {
