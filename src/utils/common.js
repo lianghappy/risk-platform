@@ -81,13 +81,21 @@ export const menuKeyPick = (location) => {
         if (path[2] === '0') key.push('warningRule');
         else key.push('warningRule');
         break;
+    case 'addRegulars':
+        if (path[2] === '0') key.push('policy');
+        else key.push('policy');
+        break;
     case 'editRegulars':
         if (path[2] === '0') key.push('policy');
         else key.push('policy');
         break;
-    case 'addRegulars':
-        if (path[2] === '0') key.push('policy');
-        else key.push('policy');
+    case 'addRegular':
+        if (path[2] === '0') key.push('sandbox');
+        else key.push('sandbox');
+        break;
+    case 'editRegular':
+        if (path[2] === '0') key.push('sandbox');
+        else key.push('sandbox');
         break;
     default:
         key.push(router);
