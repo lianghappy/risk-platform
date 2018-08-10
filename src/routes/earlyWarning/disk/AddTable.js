@@ -190,6 +190,7 @@ export default class AddTable extends React.PureComponent {
                                                                 return (<Option value={item.id} key={index}>{item.name}</Option>);
                                                             })
                                                         }
+                                                        <Option value="all">所有</Option>
                                                     </Select>
                                                 )
                                             }

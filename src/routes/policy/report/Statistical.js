@@ -68,6 +68,12 @@ export default class Statistical extends React.PureComponent {
                 Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
                 delete values.start;
             }
+            if (values && values.strategyId) {
+                Object.assign(values, {
+                    strategyId: values.strategyId[0],
+                    stageId: values.strategyId.length > 1 ? values.strategyId[1] : '',
+                });
+            }
             this.query({
                 ...values,
                 pageNum,
@@ -88,6 +94,12 @@ export default class Statistical extends React.PureComponent {
                 Object.assign(values, { statisticDateU: moment(values.start[0]._d).format('X') });
                 Object.assign(values, { statisticDateL: moment(values.start[1]._d).format('X') });
                 delete values.start;
+            }
+            if (values && values.strategyId) {
+                Object.assign(values, {
+                    strategyId: values.strategyId[0],
+                    stageId: values.strategyId.length > 1 ? values.strategyId[1] : '',
+                });
             }
             this.query({
                 ...values,
@@ -149,7 +161,7 @@ export default class Statistical extends React.PureComponent {
     }
 
     loadData = (selectedOptions) => {
-        console.log(selectedOptions);
+        const targetOption = selectedOptions[selectedOptions.length - 1];
         const { dispatch } = this.props;
         // 搜索数据
         dispatch({
@@ -157,6 +169,28 @@ export default class Statistical extends React.PureComponent {
             payload: {
                 strategyId: selectedOptions[0].value,
             }
+        }).then(() => {
+            this.loadInit(targetOption);
+        });
+    }
+
+    loadInit = (targetOption) => {
+        const { getStage } = this.props;
+        targetOption.children = [];
+        getStage.forEach(item => {
+            targetOption.children.push({
+                label: item.name,
+                value: item.id,
+            });
+        });
+        const option = this.state.options;
+        option.forEach(item => {
+            if (item.value === targetOption.value) {
+                item.children = targetOption.children;
+            }
+        });
+        this.setState({
+            options: option,
         });
     }
 
@@ -224,12 +258,13 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                     <FormItem label="策略名称" >
                         {
-                            getFieldDecorator('strategyName')(
+                            getFieldDecorator('strategyId')(
                                 <Cascader
                                     options={this.state.options}
                                     loadData={this.loadData}
                                     onChange={this.onChange}
                                     changeOnSelect
+                                    style={{ width: '350px' }}
                                 />
                             )
                         }
