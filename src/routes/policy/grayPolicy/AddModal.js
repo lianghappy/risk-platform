@@ -258,6 +258,8 @@ export default class PolicyModal extends React.PureComponent {
             getFieldValue,
         } = forms;
         const { details, grayDetails } = this.state;
+        console.log(getPolicyList);
+
         const options = getPolicyList.map(d => <Option value={d.id} key={d.id}>{d.name}</Option>);
         getFieldDecorator('keys', { initialValue: grayDetails || [0] });
         const keys = getFieldValue('keys');
@@ -272,7 +274,9 @@ export default class PolicyModal extends React.PureComponent {
                     >
                         {
                             getFieldDecorator(`strategyName[${index}]`, {
-                                initialValue: k.strategyId,
+                                initialValue: {
+                                    key: k.strategyId
+                                },
                                 rules: [
                                     { required: true, message: '请输入策略名称' },
                                 ],
@@ -282,7 +286,6 @@ export default class PolicyModal extends React.PureComponent {
                                     showSearch
                                     style={{ width: 200 }}
                                     placeholder="请选择策略"
-                                    defaultValue={{ key: k.strategyId }}
                                     optionFilterProp="children"
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 >
