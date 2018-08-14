@@ -184,7 +184,12 @@ class RecordHistory extends React.PureComponent {
                 render: (...rest) => (<span>{Number(rest[1].state) === 1 ? '进行中' : '已完成'}</span>),
                 width: 100
             },
-
+            {
+                title: '实验进度',
+                dataIndex: 'progress',
+                key: 'progress',
+                width: 100,
+            },
             { title: '操作',
                 dataIndex: 'valueType',
                 key: 'valueType',

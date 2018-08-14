@@ -292,7 +292,7 @@ class Policy extends React.PureComponent {
                         <Button type="primary">新增阶段</Button>
                     </AddStrategy>
                     }
-                    <span className="toastText">阶段管理中所有权重阶段类型的权重和要求=100%</span>
+                    <span className="toastText" style={{ marginTop: '12px' }}>阶段管理中所有权重阶段类型的权重和要求=100%</span>
                 </div>
                 <Table
                     columns={columns}

@@ -178,12 +178,6 @@ class SandSamples extends React.PureComponent {
                 width: 100,
             },
             {
-                title: '实验进度',
-                dataIndex: 'progress',
-                key: 'progress',
-                width: 100,
-            },
-            {
                 title: '操作',
                 dataIndex: 'operate',
                 key: 'operate',

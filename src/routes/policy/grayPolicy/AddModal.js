@@ -46,6 +46,7 @@ export default class PolicyModal extends React.PureComponent {
         // data: [],
         details: {},
         grayDetails: [0],
+        total: 0,
     };
     onSearch = (value) => {
         const {
@@ -62,6 +63,35 @@ export default class PolicyModal extends React.PureComponent {
             },
         });
     }
+
+    onChange = (e) => {
+        let { value } = e.target;
+        if (!/^\+?[1-9][0-9]*$/.test(value)) {
+            return;
+        }
+        const { form } = this.props;
+        const keys = form.getFieldValue('ratio');
+        if (!value) {
+            value = 0;
+        }
+        if (keys.length === 1) {
+            this.setState({
+                total: value,
+            });
+        } else {
+            let total = 0;
+            keys.forEach((item, index) => {
+                if (keys.length > (index + 1) && item) {
+                    total += Number(item);
+                }
+            });
+            total += Number(value);
+            this.setState({
+                total,
+            });
+        }
+    }
+
     remove = (k) => {
         const { form } = this.props;
         // can use data-binding to get
@@ -75,6 +105,18 @@ export default class PolicyModal extends React.PureComponent {
         form.setFieldsValue({
             keys: keys.filter(key => key !== k),
         });
+        const key = form.getFieldValue('ratio');
+        let total = 0;
+        if (key.length > 0) {
+            key.forEach((item, index) => {
+                if (keys.length > (index + 1) && item) {
+                    total += Number(item);
+                }
+            });
+            this.setState({
+                total,
+            });
+        }
     }
     add = () => {
         const { form } = this.props;
@@ -88,6 +130,15 @@ export default class PolicyModal extends React.PureComponent {
             keys: nextKeys,
         });
     }
+
+    checkNum = (value, rule, callback) => {
+        if (value && (!/^\+?[1-9][0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         const {
@@ -234,16 +285,20 @@ export default class PolicyModal extends React.PureComponent {
                         }
                     </Form.Item>
                     <Form.Item
-                        label="策略占比"
+                        label="策略占比%"
                     >
                         {
                             getFieldDecorator(`ratio[${index}]`, {
                                 initialValue: k.ratio,
                                 rules: [
                                     { required: true, message: '请输入策略占比' },
+                                    { validator: this.checkNum, message: '请输入数字' }
                                 ],
                             })(
-                                <Input />
+                                <Input
+                                    onChange={this.onChange}
+                                    onBlur={this.onBlur}
+                                />
                             )
                         }
                     </Form.Item>
@@ -313,6 +368,7 @@ export default class PolicyModal extends React.PureComponent {
                             >
                             添加策略<Icon type="plus-circle-o" style={{ marginLeft: '10px' }} />
                             </span>
+                            <span className="toastText" style={{ marginLeft: '10px' }}>说明：策略占比总和应为100%，当前配置总计：{this.state.total}%</span>
                         </Form.Item>
                         {formItems}
                     </Form>
