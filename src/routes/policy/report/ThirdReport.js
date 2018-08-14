@@ -46,17 +46,20 @@ const mapStateToProps = (state) => {
 @Form.create()
 export default class ThirdReport extends React.PureComponent {
     state={
-        time: 1,
-        startTime: moment().subtract(pageCount[0].hour[0], pageCount[0].hour[1]).format('X'),
+        time: 2,
+        startTime: moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]).format('X'),
         endTime: moment().format('X'),
-        times: [moment().subtract(pageCount[0].hour[0], pageCount[0].hour[1]), moment()]
+        times: [moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]), moment()]
     }
 
     componentDidMount() {
-        // const { startTime, endTime } = this.state;
+        const { startTime, endTime } = this.state;
         this.props.dispatch({
             type: 'statistical/dailyRecord',
-            payload: {}
+            payload: {
+                dateL: endTime,
+                dateU: startTime,
+            }
         }).then(() => {
             this.init();
         });

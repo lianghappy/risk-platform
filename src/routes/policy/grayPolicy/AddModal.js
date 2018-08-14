@@ -213,6 +213,13 @@ export default class PolicyModal extends React.PureComponent {
                     details,
                     grayDetails,
                 });
+                let total = 0;
+                grayDetails.forEach(item => {
+                    total += Number(item.ratio);
+                });
+                this.setState({
+                    total,
+                });
             });
         }
         this.setState({

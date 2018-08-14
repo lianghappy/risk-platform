@@ -117,7 +117,7 @@ const api = {
     addPolicy: `${API}/api/risk/manager/policy/strategy/create/v1`,
     updatePolicy: `${API}/api/risk/manager/policy/strategy/update/v1`,
     //  克隆策略
-    clonePolicy: `${API}/api/risk/manager/policy/strategy/clone/v1`,
+    clonePolicy: `${API}/api/risk/manager/policy/strategy/clone/v2`,
     updataEnable: `${API}/api/risk/manager/policy/strategy/update/enable/v1`,
     // 获取策略详情
     getPolicyDetail: `${API}/api/risk/manager/policy/strategy/get/v1`,
