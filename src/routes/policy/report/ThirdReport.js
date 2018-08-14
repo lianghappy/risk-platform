@@ -26,11 +26,11 @@ const pageCount = [
         indexs: 2,
     }, {
         time: '最近一月',
-        hour: [1, 'm'],
+        hour: [1, 'M'],
         indexs: 3,
     }, {
         time: '最近半年',
-        hour: [6, 'm'],
+        hour: [6, 'M'],
         indexs: 4,
     },
 ];
@@ -57,8 +57,8 @@ export default class ThirdReport extends React.PureComponent {
         this.props.dispatch({
             type: 'statistical/dailyRecord',
             payload: {
-                dateL: endTime,
-                dateU: startTime,
+                dateU: endTime,
+                dateL: startTime,
             }
         }).then(() => {
             this.init();
@@ -78,8 +78,8 @@ export default class ThirdReport extends React.PureComponent {
         const { startTime, endTime } = this.state;
         form.validateFields((errors, values) => {
             Object.assign(values, {
-                dateL: endTime,
-                dateU: startTime,
+                dateU: endTime,
+                dateL: startTime,
             });
             this.query({
                 ...values,
