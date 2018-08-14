@@ -186,8 +186,6 @@ export default class ThirdReport extends React.PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { portChannal, NormHitChannal } = this.props;
-        // const { startTime, endTime } = this.state;
-        console.log(this.state.times);
         const { times, time } = this.state;
 
 
