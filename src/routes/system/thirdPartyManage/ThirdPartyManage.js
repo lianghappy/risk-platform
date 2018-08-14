@@ -36,18 +36,18 @@ export default class ThirdPartyManage extends React.PureComponent {
         if (loading) return;
         form.validateFields((errors, values) => {
             if (values && values.statisticsDate && values.statisticsDate.length > 0) {
-                Object.assign(values, { statisticsDateU: moment(values.statisticsDate[0]._d).format('X') });
-                Object.assign(values, { statisticsDateL: moment(values.statisticsDate[1]._d).format('X') });
+                Object.assign(values, { statisticsDateL: moment(values.statisticsDate[0]._d).format('X') });
+                Object.assign(values, { statisticsDateU: moment(values.statisticsDate[1]._d).format('X') });
                 delete values.statisticsDate;
             }
             if (values && values.times && values.times.length > 0) {
-                Object.assign(values, { startDateU: moment(values.times[0]._d).format('X') });
-                Object.assign(values, { startDateL: moment(values.times[1]._d).format('X') });
+                Object.assign(values, { startDateL: moment(values.times[0]._d).format('X') });
+                Object.assign(values, { startDateU: moment(values.times[1]._d).format('X') });
                 delete values.times;
             }
             if (values && values.time && values.time.length > 0) {
-                Object.assign(values, { endDateU: moment(values.time[0]._d).format('X') });
-                Object.assign(values, { endDateL: moment(values.time[1]._d).format('X') });
+                Object.assign(values, { endDateL: moment(values.time[0]._d).format('X') });
+                Object.assign(values, { endDateU: moment(values.time[1]._d).format('X') });
                 delete values.time;
             }
             this.query({
@@ -68,18 +68,18 @@ export default class ThirdPartyManage extends React.PureComponent {
        if (loading) return;
        form.validateFields((errors, values) => {
            if (values && values.statisticsDate && values.statisticsDate.length > 0) {
-               Object.assign(values, { statisticsDateU: moment(values.statisticsDate[0]._d).format('X') });
-               Object.assign(values, { statisticsDateL: moment(values.statisticsDate[1]._d).format('X') });
+               Object.assign(values, { statisticsDateL: moment(values.statisticsDate[0]._d).format('X') });
+               Object.assign(values, { statisticsDateU: moment(values.statisticsDate[1]._d).format('X') });
                delete values.statisticsDate;
            }
            if (values && values.times && values.times.length > 0) {
-               Object.assign(values, { startDateU: moment(values.times[0]._d).format('X') });
-               Object.assign(values, { startDateL: moment(values.times[1]._d).format('X') });
+               Object.assign(values, { startDateL: moment(values.times[0]._d).format('X') });
+               Object.assign(values, { startDateU: moment(values.times[1]._d).format('X') });
                delete values.times;
            }
            if (values && values.time && values.time.length > 0) {
-               Object.assign(values, { endDateU: moment(values.time[0]._d).format('X') });
-               Object.assign(values, { endDateL: moment(values.time[1]._d).format('X') });
+               Object.assign(values, { endDateL: moment(values.time[0]._d).format('X') });
+               Object.assign(values, { endDateU: moment(values.time[1]._d).format('X') });
                delete values.time;
            }
            this.query({
