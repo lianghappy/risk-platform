@@ -99,7 +99,7 @@ export default class PolicyModal extends React.PureComponent {
         // const userId = JSON.parse(sessionStorage.userInfo).user.id;
         form.validateFields((err, values) => {
             if (!err) {
-                if (values && values.keys.length < 1) {
+                if (values && values.keys.length < 2) {
                     message.error('最少添加两个策略', DURATION);
                     return;
                 }
