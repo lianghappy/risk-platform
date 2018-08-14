@@ -422,6 +422,7 @@ class Policy extends React.PureComponent {
                                 <Select style={{ width: '157px' }}>
                                     <Select.Option value="1">已上架</Select.Option>
                                     <Select.Option value="0">未上架</Select.Option>
+                                    <Select.Option value="">全部</Select.Option>
                                 </Select>
                             )
                         }
