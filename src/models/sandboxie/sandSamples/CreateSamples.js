@@ -10,6 +10,8 @@ export default {
         sysId: SYSID,
         pageNum: 1,
         pageSize: PAGE_SIZE,
+        channelType: [],
+        strategys: [],
     },
     effects: {
         // 获取下拉菜单
@@ -18,8 +20,8 @@ export default {
             yield put({
                 type: 'getSelectSuc',
                 payload: {
-                    list: response,
-                    sysId: SYSID,
+                    list: response.channelBanks,
+                    strategys: response.strategys,
                 },
             });
         },

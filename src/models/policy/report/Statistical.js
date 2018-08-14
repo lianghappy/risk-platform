@@ -13,6 +13,7 @@ export default {
         NormHitChannal: {},
         getStage: [],
         dailyRecord: [],
+        portChannal: [],
     },
     effects: {
         // 获取策略
@@ -45,6 +46,16 @@ export default {
                 type: 'querySuc',
                 payload: {
                     getStage: response,
+                },
+            });
+        },
+        // 获取三方数据源的下拉菜单
+        * portChannal({ payload }, { call, put }) {
+            const response = yield call(post, API.portChannal, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    portChannal: response,
                 },
             });
         },

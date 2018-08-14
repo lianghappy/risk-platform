@@ -186,7 +186,7 @@ const api = {
     // 筛选条件
     selectSandSamples: `${API}/api/risk/manager/collector/analysisSample/get/v1`,
     // 获取所有的数据源
-    getAllType: `${API}/api/risk/manager/policy/getAllChannelBank/list/v1`,
+    getAllType: `${API}/api/risk/manager/collector/analysisSample/select/v1`,
     // 沙箱样本创建样本
     addCreateSamples: `${API}/api/risk/manager/collector/analysisSample/createWideTableAnalysisSample/v1`,
     // 已有的样本开始实验
@@ -272,6 +272,8 @@ const api = {
     normHit: `${API}/api/risk/manager/policy/normHit/StageChannal/v1`,
     // 三方统计
     dailyRecord: `${API}/api/risk/manager/collector/thirdpartyManage/dailyRecord/v1`,
+    // 获取三方数据源的下拉菜单
+    portChannal: `${API}/api/risk/manager/collector/thirdpartyManage/portChannal/v1`,
 
 };
 

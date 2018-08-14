@@ -18,6 +18,7 @@ const mapStateToProps = (state) => ({
     list: state.creates.list,
     sysId: state.creates.sysId,
     loading: state.loading.models.creates,
+    strategys: state.creates.strategys,
 });
 
 @connect(mapStateToProps)
@@ -116,6 +117,7 @@ class CreateSamples extends React.PureComponent {
         const { getFieldDecorator } = this.props.form;
         const {
             list,
+            strategys,
         } = this.props;
         const lists = {
             channelType: [],
@@ -215,6 +217,24 @@ class CreateSamples extends React.PureComponent {
                                         <Select placeholder="请选择业务流程">
                                             {
                                                 lists.businessProcess.map((item) => {
+                                                    return (<Option key={item.name} value={item.name}>{item.name}</Option>);
+                                                })
+                                            }
+                                            <Option value="">全部</Option>
+                                        </Select>
+                                    )
+                                }
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <FormItem label="策略名称" {...formItemLayout}>
+                                {
+                                    getFieldDecorator('strategyName')(
+                                        <Select placeholder="请选择策略名称">
+                                            {
+                                                strategys.map((item) => {
                                                     return (<Option key={item.name} value={item.name}>{item.name}</Option>);
                                                 })
                                             }

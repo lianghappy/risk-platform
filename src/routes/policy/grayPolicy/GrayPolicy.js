@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Form, Input, Button, Table, message, Select, Switch, Popconfirm } from 'antd';
+import { Layout, Form, Input, Button, Table, message, Select, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
 // import { roles } from 'utils/common';
 import style from './index.scss';
@@ -192,20 +192,6 @@ export default class GrayPolicy extends React.PureComponent {
                width: 100,
            },
            {
-               title: '状态',
-               dataIndex: 'status',
-               key: 'status',
-               width: 100,
-               render: (text, record) => (
-                   <Switch
-                       checkedChildren="开启"
-                       unCheckedChildren="关闭"
-                       onChange={(e) => this.changes(record.id, e)}
-                       checked={record.status === '1'}
-                   />
-               )
-           },
-           {
                title: '备注',
                dataIndex: 'remark',
                key: 'remark',
@@ -218,26 +204,42 @@ export default class GrayPolicy extends React.PureComponent {
                width: 100,
                render: (text, record) => (
                    <span>
+                       {
+                           record.status === '0' &&
+                           <Popconfirm
+                               placement="topRight"
+                               title="您确定要上架吗？"
+                               onConfirm={(e) => this.changes(record.id, e)}
+                           >
+                               <a>上架</a>
+                           </Popconfirm>
+                       }
                        <GrayDetails
                            grayStrategyId={record.id}
                        >
-                           <a>详情</a>
+                           <a className="jm-del">详情</a>
                        </GrayDetails>
-                       <AddModal
-                           visible={false}
-                           type="edit"
-                           onOk={this.modalOk}
-                           record={record.id}
-                       >
-                           <a className="jm-del" >编辑</a>
-                       </AddModal>
-                       <Popconfirm
-                           placement="topRight"
-                           title="您确定要删除吗？"
-                           onConfirm={() => this.onDelete(record.id)}
-                       >
-                           <a className="jm-del">删除</a>
-                       </Popconfirm>
+                       {
+                           record.status === '0' &&
+                           <AddModal
+                               visible={false}
+                               type="edit"
+                               onOk={this.modalOk}
+                               record={record.id}
+                           >
+                               <a className="jm-del" >编辑</a>
+                           </AddModal>
+                       }
+                       {
+                           record.status === '0' &&
+                           <Popconfirm
+                               placement="topRight"
+                               title="您确定要删除吗？"
+                               onConfirm={() => this.onDelete(record.id)}
+                           >
+                               <a className="jm-del">删除</a>
+                           </Popconfirm>
+                       }
                    </span>
                ),
            }

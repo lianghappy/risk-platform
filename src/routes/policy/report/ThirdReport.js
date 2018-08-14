@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import * as echarts from 'echarts/lib/echarts';
 import moment from 'moment';
 // 引入折线图。
-import 'echarts/lib/chart/bar';
+import 'echarts/lib/chart/line';
 // 引入提示框组件、标题组件、工具箱组件。
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
@@ -18,16 +18,20 @@ const { RangePicker } = DatePicker;
 const pageCount = [
     {
         time: '最近一天',
-        keys: [1, 'd'],
+        hour: [1, 'd'],
+        indexs: 1,
     }, {
         time: '最近一周',
-        keys: [7, 'd'],
+        hour: [7, 'd'],
+        indexs: 2,
     }, {
         time: '最近一月',
-        keys: [1, 'm'],
+        hour: [1, 'm'],
+        indexs: 3,
     }, {
         time: '最近半年',
-        keys: [6, 'm'],
+        hour: [6, 'm'],
+        indexs: 4,
     },
 ];
 const mapStateToProps = (state) => {
@@ -35,6 +39,7 @@ const mapStateToProps = (state) => {
         list: state.statistical.list,
         NormHitChannal: state.statistical.NormHitChannal,
         dailyRecord: state.statistical.dailyRecord,
+        portChannal: state.statistical.portChannal,
     };
 };
 @connect(mapStateToProps)
@@ -42,47 +47,23 @@ const mapStateToProps = (state) => {
 export default class ThirdReport extends React.PureComponent {
     state={
         time: 1,
+        startTime: moment().subtract(pageCount[0].hour[0], pageCount[0].hour[1]).format('X'),
+        endTime: moment().format('X'),
+        times: [moment().subtract(pageCount[0].hour[0], pageCount[0].hour[1]), moment()]
     }
 
     componentDidMount() {
+        // const { startTime, endTime } = this.state;
         this.props.dispatch({
             type: 'statistical/dailyRecord',
-            payload: {},
+            payload: {}
         }).then(() => {
             this.init();
         });
-        const container = this.bar;
+        const container = this.line;
         const myChart = echarts.init(container);
         window.onresize = myChart.resize;
     }
-
-    onPageChange = (pageNum, pageSize) => {
-        const {
-            form,
-            loading,
-        } = this.props;
-        if (loading) return;
-        form.validateFields((errors, values) => {
-            if (values && values.start && values.start.length > 0) {
-                Object.assign(values, {
-                    statisticDateU: moment(values.start[0]._d).format('X'),
-                    statisticDateL: moment(values.start[1]._d).format('X'),
-                });
-                delete values.start;
-            }
-            if (values && values.strategyId) {
-                Object.assign(values, {
-                    strategyId: values.strategyId[0],
-                    stageId: values.strategyId.length > 1 ? values.strategyId[1] : '',
-                });
-            }
-            this.query({
-                ...values,
-                pageNum,
-                pageSize,
-            });
-        });
-    };
 
     onQuery = (e) => {
         e.preventDefault();
@@ -91,24 +72,14 @@ export default class ThirdReport extends React.PureComponent {
             form,
         } = this.props;
         if (loading) return;
+        const { startTime, endTime } = this.state;
         form.validateFields((errors, values) => {
-            if (values && values.start && values.start.length > 0) {
-                Object.assign(values, {
-                    statisticDateU: moment(values.start[0]._d).format('X'),
-                    statisticDateL: moment(values.start[1]._d).format('X')
-                });
-
-                delete values.start;
-            }
-            if (values && values.strategyId) {
-                Object.assign(values, {
-                    strategyId: values.strategyId[0],
-                    stageId: values.strategyId.length > 1 ? values.strategyId[1] : '',
-                });
-            }
+            Object.assign(values, {
+                dateL: endTime,
+                dateU: startTime,
+            });
             this.query({
                 ...values,
-                pageNum: 1,
             });
         });
     }
@@ -122,51 +93,70 @@ export default class ThirdReport extends React.PureComponent {
         });
     };
 
-    onChange = (value, selectedOptions) => {
-        console.log(value, selectedOptions);
+    onChange = (value) => {
+        this.setState({
+            time: value,
+            startTime: moment().subtract(pageCount[value - 1].hour[0], pageCount[value - 1].hour[1]).format('X'),
+            endTime: moment().format('X'),
+            times: [moment().subtract(pageCount[value - 1].hour[0], pageCount[value - 1].hour[1]), moment()]
+        });
+    }
+
+    onChangeThird = (value) => {
+        this.props.dispatch({
+            type: 'statistical/portChannal',
+            payload: {
+                thirdparty: value,
+            }
+        });
     }
 
     setOption = (mychart) => {
-        const { list } = this.props;
-        const normName = list.map(it => it.normName) || [];
-        const allHitNum = list.map(it => it.allHitNum) || [];
+        const { dailyRecord } = this.props;
+        const allSuccessTime = dailyRecord.length > 0 ? dailyRecord.map(it => it.allSuccessTime) : [];
+        const allCallTime = dailyRecord.length > 0 ? dailyRecord.map(it => it.allCallTime) : [];
+        const date = dailyRecord.length > 0 ? dailyRecord.map(it => it.date) : [];
         const option = {
             tooltip: {
                 trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            legend: {
-                data: ['2011年', '2012年']
             },
             grid: {
                 left: '3%',
                 right: '4%',
                 bottom: '3%',
-                containLabel: true
+            },
+            legend: {
+                data: ['失败调用次数', '成功调用次数']
             },
             xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
+                type: 'category',
+                boundaryGap: false,
+                data: date,
             },
             yAxis: {
-                type: 'category',
-                data: normName
+                type: 'value',
+                data: ['成功调用次数', '失败调用次数']
             },
             series: [
                 {
-                    name: '命中数量',
-                    type: 'bar',
-                    data: allHitNum
-                }
+                    name: '成功调用次数',
+                    type: 'line',
+                    stack: '总量',
+                    data: allSuccessTime
+                },
+                {
+                    name: '失败调用次数',
+                    type: 'line',
+                    stack: '总量',
+                    data: allCallTime
+                },
             ]
         };
         mychart.setOption(option);
     }
 
     init = () => {
-        const container = this.bar;
+        const container = this.line;
         const myChart = echarts.init(container);
         this.setOption(myChart);
         const { NormHitChannal } = this.props;
@@ -184,10 +174,10 @@ export default class ThirdReport extends React.PureComponent {
 
     query(payload) {
         this.props.dispatch({
-            type: 'statistical/getReportList',
+            type: 'statistical/dailyRecord',
             payload,
         }).then(() => {
-            const container = this.bar;
+            const container = this.line;
             const myChart = echarts.init(container);
             this.setOption(myChart);
             window.onresize = myChart.resize;
@@ -195,48 +185,52 @@ export default class ThirdReport extends React.PureComponent {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { NormHitChannal } = this.props;
+        const { portChannal, NormHitChannal } = this.props;
+        // const { startTime, endTime } = this.state;
+        console.log(this.state.times);
+        const { times, time } = this.state;
+
 
         return (
-            <Layout>
+            <Layout className={style.statical}>
                 <Form layout="inline" className={style.inputs} onSubmit={this.onQuery}>
                     <FormItem>
-                        {
-                            getFieldDecorator('start')(
-                                <RangePicker
-                                    showTime={{
-                                        hideDisabledOptions: true,
-                                        defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
-                                    }}
-                                />
-                            )
-                        }
+                        <RangePicker
+                            showTime={{
+                                hideDisabledOptions: true,
+                                defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('23:59:59', 'HH:mm:ss')],
+                            }}
+                            value={times}
+                            format="YYYY-MM-DD HH:mm"
+                            placeholder={['开始时间', '结束时间']}
+                        />
                     </FormItem>
                     <FormItem>
-                        {
-                            getFieldDecorator('times')(
-                                <Select
-                                    value={this.state.time}
-                                >
-                                    {
-                                        pageCount.map((item, index) => {
-                                            return (
-                                                <Option key={index}>{item.time}</Option>
-                                            );
-                                        })
-                                    }
-                                </Select>
-                            )
-                        }
+                        <Select
+                            style={{ width: '154px' }}
+                            onChange={this.onChange}
+                            value={time}
+                        >
+                            {
+                                pageCount.map((item) => {
+                                    return (
+                                        <Option key={item.indexs} value={item.indexs}>{item.time}</Option>
+                                    );
+                                })
+                            }
+                        </Select>
                     </FormItem>
                     <FormItem>
                         {
                             getFieldDecorator('thirdparty')(
-                                <Select style={{ width: '157px' }}>
+                                <Select
+                                    style={{ width: '157px' }}
+                                    onChange={this.onChangeThird}
+                                >
                                     {
                                         NormHitChannal.dateSources &&
                                         NormHitChannal.dateSources.map((item) => {
-                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
+                                            return (<Option value={item.name} key={item.id}>{item.name}</Option>);
                                         })
                                     }
                                 </Select>
@@ -248,8 +242,8 @@ export default class ThirdReport extends React.PureComponent {
                             getFieldDecorator('portName')(
                                 <Select style={{ width: '157px' }}>
                                     {
-                                        NormHitChannal.status &&
-                                        NormHitChannal.status.map((item) => {
+                                        portChannal.status &&
+                                        portChannal.status.map((item) => {
                                             return (<Option value={item.code} key={item.id}>{item.name}</Option>);
                                         })
                                     }
@@ -263,26 +257,7 @@ export default class ThirdReport extends React.PureComponent {
                     </FormItem>
                 </Form>
                 <div className={style.content}>
-                    <div className={style.lefts} ref={(c) => { this.bar = c; }}></div>
-                    {
-                        this.props.list && this.props.list.length > 0 &&
-                        <div className={style.rights}>
-                            <p>规则命中排行</p>
-                            <ul>
-                                {
-                                    this.props.list.map((item, index) => {
-                                        return (
-                                            <li key={index}>
-                                                <span className={index < 3 && style.firsts}>{index + 1}</span>
-                                                <span className={style.next}>{item.normName}</span>
-                                                <span>{item.allHitNum}</span>
-                                            </li>
-                                        );
-                                    })
-                                }
-                            </ul>
-                        </div>
-                    }
+                    <div className={style.alls} ref={(c) => { this.line = c; }}></div>
                 </div>
             </Layout>
         );
