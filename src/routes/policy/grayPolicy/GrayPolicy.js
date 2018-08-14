@@ -93,7 +93,7 @@ export default class GrayPolicy extends React.PureComponent {
        });
    }
 
-   changes = (grayStrategyId, e) => {
+   changes = (grayStrategyId) => {
        const {
            dispatch,
            pageSize,
@@ -106,7 +106,7 @@ export default class GrayPolicy extends React.PureComponent {
                payload: {
                    data: {
                        grayStrategyId,
-                       status: e ? 1 : 0,
+                       status: 1,
                    },
                    resolve,
                },
@@ -209,7 +209,7 @@ export default class GrayPolicy extends React.PureComponent {
                            <Popconfirm
                                placement="topRight"
                                title="您确定要上架吗？"
-                               onConfirm={(e) => this.changes(record.id, e)}
+                               onConfirm={() => this.changes(record.id)}
                            >
                                <a>上架</a>
                            </Popconfirm>
@@ -266,8 +266,8 @@ export default class GrayPolicy extends React.PureComponent {
                        {
                            getFieldDecorator('status')(
                                <Select style={{ width: '157px' }}>
-                                   <Option value="1">启用</Option>
-                                   <Option value="0">禁用</Option>
+                                   <Option value="1">已上架</Option>
+                                   <Option value="0">未上架</Option>
                                    <Option value="">所有</Option>
                                </Select>
                            )
