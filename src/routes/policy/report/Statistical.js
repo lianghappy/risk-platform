@@ -158,7 +158,7 @@ export default class Statistical extends React.PureComponent {
                 {
                     name: '命中数量',
                     type: 'bar',
-                    data: allHitNum
+                    data: allHitNum.reverse()
                 }
             ]
         };
@@ -169,19 +169,21 @@ export default class Statistical extends React.PureComponent {
         const targetOption = selectedOptions[selectedOptions.length - 1];
         const { dispatch } = this.props;
         // 搜索数据
-        dispatch({
-            type: 'statistical/getStage',
-            payload: {
-                strategyId: selectedOptions[0].value,
-            }
-        }).then(() => {
-            this.loadInit(targetOption);
-        });
+        if (selectedOptions[0].value) {
+            dispatch({
+                type: 'statistical/getStage',
+                payload: {
+                    strategyId: selectedOptions[0].value,
+                }
+            }).then(() => {
+                this.loadInit(targetOption);
+            });
+        }
     }
 
     loadInit = (targetOption) => {
         const { getStage } = this.props;
-        targetOption.children = [];
+        targetOption.children = [{ label: '所有', value: '' }];
         getStage.forEach(item => {
             targetOption.children.push({
                 label: item.name,
@@ -213,10 +215,15 @@ export default class Statistical extends React.PureComponent {
                     isLeaf: false,
                 });
             });
-            this.setState({
-                options: option,
-            });
         }
+        option.push({
+            label: '所有',
+            value: '',
+            isLeaf: false,
+        });
+        this.setState({
+            options: option,
+        });
     }
 
     query(payload) {
@@ -259,6 +266,7 @@ export default class Statistical extends React.PureComponent {
                                             return (<Option value={item.code} key={item.id}>{item.name}</Option>);
                                         })
                                     }
+                                    <Option value="">所有</Option>
                                 </Select>
                             )
                         }
@@ -286,6 +294,7 @@ export default class Statistical extends React.PureComponent {
                                             return (<Option value={item.code} key={item.id}>{item.name}</Option>);
                                         })
                                     }
+                                    <Option value="">所有</Option>
                                 </Select>
                             )
                         }
