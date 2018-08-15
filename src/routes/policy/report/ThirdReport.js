@@ -9,7 +9,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
 import { Layout, Form, Button, Select, DatePicker } from 'antd';
-// import { roles } from 'utils/common';
+import { roles } from 'utils/common';
 import style from './index.scss';
 
 const FormItem = Form.Item;
@@ -253,8 +253,14 @@ export default class ThirdReport extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
-                        <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
-                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        {
+                            roles('R_policy_static_th_vw') &&
+                            <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('R_policy_static_th_rst') &&
+                            <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.content}>

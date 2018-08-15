@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Layout, Form, Button, Table, message, Select, DatePicker } from 'antd';
 import { DURATION, SYSID } from 'utils/constants';
 import moment from 'moment';
-// import { roles } from 'utils/common';
+import { roles } from 'utils/common';
 import style from './index.scss';
 import AddModal from './AddModal';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -324,32 +324,38 @@ export default class ThirdPartyManage extends React.PureComponent {
                            )
                        }
                    </FormItem>
-                   <FormItem>
-
-                       <Button type="primary" htmlType="submit" disabled={this.props.loading}>
+                   {
+                       roles('R_system_third_vw') &&
+                       <FormItem>
+                           <Button type="primary" htmlType="submit" disabled={this.props.loading}>
                      查询
-                       </Button>
-
-                   </FormItem>
-                   <FormItem>
-                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
+                           </Button>
+                       </FormItem>
+                   }
+                   {
+                       roles('R_system_third_rst') &&
+                       <FormItem>
+                           <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
                   重置
-                       </Button>
-                   </FormItem>
-
+                           </Button>
+                       </FormItem>
+                   }
                </Form>
-               <AddModal
-                   visible={false}
-                   type="add"
-                   onOk={this.modalOk}
-                   record={{}}
-               >
-                   <Button
-                       type="primary"
-                       className={style.btns}
-                   >新增
-                   </Button>
-               </AddModal>
+               {
+                   roles('R_system_third_add') &&
+                   <AddModal
+                       visible={false}
+                       type="add"
+                       onOk={this.modalOk}
+                       record={{}}
+                   >
+                       <Button
+                           type="primary"
+                           className={style.btns}
+                       >新增
+                       </Button>
+                   </AddModal>
+               }
 
                <Table
                    className="tableChange"

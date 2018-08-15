@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Input, Button, message } from 'antd';
+import { Layout, Form, Input, Button, message, Tooltip } from 'antd';
 import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
@@ -157,6 +157,16 @@ export default class AddRegular extends React.PureComponent {
                     >
                         <span style={{ marginRight: '20px' }}>{k.name}</span>
                         <a role="button" tabIndex="-1" onClick={() => this.remove(k)}>删除</a>
+                    </FormItem>
+                    <FormItem
+                        label="规则配置说明"
+                        {...formItemLayouts}
+                    >
+                        <Tooltip title={k.indexdescribe}>
+                            <span style={{ '-webkit-box-orient': 'vertical' }} className="description">
+                                {k.indexdescribe}
+                            </span>
+                        </Tooltip>
                     </FormItem>
                     <FormItem
                         required={false}

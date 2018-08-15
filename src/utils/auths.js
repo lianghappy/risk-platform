@@ -92,6 +92,18 @@ export const autheds = [
         id: 'R_policy_ply',
         pid: 'R_policy',
     }, {
+        name: '统计报表',
+        key: 'statistical',
+        router: '/statistical',
+        id: 'R_policy_static',
+        pid: 'R_policy',
+    }, {
+        name: '灰度策略',
+        key: 'grayPolicy',
+        router: '/grayPolicy',
+        id: 'R_policy_gray',
+        pid: 'R_policy',
+    }, {
         name: '实验中心',
         key: 'sandboxie',
         id: 'R_exp',

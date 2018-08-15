@@ -314,13 +314,14 @@ export default class Regular extends React.PureComponent {
             channels,
             status,
         } = this.props;
+
         const { stageId } = this.state;
         const categoryList = treeConvert({
             pId: 'pid',
             tId: 'value',
             tName: 'label',
         }, categories);
-        const dataSource = list.normList !== undefined ? list.normList : [];
+        const dataSource = list !== undefined ? list : [];
         const { getFieldDecorator } = form;
         const {
             selectedRowKeys,

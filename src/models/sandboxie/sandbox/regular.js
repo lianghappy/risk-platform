@@ -8,7 +8,7 @@ import { filterPath, setPath } from 'utils/path';
 export default {
     namespace: 'regular',
     state: {
-        list: {}, // 规则列表
+        list: [], // 规则列表
         pageNum: 1,
         pageSize: PAGE_SIZE,
         categories: [], // 规则类型

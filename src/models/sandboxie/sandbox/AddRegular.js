@@ -123,14 +123,14 @@ export default {
         setup({ dispatch, history }) {
             return history.listen(({ pathname }) => {
                 const path = filterPath(pathname).split('/');
-                if (path[1] === 'addRegulars') {
+                if (path[1] === 'addRegular') {
                     const id = base64.decode(path[2]);
                     dispatch({
                         type: 'common/setBreadcrumb',
-                        payload: [{ name: '策略管理', link: setPath('/policy') },
-                            { name: '阶段管理', link: setPath(`/strategy/${path[3]}`) },
-                            { name: '规则管理', link: setPath(`/regular/${path[2]}/${path[3]}`) },
-                            { name: '新增规则管理' }],
+                        payload: [{ name: '策略管理', link: setPath('/sandboxie') },
+                            { name: '阶段管理', link: setPath(`/strategies/${path[3]}`) },
+                            { name: '规则管理', link: setPath(`/regulars/${path[2]}/${path[3]}`) },
+                            { name: '新增规则' }],
                     });
                     dispatch({
                         type: 'query',

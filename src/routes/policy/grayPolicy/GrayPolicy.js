@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Layout, Form, Input, Button, Table, message, Select, Popconfirm } from 'antd';
 import { DURATION } from 'utils/constants';
-// import { roles } from 'utils/common';
+import { roles } from 'utils/common';
 import style from './index.scss';
 import AddModal from './AddModal';
 import Pagination from '../../../components/Pagination/Pagination';
@@ -205,7 +205,7 @@ export default class GrayPolicy extends React.PureComponent {
                render: (text, record) => (
                    <span>
                        {
-                           record.status === '0' &&
+                           record.status === '0' && roles('R_policy_gray_up') &&
                            <Popconfirm
                                placement="topRight"
                                title="您确定要上架吗？"
@@ -214,13 +214,16 @@ export default class GrayPolicy extends React.PureComponent {
                                <a>上架</a>
                            </Popconfirm>
                        }
-                       <GrayDetails
-                           grayStrategyId={record.id}
-                       >
-                           <a className="jm-del">详情</a>
-                       </GrayDetails>
                        {
-                           record.status === '0' &&
+                           roles('R_policy_gray_det') &&
+                           <GrayDetails
+                               grayStrategyId={record.id}
+                           >
+                               <a className="jm-del">详情</a>
+                           </GrayDetails>
+                       }
+                       {
+                           record.status === '0' && roles('R_policy_gray_edit') &&
                            <AddModal
                                visible={false}
                                type="edit"
@@ -231,7 +234,7 @@ export default class GrayPolicy extends React.PureComponent {
                            </AddModal>
                        }
                        {
-                           record.status === '0' &&
+                           record.status === '0' && roles('R_policy_gray_del') &&
                            <Popconfirm
                                placement="topRight"
                                title="您确定要删除吗？"
@@ -274,31 +277,45 @@ export default class GrayPolicy extends React.PureComponent {
                        }
                    </FormItem>
                    <FormItem>
-
-                       <Button type="primary" htmlType="submit" disabled={this.props.loading}>
-                     查询
-                       </Button>
-
+                       {
+                           roles('R_policy_gray_vw') &&
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                disabled={this.props.loading}
+                            >
+                                            查询
+                            </Button>
+                       }
                    </FormItem>
-                   <FormItem>
-                       <Button type="primary" onClick={this.onReset} disabled={this.props.loading}>
-                  重置
-                       </Button>
-                   </FormItem>
-
+                   {
+                       roles('R_policy_gray_rst') &&
+                           <FormItem>
+                               <Button
+                                   type="primary"
+                                   onClick={this.onReset}
+                                   disabled={this.props.loading}
+                               >
+                                重置
+                               </Button>
+                           </FormItem>
+                   }
                </Form>
-               <AddModal
-                   visible={false}
-                   type="add"
-                   onOk={this.modalOk}
-                   record=""
-               >
-                   <Button
-                       type="primary"
-                       className={style.btns}
-                   >新增
-                   </Button>
-               </AddModal>
+               {
+                   roles('R_policy_gray_add') &&
+                   <AddModal
+                       visible={false}
+                       type="add"
+                       onOk={this.modalOk}
+                       record=""
+                   >
+                       <Button
+                           type="primary"
+                           className={style.btns}
+                       >新增
+                       </Button>
+                   </AddModal>
+               }
 
                <Table
                    columns={columns}

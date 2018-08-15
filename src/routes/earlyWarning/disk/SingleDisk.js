@@ -337,20 +337,23 @@ export default class SingleDisk extends React.PureComponent {
             <div className={styles.chartDetail}>
                 <div className={styles.chartTitle}>
                     <span>{item.chartName}</span>
-                    <Popconfirm
-                        placement="topRight"
-                        title="您确定要删除吗？"
-                        onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
-                    >
-                        <i
-                            className={cs(
-                                'jm-icon',
-                                'anticon',
-                                styles.close
-                            )}
+                    {
+                        roles('R_warn_disk_delTab') &&
+                        <Popconfirm
+                            placement="topRight"
+                            title="您确定要删除吗？"
+                            onConfirm={() => this.onDeleteTable(item.boardAndSleuthId)}
                         >
-                        </i>
-                    </Popconfirm>
+                            <i
+                                className={cs(
+                                    'jm-icon',
+                                    'anticon',
+                                    styles.close
+                                )}
+                            >
+                            </i>
+                        </Popconfirm>
+                    }
                 </div>
                 <div className={styles.chartTable}>
                     <div className={styles.times}>

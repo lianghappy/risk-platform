@@ -90,12 +90,12 @@ export const menuKeyPick = (location) => {
         else key.push('policy');
         break;
     case 'addRegular':
-        if (path[2] === '0') key.push('sandbox');
-        else key.push('sandbox');
+        if (path[2] === '0') key.push('sandboxie');
+        else key.push('sandboxie');
         break;
     case 'editRegular':
-        if (path[2] === '0') key.push('sandbox');
-        else key.push('sandbox');
+        if (path[2] === '0') key.push('sandboxie');
+        else key.push('sandboxie');
         break;
     default:
         key.push(router);

@@ -9,7 +9,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
 import { Layout, Form, Button, Select, Cascader, DatePicker } from 'antd';
-// import { roles } from 'utils/common';
+import { roles } from 'utils/common';
 import style from './index.scss';
 
 const FormItem = Form.Item;
@@ -275,6 +275,7 @@ export default class Statistical extends React.PureComponent {
                         {
                             getFieldDecorator('strategyId')(
                                 <Cascader
+                                    placeholder="请选择"
                                     options={this.state.options}
                                     loadData={this.loadData}
                                     onChange={this.onChange}
@@ -317,8 +318,14 @@ export default class Statistical extends React.PureComponent {
                         }
                     </FormItem>
                     <FormItem>
-                        <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
-                        <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        {
+                            roles('R_policy_static_rl_vw') &&
+                            <Button type="primary" htmlType="submit" disabled={this.props.loading} className={style.save}>查询</Button>
+                        }
+                        {
+                            roles('R_policy_static_rl_rst') &&
+                            <Button type="default" onClick={this.onReset} disabled={this.props.loading}>重置</Button>
+                        }
                     </FormItem>
                 </Form>
                 <div className={style.content}>
