@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Form, Input, Transfer, Select, Button, message, Icon } from 'antd';
+import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import { setPath } from 'utils/path';
-import ConditionInput from './conditionInput';
+// import ConditionInput from './conditionInput';
 import styles from './index.scss';
 
 const Option = Select.Option;
@@ -164,14 +164,14 @@ export default class AddRule extends React.PureComponent {
                 sm: { span: 19 },
             },
         };
-        const formItemLayoutWithOutLabel = {
+        /* const formItemLayoutWithOutLabel = {
             wrapperCol: {
                 xs: { span: 24, offset: 0 },
                 sm: { span: 20, offset: 4 },
             },
-        };
-        const { getFieldDecorator, getFieldValue } = this.props.form;
-        getFieldDecorator('keys', { initialValue: [] });
+        }; */
+        const { getFieldDecorator } = this.props.form;
+        /*  getFieldDecorator('keys', { initialValue: [] });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k) => {
             return (
@@ -198,7 +198,7 @@ export default class AddRule extends React.PureComponent {
                     </div>
                 </Form.Item>
             );
-        });
+        }); */
         const times = [
             { name: '1分钟', key: '1', type: 'minutes' },
             { name: '5分钟', key: '5', type: 'minutes' },
@@ -269,13 +269,13 @@ export default class AddRule extends React.PureComponent {
                             )
                         }
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="判定条件"
                         {...formItemLayout}
                     >
                         <Icon type="plus-circle-o" onClick={() => this.add()} />
-                    </Form.Item>
-                    {formItems}
+                    </Form.Item> */}
+                    {/* {formItems} */}
                     <Form.Item>
                         <span className={styles.headers}>2、设置报警规则</span>
                     </Form.Item>

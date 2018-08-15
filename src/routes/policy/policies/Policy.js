@@ -364,7 +364,7 @@ class Policy extends React.PureComponent {
                                             <span role="button" tabIndex="-1" onClick={(e) => this.stage(e, rest[1])}>阶段管理</span>
                                         </Menu.Item>
                                         {
-                                            roles('R_B_SB_sandbox_edit') &&
+                                            roles('R_policy_ply_edit') &&
                                         <Menu.Item>
                                             {
                                                 roles('R_policy_ply_edit') && Number(rest[1].isEnable) === 0 &&

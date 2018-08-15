@@ -268,13 +268,6 @@ export default class WarningRule extends React.PureComponent {
                 dataIndex: 'strategyName',
                 key: 'strategyName',
                 width: 100,
-                render: (text, record) => {
-                    const judgeConditionList = record.judgeConditionList &&
-                    record.judgeConditionList.map((item, index) => {
-                        return (<span key={index}>{this.checkKeys(item.judgeKey)}{item.compareSymbol}{item.judgeValue}</span>);
-                    });
-                    return (<span>{record.strategyName}{judgeConditionList}</span>);
-                }
             },
             {
                 title: '状态',

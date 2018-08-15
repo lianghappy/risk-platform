@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Layout, Form, Input, Transfer, Select, Button, message, Icon } from 'antd';
+import { Layout, Form, Input, Transfer, Select, Button, message } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import base64 from 'utils/base64';
 import { setPath } from 'utils/path';
-import ConditionInput from './conditionInput';
+// import ConditionInput from './conditionInput';
 import styles from './index.scss';
 
 const times = [
@@ -39,7 +39,6 @@ export default class EditRule extends React.PureComponent {
     }
     state = {
         targetKeys: [],
-        judgeConditionList: [],
     }
     componentDidMount() {
         /*   const {
@@ -147,7 +146,6 @@ export default class EditRule extends React.PureComponent {
         const {
             record,
             getPeopleList,
-            judgeConditionList,
         } = this.props;
         const targetKeys = [];
         if (record.sleuthTeamNames && getPeopleList.length !== 0) {
@@ -161,7 +159,7 @@ export default class EditRule extends React.PureComponent {
                 });
             });
         }
-        this.setState({ targetKeys, judgeConditionList });
+        this.setState({ targetKeys });
     };
 
     remove(k) {
@@ -258,16 +256,16 @@ export default class EditRule extends React.PureComponent {
             { num: 5 },
             { num: 6 },
         ];
-        const formItemLayoutWithOutLabel = {
+        /* const formItemLayoutWithOutLabel = {
             wrapperCol: {
                 xs: { span: 24, offset: 0 },
                 sm: { span: 20, offset: 4 },
             },
-        };
-        const { judgeConditionList } = this.state;
-        const { getFieldDecorator, getFieldValue } = this.props.form;
+        }; */
+        // const { judgeConditionList } = this.state;
+        const { getFieldDecorator } = this.props.form;
 
-        getFieldDecorator('keys', { initialValue: judgeConditionList });
+        /* getFieldDecorator('keys', { initialValue: judgeConditionList });
         const keys = getFieldValue('keys');
         const formItems = keys.map((k, index) => {
             return (
@@ -295,7 +293,7 @@ export default class EditRule extends React.PureComponent {
                     </div>
                 </Form.Item>
             );
-        });
+        }); */
         return (
             <Layout className="layoutMar">
                 <Form
@@ -337,13 +335,13 @@ export default class EditRule extends React.PureComponent {
                             )
                         }
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="判定条件"
                         {...formItemLayout}
                     >
                         <Icon type="plus-circle-o" onClick={() => this.add()} />
                     </Form.Item>
-                    {formItems}
+                    {formItems} */}
                     <Form.Item>
                         <span className={styles.headers}>2、设置报警规则</span>
                     </Form.Item>

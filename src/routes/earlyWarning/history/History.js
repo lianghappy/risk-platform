@@ -11,7 +11,7 @@ const Option = Select.Option;
 const datas = [
     {
         name: '商品类型',
-        key: 'goodsType',
+        key: 'productType',
     }, {
         name: '业务流程',
         key: 'businessFlow',
@@ -283,17 +283,10 @@ export default class History extends React.PureComponent {
                 render: (text, record) => (<span>{record.duringTime && resultFormat(record.duringTime)}</span>)
             },
             {
-                title: '关联规则',
+                title: '关联资源',
                 dataIndex: 'strategyName',
                 key: 'strategyName',
                 width: 100,
-                render: (text, record) => {
-                    const judgeConditionList = record.judgeConditionList &&
-                    record.judgeConditionList.map((item, index) => {
-                        return (<span key={index}>{this.checkKeys(item.judgeKey)}{item.compareSymbol}{item.judgeValue}</span>);
-                    });
-                    return (<span>{record.strategyName}{judgeConditionList}</span>);
-                }
             },
             {
                 title: '应用名称',

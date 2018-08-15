@@ -231,7 +231,7 @@ export default class ThirdReport extends React.PureComponent {
                                     {
                                         NormHitChannal.dateSources &&
                                         NormHitChannal.dateSources.map((item) => {
-                                            return (<Option value={item.name} key={item.id}>{item.name}</Option>);
+                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
                                         })
                                     }
                                 </Select>
@@ -244,8 +244,8 @@ export default class ThirdReport extends React.PureComponent {
                                 <Select style={{ width: '157px' }}>
                                     {
                                         portChannal.status &&
-                                        portChannal.status.map((item) => {
-                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
+                                        portChannal.status.map((item, index) => {
+                                            return (<Option value={item} key={index}>{item}</Option>);
                                         })
                                     }
                                 </Select>
