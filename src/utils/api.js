@@ -228,8 +228,8 @@ const api = {
     delWarnRule: `${API}/api/risk/manager/monitor/sleuthConfig/delete/v1`,
     // 更改状态
     updateStatus: `${API}/api/risk/manager/monitor/sleuthConfig/change/v1`,
-    getSingleRule: `${API}/api/risk/manager/monitor/sleuthConfig/get/v2`,
-    warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v2`,
+    getSingleRule: `${API}/api/risk/manager/monitor/sleuthConfig/get/v1`,
+    warningRuleList: `${API}/api/risk/manager/monitor/sleuthConfig/list/v1`,
 
     /* --------------------订单管理--------------------- */
     // 订单管理列表
