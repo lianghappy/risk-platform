@@ -254,6 +254,9 @@ export default class EditRegular extends React.PureComponent {
                                     {
                                         required: true,
                                         message: '请输入规则名称'
+                                    }, {
+                                        max: 100,
+                                        message: '字段超长'
                                     }
                                 ]
                             })(
@@ -280,6 +283,9 @@ export default class EditRegular extends React.PureComponent {
                                     }, {
                                         validator: this.checkNum,
                                         message: '请输入数字'
+                                    }, {
+                                        max: 10,
+                                        message: '字段超长'
                                     }
                                 ]
                             })(
@@ -301,6 +307,9 @@ export default class EditRegular extends React.PureComponent {
                                     }, {
                                         validator: this.checkNum,
                                         message: '请输入数字'
+                                    }, {
+                                        max: 10,
+                                        message: '字段超长'
                                     }
                                 ]
                             })(

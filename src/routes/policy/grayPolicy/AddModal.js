@@ -316,7 +316,8 @@ export default class PolicyModal extends React.PureComponent {
                                 initialValue: k.ratio ? k.ratio / 100 : '',
                                 rules: [
                                     { required: true, message: '请输入策略占比' },
-                                    { validator: this.checkNum, message: '请输入有效数值，支持两位小数' }
+                                    { validator: this.checkNum, message: '请输入有效数值，支持两位小数' },
+                                    { max: 10, message: '字段超长' }
                                 ],
                             })(
                                 <Input
@@ -370,6 +371,7 @@ export default class PolicyModal extends React.PureComponent {
                                     initialValue: details.grayStrategyName,
                                     rules: [
                                         { required: true, message: '请输入灰度策略名称' },
+                                        { max: 20, message: '最多20位' }
                                     ],
                                 })(<Input placeholder="请输入灰度策略名称" />)
                             }
@@ -381,6 +383,9 @@ export default class PolicyModal extends React.PureComponent {
                             {
                                 getFieldDecorator('remark', {
                                     initialValue: details.remark,
+                                    rules: [
+                                        { max: 100, message: '最多100位' }
+                                    ]
                                 })(<TextArea placeholder="请输入灰度策略名称" />)
                             }
                         </Form.Item>

@@ -143,8 +143,9 @@ export default class Statistical extends React.PureComponent {
             },
             grid: {
                 left: '3%',
-                right: '4%',
+                right: '15%',
                 bottom: '3%',
+                top: 0,
                 containLabel: true
             },
             xAxis: {
