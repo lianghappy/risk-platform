@@ -127,9 +127,11 @@ export default class ThirdReport extends React.PureComponent {
                 left: '3%',
                 right: '4%',
                 bottom: '3%',
+                containLabel: true,
             },
             legend: {
-                data: ['失败调用次数', '成功调用次数']
+                left: 'center',
+                data: ['成功调用次数', '全部调用次数']
             },
             xAxis: {
                 type: 'category',
@@ -138,19 +140,19 @@ export default class ThirdReport extends React.PureComponent {
             },
             yAxis: {
                 type: 'value',
-                data: ['成功调用次数', '失败调用次数']
+                // data: ['成功调用次数', '全部调用次数'],
             },
             series: [
                 {
                     name: '成功调用次数',
                     type: 'line',
-                    stack: '总量',
+                    smooth: true,
                     data: allSuccessTime
                 },
                 {
-                    name: '失败调用次数',
+                    name: '全部调用次数',
                     type: 'line',
-                    stack: '总量',
+                    smooth: true,
                     data: allCallTime
                 },
             ]

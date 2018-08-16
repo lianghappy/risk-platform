@@ -153,7 +153,7 @@ export default class Statistical extends React.PureComponent {
             },
             yAxis: {
                 type: 'category',
-                data: normName
+                data: normName.reverse()
             },
             series: [
                 {
