@@ -131,8 +131,16 @@ export default class PolicyModal extends React.PureComponent {
         });
     }
 
-    checkNum = (value, rule, callback) => {
+    checkNum = (rule, value, callback) => {
         if (value && (!/^\+?[1-9][0-9]*$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+
+    checkName = (rule, value, callback) => {
+        if (value && value.key === undefined) {
             callback(rule.message);
         } else {
             callback();
@@ -152,6 +160,10 @@ export default class PolicyModal extends React.PureComponent {
             if (!err) {
                 if (values && values.keys.length < 2) {
                     message.error('最少添加两个策略', DURATION);
+                    return;
+                }
+                if (values && values.strategyName.length < 2 && values.strategyName.includes(undefined)) {
+                    message.error('请输入策略名称', DURATION);
                     return;
                 }
                 if (values && values.ratio) {
@@ -278,7 +290,8 @@ export default class PolicyModal extends React.PureComponent {
                                     key: k.strategyId
                                 },
                                 rules: [
-                                    { required: true, message: '请输入策略名称' },
+                                    { required: true, message: '请选择策略名称' },
+                                    { validator: this.checkName, message: '请输入策略名称' }
                                 ],
                             })(
                                 <Select

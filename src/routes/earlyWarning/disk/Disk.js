@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Select, Button, message, Popconfirm, Spin } from 'antd';
+import { Layout, Form, Select, Button, message, Popconfirm, Spin, Icon, Tooltip } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import noMessage from 'assets/images/noMessage.svg';
@@ -341,6 +341,12 @@ export default class Disk extends React.PureComponent {
                                              添加图表
                             </Button>
                     }
+                    <Tooltip
+                        title="如果图表的起点不是从筛选条件的开始时间起，即图表缺少部分时间段，表示该时间段没有数据。"
+                    >
+                        <Icon type="question-circle-o" style={{ marginLeft: '12px' }} />
+                    </Tooltip>
+
                     {
                         getDiskData.length > 0 &&
                         getDiskData.map((item) => {
