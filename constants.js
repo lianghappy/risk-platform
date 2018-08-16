@@ -28,9 +28,9 @@ const API = {
 }[JIMI_ENV];
 // 公用
 const API_COMMON = {
-    dev: 'http://api.test.jimistore.com:4999',
-    test: 'http://api.test.jimistore.com:4999',
-    test2: 'http://api.test2.jimistore.com:4999',
+    dev: 'http://common-api.dev.jimistore.com',
+    test: 'http://common-api.test.jimistore.com',
+    test2: 'http://common-api.test.jimistore.com',
     sandbox: 'https://testcommon.jimistore.com',
     prod: 'https://common.jimistore.com',
 }[JIMI_ENV];
