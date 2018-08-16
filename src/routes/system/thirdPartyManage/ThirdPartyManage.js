@@ -198,7 +198,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                key: 'rental',
                width: 100,
                render: (text, record) => (
-                   <span>{record.rental / 100}</span>
+                   <span>{record.rental && (record.rental / 100)}</span>
                )
            },
            {
@@ -232,7 +232,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                key: 'price',
                width: 100,
                render: (text, record) => (
-                   <span>{record.price / 100}</span>
+                   <span>{record.price && (record.price / 100)}</span>
                )
            },
            {
