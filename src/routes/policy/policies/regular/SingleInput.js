@@ -42,7 +42,7 @@ export default class SingleInput extends React.Component {
 
     handleNumberChange(e) {
         const judgeValue = e;
-        if (e.length > 0) {
+        if (e.length > 100) {
             return;
         }
         if (!('value' in this.props)) {
