@@ -27,6 +27,7 @@ const mapStateToProps = (state) => {
         list: state.statistical.list,
         NormHitChannal: state.statistical.NormHitChannal,
         getStage: state.statistical.getStage,
+        pageNum: state.statistical.pageNum,
     };
 };
 @connect(mapStateToProps)
@@ -339,7 +340,7 @@ export default class Statistical extends React.PureComponent {
                                     this.props.list.map((item, index) => {
                                         return (
                                             <li key={index}>
-                                                <span className={index < 3 && style.firsts}>{index + 1}</span>
+                                                <span className={index < 3 ? style.firsts : style.second}>{index + 1}</span>
                                                 <span className={style.next}>{item.normName}</span>
                                                 <span>{item.allHitNum}</span>
                                             </li>
@@ -347,6 +348,7 @@ export default class Statistical extends React.PureComponent {
                                     })
                                 }
                             </ul>
+
                         </div>
                     }
                 </div>
