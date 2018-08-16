@@ -62,6 +62,7 @@ export default class GrayDetails extends React.PureComponent {
                 dataIndex: 'ratio',
                 key: 'ratio',
                 width: 100,
+                render: (text, record) => (<span>{record.ratio / 100}</span>)
             }, {
                 title: '策略状态',
                 dataIndex: 'status',

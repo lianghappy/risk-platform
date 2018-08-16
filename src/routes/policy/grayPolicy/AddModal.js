@@ -66,7 +66,7 @@ export default class PolicyModal extends React.PureComponent {
 
     onChange = (e) => {
         let { value } = e.target;
-        if (!/^\+?[1-9][0-9]*$/.test(value)) {
+        if (!/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(value)) {
             return;
         }
         const { form } = this.props;
@@ -82,12 +82,12 @@ export default class PolicyModal extends React.PureComponent {
             let total = 0;
             keys.forEach((item, index) => {
                 if (keys.length > (index + 1) && item) {
-                    total += Number(item);
+                    total += (Number(item) * 1000) / 10;
                 }
             });
-            total += Number(value);
+            total += (Number(value) * 1000) / 10;
             this.setState({
-                total,
+                total: total / 100,
             });
         }
     }
@@ -110,11 +110,11 @@ export default class PolicyModal extends React.PureComponent {
         if (key.length > 0) {
             key.forEach((item, index) => {
                 if (keys.length > (index + 1) && item) {
-                    total += Number(item);
+                    total += (Number(item) * 1000) / 10;
                 }
             });
             this.setState({
-                total,
+                total: total / 100,
             });
         }
     }
@@ -132,7 +132,7 @@ export default class PolicyModal extends React.PureComponent {
     }
 
     checkNum = (rule, value, callback) => {
-        if (value && (!/^\+?[1-9][0-9]*$/.test(value))) {
+        if (value && (!/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(value))) {
             callback(rule.message);
         } else {
             callback();
@@ -185,10 +185,12 @@ export default class PolicyModal extends React.PureComponent {
                         details.push({
                             strategyId: values.strategyName[index].key,
                             strategyName: values.strategyName[index].label,
-                            ratio: values.ratio[index],
+                            ratio: (values.ratio[index] * 1000) / 10,
                         });
                     });
                     delete values.keys;
+                    delete values.ratio;
+                    delete values.strategyName;
                     Object.assign(values, { details });
                     onOk(values, resolve);
                 }).then(() => {
@@ -230,7 +232,7 @@ export default class PolicyModal extends React.PureComponent {
                     total += Number(item.ratio);
                 });
                 this.setState({
-                    total,
+                    total: total / 100,
                 });
             });
         }
@@ -270,7 +272,6 @@ export default class PolicyModal extends React.PureComponent {
             getFieldValue,
         } = forms;
         const { details, grayDetails } = this.state;
-        console.log(getPolicyList);
 
         const options = getPolicyList.map(d => <Option value={d.id} key={d.id}>{d.name}</Option>);
         getFieldDecorator('keys', { initialValue: grayDetails || [0] });
@@ -312,10 +313,10 @@ export default class PolicyModal extends React.PureComponent {
                     >
                         {
                             getFieldDecorator(`ratio[${index}]`, {
-                                initialValue: k.ratio,
+                                initialValue: k.ratio ? k.ratio / 100 : '',
                                 rules: [
                                     { required: true, message: '请输入策略占比' },
-                                    { validator: this.checkNum, message: '请输入数字' }
+                                    { validator: this.checkNum, message: '请输入有效数值，支持两位小数' }
                                 ],
                             })(
                                 <Input
@@ -357,7 +358,7 @@ export default class PolicyModal extends React.PureComponent {
                             确定
                         </Button>,
                     ]}
-                    width="600px"
+                    width="650px"
                 >
                     <Form layout="horizontal">
                         <Form.Item
