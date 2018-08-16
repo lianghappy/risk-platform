@@ -129,6 +129,14 @@ export default class AddRegular extends React.PureComponent {
         }
     }
 
+    checkNum = (rule, value, callback) => {
+        if (value && !/^[0-9]*$/.test(value)) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+
     cancel = () => {
         window.history.back(-1);
     }
@@ -144,7 +152,6 @@ export default class AddRegular extends React.PureComponent {
         };
         const stageId = base64.decode(this.props.match.params.id);
         const { getFieldDecorator, getFieldValue } = this.props.form;
-        console.log(this.state.datas);
 
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
@@ -222,6 +229,9 @@ export default class AddRegular extends React.PureComponent {
                                     {
                                         required: true,
                                         message: '请输入分值'
+                                    }, {
+                                        validator: this.checkNum,
+                                        message: '请输入数字'
                                     }
                                 ]
                             })(
@@ -239,6 +249,9 @@ export default class AddRegular extends React.PureComponent {
                                     {
                                         required: true,
                                         message: '请输入权重'
+                                    }, {
+                                        validator: this.checkNum,
+                                        message: '请输入数字'
                                     }
                                 ]
                             })(

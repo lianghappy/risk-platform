@@ -6,7 +6,6 @@ import {
     Table,
     Select,
     Button,
-    Popconfirm,
     Tree,
     message,
 } from 'antd';
@@ -302,7 +301,6 @@ export default class RegularModal extends React.PureComponent {
             channels,
             categories,
             onSubmiting,
-            ruleName,
             getUnCategory,
         } = this.props;
         const {
@@ -311,7 +309,6 @@ export default class RegularModal extends React.PureComponent {
             selectedRows,
         } = this.state;
         const { getFieldDecorator } = form;
-        const addTitle = `你确定要添加这些规则到${ruleName}下吗`;
 
         const columns = [{
             title: '规则编号',
@@ -475,18 +472,14 @@ export default class RegularModal extends React.PureComponent {
                                 <Button onClick={this.handleCancel}>
                                     取消
                                 </Button>
-                                <Popconfirm
-                                    title={addTitle}
-                                    onConfirm={this.onOk}
+                                <Button
+                                    type="primary"
+                                    disabled={this.state.selectedRowKeys.length === 0}
+                                    loading={onSubmiting}
+                                    onClick={this.onOk}
                                 >
-                                    <Button
-                                        type="primary"
-                                        disabled={this.state.selectedRowKeys.length === 0}
-                                        loading={onSubmiting}
-                                    >
                                         确定
-                                    </Button>
-                                </Popconfirm>
+                                </Button>
                             </div>
                         </div>
                     </div>

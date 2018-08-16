@@ -42,6 +42,9 @@ export default class SingleInput extends React.Component {
 
     handleNumberChange(e) {
         const judgeValue = e;
+        if (!/^[0-9]*$/.test(e)) {
+            return;
+        }
         if (!('value' in this.props)) {
             this.setState({ judgeValue });
         }
