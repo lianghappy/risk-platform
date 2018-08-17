@@ -237,6 +237,12 @@ class Policy extends React.PureComponent {
                 width: 100,
             },
             {
+                title: '结果优先级',
+                dataIndex: 'resultLevel',
+                key: 'resultLevel',
+                width: 100,
+            },
+            {
                 title: '阶段描述',
                 dataIndex: 'describ',
                 key: 'describ',

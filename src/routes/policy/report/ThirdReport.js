@@ -51,6 +51,7 @@ export default class ThirdReport extends React.PureComponent {
         endTime: moment().format('X'),
         times: [moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]), moment()],
         portChannal: [],
+        portValue: '',
     }
 
     componentDidMount() {
@@ -69,6 +70,17 @@ export default class ThirdReport extends React.PureComponent {
         window.onresize = myChart.resize;
     }
 
+    onChangeTime = (value) => {
+        if (value.length > 0) {
+            this.setState({
+                times: value,
+                time: '',
+                startTime: value[0].format('X'),
+                endTime: value[1].format('X'),
+            });
+        }
+    }
+
     onQuery = (e) => {
         e.preventDefault();
         const {
@@ -76,11 +88,12 @@ export default class ThirdReport extends React.PureComponent {
             form,
         } = this.props;
         if (loading) return;
-        const { startTime, endTime } = this.state;
+        const { startTime, endTime, portValue } = this.state;
         form.validateFields((errors, values) => {
             Object.assign(values, {
                 dateU: endTime,
                 dateL: startTime,
+                portName: portValue,
             });
             this.query({
                 ...values,
@@ -89,11 +102,18 @@ export default class ThirdReport extends React.PureComponent {
     }
 
     onReset = () => {
-        const { pageSize, form } = this.props;
+        const { form } = this.props;
         form.resetFields();
+        this.setState({
+            time: 2,
+            startTime: moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]).format('X'),
+            endTime: moment().format('X'),
+            times: [moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]), moment()],
+            portValue: '',
+        });
         this.query({
-            pageNum: 1,
-            pageSize,
+            dateU: moment().format('X'),
+            dateL: moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]).format('X'),
         });
     };
 
@@ -116,7 +136,14 @@ export default class ThirdReport extends React.PureComponent {
             const { portChannal } = this.props;
             this.setState({
                 portChannal,
+                portValue: '',
             });
+        });
+    }
+
+    onChangePort = (value) => {
+        this.setState({
+            portValue: value,
         });
     }
 
@@ -214,6 +241,7 @@ export default class ThirdReport extends React.PureComponent {
         const { times, time } = this.state;
         const { portChannal } = this.state;
 
+        console.log(this.state.portValue);
 
         return (
             <Layout className={style.statical}>
@@ -227,6 +255,7 @@ export default class ThirdReport extends React.PureComponent {
                             value={times}
                             format="YYYY-MM-DD HH:mm"
                             placeholder={['开始时间', '结束时间']}
+                            onChange={(value) => this.onChangeTime(value)}
                         />
                     </FormItem>
                     <FormItem>
@@ -257,23 +286,25 @@ export default class ThirdReport extends React.PureComponent {
                                             return (<Option value={item.code} key={item.id}>{item.name}</Option>);
                                         })
                                     }
+                                    <Option value="">所有</Option>
                                 </Select>
                             )
                         }
                     </FormItem>
                     <FormItem>
-                        {
-                            getFieldDecorator('portName')(
-                                <Select style={{ width: '157px' }}>
-                                    {
-                                        portChannal &&
+                        <Select
+                            style={{ width: '157px' }}
+                            onChange={this.onChangePort}
+                            value={this.state.portValue}
+                        >
+                            {
+                                portChannal &&
                                         portChannal.map((item, index) => {
                                             return (<Option value={item} key={index}>{item}</Option>);
                                         })
-                                    }
-                                </Select>
-                            )
-                        }
+                            }
+                            <Option value="">所有</Option>
+                        </Select>
                     </FormItem>
                     <FormItem>
                         {

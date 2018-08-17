@@ -14,6 +14,7 @@ export default {
         getStage: [],
         dailyRecord: [],
         portChannal: [],
+        dateSources: [],
     },
     effects: {
         // 获取策略
@@ -45,7 +46,8 @@ export default {
             yield put({
                 type: 'querySuc',
                 payload: {
-                    getStage: response,
+                    getStage: response.stages,
+                    dateSources: response.dateSources,
                 },
             });
         },

@@ -159,7 +159,7 @@ export default class Statistical extends React.PureComponent {
                     color: '#000',
                     interval: 0,
                     formatter(value) {
-                        if (value.length > 8) {
+                        if (value.length > 6) {
                             return `${value.substring(0, 6)}...`;
                         }
                         return value;

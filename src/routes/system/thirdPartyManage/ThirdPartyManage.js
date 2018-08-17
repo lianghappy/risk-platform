@@ -278,6 +278,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                                            return (<Option value={item.code} key={index}>{item.name}</Option>);
                                        })
                                    }
+                                   <Option value="">全部</Option>
                                </Select>
                            )
                        }
@@ -320,6 +321,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                                <Select style={{ width: '157px' }}>
                                    <Option value="1">免费</Option>
                                    <Option value="0">付费</Option>
+                                   <Option value="">全部</Option>
                                </Select>
                            )
                        }
