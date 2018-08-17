@@ -8,7 +8,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/toolbox';
-import { Layout, Form, Button, Select, DatePicker } from 'antd';
+import { Layout, Form, Button, Select, DatePicker, Tooltip, Icon } from 'antd';
 import { roles } from 'utils/common';
 import style from './index.scss';
 
@@ -272,8 +272,15 @@ export default class ThirdReport extends React.PureComponent {
                                 })
                             }
                         </Select>
+                        <Tooltip
+                            title="如果图表的起点不是从筛选条件的开始时间起，即图表缺少部分时间段，表示该时间段没有数据。"
+                        >
+                            <Icon type="question-circle-o" style={{ marginLeft: '12px' }} />
+                        </Tooltip>
                     </FormItem>
-                    <FormItem>
+                    <FormItem
+                        label="数据源"
+                    >
                         {
                             getFieldDecorator('thirdparty')(
                                 <Select
@@ -291,7 +298,9 @@ export default class ThirdReport extends React.PureComponent {
                             )
                         }
                     </FormItem>
-                    <FormItem>
+                    <FormItem
+                        label="服务名称"
+                    >
                         <Select
                             style={{ width: '157px' }}
                             onChange={this.onChangePort}
