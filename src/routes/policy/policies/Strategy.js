@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Layout, Input, Form, Button, Table, message, Popconfirm, Tooltip } from 'antd';
+import { Layout, Input, Form, Button, Table, message, Popconfirm, Tooltip, Icon } from 'antd';
 import base64 from 'utils/base64';
 import { DURATION } from 'utils/constants';
 import { roles } from 'utils/common';
@@ -215,6 +215,25 @@ class Policy extends React.PureComponent {
                 dataIndex: 'weight',
                 key: 'weight',
                 render: (text, record) => (<span>{(record.weight) / 100}</span>),
+                width: 100,
+            },
+            {
+                title: (
+                    <span>
+                        skip&nbsp;
+                        <Tooltip title="即使命中该阶段，仍然会执行下一阶段。">
+                            <Icon type="question-circle-o" />
+                        </Tooltip>
+                    </span>
+                ),
+                dataIndex: 'skip',
+                key: 'skip',
+                render: (text, record) => (
+                    <span>
+                        {record.resultSkip === '0' && '否'}
+                        {record.resultSkip === '1' && '是'}
+                    </span>
+                ),
                 width: 100,
             },
             {

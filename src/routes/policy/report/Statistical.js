@@ -154,7 +154,17 @@ export default class Statistical extends React.PureComponent {
             },
             yAxis: {
                 type: 'category',
-                data: normName.reverse()
+                data: normName.reverse(),
+                axisLabel: {
+                    color: '#000',
+                    interval: 0,
+                    formatter(value) {
+                        if (value.length > 8) {
+                            return `${value.substring(0, 6)}...`;
+                        }
+                        return value;
+                    }
+                },
             },
             series: [
                 {
@@ -287,7 +297,7 @@ export default class Statistical extends React.PureComponent {
                             )
                         }
                     </FormItem>
-                    <FormItem label="状态名称" >
+                    <FormItem label="风控结果" >
                         {
                             getFieldDecorator('status')(
                                 <Select style={{ width: '157px' }}>

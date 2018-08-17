@@ -220,7 +220,7 @@ class AddStrategy extends React.PureComponent {
                             {
                                 getFieldDecorator('resultSkip', {
                                     initialValue: record.resultSkip !== undefined
-                                        ? record.resultSkip : '1',
+                                        ? record.resultSkip : '',
                                     rule: [
                                         {
                                             required: true,
@@ -231,6 +231,7 @@ class AddStrategy extends React.PureComponent {
                                     <Select onSelect={this.onSelect} defaultValue="1">
                                         <Option value="1">是</Option>
                                         <Option value="0">否</Option>
+                                        <Option value=""></Option>
                                     </Select>
                                 )
                             }

@@ -66,6 +66,14 @@ export default class AddModal extends React.PureComponent {
         });
     };
 
+    checkNum = (rule, value, callback) => {
+        if (value && (!/^[0-9]+([.]{1}[0-9]{1,2})?$/.test(value))) {
+            callback(rule.message);
+        } else {
+            callback();
+        }
+    }
+
     handleShow = () => {
         // this.props.form.validateFields();
         this.setState({
@@ -139,7 +147,7 @@ export default class AddModal extends React.PureComponent {
                         </Form.Item>
                         <Form.Item
                             {...formItemLayout}
-                            label="产品名称"
+                            label="服务名称"
                         >
                             {
                                 getFieldDecorator('productName', {
@@ -214,6 +222,11 @@ export default class AddModal extends React.PureComponent {
                                             required: true,
                                             message: '请输入价格',
                                         },
+                                        {
+                                            max: 20,
+                                            message: '字段超长',
+                                        },
+                                        { validator: this.checkNum, message: '请输入有效数值，支持两位小数' },
                                     ],
                                 })(<Input placeholder="请输入价格" />)
                             }

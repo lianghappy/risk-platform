@@ -49,7 +49,8 @@ export default class ThirdReport extends React.PureComponent {
         time: 2,
         startTime: moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]).format('X'),
         endTime: moment().format('X'),
-        times: [moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]), moment()]
+        times: [moment().subtract(pageCount[1].hour[0], pageCount[1].hour[1]), moment()],
+        portChannal: [],
     }
 
     componentDidMount() {
@@ -111,6 +112,11 @@ export default class ThirdReport extends React.PureComponent {
             payload: {
                 thirdparty: value,
             }
+        }).then(() => {
+            const { portChannal } = this.props;
+            this.setState({
+                portChannal,
+            });
         });
     }
 
@@ -146,13 +152,27 @@ export default class ThirdReport extends React.PureComponent {
                 {
                     name: '成功调用次数',
                     type: 'line',
-                    smooth: true,
+                    symbol: 'triangle',
+                    symbolSize: 20,
+                    lineStyle: {
+                        normal: {
+                            color: 'green',
+                            width: 4,
+                            type: 'dashed'
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 3,
+                            borderColor: 'yellow',
+                            color: 'blue'
+                        }
+                    },
                     data: allSuccessTime
                 },
                 {
                     name: '全部调用次数',
                     type: 'line',
-                    smooth: true,
                     data: allCallTime
                 },
             ]
@@ -190,8 +210,9 @@ export default class ThirdReport extends React.PureComponent {
     }
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { portChannal, NormHitChannal } = this.props;
+        const { NormHitChannal } = this.props;
         const { times, time } = this.state;
+        const { portChannal } = this.state;
 
 
         return (
@@ -245,8 +266,8 @@ export default class ThirdReport extends React.PureComponent {
                             getFieldDecorator('portName')(
                                 <Select style={{ width: '157px' }}>
                                     {
-                                        portChannal.status &&
-                                        portChannal.status.map((item, index) => {
+                                        portChannal &&
+                                        portChannal.map((item, index) => {
                                             return (<Option value={item} key={index}>{item}</Option>);
                                         })
                                     }

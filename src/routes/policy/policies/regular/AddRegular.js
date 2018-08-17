@@ -44,13 +44,29 @@ export default class AddRegular extends React.PureComponent {
             }
             if (!errors) {
                 const { datas } = this.state;
-                datas.forEach(item => {
-                    if ((Object.keys(values.reason)).includes(item.id)) {
-                        item.compareSymbol = values.reason[item.id].compareSymbol;
-                        item.judgeValue = values.reason[item.id].judgeValue;
-                    }
+                const ids = [];
+                const normList = [];
+                Object.keys(values.reason).forEach(key => {
+                    ids.push({
+                        compareSymbol: values.reason[key].compareSymbol,
+                        judgeValue: values.reason[key].judgeValue,
+                        id: key.substring(0, key.length - 1),
+                    });
                 });
-                values.normList = values.keys;
+                ids.forEach(item => {
+                    let flag = true;
+                    datas.forEach(it => {
+                        if (it.id === item.id && flag) {
+                            flag = false;
+                            normList.push({
+                                ...it,
+                                compareSymbol: item.compareSymbol,
+                                judgeValue: item.judgeValue,
+                            });
+                        }
+                    });
+                });
+                values.normList = normList;
                 delete values.keys;
                 values.stageId = base64.decode(this.props.match.params.id);
                 new Promise((resolve) => {
@@ -101,14 +117,12 @@ export default class AddRegular extends React.PureComponent {
     modalOk = (data, callback) => {
         callback();
         const values = this.state.datas;
-        const val = [];
-        data.categoryAndRuleList.forEach(item => {
+        // const val = [];
+        /* data.categoryAndRuleList.forEach(item => {
             val.push(item.id);
-        });
+        }); */
         values.forEach(item => {
-            if (!val.includes(item.id)) {
-                data.categoryAndRuleList.push(item);
-            }
+            data.categoryAndRuleList.push(item);
         });
         /*  data.categoryAndRuleList.forEach(item => {
             if (!val.includes(item.id)) {
@@ -155,9 +169,9 @@ export default class AddRegular extends React.PureComponent {
 
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
-        const formItems = keys.map((k) => {
+        const formItems = keys.map((k, index) => {
             return (
-                <div key={k.id} style={{ background: 'rgba(250,250,250,1)' }} className={styles.adds}>
+                <div key={k.id + (keys.length - index - 1)} style={{ background: 'rgba(250,250,250,1)' }} className={styles.adds}>
                     <FormItem
                         label="规则字段"
                         {...formItemLayouts}
@@ -181,7 +195,7 @@ export default class AddRegular extends React.PureComponent {
                         {...formItemLayouts}
                     >
                         <div style={{ display: 'flex' }}>
-                            {getFieldDecorator(`reason[${k.id}]`, {
+                            {getFieldDecorator(`reason[${k.id + (keys.length - index - 1)}]`, {
                                 validateTrigger: ['onChange'],
                                 rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
                             })(

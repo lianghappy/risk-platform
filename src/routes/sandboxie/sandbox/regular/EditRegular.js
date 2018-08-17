@@ -59,20 +59,30 @@ export default class EditRegular extends React.PureComponent {
             }
             if (!errors) {
                 const { datas } = this.state;
-                const ids = JSON.parse(sessionStorage.regular).id;
-                datas.forEach(item => {
-                    if ((Object.keys(values.reason)).includes(item.id)) {
-                        item.compareSymbol = values.reason[item.id].compareSymbol;
-                        item.judgeValue = values.reason[item.id].judgeValue;
-                    }
-                    if (item.createTime) {
-                        delete item.createTime;
-                    }
-                    if (item.updateTime) {
-                        delete item.updateTime;
-                    }
+                const idss = JSON.parse(sessionStorage.regular).id;
+                const ids = [];
+                const normList = [];
+                Object.keys(values.reason).forEach(key => {
+                    ids.push({
+                        compareSymbol: values.reason[key].compareSymbol,
+                        judgeValue: values.reason[key].judgeValue,
+                        id: key.substring(0, key.length - 1),
+                    });
                 });
-                values.normList = values.keys;
+                ids.forEach(item => {
+                    let flag = true;
+                    datas.forEach(it => {
+                        if (it.id === item.id && flag) {
+                            flag = false;
+                            normList.push({
+                                ...it,
+                                compareSymbol: item.compareSymbol,
+                                judgeValue: item.judgeValue,
+                            });
+                        }
+                    });
+                });
+                values.normList = normList;
                 delete values.keys;
                 values.stageId = base64.decode(this.props.match.params.id);
                 let url = 'editRegularPly/update';
@@ -86,7 +96,7 @@ export default class EditRegular extends React.PureComponent {
                         payload: {
                             data: {
                                 ...values,
-                                id: ids,
+                                id: idss,
                             },
                             resolve,
                         }
@@ -200,9 +210,9 @@ export default class EditRegular extends React.PureComponent {
 
         getFieldDecorator('keys', { initialValue: this.state.datas });
         const keys = getFieldValue('keys');
-        const formItems = keys.map((k) => {
+        const formItems = keys.map((k, index) => {
             return (
-                <div key={k.id} style={{ background: 'rgba(250,250,250,1)' }}>
+                <div key={k.id + (keys.length - index - 1)} style={{ background: 'rgba(250,250,250,1)' }}>
                     <FormItem
                         label="规则字段"
                         {...formItemLayouts}
@@ -226,7 +236,7 @@ export default class EditRegular extends React.PureComponent {
                         {...formItemLayouts}
                     >
                         <div style={{ display: 'flex' }}>
-                            {getFieldDecorator(`reason[${k.id}]`, {
+                            {getFieldDecorator(`reason[${k.id + (keys.length - index - 1)}]`, {
                                 initialValue: k,
                                 validateTrigger: ['onChange'],
                                 rules: [{ required: true, validator: (rule, value, callback) => this.checkChannel(rule, value, callback) }],
