@@ -175,7 +175,8 @@ export default class Statistical extends React.PureComponent {
                 {
                     name: '命中数量',
                     type: 'bar',
-                    data: allHitNum.reverse()
+                    data: allHitNum.reverse(),
+                    barMaxWidth: '40px'
                 }
             ]
         };
