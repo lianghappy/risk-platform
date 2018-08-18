@@ -15,6 +15,7 @@ export default {
         dailyRecord: [],
         portChannal: [],
         dateSources: [],
+        allPortChannal: [],
     },
     effects: {
         // 获取策略
@@ -68,6 +69,15 @@ export default {
                 type: 'querySuc',
                 payload: {
                     dailyRecord: response,
+                },
+            });
+        },
+        * allPortChannal({ payload }, { call, put }) {
+            const response = yield call(post, API.allPortChannal, payload);
+            yield put({
+                type: 'querySuc',
+                payload: {
+                    allPortChannal: response,
                 },
             });
         },

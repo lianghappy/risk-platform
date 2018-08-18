@@ -274,6 +274,7 @@ const api = {
     dailyRecord: `${API}/api/risk/manager/collector/thirdpartyManage/dailyRecord/v1`,
     // 获取三方数据源的下拉菜单
     portChannal: `${API}/api/risk/manager/collector/thirdpartyManage/portChannal/v1`,
+    allPortChannal: `${API}/api/risk/manager/collector/thirdpartyManage/allPortChannal/v1`,
 
 };
 

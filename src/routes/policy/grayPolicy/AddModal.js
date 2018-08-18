@@ -167,12 +167,9 @@ export default class PolicyModal extends React.PureComponent {
                     return;
                 }
                 if (values && values.ratio) {
-                    let sum = 0;
-                    Object.keys(values.ratio).forEach(item => {
-                        sum += item;
-                    });
-                    if (sum > 100) {
-                        message.error('所有的策略占比少于100', DURATION);
+                    const { total } = this.state;
+                    if (total !== 100) {
+                        message.error('策略占比之和等于100', DURATION);
                         return;
                     }
                 }
@@ -317,7 +314,6 @@ export default class PolicyModal extends React.PureComponent {
                                 rules: [
                                     { required: true, message: '请输入策略占比' },
                                     { validator: this.checkNum, message: '请输入有效数值，支持两位小数' },
-                                    { max: 10, message: '字段超长' }
                                 ],
                             })(
                                 <Input

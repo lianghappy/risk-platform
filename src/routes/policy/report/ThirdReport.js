@@ -40,6 +40,7 @@ const mapStateToProps = (state) => {
         NormHitChannal: state.statistical.NormHitChannal,
         dailyRecord: state.statistical.dailyRecord,
         portChannal: state.statistical.portChannal,
+        allPortChannal: state.statistical.allPortChannal,
     };
 };
 @connect(mapStateToProps)
@@ -56,6 +57,12 @@ export default class ThirdReport extends React.PureComponent {
 
     componentDidMount() {
         const { startTime, endTime } = this.state;
+        this.props.dispatch({
+            type: 'statistical/allPortChannal',
+            payload: {},
+        }).then(() => {
+            this.init();
+        });
         this.props.dispatch({
             type: 'statistical/dailyRecord',
             payload: {
@@ -179,11 +186,11 @@ export default class ThirdReport extends React.PureComponent {
                     name: '成功调用次数',
                     type: 'line',
                     symbol: 'triangle',
-                    symbolSize: 20,
+                    symbolSize: 10,
                     lineStyle: {
                         normal: {
                             color: 'green',
-                            width: 4,
+                            width: 2,
                             type: 'dashed'
                         }
                     },
@@ -191,7 +198,7 @@ export default class ThirdReport extends React.PureComponent {
                         normal: {
                             borderWidth: 3,
                             borderColor: 'yellow',
-                            color: 'blue'
+                            color: 'white'
                         }
                     },
                     data: allSuccessTime
@@ -210,15 +217,20 @@ export default class ThirdReport extends React.PureComponent {
         const container = this.line;
         const myChart = echarts.init(container);
         this.setOption(myChart);
-        const { NormHitChannal } = this.props;
-        const option = [];
-        if (NormHitChannal.strategys) {
-            NormHitChannal.strategys.forEach(item => {
-                option.push({
-                    label: item.name,
-                    value: item.id,
-                    isLeaf: false,
+        const { NormHitChannal, allPortChannal } = this.props;
+        if (NormHitChannal.strategys && allPortChannal) {
+            const option = [];
+            if (NormHitChannal.strategys) {
+                NormHitChannal.strategys.forEach(item => {
+                    option.push({
+                        label: item.name,
+                        value: item.id,
+                        isLeaf: false,
+                    });
                 });
+            }
+            this.setState({
+                portChannal: allPortChannal,
             });
         }
     }
