@@ -191,6 +191,7 @@ export default class ThirdPartyManage extends React.PureComponent {
                dataIndex: 'cost',
                key: 'cost',
                width: 100,
+               render: (text, record) => (<span>{record.cost && record.cost / 100}</span>)
            },
            {
                title: '总金额',
