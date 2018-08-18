@@ -28,6 +28,7 @@ const mapStateToProps = (state) => {
         NormHitChannal: state.statistical.NormHitChannal,
         getStage: state.statistical.getStage,
         pageNum: state.statistical.pageNum,
+        dateSources: state.statistical.dateSources,
     };
 };
 @connect(mapStateToProps)
@@ -35,6 +36,8 @@ const mapStateToProps = (state) => {
 export default class Statistical extends React.PureComponent {
     state={
         options: [],
+        dateSources: [],
+        thirdpartyName: '',
     }
 
     componentDidMount() {
@@ -117,14 +120,19 @@ export default class Statistical extends React.PureComponent {
     onReset = () => {
         const { pageSize, form } = this.props;
         form.resetFields();
+        this.setState({
+            thirdpartyName: ''
+        });
         this.query({
             pageNum: 1,
             pageSize,
         });
     };
 
-    onChange = (value, selectedOptions) => {
-        console.log(value, selectedOptions);
+    onChanges = (value) => {
+        this.setState({
+            thirdpartyName: value,
+        });
     }
 
     setOption = (mychart) => {
@@ -137,9 +145,6 @@ export default class Statistical extends React.PureComponent {
                 axisPointer: {
                     type: 'shadow'
                 }
-            },
-            legend: {
-                data: ['2011年', '2012年']
             },
             grid: {
                 left: '3%',
@@ -194,7 +199,7 @@ export default class Statistical extends React.PureComponent {
     }
 
     loadInit = (targetOption) => {
-        const { getStage } = this.props;
+        const { getStage, dateSources } = this.props;
         targetOption.children = [{ label: '所有', value: '' }];
         getStage.forEach(item => {
             targetOption.children.push({
@@ -210,6 +215,7 @@ export default class Statistical extends React.PureComponent {
         });
         this.setState({
             options: option,
+            dateSources,
         });
     }
 
@@ -235,10 +241,13 @@ export default class Statistical extends React.PureComponent {
         });
         this.setState({
             options: option,
+            dateSources: NormHitChannal.dateSources,
         });
     }
 
     query(payload) {
+        const { thirdpartyName } = this.state;
+        Object.assign(payload, { thirdpartyName });
         this.props.dispatch({
             type: 'statistical/getReportList',
             payload,
@@ -252,6 +261,7 @@ export default class Statistical extends React.PureComponent {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { NormHitChannal } = this.props;
+        const { dateSources } = this.state;
 
         return (
             <Layout className={style.statical}>
@@ -270,17 +280,19 @@ export default class Statistical extends React.PureComponent {
                     </FormItem>
                     <FormItem label="数据源" >
                         {
-                            getFieldDecorator('thirdpartyName')(
-                                <Select style={{ width: '157px' }}>
-                                    {
-                                        NormHitChannal.dateSources &&
-                                        NormHitChannal.dateSources.map((item) => {
-                                            return (<Option value={item.code} key={item.id}>{item.name}</Option>);
-                                        })
-                                    }
-                                    <Option value="">所有</Option>
-                                </Select>
-                            )
+                            <Select
+                                style={{ width: '157px' }}
+                                value={this.state.thirdpartyName}
+                                onChange={this.onChanges}
+                            >
+                                {
+                                    dateSources &&
+                                    dateSources.map((item) => {
+                                        return (<Option value={item.code} key={item.id}>{item.name}</Option>);
+                                    })
+                                }
+                                <Option value="">所有</Option>
+                            </Select>
                         }
                     </FormItem>
                     <FormItem label="策略名称" >
@@ -290,7 +302,6 @@ export default class Statistical extends React.PureComponent {
                                     placeholder="请选择"
                                     options={this.state.options}
                                     loadData={this.loadData}
-                                    onChange={this.onChange}
                                     changeOnSelect
                                     style={{ width: '350px' }}
                                 />

@@ -163,7 +163,6 @@ export default class ThirdReport extends React.PureComponent {
                 containLabel: true,
             },
             legend: {
-                left: 'center',
                 data: ['成功调用次数', '全部调用次数']
             },
             xAxis: {
@@ -240,8 +239,6 @@ export default class ThirdReport extends React.PureComponent {
         const { NormHitChannal } = this.props;
         const { times, time } = this.state;
         const { portChannal } = this.state;
-
-        console.log(this.state.portValue);
 
         return (
             <Layout className={style.statical}>
