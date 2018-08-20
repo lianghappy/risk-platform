@@ -60,6 +60,7 @@ export default class PolicyModal extends React.PureComponent {
                 pageNum: 1,
                 pageSize: 100,
                 name: value,
+                isEnable: 1,
             },
         });
     }
@@ -247,7 +248,7 @@ export default class PolicyModal extends React.PureComponent {
 
     query(payload) {
         const companyId = JSON.parse(sessionStorage.userInfo).user.company;
-        Object.assign(payload, { companyId, pageNum: 1, pageSize: 100 });
+        Object.assign(payload, { companyId, pageNum: 1, pageSize: 100, isEnable: 1, });
         this.props.dispatch({
             type: 'grayPolicy/getPolicySelect',
             payload,
