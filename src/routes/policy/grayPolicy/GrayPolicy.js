@@ -182,8 +182,8 @@ export default class GrayPolicy extends React.PureComponent {
            },
            {
                title: '更新人姓名',
-               dataIndex: 'updateAuthor',
-               key: 'updateAuthor',
+               dataIndex: 'operator',
+               key: 'operator',
                width: 100,
            },
            {
