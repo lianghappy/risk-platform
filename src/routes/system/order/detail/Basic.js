@@ -89,6 +89,13 @@ export default class Basic extends React.PureComponent {
                         <span>风控审核结束时间：</span>
                         <span>{orderBasic.detailCreatime}</span>
                     </Col>
+                    {
+                        orderBasic.grayStrategyId &&
+                        <Col span={12}>
+                            <span>灰度策略标识ID：</span>
+                            <span>{orderBasic.grayStrategyId}</span>
+                        </Col>
+                    }
                 </Row>
             </Layout>
         );
