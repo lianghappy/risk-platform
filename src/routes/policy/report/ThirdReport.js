@@ -134,18 +134,24 @@ export default class ThirdReport extends React.PureComponent {
     }
 
     onChangeThird = (value) => {
-        this.props.dispatch({
-            type: 'statistical/portChannal',
-            payload: {
-                thirdparty: value,
-            }
-        }).then(() => {
-            const { portChannal } = this.props;
+        if (value) {
+            this.props.dispatch({
+                type: 'statistical/portChannal',
+                payload: {
+                    thirdparty: value,
+                }
+            }).then(() => {
+                const { portChannal } = this.props;
+                this.setState({
+                    portChannal,
+                    portValue: '',
+                });
+            });
+        } else {
             this.setState({
-                portChannal,
                 portValue: '',
             });
-        });
+        }
     }
 
     onChangePort = (value) => {
