@@ -189,7 +189,8 @@ export default class PolicyModal extends React.PureComponent {
                     delete values.keys;
                     delete values.ratio;
                     delete values.strategyName;
-                    Object.assign(values, { details });
+                    const operator = JSON.parse(sessionStorage.userInfo).user.realName;
+                    Object.assign(values, { details, operator });
                     onOk(values, resolve);
                 }).then(() => {
                     this.handleCancel();

@@ -73,11 +73,12 @@ export default class GrayPolicy extends React.PureComponent {
            form,
            dispatch,
        } = this.props;
+       const operator = JSON.parse(sessionStorage.userInfo).user.realName;
        new Promise((resolve) => {
            dispatch({
                type: 'grayPolicy/del',
                payload: {
-                   data: { id },
+                   data: { id, operator },
                    resolve,
                },
            });
