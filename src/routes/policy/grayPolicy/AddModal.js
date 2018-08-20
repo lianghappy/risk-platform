@@ -207,6 +207,7 @@ export default class PolicyModal extends React.PureComponent {
                 companyId,
                 pageNum: 1,
                 pageSize: 100,
+                isEnable: 1,
             },
         });
         if (this.props.record) {
