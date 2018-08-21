@@ -253,6 +253,11 @@ export default class SingleDisk extends React.PureComponent {
                     }
                     return `${item.value / 100}%`;
                 }),
+                lineStyle: {
+                    normal: {
+                        width: 1,
+                    }
+                },
             }]
         });
     }

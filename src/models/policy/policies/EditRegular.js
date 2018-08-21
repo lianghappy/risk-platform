@@ -140,7 +140,7 @@ export default {
                         payload: [{ name: '策略管理', link: setPath('/policy') },
                             { name: '阶段管理', link: setPath(`/strategy/${path[3]}`) },
                             { name: '规则管理', link: setPath(`/regular/${path[2]}/${path[3]}`) },
-                            { name: '新增规则管理' }],
+                            { name: '编辑规则管理' }],
                     });
                     /*                   const id = sessionStorage.regular ? JSON.parse(sessionStorage.regular).id : '';
                     dispatch({

@@ -191,28 +191,31 @@ export default class ThirdReport extends React.PureComponent {
                 {
                     name: '成功调用次数',
                     type: 'line',
-                    symbol: 'triangle',
-                    symbolSize: 10,
                     lineStyle: {
+                        color: 'red',
+                        type: 'dashed',
                         normal: {
-                            color: 'green',
-                            width: 2,
-                            type: 'dashed'
+                            color: 'red',
+                            width: 1,
+                            borderType: 'dashed'
                         }
                     },
                     itemStyle: {
-                        normal: {
-                            borderWidth: 3,
-                            borderColor: 'yellow',
-                            color: 'white'
-                        }
+                        borderType: 'dashed',
                     },
+                    smooth: true,
                     data: allSuccessTime
                 },
                 {
                     name: '全部调用次数',
                     type: 'line',
-                    data: allCallTime
+                    data: allCallTime,
+                    smooth: true,
+                    lineStyle: {
+                        normal: {
+                            width: 1,
+                        }
+                    },
                 },
             ]
         };

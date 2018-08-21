@@ -69,13 +69,11 @@ export default {
         * update({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.updateRegulars, data);
-            console.log('111');
             yield call(resolve);
         },
         * clone({ payload }, { call }) {
             const { data, resolve } = payload;
             yield call(post, API.cloneRegulars, data);
-            console.log('111');
             yield call(resolve);
         },
         // 规则类型
