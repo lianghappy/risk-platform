@@ -106,7 +106,7 @@ class Policy extends React.PureComponent {
              name = '最好匹配';
              break;
          case 4:
-             name = '预阶段';
+             name = '人审阶段';
              break;
          default:
              break;

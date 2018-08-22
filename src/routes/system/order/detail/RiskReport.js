@@ -136,7 +136,7 @@ export default class RiskReport extends React.PureComponent {
                                         {item.stageType === '1' && '最坏匹配'}
                                         {item.stageType === '2' && '权重匹配'}
                                         {item.stageType === '3' && '最好匹配'}
-                                        {item.stageType === '4' && '人审预阶段'}
+                                        {item.stageType === '4' && '人审阶段'}
                                     </span>
                                     <span>阶段得分：{item.stageScore}</span>
                                     <span>阶段审核结果：

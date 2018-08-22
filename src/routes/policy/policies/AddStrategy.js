@@ -100,7 +100,7 @@ class AddStrategy extends React.PureComponent {
             name = '最好匹配';
             break;
         case 4:
-            name = '预阶段';
+            name = '人审阶段';
             break;
         default:
             break;
@@ -190,7 +190,7 @@ class AddStrategy extends React.PureComponent {
                                                 <Option value="1">最坏匹配</Option>
                                                 <Option value="2">权重匹配</Option>
                                                 <Option value="3">最好匹配</Option>
-                                                <Option value="4">预阶段</Option>
+                                                <Option value="4">人审阶段</Option>
                                             </Select>
                                         )
                                     }
